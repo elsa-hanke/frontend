@@ -1,0 +1,29 @@
+<template>
+  <b-skeleton-wrapper :loading="loading">
+    <template v-slot:loading>
+      <b-card v-bind="$attrs">
+        <b-skeleton width="85%"></b-skeleton>
+        <b-skeleton width="55%"></b-skeleton>
+        <b-skeleton width="70%"></b-skeleton>
+      </b-card>
+    </template>
+    <b-card v-bind="$attrs"
+      ><template v-for="(index, name) in $slots" v-slot:[name]>
+        <slot :name="name" /> </template
+    ></b-card>
+  </b-skeleton-wrapper>
+</template>
+
+<script lang="ts">
+import Vue from "vue";
+import Component from "vue-class-component";
+import { Prop } from "vue-property-decorator";
+
+@Component
+export default class BCardSkeleton extends Vue {
+  @Prop({ required: false, default: false })
+  loading!: boolean;
+}
+</script>
+
+<style lang="scss" scoped></style>
