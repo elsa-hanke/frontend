@@ -1,13 +1,13 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
 import Meta from "vue-meta";
-import Etusivu from "../views/Etusivu.vue";
-import Koulutussuunnitelma from "../views/Koulutussuunnitelma.vue";
-import Arvioinnit from "../views/Arvioinnit.vue";
-import Tyoskentelyjaksot from "../views/Tyoskentelyjaksot.vue";
-import Koulutukset from "../views/Koulutukset.vue";
-import Viestit from "../views/Viestit.vue";
-import Asiakirjat from "../views/Asiakirjat.vue";
+import Etusivu from "../views/etusivu.vue";
+import Koulutussuunnitelma from "../views/koulutussuunnitelma.vue";
+import Arvioinnit from "../views/arvioinnit.vue";
+import Tyoskentelyjaksot from "../views/tyoskentelyjaksot.vue";
+import Koulutukset from "../views/koulutukset.vue";
+import Viestit from "../views/viestit.vue";
+import Asiakirjat from "../views/asiakirjat.vue";
 
 Vue.use(VueRouter);
 Vue.use(Meta);

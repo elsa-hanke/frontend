@@ -5,7 +5,7 @@ import "./plugins/filters";
 import "./plugins/bootstrap-vue";
 import i18n from "./plugins/i18n";
 import "./configs/fontawesome";
-import App from "./App.vue";
+import App from "./app.vue";
 import router from "./router";
 import store from "./store";
 
