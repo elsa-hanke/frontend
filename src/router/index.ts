@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
 import Meta from "vue-meta";
+import Root from "../views/root.vue";
 import Etusivu from "../views/etusivu.vue";
 import Koulutussuunnitelma from "../views/koulutussuunnitelma.vue";
 import Arvioinnit from "../views/arvioinnit.vue";
@@ -8,6 +9,8 @@ import Tyoskentelyjaksot from "../views/tyoskentelyjaksot.vue";
 import Koulutukset from "../views/koulutukset.vue";
 import Viestit from "../views/viestit.vue";
 import Asiakirjat from "../views/asiakirjat.vue";
+import PageNotFound from "../views/page-not-found.vue";
+import Login from "../views/login.vue";
 
 Vue.use(VueRouter);
 Vue.use(Meta);
@@ -16,47 +19,59 @@ const routes: Array<RouteConfig> = [
   {
     path: "/",
     name: "root",
-    redirect: { name: "etusivu" }
+    component: Root,
+    redirect: { name: "etusivu" },
+    children: [
+      {
+        path: "/etusivu",
+        name: "etusivu",
+        component: Etusivu
+      },
+      {
+        path: "/koulutussuunnitelma",
+        name: "koulutussuunnitelma",
+        component: Koulutussuunnitelma
+      },
+      {
+        path: "/arvioinnit",
+        name: "arvioinnit",
+        component: Arvioinnit
+      },
+      {
+        path: "/tyoskentelyjaksot",
+        name: "tyoskentelyjaksot",
+        component: Tyoskentelyjaksot
+      },
+      {
+        path: "/koulutukset",
+        name: "koulutukset",
+        component: Koulutukset
+      },
+      {
+        path: "/viestit",
+        name: "viestit",
+        component: Viestit
+      },
+      {
+        path: "/asiakirjat",
+        name: "asiakirjat",
+        component: Asiakirjat
+      }
+    ]
   },
   {
-    path: "/etusivu",
-    name: "etusivu",
-    component: Etusivu
+    path: "/login",
+    name: "login",
+    component: Login
   },
   {
-    path: "/koulutussuunnitelma",
-    name: "koulutussuunnitelma",
-    component: Koulutussuunnitelma
-  },
-  {
-    path: "/arvioinnit",
-    name: "arvioinnit",
-    component: Arvioinnit
-  },
-  {
-    path: "/tyoskentelyjaksot",
-    name: "tyoskentelyjaksot",
-    component: Tyoskentelyjaksot
-  },
-  {
-    path: "/koulutukset",
-    name: "koulutukset",
-    component: Koulutukset
-  },
-  {
-    path: "/viestit",
-    name: "viestit",
-    component: Viestit
-  },
-  {
-    path: "/asiakirjat",
-    name: "asiakirjat",
-    component: Asiakirjat
+    path: "*",
+    component: PageNotFound
   }
 ];
 
 const router = new VueRouter({
-  mode: "history",
+  mode: "hash", // todo: history
   base: process.env.BASE_URL,
   routes
 });

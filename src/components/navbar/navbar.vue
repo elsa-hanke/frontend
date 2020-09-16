@@ -30,15 +30,19 @@
           <font-awesome-icon icon="envelope" fixed-width />
         </b-nav-item>
 
-        <b-nav-item href="#" class="border-left text-nowrap align-self-center">
+        <b-nav-item
+          href="#"
+          class="border-left text-nowrap align-self-center"
+          @click="logout()"
+        >
           <avatar
-            username="Matti Meikäläinen"
+            :username="displayName"
             background-color="gray"
             color="white"
             :size="32"
-            class="d-inline-block mr-3"
+            class="d-inline-block mr-2"
           ></avatar>
-          <span>Matti Meikäläinen</span>
+          <span class="align-middle">{{ displayName }}</span>
         </b-nav-item>
 
         <b-nav-item-dropdown
@@ -63,6 +67,7 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import Avatar from "vue-avatar";
+import store from "@/store";
 
 @Component({
   components: {
@@ -70,12 +75,26 @@ import Avatar from "vue-avatar";
   }
 })
 export default class Navbar extends Vue {
+  get displayName() {
+    const account = store.getters.account;
+    if (account) {
+      return `${account.firstName} ${account.lastName}`;
+    } else {
+      return "";
+    }
+  }
+
   get currentLocale() {
     return this.$i18n.locale;
   }
 
   get locales() {
     return Object.keys(this.$i18n.messages);
+  }
+
+  async logout() {
+    await store.dispatch("logout");
+    this.$router.push({ name: "login" });
   }
 
   changeLocale(lang: string) {

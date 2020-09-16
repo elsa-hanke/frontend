@@ -11,6 +11,22 @@ import store from "./store";
 
 Vue.config.productionTip = false;
 
+router.beforeEach(async (to, from, next) => {
+  if (to.matched.length > 0 && to.matched[0].name === "login") {
+    if (store.getters.isLoggedIn) {
+      next("/");
+    } else {
+      next();
+    }
+  }
+  await store.dispatch("authorize");
+  if (store.getters.isLoggedIn) {
+    next();
+  } else {
+    next("/login");
+  }
+});
+
 new Vue({
   router,
   store,
