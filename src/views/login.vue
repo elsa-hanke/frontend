@@ -42,9 +42,13 @@
             :placeholder="$t('syota-salasana')"
           ></b-form-input>
         </b-form-group>
-        <b-button type="submit" variant="primary" class="w-100">{{
-          $t("kirjaudu")
-        }}</b-button>
+        <b-button
+          type="submit"
+          variant="primary"
+          class="w-100"
+          :disabled="status === 'loading'"
+          >{{ $t("kirjaudu") }}</b-button
+        >
       </b-form>
     </b-card>
   </b-container>
@@ -61,15 +65,18 @@ export default class Login extends Vue {
   form = {};
   error = false;
 
+  get status() {
+    return store.getters.status;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async onSubmit(evt: any) {
     evt.preventDefault();
+    this.error = false;
     await store.dispatch("login", this.form);
-    await store.dispatch("authorize");
     if (store.getters.isLoggedIn) {
-      this.$router.push({ name: "root" });
+      this.$router.push({ name: "root" }); // todo: tai edelliseen näkymään
     } else {
-      console.log("error");
       this.error = true;
     }
   }

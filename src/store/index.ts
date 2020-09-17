@@ -7,7 +7,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     status: "",
-    account: null
+    account: null,
+    login: null
   },
   mutations: {
     authRequest(state) {
@@ -20,6 +21,26 @@ export default new Vuex.Store({
     authError(state) {
       state.status = "error";
       state.account = null;
+    },
+    loginRequest(state) {
+      state.status = "loading";
+    },
+    loginSuccess(state, login) {
+      state.login = login;
+    },
+    loginError(state) {
+      state.status = "error";
+    },
+    logoutRequest(state) {
+      state.status = "loading";
+    },
+    logoutSuccess(state) {
+      state.account = null;
+      state.login = null;
+      state.status = "success";
+    },
+    logoutError(state) {
+      state.status = "error";
     }
   },
   actions: {
@@ -32,11 +53,12 @@ export default new Vuex.Store({
         commit("authError");
       }
     },
-    async login({ commit }, form) {
+    async login({ commit, dispatch }, form) {
       commit("loginRequest");
       try {
         const login = (await axios.post("auth/login", form)).data;
         commit("loginSuccess", login);
+        await dispatch("authorize");
       } catch (err) {
         commit("loginError");
       }
@@ -53,7 +75,7 @@ export default new Vuex.Store({
   },
   getters: {
     isLoggedIn: state => !!state.account,
-    authStatus: state => state.status,
+    status: state => state.status,
     account: state => state.account
   }
 });
