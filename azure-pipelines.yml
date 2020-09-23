@@ -21,13 +21,13 @@ jobs:
         displayName: Cache Yarn packages
       - script: |
           yarn --frozen-lockfile
-        displayName: 'yarn'
+        displayName: 'Install'
       - script: |
           yarn lint
-        displayName: 'yarn lint'
+        displayName: 'Lint'
       - script: |
           yarn test:unit
-        displayName: 'yarn test:unit'
+        displayName: 'Tests'
       - script: |
           yarn build
-        displayName: 'yarn build'
+        displayName: 'Build'
