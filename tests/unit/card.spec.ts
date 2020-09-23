@@ -7,8 +7,8 @@ localVue.use(BootstrapVue);
 
 describe("Card.vue", () => {
   it("renders", () => {
-    const wrapper = shallowMount(Card, {
-      localVue,
+    shallowMount(Card, {
+      localVue
     });
   });
 });
