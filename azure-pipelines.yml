@@ -29,8 +29,5 @@ jobs:
           yarn test:unit
         displayName: 'yarn test:unit'
       - script: |
-          yarn test:e2e
-        displayName: 'yarn test:e2e'
-      - script: |
           yarn build
         displayName: 'yarn build'
