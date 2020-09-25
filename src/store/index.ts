@@ -7,8 +7,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     status: "",
-    account: null,
-    login: null
+    account: null
   },
   mutations: {
     authRequest(state) {
@@ -22,21 +21,11 @@ export default new Vuex.Store({
       state.status = "error";
       state.account = null;
     },
-    loginRequest(state) {
-      state.status = "loading";
-    },
-    loginSuccess(state, login) {
-      state.login = login;
-    },
-    loginError(state) {
-      state.status = "error";
-    },
     logoutRequest(state) {
       state.status = "loading";
     },
     logoutSuccess(state) {
       state.account = null;
-      state.login = null;
       state.status = "success";
     },
     logoutError(state) {
@@ -47,27 +36,18 @@ export default new Vuex.Store({
     async authorize({ commit }) {
       commit("authRequest");
       try {
-        const account = (await axios.get("services/uaa/api/account")).data;
+        const account = (await axios.get("api/account")).data;
         commit("authSuccess", account);
       } catch (err) {
         commit("authError");
       }
     },
-    async login({ commit, dispatch }, form) {
-      commit("loginRequest");
-      try {
-        const login = (await axios.post("auth/login", form)).data;
-        commit("loginSuccess", login);
-        await dispatch("authorize");
-      } catch (err) {
-        commit("loginError");
-      }
-    },
     async logout({ commit }) {
       commit("logoutRequest");
       try {
-        await axios.post("auth/logout");
+        const logoutDetails = (await axios.post("api/logout", {})).data;
         commit("logoutSuccess");
+        window.location.href = `${logoutDetails.logoutUrl}?redirect_uri=${location.origin}/`;
       } catch (err) {
         commit("logoutError");
       }

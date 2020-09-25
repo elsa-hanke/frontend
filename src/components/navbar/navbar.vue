@@ -94,7 +94,6 @@ export default class Navbar extends Vue {
 
   async logout() {
     await store.dispatch("logout");
-    this.$router.push({ name: "login" });
   }
 
   changeLocale(lang: string) {

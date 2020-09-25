@@ -23,7 +23,7 @@ router.beforeEach(async (to, from, next) => {
   if (store.getters.isLoggedIn) {
     next();
   } else {
-    next("/login");
+    location.href = `${location.origin}/oauth2/authorization/oidc`;
   }
 });
 
