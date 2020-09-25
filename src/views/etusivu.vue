@@ -9,13 +9,15 @@
             class="mb-3"
           >
             <div class="d-flex align-items-center">
-              <avatar
-                :username="displayName"
-                background-color="gray"
-                color="white"
-                :size="96"
-                class="d-inline-block mr-3"
-              ></avatar>
+              <div>
+                <avatar
+                  :username="displayName"
+                  background-color="gray"
+                  color="white"
+                  :size="96"
+                  class="mr-3"
+                ></avatar>
+              </div>
               <div class="flex-fill">
                 <table class="table table-borderless">
                   <tr>
