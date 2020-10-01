@@ -59,7 +59,7 @@ stages:
                   inputs:
                     awsCredentials: "elsa-ci"
                     regionName: "eu-west-1"
-                    bucketName: "elsa-frontend"
+                    bucketName: "elsapalvelu.fi"
                     sourceFolder: "$(Pipeline.Workspace)/ElsaFrontendApp"
                     globExpressions: "**"
                   displayName: "Deploy to S3"
