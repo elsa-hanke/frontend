@@ -23,13 +23,13 @@ export default new Vuex.Store({
     },
     authError(state) {
       state.status = "error";
-      state.account = null;
+      //state.account = null;
     },
     logoutRequest(state) {
       state.status = "loading";
     },
     logoutSuccess(state) {
-      state.account = null;
+      //state.account = null;
       state.status = "success";
     },
     logoutError(state) {
