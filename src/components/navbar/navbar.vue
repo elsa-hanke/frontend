@@ -1,6 +1,6 @@
 <template>
   <b-navbar toggleable="lg" type="dark" variant="primary" sticky class="px-0">
-    <b-navbar-brand class="col-lg-2 mr-0 text-nowrap" :to="{ name: 'etusivu' }">
+    <b-navbar-brand class="col-lg-2 mr-0 text-nowrap">
       <span class="font-weight-bold text-uppercase">{{ $t("elsa") }}</span
       >-{{ $t("palvelu") | lowercase }}
     </b-navbar-brand>
