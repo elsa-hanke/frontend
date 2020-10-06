@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="etusivu">
     <b-container fluid>
       <b-row class="mt-4" lg>
         <b-col class="pl-0 pr-2">
