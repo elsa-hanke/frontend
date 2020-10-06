@@ -10,7 +10,7 @@ import router from "./router";
 import store from "./store";
 
 Vue.config.productionTip = false;
-/*
+
 router.beforeEach(async (to, from, next) => {
   if (to.matched.length > 0 && to.matched[0].name === "login") {
     if (store.getters.isLoggedIn) {
@@ -26,7 +26,7 @@ router.beforeEach(async (to, from, next) => {
     location.href = `${location.origin}/oauth2/authorization/oidc`;
   }
 });
-*/
+
 new Vue({
   router,
   store,
