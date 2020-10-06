@@ -7,11 +7,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     status: "",
-    //account: null
-    account: {
-      firstName: "Erikoistuva",
-      lastName: "Lääkäri"
-    }
+    account: null
   },
   mutations: {
     authRequest(state) {
