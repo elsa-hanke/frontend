@@ -1,5 +1,6 @@
 {
   "arvioinnit": "Arvioinnit",
+  "arvo": "Arvo",
   "asiakirjat": "Asiakirjat",
   "elsa-palvelu": "ELSA-palvelu",
   "elsa": "ELSA",
@@ -11,6 +12,7 @@
   "henkilotiedot": "Henkilötiedot",
   "johtamiskoulutukset": "Johtamiskoulutukset",
   "kayttajatunnus": "Käyttäjätunnus",
+  "kentta": "Kenttä",
   "kirjaudu-sisaan": "Kirjaudu sisään",
   "kirjaudu": "Kirjaudu",
   "kirjautumaton-kayttaja": "Kirjautumaton käyttäjä",
