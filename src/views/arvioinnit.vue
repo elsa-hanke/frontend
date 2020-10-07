@@ -8,7 +8,7 @@
             :loading="false"
             class="mb-3"
           >
-            <b-container fluid class="px-0">
+            <b-container fluid class="px-0 mb-3">
               <b-row>
                 <b-col>
                   <b-form-select
@@ -36,7 +36,9 @@
                 </b-col>
               </b-row>
             </b-container>
-            Lorem ipsum
+            <b-skeleton width="85%"></b-skeleton>
+            <b-skeleton width="55%"></b-skeleton>
+            <b-skeleton width="70%"></b-skeleton>
           </b-card-skeleton>
         </b-col>
         <b-col class="pl-3 pr-0" lg="2">
@@ -91,10 +93,10 @@ export default class Arvioinnit extends Vue {
   };
 
   options = {
-    osaamisalue: [{ value: null, text: "Please select an option" }],
-    arviointi: [],
-    tyoskentelyjakso: [],
-    kouluttaja: []
+    osaamisalue: [{ value: null, text: this.$t("epa-osaamisalue") }],
+    arviointi: [{ value: null, text: this.$t("arviointi") }],
+    tyoskentelyjakso: [{ value: null, text: this.$t("tyoskentelyjakso") }],
+    kouluttaja: [{ value: null, text: this.$t("kouluttaja") }]
   };
 }
 </script>
