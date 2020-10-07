@@ -1,7 +1,7 @@
 import { Module } from "vuex";
 import axios from "axios";
 
-const authModule: Module<any, any> = {
+const auth: Module<any, any> = {
   state: {
     status: "",
     account: null
@@ -57,4 +57,4 @@ const authModule: Module<any, any> = {
   }
 };
 
-export default authModule;
+export default auth;
