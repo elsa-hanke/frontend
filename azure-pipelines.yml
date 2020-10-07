@@ -55,6 +55,13 @@ stages:
               steps:
                 - download: current
                   artifact: ElsaFrontendApp
+                - task: AWSCLI@1
+                  inputs:
+                    awsCredentials: 'elsa-ci'
+                    regionName: 'eu-west-1'
+                    awsCommand: 's3'
+                    awsSubCommand: 'rm'
+                    awsArguments: 's3://testi.elsapalvelu.fi/'
                 - task: S3Upload@1
                   inputs:
                     awsCredentials: "elsa-ci"
@@ -63,3 +70,10 @@ stages:
                     sourceFolder: "$(Pipeline.Workspace)/ElsaFrontendApp"
                     globExpressions: "**"
                   displayName: "Deploy to S3"
+                - task: AWSCLI@1
+                  inputs:
+                    awsCredentials: 'elsa-ci'
+                    regionName: 'eu-west-1'
+                    awsCommand: 'cloudfront'
+                    awsSubCommand: 'create-invalidation'
+                    awsArguments: '--distribution-id E3GEM0Z5QYSRAF --paths "/*"'
