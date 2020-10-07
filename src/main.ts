@@ -7,7 +7,7 @@ import i18n from "./plugins/i18n";
 import "./configs/fontawesome";
 import App from "./app.vue";
 import router from "./router";
-import store from "./store";
+import store, { ELSA_API_LOCATION } from "./store";
 
 Vue.config.productionTip = false;
 
@@ -23,7 +23,7 @@ router.beforeEach(async (to, from, next) => {
   if (store.getters.isLoggedIn) {
     next();
   } else {
-    location.href = `${location.origin}/oauth2/authorization/oidc`;
+    location.href = `${ELSA_API_LOCATION}/oauth2/authorization/oidc`;
   }
 });
 
