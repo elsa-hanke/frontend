@@ -19,7 +19,14 @@
                 ></avatar>
               </div>
               <div class="flex-fill">
-                <table class="table table-borderless">
+                <table
+                  class="table table-borderless"
+                  :summary="$t('henkilotiedot')"
+                >
+                  <tr class="sr-only">
+                    <th scope="col">{{ $t("kentta") }}</th>
+                    <th scope="col">{{ $t("arvo") }}</th>
+                  </tr>
                   <tr>
                     <td class="p-0 text-muted">{{ $t("nimi") }}</td>
                     <td class="p-0">{{ displayName }}</td>
