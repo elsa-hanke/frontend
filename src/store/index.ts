@@ -12,6 +12,7 @@ export const ELSA_API_LOCATION =
       }`
     : "";
 axios.defaults.baseURL = `${ELSA_API_LOCATION}/api/`;
+axios.defaults.withCredentials = true;
 
 export default new Vuex.Store({
   modules: {
