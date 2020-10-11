@@ -1,19 +1,25 @@
 <template>
-  <nav id="sidebar-menu" class="col-lg-2 d-lg-block bg-white sidebar">
+  <nav
+    id="sidebar-menu"
+    class="col-lg-2 d-none d-lg-block d-xl-block bg-white sidebar"
+  >
     <div class="sidebar-sticky">
       <b-nav vertical>
         <b-nav-item class="border-top border-bottom" :to="{ name: 'etusivu' }">
           <font-awesome-icon icon="home" fixed-width />
           {{ $t("etusivu") }}
         </b-nav-item>
+        <!--
         <b-nav-item class="border-bottom" :to="{ name: 'koulutussuunnitelma' }">
           <font-awesome-icon icon="file" fixed-width />
           {{ $t("koulutussuunnitelma") }}
         </b-nav-item>
+        -->
         <b-nav-item class="border-bottom" :to="{ name: 'arvioinnit' }">
           <font-awesome-icon icon="award" fixed-width />
           {{ $t("arvioinnit") }}
         </b-nav-item>
+        <!--
         <b-nav-item class="border-bottom" :to="{ name: 'tyoskentelyjaksot' }">
           <font-awesome-icon icon="calendar" fixed-width />
           {{ $t("tyoskentelyjaksot") }}
@@ -30,6 +36,7 @@
           <font-awesome-icon icon="file" fixed-width />
           {{ $t("asiakirjat") }}
         </b-nav-item>
+        -->
       </b-nav>
     </div>
   </nav>

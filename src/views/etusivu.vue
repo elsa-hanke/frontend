@@ -2,14 +2,14 @@
   <div class="etusivu">
     <b-container fluid>
       <b-row class="mt-4" lg>
-        <b-col class="pl-0 pr-2">
+        <b-col class="pl-0 pr-0 pr-lg-2">
           <b-card-skeleton
             :header="$t('henkilotiedot')"
             :loading="!account"
             class="mb-3"
           >
             <div class="d-flex align-items-center">
-              <div>
+              <div class="d-none d-lg-block d-xl-block">
                 <avatar
                   :username="displayName"
                   background-color="gray"
@@ -45,9 +45,12 @@
                   </tr>
                 </table>
               </div>
-              <b-button size="sm" variant="primary" class="rounded-pill">{{
-                $t("muokkaa-tietoja")
-              }}</b-button>
+              <b-button
+                size="sm"
+                variant="primary"
+                class="rounded-pill d-none d-lg-block d-xl-block"
+                >{{ $t("muokkaa-tietoja") }}
+              </b-button>
             </div>
           </b-card-skeleton>
           <b-card-skeleton
@@ -61,7 +64,7 @@
             class="mb-3"
           ></b-card-skeleton>
         </b-col>
-        <b-col class="pl-2 pr-0" lg>
+        <b-col class="pl-0 pl-lg-2 pr-0" lg>
           <b-card-skeleton
             :header="$t('koulutussuunnitelma')"
             :loading="true"
@@ -78,7 +81,7 @@
             class="mb-3"
           ></b-card-skeleton>
         </b-col>
-        <b-col class="pl-3 pr-0" lg="2">
+        <b-col class="pl-0 pl-lg-3 pr-0" lg="2">
           <b-button
             variant="link"
             class="d-flex align-items-center text-decoration-none"

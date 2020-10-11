@@ -5,7 +5,9 @@
       >-{{ $t("palvelu") | lowercase }}
     </b-navbar-brand>
 
+    <!--
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+    -->
 
     <!--
     <div class="d-flex justify-content-center w-100">
@@ -22,7 +24,7 @@
 
     <b-collapse id="nav-collapse" is-nav>
       <!-- Right aligned nav items -->
-      <b-navbar-nav class="ml-auto mr-lg-3">
+      <b-navbar-nav class="ml-auto mr-lg-3 d-none d-lg-flex d-xl-flex">
         <b-nav-item
           href="#"
           class="text-nowrap align-self-center"
