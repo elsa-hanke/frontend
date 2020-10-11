@@ -47,6 +47,7 @@ const auth: Module<any, any> = {
         window.location.href = `${logoutDetails.logoutUrl}?redirect_uri=${location.origin}/`;
       } catch (err) {
         commit("logoutError");
+        window.location.reload();
       }
     }
   },
