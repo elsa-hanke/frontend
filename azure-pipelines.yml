@@ -61,12 +61,12 @@ stages:
                     regionName: 'eu-west-1'
                     awsCommand: 's3'
                     awsSubCommand: 'rm'
-                    awsArguments: 's3://testi.elsapalvelu.fi/'
+                    awsArguments: 's3://kehitys.elsapalvelu.fi/'
                 - task: S3Upload@1
                   inputs:
                     awsCredentials: "elsa-ci"
                     regionName: "eu-west-1"
-                    bucketName: "testi.elsapalvelu.fi"
+                    bucketName: "kehitys.elsapalvelu.fi"
                     sourceFolder: "$(Pipeline.Workspace)/ElsaFrontendApp"
                     globExpressions: "**"
                   displayName: "Deploy to S3"
@@ -76,4 +76,4 @@ stages:
                     regionName: 'eu-west-1'
                     awsCommand: 'cloudfront'
                     awsSubCommand: 'create-invalidation'
-                    awsArguments: '--distribution-id E3GEM0Z5QYSRAF --paths "/*"'
+                    awsArguments: '--distribution-id E12KDI5JPO05NG --paths "/*"'
