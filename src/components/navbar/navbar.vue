@@ -7,6 +7,7 @@
 
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
+    <!--
     <div class="d-flex justify-content-center w-100">
       <div class="input-group" style="width: 500px;">
         <input
@@ -17,6 +18,7 @@
         />
       </div>
     </div>
+    -->
 
     <b-collapse id="nav-collapse" is-nav>
       <!-- Right aligned nav items -->
