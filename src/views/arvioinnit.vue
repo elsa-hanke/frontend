@@ -41,7 +41,7 @@
             <b-skeleton width="70%"></b-skeleton>
           </b-card-skeleton>
         </b-col>
-        <b-col class="pl-3 pr-0" lg="2">
+        <b-col class="pl-0 pl-lg-3 pr-0" lg="2">
           <b-button
             variant="link"
             class="d-flex align-items-center text-decoration-none"
