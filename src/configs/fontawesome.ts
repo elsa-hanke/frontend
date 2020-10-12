@@ -16,7 +16,9 @@ import {
   faClipboardList,
   faArrowUp,
   faPaperPlane,
-  faShare
+  faShare,
+  faQuestionCircle,
+  faQuestion
 } from "@fortawesome/free-solid-svg-icons";
 import {
   FontAwesomeIcon,
@@ -39,6 +41,8 @@ library.add(faClipboardList);
 library.add(faArrowUp);
 library.add(faPaperPlane);
 library.add(faShare);
+library.add(faQuestionCircle);
+library.add(faQuestion);
 
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 Vue.component("font-awesome-layers", FontAwesomeLayers);
