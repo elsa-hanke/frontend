@@ -8,8 +8,9 @@
       </b-card>
     </template>
     <b-card v-bind="$attrs"
-      ><template v-for="(index, name) in $slots" v-slot:[name]>
-        <slot :name="name" /> </template
+      ><template v-slot:header><slot name="header"/></template
+      ><template v-for="(index, name) in $slots" v-slot:[name]
+        ><slot :name="name"/></template
     ></b-card>
   </b-skeleton-wrapper>
 </template>
