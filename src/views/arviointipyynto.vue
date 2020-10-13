@@ -21,15 +21,13 @@
               <b-form-group label-for="arviointipyynto-tyoskentelyjakso"
                 ><template v-slot:label
                   ><div
-                    class="d-flex justify-content-between align-items-center"
+                    class="d-flex justify-content-between align-items-center flex-wrap"
                   >
                     <div class="text-nowrap">
                       {{ $t("tyoskentelyjakso") }}
                       <span class="text-primary">*</span>
                     </div>
-                    <div
-                      class="d-flex align-items-center text-muted form-group-help"
-                    >
+                    <div class="text-muted form-group-help">
                       <font-awesome-layers fixed-width>
                         <font-awesome-icon
                           fixed-width
@@ -41,10 +39,8 @@
                           transform="shrink-8"
                         />
                       </font-awesome-layers>
-                      <b-button variant="link" class="p-0 border-0">{{
-                        $t("lisaa-tyoskentelyjakso")
-                      }}</b-button>
-                      <span>{{ $t("jos-et-loyda-sita-alta") }} </span>
+                      <a href="#">{{ $t("lisaa-tyoskentelyjakso") }}</a
+                      ><span>{{ $t("jos-et-loyda-sita-alta") }} </span>
                     </div>
                   </div></template
                 ><b-form-select
@@ -92,15 +88,13 @@
                   class="col-md-8"
                   ><template v-slot:label
                     ><div
-                      class="d-flex justify-content-between align-items-center"
+                      class="d-flex justify-content-between align-items-center flex-wrap"
                     >
                       <div class="text-nowrap">
                         {{ $t("kouluttaja") }}
                         <span class="text-primary">*</span>
                       </div>
-                      <div
-                        class="d-flex align-items-center text-muted form-group-help"
-                      >
+                      <div class="text-muted form-group-help">
                         <font-awesome-layers fixed-width>
                           <font-awesome-icon
                             fixed-width
@@ -112,10 +106,8 @@
                             transform="shrink-8"
                           />
                         </font-awesome-layers>
-                        <b-button variant="link" class="p-0 border-0">{{
-                          $t("lisaa-kouluttaja")
-                        }}</b-button>
-                        <span>{{ $t("jos-et-loyda-sita-alta") }} </span>
+                        <a href="#">{{ $t("lisaa-kouluttaja") }}</a
+                        ><span>{{ $t("jos-et-loyda-sita-alta") }} </span>
                       </div>
                     </div></template
                   ><b-form-select
