@@ -6,34 +6,34 @@
     <div class="sidebar-sticky font-weight-500">
       <b-nav vertical>
         <b-nav-item class="border-top border-bottom" :to="{ name: 'etusivu' }">
-          <font-awesome-icon icon="home" fixed-width />
+          <font-awesome-icon icon="home" fixed-width size="lg" />
           {{ $t("etusivu") }}
         </b-nav-item>
         <!--
         <b-nav-item class="border-bottom" :to="{ name: 'koulutussuunnitelma' }">
-          <font-awesome-icon icon="file" fixed-width />
+          <font-awesome-icon icon="file" fixed-width size="lg" />
           {{ $t("koulutussuunnitelma") }}
         </b-nav-item>
         -->
         <b-nav-item class="border-bottom" :to="{ name: 'arvioinnit' }">
-          <font-awesome-icon icon="award" fixed-width />
+          <font-awesome-icon icon="award" fixed-width size="lg" />
           {{ $t("arvioinnit") }}
         </b-nav-item>
         <!--
         <b-nav-item class="border-bottom" :to="{ name: 'tyoskentelyjaksot' }">
-          <font-awesome-icon icon="calendar" fixed-width />
+          <font-awesome-icon icon="calendar" fixed-width size="lg" />
           {{ $t("tyoskentelyjaksot") }}
         </b-nav-item>
         <b-nav-item class="border-bottom" :to="{ name: 'koulutukset' }">
-          <font-awesome-icon icon="file-alt" fixed-width />
+          <font-awesome-icon icon="file-alt" fixed-width size="lg" />
           {{ $t("koulutukset") }}
         </b-nav-item>
         <b-nav-item class="border-bottom" :to="{ name: 'viestit' }">
-          <font-awesome-icon icon="envelope" fixed-width />
+          <font-awesome-icon icon="envelope" fixed-width size="lg" />
           {{ $t("viestit") }}
         </b-nav-item>
         <b-nav-item class="border-bottom" :to="{ name: 'asiakirjat' }">
-          <font-awesome-icon icon="file" fixed-width />
+          <font-awesome-icon icon="file" fixed-width size="lg" />
           {{ $t("asiakirjat") }}
         </b-nav-item>
         -->
