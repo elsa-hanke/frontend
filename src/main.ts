@@ -9,6 +9,8 @@ import App from "./app.vue";
 import router from "./router";
 import store, { ELSA_API_LOCATION } from "./store";
 
+import "@/styles/app.scss";
+
 Vue.config.productionTip = false;
 
 router.beforeEach(async (to, from, next) => {
