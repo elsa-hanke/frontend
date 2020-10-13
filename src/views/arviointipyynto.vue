@@ -23,12 +23,12 @@
                   ><div
                     class="d-flex justify-content-between align-items-center flex-wrap"
                   >
-                    <div class="text-nowrap">
+                    <div class="text-nowrap mr-3">
                       {{ $t("tyoskentelyjakso") }}
                       <span class="text-primary">*</span>
                     </div>
                     <div class="text-muted form-group-help">
-                      <font-awesome-layers fixed-width>
+                      <font-awesome-layers fixed-width class="mr-1">
                         <font-awesome-icon
                           fixed-width
                           :icon="['far', 'circle']"
@@ -90,12 +90,12 @@
                     ><div
                       class="d-flex justify-content-between align-items-center flex-wrap"
                     >
-                      <div class="text-nowrap">
+                      <div class="text-nowrap mr-3">
                         {{ $t("kouluttaja") }}
                         <span class="text-primary">*</span>
                       </div>
                       <div class="text-muted form-group-help">
-                        <font-awesome-layers fixed-width>
+                        <font-awesome-layers fixed-width class="mr-1">
                           <font-awesome-icon
                             fixed-width
                             :icon="['far', 'circle']"

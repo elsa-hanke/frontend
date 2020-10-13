@@ -33,7 +33,7 @@
           :to="{ name: 'viestit' }"
         >
           {{ $t("viestit") }}
-          <font-awesome-icon icon="envelope" fixed-width />
+          <font-awesome-icon icon="envelope" fixed-width size="lg" />
         </b-nav-item>
 
         <b-nav-item
