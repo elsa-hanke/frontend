@@ -2,6 +2,24 @@
   <div class="etusivu">
     <b-container fluid>
       <b-row class="mt-4" lg>
+        <b-col class="pl-0 pl-lg-3 pr-0" lg="2" order-lg="3" order-xl="3">
+          <b-button
+            variant="link"
+            class="d-flex align-items-center text-decoration-none"
+          >
+            <div class="fa-2x mr-2">
+              <font-awesome-layers>
+                <font-awesome-icon icon="circle" />
+                <font-awesome-icon
+                  icon="arrows-alt"
+                  transform="shrink-6"
+                  :style="{ color: 'white' }"
+                />
+              </font-awesome-layers>
+            </div>
+            <span class="text-left">{{ $t("lisaa-ja-muokkaa-osioita") }}</span>
+          </b-button>
+        </b-col>
         <b-col class="pl-0 pr-0 pr-lg-2">
           <b-card-skeleton
             :header="$t('henkilotiedot')"
@@ -80,24 +98,6 @@
             :loading="true"
             class="mb-3"
           ></b-card-skeleton>
-        </b-col>
-        <b-col class="pl-0 pl-lg-3 pr-0" lg="2">
-          <b-button
-            variant="link"
-            class="d-flex align-items-center text-decoration-none"
-          >
-            <div class="fa-2x mr-2">
-              <font-awesome-layers>
-                <font-awesome-icon icon="circle" />
-                <font-awesome-icon
-                  icon="arrows-alt"
-                  transform="shrink-6"
-                  :style="{ color: 'white' }"
-                />
-              </font-awesome-layers>
-            </div>
-            <span class="text-left">{{ $t("lisaa-ja-muokkaa-osioita") }}</span>
-          </b-button>
         </b-col>
       </b-row>
     </b-container>

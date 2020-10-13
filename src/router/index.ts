@@ -1,16 +1,19 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
 import Meta from "vue-meta";
-import Root from "../views/root.vue";
-import Etusivu from "../views/etusivu.vue";
-import Koulutussuunnitelma from "../views/koulutussuunnitelma.vue";
 import Arvioinnit from "../views/arvioinnit.vue";
-import Tyoskentelyjaksot from "../views/tyoskentelyjaksot.vue";
-import Koulutukset from "../views/koulutukset.vue";
-import Viestit from "../views/viestit.vue";
+import Arviointi from "../views/arviointi.vue";
+import Arviointipyynto from "../views/arviointipyynto.vue";
 import Asiakirjat from "../views/asiakirjat.vue";
-import PageNotFound from "../views/page-not-found.vue";
+import Etusivu from "../views/etusivu.vue";
+import Itsearviointi from "../views/itsearviointi.vue";
+import Koulutukset from "../views/koulutukset.vue";
+import Koulutussuunnitelma from "../views/koulutussuunnitelma.vue";
 import Login from "../views/login.vue";
+import PageNotFound from "../views/page-not-found.vue";
+import Root from "../views/root.vue";
+import Tyoskentelyjaksot from "../views/tyoskentelyjaksot.vue";
+import Viestit from "../views/viestit.vue";
 
 Vue.use(VueRouter);
 Vue.use(Meta);
@@ -36,6 +39,21 @@ const routes: Array<RouteConfig> = [
         path: "/arvioinnit",
         name: "arvioinnit",
         component: Arvioinnit
+      },
+      {
+        path: "/arvioinnit/arviointipyynto",
+        name: "arviointipyynto",
+        component: Arviointipyynto
+      },
+      {
+        path: "/arvioinnit/itsearviointi",
+        name: "itsearviointi",
+        component: Itsearviointi
+      },
+      {
+        path: "/arvioinnit/:id",
+        name: "arviointi",
+        component: Arviointi
       },
       {
         path: "/tyoskentelyjaksot",

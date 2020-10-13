@@ -3,7 +3,7 @@
     id="sidebar-menu"
     class="col-lg-2 d-none d-lg-block d-xl-block bg-white sidebar"
   >
-    <div class="sidebar-sticky">
+    <div class="sidebar-sticky font-weight-500">
       <b-nav vertical>
         <b-nav-item class="border-top border-bottom" :to="{ name: 'etusivu' }">
           <font-awesome-icon icon="home" fixed-width />

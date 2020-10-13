@@ -1,6 +1,6 @@
 <template>
   <b-navbar toggleable="lg" type="dark" variant="primary" sticky class="px-0">
-    <b-navbar-brand class="col-lg-2 mr-0 text-nowrap">
+    <b-navbar-brand class="col-lg-2 mr-0 text-nowrap user-select-none">
       <span class="font-weight-bold text-uppercase">{{ $t("elsa") }}</span
       >-{{ $t("palvelu") | lowercase }}
     </b-navbar-brand>
@@ -24,7 +24,9 @@
 
     <b-collapse id="nav-collapse" is-nav>
       <!-- Right aligned nav items -->
-      <b-navbar-nav class="ml-auto mr-lg-3 d-none d-lg-flex d-xl-flex">
+      <b-navbar-nav
+        class="ml-auto mr-lg-3 d-none d-lg-flex d-xl-flex font-weight-500"
+      >
         <b-nav-item
           href="#"
           class="text-nowrap align-self-center"
@@ -39,14 +41,7 @@
           class="border-left text-nowrap align-self-center"
           @click="logout()"
         >
-          <avatar
-            :username="displayName"
-            background-color="gray"
-            color="white"
-            :size="32"
-            class="d-inline-block mr-2"
-          ></avatar>
-          <span class="align-middle">{{ displayName }}</span>
+          <user-avatar :displayName="displayName" />
         </b-nav-item>
 
         <b-nav-item-dropdown
@@ -72,10 +67,12 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import Avatar from "vue-avatar";
 import store from "@/store";
+import UserAvatar from "@/components/user-avatar/user-avatar.vue";
 
 @Component({
   components: {
-    avatar: Avatar
+    avatar: Avatar,
+    "user-avatar": UserAvatar
   }
 })
 export default class Navbar extends Vue {
