@@ -1,7 +1,7 @@
 <template>
   <div class="etusivu">
-    <b-container fluid>
-      <b-row class="mt-4" lg>
+    <b-container fluid class="mt-3">
+      <b-row class="mt-3" lg>
         <b-col class="pl-0 pl-lg-3 pr-0" lg="2" order-lg="3" order-xl="3">
           <b-button
             variant="link"
@@ -20,7 +20,7 @@
             <span class="text-left">{{ $t("lisaa-ja-muokkaa-osioita") }}</span>
           </b-button>
         </b-col>
-        <b-col class="pl-0 pr-0 pr-lg-2">
+        <b-col class="pl-0 pr-0 pr-lg-2 mt-3 mt-lg-0 mt-xl-0">
           <b-card-skeleton
             :header="$t('henkilotiedot')"
             :loading="!account"

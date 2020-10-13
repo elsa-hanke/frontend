@@ -1,7 +1,7 @@
 <template>
   <div class="asiakirjat">
     <b-container fluid>
-      <b-row class="mt-4" lg>
+      <b-row class="mt-3" lg>
         <b-col class="pl-0 pr-0">
           <b-card-skeleton
             :header="$t('asiakirjat')"

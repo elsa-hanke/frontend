@@ -5,7 +5,7 @@
       background-color="gray"
       color="white"
       :size="32"
-      class="d-inline-block mr-2"
+      class="d-inline-block mr-2 avatar"
     ></avatar>
     <span class="align-middle">{{ displayName }}</span>
   </div>
@@ -28,4 +28,8 @@ export default class UserAvatar extends Vue {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.avatar {
+  min-width: 32px;
+}
+</style>
