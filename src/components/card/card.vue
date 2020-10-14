@@ -2,13 +2,21 @@
   <b-skeleton-wrapper :loading="loading">
     <template v-slot:loading>
       <b-card v-bind="$attrs">
+        <template v-slot:header
+          ><slot name="header"
+            ><span class="font-weight-500">{{ header }}</span></slot
+          ></template
+        >
         <b-skeleton width="85%"></b-skeleton>
         <b-skeleton width="55%"></b-skeleton>
         <b-skeleton width="70%"></b-skeleton>
       </b-card>
     </template>
     <b-card v-bind="$attrs"
-      ><template v-slot:header><slot name="header"/></template
+      ><template v-slot:header
+        ><slot name="header"
+          ><span class="font-weight-500">{{ header }}</span></slot
+        ></template
       ><template v-for="(index, name) in $slots" v-slot:[name]
         ><slot :name="name"/></template
     ></b-card>
@@ -24,6 +32,9 @@ import { Prop } from "vue-property-decorator";
 export default class BCardSkeleton extends Vue {
   @Prop({ required: false, default: false })
   loading!: boolean;
+
+  @Prop({ required: false, default: "", type: String })
+  header!: string;
 }
 </script>
 
