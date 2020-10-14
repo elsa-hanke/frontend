@@ -73,7 +73,7 @@
         class="col-md-8"
       >
         <template v-slot:modal-content>
-          <b-alert variant="warning" show>todo</b-alert>
+          <kouluttaja-form />
         </template>
         <multiselect
           :id="arviointipyyntoKouluttajaId"
@@ -142,13 +142,15 @@ import store from "@/store";
 import UserAvatar from "@/components/user-avatar/user-avatar.vue";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
 import TyoskentelyjaksoForm from "@/forms/tyoskentelyjakso-form.vue";
+import kouluttajaForm from "@/forms/kouluttaja-form.vue";
 
 @Component({
   components: {
     ElsaFormGroup,
+    kouluttajaForm,
+    Multiselect,
     TyoskentelyjaksoForm,
-    UserAvatar,
-    Multiselect
+    UserAvatar
   }
 })
 export default class ArviointipyyntoForm extends Vue {
@@ -168,6 +170,7 @@ export default class ArviointipyyntoForm extends Vue {
   onSubmit(event: any) {
     event.preventDefault();
     console.log("onSubmit", this.form);
+    this.$emit("submit", this.form);
   }
 
   onSubmit2() {
