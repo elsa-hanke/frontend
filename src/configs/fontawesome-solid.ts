@@ -4,6 +4,8 @@ import {
   faArrowUp,
   faAward,
   faCheckCircle,
+  faChevronLeft,
+  faChevronRight,
   faCircle,
   faClipboard,
   faClipboardList,
@@ -18,16 +20,15 @@ import {
   faQuestion,
   faQuestionCircle,
   faSearch,
-  faShare,
-  faStar,
-  faChevronLeft,
-  faChevronRight
+  faShare
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(faArrowsAlt);
 library.add(faArrowUp);
 library.add(faAward);
 library.add(faCheckCircle);
+library.add(faChevronLeft);
+library.add(faChevronRight);
 library.add(faCircle);
 library.add(faClipboard);
 library.add(faClipboardList);
@@ -43,6 +44,3 @@ library.add(faQuestion);
 library.add(faQuestionCircle);
 library.add(faSearch);
 library.add(faShare);
-library.add(faStar);
-library.add(faChevronLeft);
-library.add(faChevronRight);

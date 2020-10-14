@@ -47,7 +47,7 @@
                   v-b-popover.hover.top="$t('arvioinnit-kuvaus')"
                 /></div
             ></template>
-            <b-tabs content-class="mt-3">
+            <b-tabs content-class="mt-3" :no-fade="true">
               <b-tab :title="$t('arvioinnit-ja-itsearvioinnit')" active>
                 <b-container fluid class="px-0 mb-3">
                   <b-row>
@@ -172,7 +172,9 @@
                   </b-pagination>
                 </div>
               </b-tab>
-              <b-tab :title="$t('arviointipyynnot')"> </b-tab>
+              <b-tab :title="$t('arviointipyynnot')">
+                Lorem ipsum...
+              </b-tab>
             </b-tabs>
           </b-card-skeleton>
         </b-col>

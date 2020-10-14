@@ -35,40 +35,30 @@
               </b-link>
             </template>
             <template v-slot:cell(arviointi)="data">
-              <div class="d-flex icon-star">
-                <font-awesome-icon
-                  icon="star"
-                  transform="shrink-8"
-                  size="2x"
-                  v-for="idx in data.item.arviointi"
-                  :key="`a-${idx}`"
-                />
-                <font-awesome-icon
-                  :icon="['far', 'star']"
-                  transform="shrink-8"
-                  size="2x"
-                  v-for="idx in maxValue - data.item.arviointi"
-                  :key="`b-${idx}`"
-                />
-              </div>
+              <b-form-rating
+                id="rating-inline"
+                inline
+                no-border
+                stars="5"
+                :readonly="true"
+                :value="data.item.arviointi"
+                v-b-tooltip.right.hover
+                :title="data.item.arviointi"
+                class="color-star p-0"
+              ></b-form-rating>
             </template>
             <template v-slot:cell(itsearviointi)="data">
-              <div class="d-flex icon-star">
-                <font-awesome-icon
-                  icon="star"
-                  transform="shrink-8"
-                  size="2x"
-                  v-for="idx in data.item.arviointi"
-                  :key="`c-${idx}`"
-                />
-                <font-awesome-icon
-                  :icon="['far', 'star']"
-                  transform="shrink-8"
-                  size="2x"
-                  v-for="idx in maxValue - data.item.arviointi"
-                  :key="`d-${idx}`"
-                />
-              </div>
+              <b-form-rating
+                id="rating-inline"
+                inline
+                no-border
+                stars="5"
+                :readonly="true"
+                :value="data.item.itsearviointi"
+                v-b-tooltip.right.hover
+                :title="data.item.itsearviointi"
+                class="color-star p-0"
+              ></b-form-rating>
             </template>
           </b-table>
           <b-button variant="primary">{{ $t("avaa-arviointi") }}</b-button>
@@ -130,7 +120,7 @@ export default class ArviointiCard extends Vue {
   }
 }
 
-.icon-star {
+.color-star {
   color: #ffc107;
 }
 </style>
