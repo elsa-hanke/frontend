@@ -40,7 +40,7 @@
           <b-card-skeleton :loading="false" class="mb-3">
             <template v-slot:header>
               <div class="d-flex justify-content-between align-items-center">
-                <span>{{ $t("arvioinnit") }}</span>
+                <span class="font-weight-500">{{ $t("arvioinnit") }}</span>
                 <font-awesome-icon
                   icon="question-circle"
                   fixed-width

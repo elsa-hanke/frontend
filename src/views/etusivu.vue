@@ -27,18 +27,17 @@
             class="mb-3"
           >
             <div class="d-flex align-items-center">
-              <div class="d-none d-lg-block d-xl-block">
+              <div class="d-none d-lg-block d-xl-block mr-3">
                 <avatar
                   :username="displayName"
                   background-color="gray"
                   color="white"
                   :size="96"
-                  class="mr-3"
                 ></avatar>
               </div>
               <div class="flex-fill">
                 <table
-                  class="table table-borderless"
+                  class="table table-borderless text-size-sm"
                   :summary="$t('henkilotiedot')"
                 >
                   <tr class="sr-only">
@@ -46,27 +45,33 @@
                     <th scope="col">{{ $t("arvo") }}</th>
                   </tr>
                   <tr>
-                    <td class="p-0 text-muted">{{ $t("nimi") }}</td>
-                    <td class="p-0">{{ displayName }}</td>
+                    <td class="py-0 pl-0 pr-1 text-muted">{{ $t("nimi") }}</td>
+                    <td class="py-0 pr-0 pl-1">{{ displayName }}</td>
                   </tr>
                   <tr>
-                    <td class="p-0 text-muted">{{ $t("puhelinnumero") }}</td>
-                    <td class="p-0">-</td>
+                    <td class="py-0 pl-0 pr-1 text-muted">
+                      {{ $t("puhelinnumero") }}
+                    </td>
+                    <td class="py-0 pr-0 pl-1">-</td>
                   </tr>
                   <tr>
-                    <td class="p-0 text-muted">{{ $t("erikoistumisala") }}</td>
-                    <td class="p-0">-</td>
+                    <td class="py-0 pl-0 pr-1 text-muted">
+                      {{ $t("erikoistumisala") }}
+                    </td>
+                    <td class="py-0 pr-0 pl-1">-</td>
                   </tr>
                   <tr>
-                    <td class="p-0 text-muted">{{ $t("vastuuhenkilo") }}</td>
-                    <td class="p-0">-</td>
+                    <td class="py-0 pl-0 pr-1 text-muted">
+                      {{ $t("vastuuhenkilo") }}
+                    </td>
+                    <td class="py-0 pr-0 pl-1">-</td>
                   </tr>
                 </table>
               </div>
               <b-button
                 size="sm"
                 variant="primary"
-                class="rounded-pill d-none d-lg-block d-xl-block"
+                class="rounded-pill d-none d-lg-block d-xl-block ml-3"
                 >{{ $t("muokkaa-tietoja") }}
               </b-button>
             </div>
@@ -129,3 +134,5 @@ export default class Etusivu extends Vue {
   }
 }
 </script>
+
+<style lang="scss" scoped></style>
