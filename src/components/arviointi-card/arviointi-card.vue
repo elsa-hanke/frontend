@@ -42,8 +42,6 @@
                 stars="5"
                 :readonly="true"
                 :value="data.item.arviointi"
-                v-b-tooltip.right.hover
-                :title="data.item.arviointi"
                 class="color-star p-0"
               ></b-form-rating>
             </template>
@@ -55,8 +53,6 @@
                 stars="5"
                 :readonly="true"
                 :value="data.item.itsearviointi"
-                v-b-tooltip.right.hover
-                :title="data.item.itsearviointi"
                 class="color-star p-0"
               ></b-form-rating>
             </template>
