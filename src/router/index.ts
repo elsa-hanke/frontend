@@ -4,6 +4,7 @@ import Meta from "vue-meta";
 import Arvioinnit from "../views/arvioinnit.vue";
 import Arviointi from "../views/arviointi.vue";
 import Arviointipyynto from "../views/arviointipyynto.vue";
+import ArviointipyyntoLahetetty from "../views/arviointipyynto-lahetetty.vue";
 import Asiakirjat from "../views/asiakirjat.vue";
 import Etusivu from "../views/etusivu.vue";
 import Itsearviointi from "../views/itsearviointi.vue";
@@ -44,6 +45,11 @@ const routes: Array<RouteConfig> = [
         path: "/arvioinnit/arviointipyynto",
         name: "arviointipyynto",
         component: Arviointipyynto
+      },
+      {
+        path: "/arvioinnit/arviointipyynto-lahetetty",
+        name: "arviointipyynto-lahetetty",
+        component: ArviointipyyntoLahetetty
       },
       {
         path: "/arvioinnit/itsearviointi",

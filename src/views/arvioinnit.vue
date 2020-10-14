@@ -47,101 +47,133 @@
                   v-b-popover.hover.top="$t('arvioinnit-kuvaus')"
                 /></div
             ></template>
-            <b-container fluid class="px-0 mb-3">
-              <b-row>
-                <b-col>
-                  <b-form-group
-                    :label="$t('epa-osaamisalue')"
-                    label-for="arvioinnit-osaamisalue-filter"
+            <b-tabs content-class="mt-3">
+              <b-tab :title="$t('arvioinnit-ja-itsearvioinnit')" active>
+                <b-container fluid class="px-0 mb-3">
+                  <b-row>
+                    <b-col>
+                      <b-form-group
+                        :label="$t('epa-osaamisalue')"
+                        label-for="arvioinnit-osaamisalue-filter"
+                      >
+                        <multiselect
+                          id="arvioinnit-osaamisalue-filter"
+                          v-model="selected.osaamisalue"
+                          :options="options.osaamisalue"
+                          :placeholder="$t('valitse')"
+                          label="name"
+                          track-by="name"
+                        >
+                          <template slot="noResult">
+                            <div>{{ $t("ei-hakutuloksia") }}</div>
+                          </template>
+                          <template slot="noOptions">{{
+                            $t("ei-vaihtoehtoja")
+                          }}</template>
+                        </multiselect>
+                      </b-form-group>
+                    </b-col>
+                    <b-col>
+                      <b-form-group
+                        :label="$t('tapahtuma')"
+                        label-for="arvioinnit-arviointi-filter"
+                      >
+                        <multiselect
+                          id="arvioinnit-arviointi-filter"
+                          v-model="selected.arviointi"
+                          :options="options.arviointi"
+                          :placeholder="$t('valitse')"
+                          label="name"
+                          track-by="name"
+                        >
+                          <template slot="noResult">
+                            <div>{{ $t("ei-hakutuloksia") }}</div>
+                          </template>
+                          <template slot="noOptions">{{
+                            $t("ei-vaihtoehtoja")
+                          }}</template>
+                        </multiselect>
+                      </b-form-group>
+                    </b-col>
+                    <b-col>
+                      <b-form-group
+                        :label="$t('tyoskentelyjakso')"
+                        label-for="arvioinnit-tyoskentelyjakso-filter"
+                      >
+                        <multiselect
+                          id="arvioinnit-tyoskentelyjakso-filter"
+                          v-model="selected.tyoskentelyjakso"
+                          :options="options.tyoskentelyjakso"
+                          :placeholder="$t('valitse')"
+                          label="name"
+                          track-by="name"
+                        >
+                          <template slot="noResult">
+                            <div>{{ $t("ei-hakutuloksia") }}</div>
+                          </template>
+                          <template slot="noOptions">{{
+                            $t("ei-vaihtoehtoja")
+                          }}</template>
+                        </multiselect>
+                      </b-form-group>
+                    </b-col>
+                    <b-col>
+                      <b-form-group
+                        :label="$t('kouluttaja')"
+                        label-for="arvioinnit-kouluttaja-filter"
+                      >
+                        <multiselect
+                          id="arvioinnit-kouluttaja-filter"
+                          v-model="selected.kouluttaja"
+                          :options="options.kouluttaja"
+                          :placeholder="$t('valitse')"
+                          label="name"
+                          track-by="name"
+                        >
+                          <template slot="noResult">
+                            <div>{{ $t("ei-hakutuloksia") }}</div>
+                          </template>
+                          <template slot="noOptions">{{
+                            $t("ei-vaihtoehtoja")
+                          }}</template>
+                        </multiselect>
+                      </b-form-group>
+                    </b-col>
+                  </b-row>
+                </b-container>
+                <div class="arvioinnit">
+                  <hr />
+                  <div v-for="(arviointi, idx) in arvioinnit" :key="idx">
+                    <arviointi-card />
+                  </div>
+                  <b-pagination
+                    v-model="page"
+                    :total-rows="10"
+                    :per-page="3"
+                    pills
+                    align="center"
+                    :hide-goto-end-buttons="true"
                   >
-                    <multiselect
-                      id="arvioinnit-osaamisalue-filter"
-                      v-model="selected.osaamisalue"
-                      :options="options.osaamisalue"
-                      :placeholder="$t('valitse')"
-                      label="name"
-                      track-by="name"
+                    <template v-slot:prev-text
+                      ><font-awesome-icon
+                        icon="chevron-left"
+                        fixed-width
+                        size="lg"
+                        cl
+                      />{{ $t("edellinen") }}</template
                     >
-                      <template slot="noResult">
-                        <div>{{ $t("ei-hakutuloksia") }}</div>
-                      </template>
-                      <template slot="noOptions">{{
-                        $t("ei-vaihtoehtoja")
-                      }}</template>
-                    </multiselect>
-                  </b-form-group>
-                </b-col>
-                <b-col>
-                  <b-form-group
-                    :label="$t('tapahtuma')"
-                    label-for="arvioinnit-arviointi-filter"
-                  >
-                    <multiselect
-                      id="arvioinnit-arviointi-filter"
-                      v-model="selected.arviointi"
-                      :options="options.arviointi"
-                      :placeholder="$t('valitse')"
-                      label="name"
-                      track-by="name"
-                    >
-                      <template slot="noResult">
-                        <div>{{ $t("ei-hakutuloksia") }}</div>
-                      </template>
-                      <template slot="noOptions">{{
-                        $t("ei-vaihtoehtoja")
-                      }}</template>
-                    </multiselect>
-                  </b-form-group>
-                </b-col>
-                <b-col>
-                  <b-form-group
-                    :label="$t('tyoskentelyjakso')"
-                    label-for="arvioinnit-tyoskentelyjakso-filter"
-                  >
-                    <multiselect
-                      id="arvioinnit-tyoskentelyjakso-filter"
-                      v-model="selected.tyoskentelyjakso"
-                      :options="options.tyoskentelyjakso"
-                      :placeholder="$t('valitse')"
-                      label="name"
-                      track-by="name"
-                    >
-                      <template slot="noResult">
-                        <div>{{ $t("ei-hakutuloksia") }}</div>
-                      </template>
-                      <template slot="noOptions">{{
-                        $t("ei-vaihtoehtoja")
-                      }}</template>
-                    </multiselect>
-                  </b-form-group>
-                </b-col>
-                <b-col>
-                  <b-form-group
-                    :label="$t('kouluttaja')"
-                    label-for="arvioinnit-kouluttaja-filter"
-                  >
-                    <multiselect
-                      id="arvioinnit-kouluttaja-filter"
-                      v-model="selected.kouluttaja"
-                      :options="options.kouluttaja"
-                      :placeholder="$t('valitse')"
-                      label="name"
-                      track-by="name"
-                    >
-                      <template slot="noResult">
-                        <div>{{ $t("ei-hakutuloksia") }}</div>
-                      </template>
-                      <template slot="noOptions">{{
-                        $t("ei-vaihtoehtoja")
-                      }}</template>
-                    </multiselect>
-                  </b-form-group>
-                </b-col>
-              </b-row>
-            </b-container>
-            <b-skeleton width="85%"></b-skeleton>
-            <b-skeleton width="55%"></b-skeleton>
-            <b-skeleton width="70%"></b-skeleton>
+                    <template v-slot:next-text
+                      >{{ $t("seuraava")
+                      }}<font-awesome-icon
+                        icon="chevron-right"
+                        fixed-width
+                        size="lg"
+                    /></template>
+                  </b-pagination>
+                </div>
+              </b-tab>
+              <b-tab :title="$t('arviointipyynnot')"> </b-tab>
+            </b-tabs>
           </b-card-skeleton>
         </b-col>
       </b-row>
@@ -151,13 +183,15 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import BCardSkeleton from "@/components/card/card.vue";
 import Multiselect from "vue-multiselect";
+import BCardSkeleton from "@/components/card/card.vue";
+import ArviointiCard from "@/components/arviointi-card/arviointi-card.vue";
 
 @Component({
   components: {
     BCardSkeleton,
-    Multiselect
+    Multiselect,
+    ArviointiCard
   }
 })
 export default class Arvioinnit extends Vue {
@@ -174,6 +208,8 @@ export default class Arvioinnit extends Vue {
     tyoskentelyjakso: [],
     kouluttaja: []
   };
+  arvioinnit = [{}, {}, {}, {}, {}];
+  page = 1;
 
   items = [
     {
