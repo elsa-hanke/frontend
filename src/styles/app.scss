@@ -1,3 +1,5 @@
+@import "~@/styles/variables";
+
 .font-weight-400 {
   font-weight: 400;
 }
@@ -12,4 +14,30 @@
 
 label {
   font-weight: 500;
+}
+
+.modal-content {
+  box-shadow: 0 0 0.5rem rgba(black, .5);
+  .modal-header {
+    color: white;
+    background-color: $primary;
+    display: flex;
+    align-items: center;
+    .modal-title {
+      font-size: 1rem;
+    }
+    .close {
+      color: white;
+      text-shadow: none;
+      opacity: 1;
+      margin: -0.75rem -1.25rem -0.75rem auto;
+      font-size: 500;
+      font-size: 1.5rem;
+    }
+  }
+}
+
+.custom-control.custom-radio {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
 }

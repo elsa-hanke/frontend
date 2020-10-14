@@ -112,8 +112,8 @@ import store from "@/store";
 
 @Component({
   components: {
-    "b-card-skeleton": BCardSkeleton,
-    avatar: Avatar
+    BCardSkeleton,
+    Avatar
   }
 })
 export default class Etusivu extends Vue {

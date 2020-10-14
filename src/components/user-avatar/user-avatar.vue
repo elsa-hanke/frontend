@@ -19,7 +19,7 @@ import Avatar from "vue-avatar";
 
 @Component({
   components: {
-    avatar: Avatar
+    Avatar
   }
 })
 export default class UserAvatar extends Vue {
