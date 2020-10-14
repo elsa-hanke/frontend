@@ -18,12 +18,12 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import Navbar from "@/components/navbar/navbar.vue";
-import SidebarbarMenu from "@/components/sidebar-menu/sidebar-menu.vue";
+import SidebarMenu from "@/components/sidebar-menu/sidebar-menu.vue";
 
 @Component({
   components: {
-    navbar: Navbar,
-    "sidebar-menu": SidebarbarMenu
+    Navbar,
+    SidebarMenu
   }
 })
 export default class Root extends Vue {}

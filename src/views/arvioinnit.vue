@@ -135,7 +135,7 @@ import BCardSkeleton from "@/components/card/card.vue";
 
 @Component({
   components: {
-    "b-card-skeleton": BCardSkeleton
+    BCardSkeleton
   }
 })
 export default class Arvioinnit extends Vue {

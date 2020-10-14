@@ -71,8 +71,8 @@ import UserAvatar from "@/components/user-avatar/user-avatar.vue";
 
 @Component({
   components: {
-    avatar: Avatar,
-    "user-avatar": UserAvatar
+    Avatar,
+    UserAvatar
   }
 })
 export default class Navbar extends Vue {
