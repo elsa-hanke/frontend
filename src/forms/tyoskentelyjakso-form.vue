@@ -4,32 +4,40 @@
       :label-for="tyoskentelyjaksoKuntaId"
       :label="$t('kunta')"
       :required="true"
-      ><b-form-select
+    >
+      <multiselect
         :id="tyoskentelyjaksoKuntaId"
         v-model="form.kunta"
         :options="kunnat"
-        ><template v-slot:first>
-          <b-form-select-option :value="null" disabled>{{
-            $t("kirjoita-tai-valitse")
-          }}</b-form-select-option>
+        :placeholder="$t('valitse')"
+        label="name"
+        track-by="name"
+      >
+        <template slot="noResult">
+          <div>{{ $t("ei-hakutuloksia") }}</div>
         </template>
-      </b-form-select></elsa-form-group
-    >
+        <template slot="noOptions">{{ $t("ei-vaihtoehtoja") }}</template>
+      </multiselect>
+    </elsa-form-group>
     <elsa-form-group
       :label-for="tyoskentelyjaksoTyoskentelypaikkaId"
       :label="$t('tyoskentelypaikka')"
       :required="true"
-      ><b-form-select
+    >
+      <multiselect
         :id="tyoskentelyjaksoTyoskentelypaikkaId"
         v-model="form.tyoskentelypaikka"
         :options="tyoskentelypaikat"
-        ><template v-slot:first>
-          <b-form-select-option :value="null" disabled>{{
-            $t("kirjoita-tai-valitse")
-          }}</b-form-select-option>
+        :placeholder="$t('valitse')"
+        label="name"
+        track-by="name"
+      >
+        <template slot="noResult">
+          <div>{{ $t("ei-hakutuloksia") }}</div>
         </template>
-      </b-form-select></elsa-form-group
-    >
+        <template slot="noOptions">{{ $t("ei-vaihtoehtoja") }}</template>
+      </multiselect>
+    </elsa-form-group>
     <elsa-form-group
       :label-for="tyoskentelyjaksoTyyppiId"
       :label="$t('tyyppi')"
@@ -118,12 +126,13 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-//import { Prop } from "vue-property-decorator";
+import Multiselect from "vue-multiselect";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
 
 @Component({
   components: {
-    ElsaFormGroup
+    ElsaFormGroup,
+    Multiselect
   }
 })
 export default class TyoskentelyjaksoForm extends Vue {
