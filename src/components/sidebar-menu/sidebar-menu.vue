@@ -2,6 +2,7 @@
   <nav
     id="sidebar-menu"
     class="col-lg-2 d-none d-lg-block d-xl-block bg-white sidebar"
+    :style="{ paddingTop: paddingTop + 'px' }"
   >
     <div class="sidebar-sticky font-weight-500">
       <b-nav vertical>
@@ -47,7 +48,17 @@ import Vue from "vue";
 import Component from "vue-class-component";
 
 @Component
-export default class SidebarMenu extends Vue {}
+export default class SidebarMenu extends Vue {
+  paddingTop = 64;
+
+  // Tarkista sivunavigaation paikka
+  mounted() {
+    const el = document.getElementById("navbar-top");
+    if (el) {
+      this.paddingTop = el.offsetHeight;
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -59,7 +70,7 @@ export default class SidebarMenu extends Vue {}
   bottom: 0;
   left: 0;
   z-index: 100;
-  padding: 64px 0 0;
+  padding: 0;
   box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
 
   .nav-link {
