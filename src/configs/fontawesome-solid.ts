@@ -18,7 +18,10 @@ import {
   faQuestion,
   faQuestionCircle,
   faSearch,
-  faShare
+  faShare,
+  faStar,
+  faChevronLeft,
+  faChevronRight
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(faArrowsAlt);
@@ -40,3 +43,6 @@ library.add(faQuestion);
 library.add(faQuestionCircle);
 library.add(faSearch);
 library.add(faShare);
+library.add(faStar);
+library.add(faChevronLeft);
+library.add(faChevronRight);

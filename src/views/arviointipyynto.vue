@@ -8,7 +8,7 @@
             :loading="false"
             class="mb-3 arviointipyynto-card"
             :header="$t('pyyda-arviointia')"
-            ><arviointipyynto-form />
+            ><arviointipyynto-form @submit="onSubmit" />
           </b-card-skeleton>
         </b-col>
       </b-row>
@@ -45,10 +45,17 @@ export default class Arviointipyynto extends Vue {
       active: true
     }
   ];
+  saved = false;
+
+  onSubmit(form: any) {
+    console.log(form);
+    this.saved = true;
+    this.$router.push({ name: "arviointipyynto-lahetetty" });
+  }
 
   async beforeRouteLeave(to: any, from: any, next: any) {
     try {
-      if (await confimExit(this)) {
+      if (this.saved || (await confimExit(this))) {
         next();
       } else {
         next(false);
