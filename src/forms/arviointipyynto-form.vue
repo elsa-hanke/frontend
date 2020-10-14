@@ -13,34 +13,44 @@
       :add-new="onSubmit2"
       :add-new-label="$t('lisaa-tyoskentelyjakso')"
       :required="true"
-      ><template v-slot:modal-content><tyoskentelyjakso-form /></template
-      ><b-form-select
+    >
+      <template v-slot:modal-content>
+        <tyoskentelyjakso-form />
+      </template>
+      <multiselect
         :id="arviointipyyntoTyoskentelyjaksoId"
         v-model="form.tyoskentelyjakso"
         :options="tyoskentelyjaksot"
-        ><template v-slot:first>
-          <b-form-select-option :value="null" disabled>{{
-            $t("valitse")
-          }}</b-form-select-option>
+        :placeholder="$t('valitse')"
+        label="name"
+        track-by="name"
+      >
+        <template slot="noResult">
+          <div>{{ $t("ei-hakutuloksia") }}</div>
         </template>
-      </b-form-select></elsa-form-group
-    >
+        <template slot="noOptions">{{ $t("ei-vaihtoehtoja") }}</template>
+      </multiselect>
+    </elsa-form-group>
     <b-form-group :label-for="arviointipyyntoEpaOsaamisalueId"
       ><template v-slot:label
         ><div class="text-nowrap">
           {{ $t("epa-osaamisalue") }}
           <span class="text-primary">*</span>
         </div></template
-      ><b-form-select
+      >
+      <multiselect
         :id="arviointipyyntoEpaOsaamisalueId"
         v-model="form.epaOsaamisalue"
         :options="epaOsaamisalueet"
-        ><template v-slot:first>
-          <b-form-select-option :value="null" disabled>{{
-            $t("valitse")
-          }}</b-form-select-option>
+        :placeholder="$t('valitse')"
+        label="name"
+        track-by="name"
+      >
+        <template slot="noResult">
+          <div>{{ $t("ei-hakutuloksia") }}</div>
         </template>
-      </b-form-select>
+        <template slot="noOptions">{{ $t("ei-vaihtoehtoja") }}</template>
+      </multiselect>
     </b-form-group>
     <b-form-group label-for="arviointipyynto-arvioitava-tapahtuma"
       ><template v-slot:label
@@ -61,17 +71,24 @@
         :add-new-label="$t('lisaa-kouluttaja')"
         :required="true"
         class="col-md-8"
-        ><b-form-select
+      >
+        <template v-slot:modal-content>
+          <b-alert variant="warning" show>todo</b-alert>
+        </template>
+        <multiselect
           :id="arviointipyyntoKouluttajaId"
           v-model="form.kouluttaja"
           :options="kouluttajat"
-          ><template v-slot:first>
-            <b-form-select-option :value="null" disabled>{{
-              $t("valitse")
-            }}</b-form-select-option>
+          :placeholder="$t('valitse')"
+          label="name"
+          track-by="name"
+        >
+          <template slot="noResult">
+            <div>{{ $t("ei-hakutuloksia") }}</div>
           </template>
-        </b-form-select></elsa-form-group
-      >
+          <template slot="noOptions">{{ $t("ei-vaihtoehtoja") }}</template>
+        </multiselect>
+      </elsa-form-group>
       <b-form-group :label-for="arviointipyyntoAjankohtaId" class="col-md-4"
         ><template v-slot:label
           ><div class="text-nowrap">
@@ -120,6 +137,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
+import Multiselect from "vue-multiselect";
 import store from "@/store";
 import UserAvatar from "@/components/user-avatar/user-avatar.vue";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
@@ -129,7 +147,8 @@ import TyoskentelyjaksoForm from "@/forms/tyoskentelyjakso-form.vue";
   components: {
     ElsaFormGroup,
     TyoskentelyjaksoForm,
-    UserAvatar
+    UserAvatar,
+    Multiselect
   }
 })
 export default class ArviointipyyntoForm extends Vue {

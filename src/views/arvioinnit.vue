@@ -54,16 +54,21 @@
                     :label="$t('epa-osaamisalue')"
                     label-for="arvioinnit-osaamisalue-filter"
                   >
-                    <b-form-select
+                    <multiselect
                       id="arvioinnit-osaamisalue-filter"
                       v-model="selected.osaamisalue"
                       :options="options.osaamisalue"
-                      ><template v-slot:first>
-                        <b-form-select-option :value="null" disabled>{{
-                          $t("valitse")
-                        }}</b-form-select-option>
-                      </template></b-form-select
+                      :placeholder="$t('valitse')"
+                      label="name"
+                      track-by="name"
                     >
+                      <template slot="noResult">
+                        <div>{{ $t("ei-hakutuloksia") }}</div>
+                      </template>
+                      <template slot="noOptions">{{
+                        $t("ei-vaihtoehtoja")
+                      }}</template>
+                    </multiselect>
                   </b-form-group>
                 </b-col>
                 <b-col>
@@ -71,16 +76,21 @@
                     :label="$t('tapahtuma')"
                     label-for="arvioinnit-arviointi-filter"
                   >
-                    <b-form-select
+                    <multiselect
                       id="arvioinnit-arviointi-filter"
                       v-model="selected.arviointi"
                       :options="options.arviointi"
-                      ><template v-slot:first>
-                        <b-form-select-option :value="null" disabled>{{
-                          $t("valitse")
-                        }}</b-form-select-option>
-                      </template></b-form-select
+                      :placeholder="$t('valitse')"
+                      label="name"
+                      track-by="name"
                     >
+                      <template slot="noResult">
+                        <div>{{ $t("ei-hakutuloksia") }}</div>
+                      </template>
+                      <template slot="noOptions">{{
+                        $t("ei-vaihtoehtoja")
+                      }}</template>
+                    </multiselect>
                   </b-form-group>
                 </b-col>
                 <b-col>
@@ -88,16 +98,21 @@
                     :label="$t('tyoskentelyjakso')"
                     label-for="arvioinnit-tyoskentelyjakso-filter"
                   >
-                    <b-form-select
+                    <multiselect
                       id="arvioinnit-tyoskentelyjakso-filter"
                       v-model="selected.tyoskentelyjakso"
                       :options="options.tyoskentelyjakso"
-                      ><template v-slot:first>
-                        <b-form-select-option :value="null" disabled>{{
-                          $t("valitse")
-                        }}</b-form-select-option>
-                      </template></b-form-select
+                      :placeholder="$t('valitse')"
+                      label="name"
+                      track-by="name"
                     >
+                      <template slot="noResult">
+                        <div>{{ $t("ei-hakutuloksia") }}</div>
+                      </template>
+                      <template slot="noOptions">{{
+                        $t("ei-vaihtoehtoja")
+                      }}</template>
+                    </multiselect>
                   </b-form-group>
                 </b-col>
                 <b-col>
@@ -105,16 +120,21 @@
                     :label="$t('kouluttaja')"
                     label-for="arvioinnit-kouluttaja-filter"
                   >
-                    <b-form-select
+                    <multiselect
                       id="arvioinnit-kouluttaja-filter"
                       v-model="selected.kouluttaja"
                       :options="options.kouluttaja"
-                      ><template v-slot:first>
-                        <b-form-select-option :value="null" disabled>{{
-                          $t("valitse")
-                        }}</b-form-select-option>
-                      </template></b-form-select
+                      :placeholder="$t('valitse')"
+                      label="name"
+                      track-by="name"
                     >
+                      <template slot="noResult">
+                        <div>{{ $t("ei-hakutuloksia") }}</div>
+                      </template>
+                      <template slot="noOptions">{{
+                        $t("ei-vaihtoehtoja")
+                      }}</template>
+                    </multiselect>
                   </b-form-group>
                 </b-col>
               </b-row>
@@ -132,10 +152,12 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import BCardSkeleton from "@/components/card/card.vue";
+import Multiselect from "vue-multiselect";
 
 @Component({
   components: {
-    BCardSkeleton
+    BCardSkeleton,
+    Multiselect
   }
 })
 export default class Arvioinnit extends Vue {
