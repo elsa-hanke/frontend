@@ -1,10 +1,23 @@
 <template>
-  <b-form-group :label-for="labelFor"
+  <b-form-group :label-for="uid" v-bind="$attrs"
     ><template v-slot:label
       ><div class="d-flex justify-content-between align-items-center flex-wrap">
         <div class="text-nowrap" :class="{ 'mr-3': addNew }">
           {{ label }}
-          <span class="text-primary" v-if="required">*</span>
+          <span class="text-primary"
+            >{{ required ? "*" : "" }}
+            <font-awesome-layers
+              v-if="help"
+              fixed-width
+              v-b-popover.hover.top="help"
+            >
+              <font-awesome-icon fixed-width :icon="['far', 'circle']" />
+              <font-awesome-icon
+                fixed-width
+                icon="info"
+                transform="shrink-8"
+              /> </font-awesome-layers
+          ></span>
         </div>
         <div class="text-muted form-group-help" v-if="addNew">
           <font-awesome-layers fixed-width class="mr-1">
@@ -32,7 +45,7 @@
           ><span>{{ $t("tai-valitse-alta") }} </span>
         </div>
       </div></template
-    ><slot
+    ><slot v-bind:uid="uid"
   /></b-form-group>
 </template>
 
@@ -58,6 +71,9 @@ export default class ElsaFormGroup extends Vue {
 
   @Prop({ required: false, type: Boolean, default: false })
   required!: boolean;
+
+  @Prop({ required: false, type: String })
+  help!: string;
 
   async hideConfirm(event: any) {
     // Tarkista, onko poistuminen jo vahvistettu
@@ -85,6 +101,10 @@ export default class ElsaFormGroup extends Vue {
 
   get modalRef() {
     return `elsa-form-group-modal-${(this as any)._uid}`;
+  }
+
+  get uid() {
+    return `elsa-form-group-${(this as any)._uid}`;
   }
 }
 </script>

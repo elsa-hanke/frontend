@@ -41,7 +41,7 @@
                 stars="5"
                 :readonly="true"
                 :value="data.item.arviointi"
-                class="color-star p-0"
+                class="text-star p-0"
               ></b-form-rating>
             </template>
             <template v-slot:cell(itsearviointi)="data">
@@ -51,7 +51,7 @@
                 stars="5"
                 :readonly="true"
                 :value="data.item.itsearviointi"
-                class="color-star p-0"
+                class="text-star p-0"
               ></b-form-rating>
             </template>
           </b-table>
@@ -112,9 +112,5 @@ export default class ArviointiCard extends Vue {
   td:last-child {
     padding-right: 0;
   }
-}
-
-.color-star {
-  color: #ffc107;
 }
 </style>
