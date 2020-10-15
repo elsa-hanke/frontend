@@ -60,7 +60,7 @@
       class="align-items-center mb-md-0"
     >
       <template v-slot="{ uid }">
-        <span :id="uid">Kouluttaja Kouluttaja</span>
+        <user-avatar :id="uid" displayName="Kouluttaja Kouluttaja" />
       </template>
     </elsa-form-group>
     <elsa-form-group
