@@ -52,92 +52,94 @@
                 <b-container fluid class="px-0 mb-3">
                   <b-row>
                     <b-col>
-                      <b-form-group
-                        :label="$t('epa-osaamisalue')"
-                        label-for="arvioinnit-osaamisalue-filter"
-                      >
-                        <multiselect
-                          id="arvioinnit-osaamisalue-filter"
-                          v-model="selected.osaamisalue"
-                          :options="options.osaamisalue"
-                          :placeholder="$t('valitse')"
-                          label="name"
-                          track-by="name"
-                        >
-                          <template slot="noResult">
-                            <div>{{ $t("ei-hakutuloksia") }}</div>
-                          </template>
-                          <template slot="noOptions">{{
-                            $t("ei-vaihtoehtoja")
-                          }}</template>
-                        </multiselect>
-                      </b-form-group>
+                      <elsa-form-group :label="$t('epa-osaamisalue')">
+                        <template v-slot="{ uid }">
+                          <multiselect
+                            :id="uid"
+                            v-model="selected.osaamisalue"
+                            :options="options.osaamisalue"
+                            :placeholder="$t('valitse')"
+                            label="name"
+                            track-by="name"
+                          >
+                            <template slot="noResult">
+                              <div>{{ $t("ei-hakutuloksia") }}</div>
+                            </template>
+                            <template slot="noOptions">{{
+                              $t("ei-vaihtoehtoja")
+                            }}</template>
+                          </multiselect>
+                        </template>
+                      </elsa-form-group>
                     </b-col>
                     <b-col>
-                      <b-form-group
-                        :label="$t('tapahtuma')"
-                        label-for="arvioinnit-arviointi-filter"
-                      >
-                        <multiselect
-                          id="arvioinnit-arviointi-filter"
-                          v-model="selected.arviointi"
-                          :options="options.arviointi"
-                          :placeholder="$t('valitse')"
-                          label="name"
-                          track-by="name"
-                        >
-                          <template slot="noResult">
-                            <div>{{ $t("ei-hakutuloksia") }}</div>
-                          </template>
-                          <template slot="noOptions">{{
-                            $t("ei-vaihtoehtoja")
-                          }}</template>
-                        </multiselect>
-                      </b-form-group>
+                      <elsa-form-group :label="$t('tapahtuma')">
+                        <template v-slot="{ uid }">
+                          <multiselect
+                            :id="uid"
+                            v-model="selected.arviointi"
+                            :options="options.arviointi"
+                            :placeholder="$t('valitse')"
+                            label="name"
+                            track-by="name"
+                          >
+                            <template slot="noResult">
+                              <div>{{ $t("ei-hakutuloksia") }}</div>
+                            </template>
+                            <template slot="noOptions">{{
+                              $t("ei-vaihtoehtoja")
+                            }}</template>
+                          </multiselect>
+                        </template>
+                      </elsa-form-group>
                     </b-col>
                     <b-col>
-                      <b-form-group
+                      <elsa-form-group
                         :label="$t('tyoskentelyjakso')"
                         label-for="arvioinnit-tyoskentelyjakso-filter"
                       >
-                        <multiselect
-                          id="arvioinnit-tyoskentelyjakso-filter"
-                          v-model="selected.tyoskentelyjakso"
-                          :options="options.tyoskentelyjakso"
-                          :placeholder="$t('valitse')"
-                          label="name"
-                          track-by="name"
-                        >
-                          <template slot="noResult">
-                            <div>{{ $t("ei-hakutuloksia") }}</div>
-                          </template>
-                          <template slot="noOptions">{{
-                            $t("ei-vaihtoehtoja")
-                          }}</template>
-                        </multiselect>
-                      </b-form-group>
+                        <template v-slot="{ uid }">
+                          <multiselect
+                            :id="uid"
+                            v-model="selected.tyoskentelyjakso"
+                            :options="options.tyoskentelyjakso"
+                            :placeholder="$t('valitse')"
+                            label="name"
+                            track-by="name"
+                          >
+                            <template slot="noResult">
+                              <div>{{ $t("ei-hakutuloksia") }}</div>
+                            </template>
+                            <template slot="noOptions">{{
+                              $t("ei-vaihtoehtoja")
+                            }}</template>
+                          </multiselect>
+                        </template>
+                      </elsa-form-group>
                     </b-col>
                     <b-col>
-                      <b-form-group
+                      <elsa-form-group
                         :label="$t('kouluttaja')"
                         label-for="arvioinnit-kouluttaja-filter"
                       >
-                        <multiselect
-                          id="arvioinnit-kouluttaja-filter"
-                          v-model="selected.kouluttaja"
-                          :options="options.kouluttaja"
-                          :placeholder="$t('valitse')"
-                          label="name"
-                          track-by="name"
-                        >
-                          <template slot="noResult">
-                            <div>{{ $t("ei-hakutuloksia") }}</div>
-                          </template>
-                          <template slot="noOptions">{{
-                            $t("ei-vaihtoehtoja")
-                          }}</template>
-                        </multiselect>
-                      </b-form-group>
+                        <template v-slot="{ uid }">
+                          <multiselect
+                            :id="uid"
+                            v-model="selected.kouluttaja"
+                            :options="options.kouluttaja"
+                            :placeholder="$t('valitse')"
+                            label="name"
+                            track-by="name"
+                          >
+                            <template slot="noResult">
+                              <div>{{ $t("ei-hakutuloksia") }}</div>
+                            </template>
+                            <template slot="noOptions">{{
+                              $t("ei-vaihtoehtoja")
+                            }}</template>
+                          </multiselect>
+                        </template>
+                      </elsa-form-group>
                     </b-col>
                   </b-row>
                 </b-container>
@@ -188,12 +190,14 @@ import { Component, Vue } from "vue-property-decorator";
 import Multiselect from "vue-multiselect";
 import BCardSkeleton from "@/components/card/card.vue";
 import ArviointiCard from "@/components/arviointi-card/arviointi-card.vue";
+import ElsaFormGroup from "@/components/form-group/form-group.vue";
 
 @Component({
   components: {
     BCardSkeleton,
     Multiselect,
-    ArviointiCard
+    ArviointiCard,
+    ElsaFormGroup
   }
 })
 export default class Arvioinnit extends Vue {

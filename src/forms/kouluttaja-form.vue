@@ -1,24 +1,15 @@
 <template>
   <b-form @submit="onSubmit">
-    <b-form-group :label-for="kouluttajaNimiId"
-      ><template v-slot:label
-        ><div class="text-nowrap">
-          {{ $t("kouluttajan-nimi") }}
-          <span class="text-primary">*</span>
-        </div></template
-      ><b-form-input :id="kouluttajaNimiId" v-model="form.nimi"></b-form-input>
-    </b-form-group>
-    <b-form-group :label-for="kouluttajaSahkopostiId"
-      ><template v-slot:label
-        ><div class="text-nowrap">
-          {{ $t("kouluttajan-sahkoposti") }}
-          <span class="text-primary">*</span>
-        </div></template
-      ><b-form-input
-        :id="kouluttajaSahkopostiId"
-        v-model="form.sahkoposti"
-      ></b-form-input>
-    </b-form-group>
+    <elsa-form-group :label="$t('kouluttajan-nimi')" :required="true">
+      <template v-slot="{ uid }">
+        <b-form-input :id="uid" v-model="form.nimi"></b-form-input>
+      </template>
+    </elsa-form-group>
+    <elsa-form-group :label="$t('kouluttajan-sahkoposti')" :required="true">
+      <template v-slot="{ uid }">
+        <b-form-input :id="uid" v-model="form.sahkoposti" />
+      </template>
+    </elsa-form-group>
   </b-form>
 </template>
 
@@ -41,18 +32,6 @@ export default class KouluttajaForm extends Vue {
   onSubmit(event: any) {
     event.preventDefault();
     console.log("onSubmit", this.form);
-  }
-
-  get uid() {
-    return (this as any)._uid;
-  }
-
-  get kouluttajaNimiId() {
-    return `kouluttaja-nimi-${this.uid}`;
-  }
-
-  get kouluttajaSahkopostiId() {
-    return `kouluttaja-sahkoposti-${this.uid}`;
   }
 }
 </script>

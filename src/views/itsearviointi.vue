@@ -9,9 +9,7 @@
             class="mb-3"
             :header="$t('tee-itsearviointi')"
           >
-            <b-skeleton width="85%"></b-skeleton>
-            <b-skeleton width="55%"></b-skeleton>
-            <b-skeleton width="70%"></b-skeleton>
+            <arviointi-form @submit="onSubmit" />
           </b-card-skeleton>
         </b-col>
         <b-col class="pl-3 pr-0" lg="2"></b-col>
@@ -22,11 +20,14 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import { confimExit } from "@/utils/confirm";
 import BCardSkeleton from "@/components/card/card.vue";
+import ArviointiForm from "@/forms/arviointi-form.vue";
 
 @Component({
   components: {
-    BCardSkeleton
+    BCardSkeleton,
+    ArviointiForm
   }
 })
 export default class Itsearviointi extends Vue {
@@ -44,5 +45,24 @@ export default class Itsearviointi extends Vue {
       active: true
     }
   ];
+  saved = false;
+
+  onSubmit(form: any) {
+    console.log(form);
+    this.saved = true;
+    this.$router.push({ name: "itsearviointi-valmis" });
+  }
+
+  async beforeRouteLeave(to: any, from: any, next: any) {
+    try {
+      if (this.saved || (await confimExit(this))) {
+        next();
+      } else {
+        next(false);
+      }
+    } catch (err) {
+      next(false);
+    }
+  }
 }
 </script>
