@@ -8,6 +8,7 @@ import ArviointipyyntoLahetetty from "../views/arviointipyynto-lahetetty.vue";
 import Asiakirjat from "../views/asiakirjat.vue";
 import Etusivu from "../views/etusivu.vue";
 import Itsearviointi from "../views/itsearviointi.vue";
+import ItsearviointiValmis from "../views/itsearviointi-valmis.vue";
 import Koulutukset from "../views/koulutukset.vue";
 import Koulutussuunnitelma from "../views/koulutussuunnitelma.vue";
 import Login from "../views/login.vue";
@@ -55,6 +56,11 @@ const routes: Array<RouteConfig> = [
         path: "/arvioinnit/itsearviointi",
         name: "itsearviointi",
         component: Itsearviointi
+      },
+      {
+        path: "/arvioinnit/itsearviointi-valmis",
+        name: "itsearviointi-valmis",
+        component: ItsearviointiValmis
       },
       {
         path: "/arvioinnit/:id",
