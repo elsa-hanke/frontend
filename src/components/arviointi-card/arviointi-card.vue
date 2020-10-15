@@ -36,7 +36,6 @@
             </template>
             <template v-slot:cell(arviointi)="data">
               <b-form-rating
-                id="rating-inline"
                 inline
                 no-border
                 stars="5"
@@ -47,7 +46,6 @@
             </template>
             <template v-slot:cell(itsearviointi)="data">
               <b-form-rating
-                id="rating-inline"
                 inline
                 no-border
                 stars="5"
