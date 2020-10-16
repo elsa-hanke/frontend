@@ -101,7 +101,7 @@ const routes: Array<RouteConfig> = [
 ];
 
 const router = new VueRouter({
-  mode: "hash", // todo: history
+  mode: "history",
   base: process.env.BASE_URL,
   routes
 });
