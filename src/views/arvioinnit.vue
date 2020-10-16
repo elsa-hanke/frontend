@@ -49,10 +49,13 @@
             ></template>
             <b-tabs content-class="mt-3" :no-fade="true">
               <b-tab :title="$t('arvioinnit-ja-itsearvioinnit')" active>
-                <b-container fluid class="px-0 mb-3">
+                <b-container fluid class="px-0">
                   <b-row>
                     <b-col>
-                      <elsa-form-group :label="$t('epa-osaamisalue')">
+                      <elsa-form-group
+                        :label="$t('epa-osaamisalue')"
+                        class="mb-0"
+                      >
                         <template v-slot="{ uid }">
                           <multiselect
                             :id="uid"
@@ -73,7 +76,7 @@
                       </elsa-form-group>
                     </b-col>
                     <b-col>
-                      <elsa-form-group :label="$t('tapahtuma')">
+                      <elsa-form-group :label="$t('tapahtuma')" class="mb-0">
                         <template v-slot="{ uid }">
                           <multiselect
                             :id="uid"
@@ -97,6 +100,7 @@
                       <elsa-form-group
                         :label="$t('tyoskentelyjakso')"
                         label-for="arvioinnit-tyoskentelyjakso-filter"
+                        class="mb-0"
                       >
                         <template v-slot="{ uid }">
                           <multiselect
@@ -121,6 +125,7 @@
                       <elsa-form-group
                         :label="$t('kouluttaja')"
                         label-for="arvioinnit-kouluttaja-filter"
+                        class="mb-0"
                       >
                         <template v-slot="{ uid }">
                           <multiselect

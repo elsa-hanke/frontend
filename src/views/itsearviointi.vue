@@ -6,10 +6,10 @@
         <b-col class="pl-0 pr-0">
           <b-card-skeleton
             :loading="false"
-            class="mb-3"
+            class="mb-3 itsearviointi-card"
             :header="$t('tee-itsearviointi')"
           >
-            <arviointi-form @submit="onSubmit" />
+            <arviointi-form @submit="onSubmit" :editing="true" />
           </b-card-skeleton>
         </b-col>
         <b-col class="pl-3 pr-0" lg="2"></b-col>
@@ -66,3 +66,9 @@ export default class Itsearviointi extends Vue {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.itsearviointi-card {
+  max-width: 970px;
+}
+</style>

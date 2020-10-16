@@ -53,7 +53,7 @@ const routes: Array<RouteConfig> = [
         component: ArviointipyyntoLahetetty
       },
       {
-        path: "/arvioinnit/itsearviointi",
+        path: "/arvioinnit/:arviointiId/itsearviointi",
         name: "itsearviointi",
         component: Itsearviointi
       },
@@ -63,7 +63,7 @@ const routes: Array<RouteConfig> = [
         component: ItsearviointiValmis
       },
       {
-        path: "/arvioinnit/:id",
+        path: "/arvioinnit/:arviointiId",
         name: "arviointi",
         component: Arviointi
       },

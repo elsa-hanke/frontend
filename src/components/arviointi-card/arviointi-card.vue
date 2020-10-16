@@ -55,7 +55,11 @@
               ></b-form-rating>
             </template>
           </b-table>
-          <b-button variant="primary">{{ $t("avaa-arviointi") }}</b-button>
+          <b-button
+            variant="primary"
+            :to="{ name: 'arviointi', params: { arviointiId: '1' } }"
+            >{{ $t("avaa-arviointi") }}</b-button
+          >
         </b-col>
       </b-row>
     </b-container>
@@ -93,9 +97,11 @@ export default class ArviointiCard extends Vue {
 </script>
 
 <style lang="scss" scoped>
+@import "@/styles/_variables.scss";
+
 ::v-deep table {
   thead tr {
-    border-bottom: solid #ced4da 1px;
+    border-bottom: solid $gray-300 1px;
   }
   th:first-child {
     padding-left: 0;

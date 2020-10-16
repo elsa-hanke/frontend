@@ -26,7 +26,7 @@
               <b-button
                 type="submit"
                 variant="primary"
-                :to="{ name: 'itsearviointi' }"
+                :to="{ name: 'itsearviointi', params: { arviointiId: '1' } }"
                 >{{ $t("tee-tapahtumasta-itsearviointi") }}</b-button
               >
             </div>
