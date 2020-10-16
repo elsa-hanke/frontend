@@ -1,10 +1,10 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const { gitDescribeSync } = require("git-describe");
 try {
   process.env.VUE_APP_COMMIT_HASH = gitDescribeSync().hash;
 } catch (err) {
   console.warn("Cannot get Git commit hash");
 }
-
 
 module.exports = {
   lintOnSave: "default",
