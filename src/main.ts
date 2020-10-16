@@ -14,17 +14,29 @@ import "@/styles/app.scss";
 Vue.config.productionTip = false;
 
 router.beforeEach(async (to, from, next) => {
-  if (to.matched.length > 0 && to.matched[0].name === "login") {
-    if (store.getters.isLoggedIn) {
-      next("/");
-    } else {
-      next();
-    }
-  }
   await store.dispatch("authorize");
   if (store.getters.isLoggedIn) {
+    if (typeof localStorage !== "undefined") {
+      try {
+        const to = localStorage.getItem("to") as string;
+        localStorage.removeItem("to");
+        next({
+          ...JSON.parse(to),
+          replace: true
+        });
+      } catch (err) {
+        console.warn(err);
+      }
+    }
     next();
   } else {
+    if (typeof localStorage !== "undefined") {
+      try {
+        localStorage.setItem("to", JSON.stringify(to));
+      } catch (err) {
+        console.warn(err);
+      }
+    }
     location.href = `${ELSA_API_LOCATION}/oauth2/authorization/oidc`;
   }
 });

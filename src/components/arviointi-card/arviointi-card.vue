@@ -48,7 +48,7 @@
               <b-link
                 variant="link"
                 class="d-flex align-items-center text-decoration-none"
-                :to="{ name: 'itsearviointi' }"
+                :to="{ name: 'itsearviointi', params: { arviointiId: '1' } }"
                 v-if="data.index === 0"
               >
                 {{ $t("tee-itsearviointi") }}
