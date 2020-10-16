@@ -3,10 +3,10 @@
     <b-breadcrumb :items="items" class="mb-0"></b-breadcrumb>
     <b-container fluid>
       <b-row lg>
-        <b-col class="pl-0 pr-0">
+        <b-col class="px-0">
           <b-card-skeleton
             :loading="false"
-            class="mb-3 itsearviointi-card"
+            class="mb-3 arviointi-card"
             :header="$t('arviointi')"
           >
             <arviointi-form @submit="onSubmit" :editing="false" />
@@ -50,3 +50,9 @@ export default class Arviointi extends Vue {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.arviointi-card {
+  max-width: 970px;
+}
+</style>

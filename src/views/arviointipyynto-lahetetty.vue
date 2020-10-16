@@ -3,7 +3,7 @@
     <b-breadcrumb :items="items" class="mb-0"></b-breadcrumb>
     <b-container fluid>
       <b-row lg>
-        <b-col class="pl-0 pr-0">
+        <b-col class="px-0">
           <b-card-skeleton
             :loading="false"
             class="mb-3 arviointipyynto-card"

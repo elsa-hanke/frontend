@@ -83,7 +83,8 @@
         <span :id="uid">Potilasta siirretty tuoliin ja takaisin.</span>
       </template>
     </elsa-form-group>
-    <hr v-if="editing" />
+    <hr />
+    <p v-if="!editing">Todo...</p>
     <b-form-row v-if="editing">
       <elsa-form-group
         :label="$t('vaativuustaso')"
@@ -369,5 +370,3 @@ export default class ArviointiForm extends Vue {
   }
 }
 </script>
-
-<style lang="scss" scoped></style>

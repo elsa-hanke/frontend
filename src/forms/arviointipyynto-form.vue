@@ -184,5 +184,3 @@ export default class ArviointipyyntoForm extends Vue {
   }
 }
 </script>
-
-<style lang="scss" scoped></style>

@@ -22,7 +22,7 @@
             <span class="text-left">{{ $t("pyyda-arviointia") }}</span>
           </b-button>
         </b-col>
-        <b-col class="pl-0 pr-0 mt-3 mt-lg-0 mt-xl-0">
+        <b-col class="px-0 mt-3 mt-lg-0 mt-xl-0">
           <b-card-skeleton :loading="false" class="mb-3">
             <template v-slot:header>
               <div class="d-flex justify-content-between align-items-center">

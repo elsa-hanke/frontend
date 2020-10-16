@@ -35,5 +35,3 @@ export default class LahikouluttajaForm extends Vue {
   }
 }
 </script>
-
-<style lang="scss" scoped></style>

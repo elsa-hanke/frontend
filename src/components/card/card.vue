@@ -37,5 +37,3 @@ export default class BCardSkeleton extends Vue {
   header!: string;
 }
 </script>
-
-<style lang="scss" scoped></style>

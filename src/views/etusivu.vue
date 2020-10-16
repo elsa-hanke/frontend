@@ -20,7 +20,7 @@
             <span class="text-left">{{ $t("lisaa-ja-muokkaa-osioita") }}</span>
           </b-button>
         </b-col>
-        <b-col class="pl-0 pr-0 pr-lg-2 mt-3 mt-lg-0 mt-xl-0">
+        <b-col class="px-0 pr-lg-2 mt-3 mt-lg-0 mt-xl-0">
           <b-card-skeleton
             :header="$t('henkilotiedot')"
             :loading="!account"
@@ -134,5 +134,3 @@ export default class Etusivu extends Vue {
   }
 }
 </script>
-
-<style lang="scss" scoped></style>
