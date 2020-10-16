@@ -1,16 +1,21 @@
 @import "~@/styles/variables";
 @import "~vue-multiselect/dist/vue-multiselect.min.css";
 
+$font-weight-400: 400;
+$font-weight-500: 500;
+$font-weight-700: 700;
+$nav-tabs-border-bottom-width: 3px;
+
 .font-weight-400 {
-  font-weight: 400;
+  font-weight: $font-weight-400;
 }
 
 .font-weight-500 {
-  font-weight: 500;
+  font-weight: $font-weight-500;
 }
 
 .font-weight-700 {
-  font-weight: 700;
+  font-weight: $font-weight-700;
 }
 
 .text-size-sm {
@@ -74,4 +79,25 @@ label {
 .text-star,
 .text-star:focus {
   color: #ffc107;
+}
+
+ul.nav.nav-tabs {
+  border-bottom: $nav-tabs-border-bottom-width solid $gray-300;
+  li {
+    a.nav-link {
+      font-weight: $font-weight-700;
+
+      &.active {
+        border-bottom: $nav-tabs-border-bottom-width solid $primary;
+        margin-bottom: -$nav-tabs-border-bottom-width;
+      }
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+}
+
+hr {
+  border-top-color: $hr-color;
 }

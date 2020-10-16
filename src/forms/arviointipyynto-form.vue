@@ -57,14 +57,14 @@
     </elsa-form-group>
     <b-form-row>
       <elsa-form-group
-        :label="$t('kouluttaja')"
+        :label="$t('kouluttaja-tai-lahikouluttaja')"
         :add-new="onSubmit2"
-        :add-new-label="$t('lisaa-kouluttaja')"
+        :add-new-label="$t('lisaa-lahikouluttaja')"
         :required="true"
         class="col-md-8"
       >
         <template v-slot:modal-content>
-          <kouluttaja-form />
+          <lahikouluttaja-form />
         </template>
         <template v-slot="{ uid }">
           <multiselect
@@ -135,12 +135,12 @@ import store from "@/store";
 import UserAvatar from "@/components/user-avatar/user-avatar.vue";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
 import TyoskentelyjaksoForm from "@/forms/tyoskentelyjakso-form.vue";
-import kouluttajaForm from "@/forms/kouluttaja-form.vue";
+import LahikouluttajaForm from "@/forms/lahikouluttaja-form.vue";
 
 @Component({
   components: {
     ElsaFormGroup,
-    kouluttajaForm,
+    LahikouluttajaForm,
     Multiselect,
     TyoskentelyjaksoForm,
     UserAvatar

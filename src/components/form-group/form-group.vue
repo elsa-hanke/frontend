@@ -19,6 +19,13 @@
               /> </font-awesome-layers
           ></span>
         </div>
+        <div class="text-muted form-group-help" v-if="$slots['help']">
+          <font-awesome-layers fixed-width class="mr-1">
+            <font-awesome-icon fixed-width :icon="['far', 'circle']" />
+            <font-awesome-icon fixed-width icon="info" transform="shrink-8" />
+          </font-awesome-layers>
+          <slot name="help" />
+        </div>
         <div class="text-muted form-group-help" v-if="addNew">
           <font-awesome-layers fixed-width class="mr-1">
             <font-awesome-icon fixed-width :icon="['far', 'circle']" />

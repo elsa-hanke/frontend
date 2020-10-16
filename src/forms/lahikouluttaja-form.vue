@@ -1,13 +1,13 @@
 <template>
   <b-form @submit="onSubmit">
-    <elsa-form-group :label="$t('kouluttajan-nimi')" :required="true">
+    <elsa-form-group :label="$t('lahikouluttajan-nimi')" :required="true">
       <template v-slot="{ uid }">
         <b-form-input :id="uid" v-model="form.nimi"></b-form-input>
       </template>
     </elsa-form-group>
-    <elsa-form-group :label="$t('kouluttajan-sahkoposti')" :required="true">
+    <elsa-form-group :label="$t('lahikouluttajan-sahkoposti')" :required="true">
       <template v-slot="{ uid }">
-        <b-form-input :id="uid" v-model="form.sahkoposti" />
+        <b-form-input :id="uid" v-model="form.sahkoposti" type="email" />
       </template>
     </elsa-form-group>
   </b-form>
@@ -23,7 +23,7 @@ import ElsaFormGroup from "@/components/form-group/form-group.vue";
     ElsaFormGroup
   }
 })
-export default class KouluttajaForm extends Vue {
+export default class LahikouluttajaForm extends Vue {
   form = {
     nimi: null,
     sahkoposti: null
