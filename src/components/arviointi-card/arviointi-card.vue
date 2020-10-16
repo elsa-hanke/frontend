@@ -45,14 +45,14 @@
               ></b-form-rating>
             </template>
             <template v-slot:cell(itsearviointi)="data">
-              <b-form-rating
-                inline
-                no-border
-                stars="5"
-                :readonly="true"
-                :value="data.item.itsearviointi"
-                class="text-star p-0"
-              ></b-form-rating>
+              <b-link
+                variant="link"
+                class="d-flex align-items-center text-decoration-none"
+                :to="{ name: 'itsearviointi' }"
+                v-if="data.index === 0"
+              >
+                {{ $t("tee-itsearviointi") }}
+              </b-link>
             </template>
           </b-table>
           <b-button

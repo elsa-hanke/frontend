@@ -39,8 +39,8 @@
           class="text-nowrap align-self-center"
           :to="{ name: 'viestit' }"
         >
-          {{ $t("viestit") }}
           <font-awesome-icon icon="envelope" fixed-width size="lg" />
+          {{ $t("viestit") }}
         </b-nav-item>
 
         <b-nav-item

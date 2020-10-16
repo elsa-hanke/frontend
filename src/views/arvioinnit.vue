@@ -21,20 +21,6 @@
             </div>
             <span class="text-left">{{ $t("pyyda-arviointia") }}</span>
           </b-button>
-          <!--
-          <b-button
-            variant="link"
-            class="d-flex align-items-center text-decoration-none"
-            :to="{ name: 'itsearviointi' }"
-          >
-            <div class="fa-2x mr-2">
-              <font-awesome-layers>
-                <font-awesome-icon icon="clipboard-list" />
-              </font-awesome-layers>
-            </div>
-            <span class="text-left">{{ $t("tee-itsearviointi") }}</span>
-          </b-button>
-          -->
         </b-col>
         <b-col class="pl-0 pr-0 mt-3 mt-lg-0 mt-xl-0">
           <b-card-skeleton :loading="false" class="mb-3">
