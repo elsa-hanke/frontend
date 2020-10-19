@@ -22,15 +22,11 @@
             :items="value.items"
           >
             <template v-slot:cell(epa)="data">
-              <span>{{ data.item.epa }}</span>
+              {{ data.item.epa }}
               <b-link v-b-popover.hover.right="'Lorem ipsum...'">
-                <font-awesome-layers fixed-width class="ml-1">
-                  <font-awesome-icon fixed-width :icon="['far', 'circle']" />
-                  <font-awesome-icon
-                    fixed-width
-                    icon="info"
-                    transform="shrink-8"
-                  />
+                <font-awesome-layers fixed-width>
+                  <font-awesome-icon :icon="['far', 'circle']" />
+                  <font-awesome-icon icon="info" transform="shrink-8" />
                 </font-awesome-layers>
               </b-link>
             </template>

@@ -34,9 +34,8 @@
             class="text-primary"
             v-b-popover.hover.top="'Todo'"
           >
-            <font-awesome-icon fixed-width :icon="['far', 'circle']" />
+            <font-awesome-icon :icon="['far', 'circle']" />
             <font-awesome-icon
-              fixed-width
               icon="info"
               transform="shrink-8"
             /> </font-awesome-layers
