@@ -136,33 +136,39 @@
                 </b-container>
                 <div class="arvioinnit">
                   <hr />
-                  <div v-for="(arviointi, idx) in arvioinnit" :key="idx">
-                    <arviointi-card />
-                  </div>
-                  <b-pagination
-                    v-model="page"
-                    :total-rows="10"
-                    :per-page="3"
-                    pills
-                    align="center"
-                    :hide-goto-end-buttons="true"
-                  >
-                    <template v-slot:prev-text
-                      ><font-awesome-icon
-                        icon="chevron-left"
-                        fixed-width
-                        size="lg"
-                        cl
-                      />{{ $t("edellinen") }}</template
+                  <div v-if="arvioinnit">
+                    <div v-for="(arviointi, idx) in arvioinnit" :key="idx">
+                      <arviointi-card :value="arviointi" />
+                    </div>
+                    <b-pagination
+                      v-model="page"
+                      :total-rows="totalRows"
+                      :per-page="perPage"
+                      @input="fetch"
+                      pills
+                      align="center"
+                      :hide-goto-end-buttons="true"
                     >
-                    <template v-slot:next-text
-                      >{{ $t("seuraava")
-                      }}<font-awesome-icon
-                        icon="chevron-right"
-                        fixed-width
-                        size="lg"
-                    /></template>
-                  </b-pagination>
+                      <template v-slot:prev-text
+                        ><font-awesome-icon
+                          icon="chevron-left"
+                          fixed-width
+                          size="lg"
+                          cl
+                        />{{ $t("edellinen") }}</template
+                      >
+                      <template v-slot:next-text
+                        >{{ $t("seuraava")
+                        }}<font-awesome-icon
+                          icon="chevron-right"
+                          fixed-width
+                          size="lg"
+                      /></template>
+                    </b-pagination>
+                  </div>
+                  <div class="text-center" v-else>
+                    <b-spinner variant="primary" label="Spinning"></b-spinner>
+                  </div>
                 </div>
               </b-tab>
               <b-tab :title="$t('arviointipyynnot')">
@@ -178,6 +184,7 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import axios from "axios";
 import Multiselect from "vue-multiselect";
 import BCardSkeleton from "@/components/card/card.vue";
 import ArviointiCard from "@/components/arviointi-card/arviointi-card.vue";
@@ -205,8 +212,10 @@ export default class Arvioinnit extends Vue {
     tyoskentelyjakso: [],
     kouluttaja: []
   };
-  arvioinnit = [{}, {}, {}, {}, {}];
+  arvioinnit: null | any[] = null;
   page = 1;
+  totalRows = 0;
+  perPage = 5;
 
   items = [
     {
@@ -218,5 +227,24 @@ export default class Arvioinnit extends Vue {
       active: true
     }
   ];
+
+  mounted() {
+    this.fetch();
+  }
+
+  async fetch() {
+    try {
+      const omat = await axios.get("suoritusarvioinnit/omat", {
+        params: {
+          page: this.page - 1,
+          size: this.perPage
+        }
+      });
+      this.totalRows = omat.headers["x-total-count"];
+      this.arvioinnit = omat.data;
+    } catch (err) {
+      this.arvioinnit = [];
+    }
+  }
 }
 </script>
