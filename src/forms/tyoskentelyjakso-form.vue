@@ -77,7 +77,6 @@
       </elsa-form-group>
       <elsa-form-group
         :label="$t('paattymispaiva')"
-        :required="true"
         class="col-sm-12 col-md-6 pl-md-3"
       >
         <template v-slot="{ uid }">

@@ -49,7 +49,7 @@
       class="align-items-center mb-md-0"
     >
       <template v-slot="{ uid }">
-        <span :id="uid">Potilaan siirto</span>
+        <span :id="uid">{{ value.arvioitavaTapahtuma }}</span>
       </template>
     </elsa-form-group>
     <elsa-form-group
@@ -69,7 +69,7 @@
       class="align-items-center mb-md-0"
     >
       <template v-slot="{ uid }">
-        <span :id="uid">15.10.2020</span>
+        <span :id="uid">{{ value.tapahtumanAjankohta }}</span>
       </template>
     </elsa-form-group>
     <elsa-form-group
@@ -314,6 +314,9 @@ import TyoskentelyjaksoForm from "@/forms/tyoskentelyjakso-form.vue";
 export default class ArviointiForm extends Vue {
   @Prop({ required: false, default: false })
   editing!: boolean;
+
+  @Prop({ required: true })
+  value!: any;
 
   form: any = {
     kokonaisarviointi: null,

@@ -4,8 +4,10 @@
       <b-row>
         <b-col lg="8">
           <div class="d-flex justify-content-between align-items-center">
-            <div class="text-size-lg font-weight-500 mr-3">Potilaan siirto</div>
-            <div>10.10.2020</div>
+            <div class="text-size-lg font-weight-500 mr-3">
+              {{ value.arvioitavaTapahtuma }}
+            </div>
+            <div>{{ value.tapahtumanAjankohta }}</div>
           </div>
         </b-col>
         <b-col>Laaksolahden terveyskeskus</b-col>
@@ -18,8 +20,8 @@
             responsive
             small
             borderless
-            :fields="value.fields"
-            :items="value.items"
+            :fields="tableValue.fields"
+            :items="tableValue.items"
           >
             <template v-slot:cell(epa)="data">
               {{ data.item.epa }}
@@ -44,7 +46,10 @@
               <b-link
                 variant="link"
                 class="d-flex align-items-center text-decoration-none"
-                :to="{ name: 'itsearviointi', params: { arviointiId: '1' } }"
+                :to="{
+                  name: 'itsearviointi',
+                  params: { arviointiId: value.id }
+                }"
                 v-if="data.index === 0"
               >
                 {{ $t("tee-itsearviointi") }}
@@ -53,7 +58,7 @@
           </b-table>
           <b-button
             variant="primary"
-            :to="{ name: 'arviointi', params: { arviointiId: '1' } }"
+            :to="{ name: 'arviointi', params: { arviointiId: value.id } }"
             >{{ $t("avaa-arviointi") }}</b-button
           >
         </b-col>
@@ -66,10 +71,14 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
+import { Prop } from "vue-property-decorator";
 
 @Component({})
 export default class ArviointiCard extends Vue {
-  value = {
+  @Prop({})
+  value!: any;
+
+  tableValue = {
     fields: [
       { key: "epa", label: "Hoitovastuun siirtäminen" },
       { key: "arviointi", label: "Arviointi" },
