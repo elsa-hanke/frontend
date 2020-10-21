@@ -64,6 +64,12 @@
             label="nimi"
             track-by="nimi"
           >
+            <template v-slot:option="{ option }">
+              <user-avatar
+                :displayName="option.nimi"
+                :src="decodeBase64Image(option)"
+              />
+            </template>
           </elsa-multiselect>
         </template>
       </elsa-form-group>
@@ -158,6 +164,14 @@ export default class ArviointipyyntoForm extends Vue {
 
   onSubmit2() {
     console.log("onSubmit2");
+  }
+
+  decodeBase64Image(option: any) {
+    if (option && option.profiilikuvaContentType && option.profiilikuva) {
+      return `data:${option.profiilikuvaContentType};base64,${option.profiilikuva}`;
+    } else {
+      return undefined;
+    }
   }
 
   get displayName() {

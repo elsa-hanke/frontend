@@ -1,6 +1,7 @@
 <template>
   <div class="d-flex text-nowrap align-items-center">
     <avatar
+      v-bind="$attrs"
       :username="displayName"
       background-color="gray"
       color="white"

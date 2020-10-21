@@ -17,9 +17,9 @@
       }}</template>
       <template slot="noResult">{{ $t("ei-hakutuloksia") }}</template>
       <template slot="noOptions">{{ $t("ei-vaihtoehtoja") }}</template>
-      <template v-for="(index, name) in $slots" v-slot:[name]
-        ><slot :name="name"
-      /></template>
+      <template v-for="(index, name) in $scopedSlots" v-slot:[name]="data">
+        <slot :name="name" v-bind="data"></slot>
+      </template>
     </multiselect>
   </div>
 </template>
@@ -134,6 +134,10 @@ export default class ElsaMultiselect extends Vue {
     font-size: 0.875rem;
     border-color: $gray-400;
 
+    .multiselect__option::after {
+      top: 50%;
+      transform: translateY(-50%);
+    }
     .multiselect__option.multiselect__option--highlight,
     .multiselect__option.multiselect__option--highlight::after {
       background: $primary;
