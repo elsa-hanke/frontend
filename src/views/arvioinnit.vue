@@ -112,6 +112,12 @@
                     <div v-for="(arviointi, index) in arvioinnit" :key="index">
                       <arviointi-card :value="arviointi" />
                     </div>
+                    <b-alert
+                      v-if="arvioinnit.length === 0"
+                      variant="warning"
+                      show
+                      >{{ $t("yhtaan-arviointia-ei-ole-viela-tehty") }}</b-alert
+                    >
                     <b-pagination
                       v-model="page"
                       :total-rows="totalRows"
