@@ -1,11 +1,17 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap");
+// Boostrap variables
 $gray-300: #dee2e6;
+$gray-400: #ced4da;
+$yellow: #ffc107;
+$red: #dc3545;
 $font-family-sans-serif: "Montserrat", system-ui, -apple-system, "Segoe UI",
   Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
   "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-$font-size-base: 0.875rem; // tai 0.75rem;
+$font-size-base: 0.875rem;
+$line-height-base: 1.5;
 $body-bg: #f7f7f7;
 $primary: rgb(65, 175, 235);
+$warning: $yellow;
+$danger: $red;
 $input-placeholder-color: $primary;
 $navbar-dark-color: white;
 $card-cap-bg: $primary;
@@ -34,4 +40,11 @@ $hr-margin-y: 1.5rem;
 $hr-color: $gray-300;
 $nav-tabs-border-width: 0;
 $nav-tabs-link-active-bg: none;
-$nav-tabs-link-active-border-color: red;
+$border-color: $gray-300;
+
+// Custom variables
+$font-weight-400: 400;
+$font-weight-500: 500;
+$font-weight-700: 700;
+$nav-tabs-border-bottom-width: 3px;
+$primary-light: #ecf7fd;

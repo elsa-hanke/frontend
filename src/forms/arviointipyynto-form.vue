@@ -15,36 +15,26 @@
         <tyoskentelyjakso-form />
       </template>
       <template v-slot="{ uid }">
-        <multiselect
+        <elsa-multiselect
           :id="uid"
           v-model="form.tyoskentelyjakso"
           :options="tyoskentelyjaksot"
-          :placeholder="$t('valitse')"
           label="name"
           track-by="name"
         >
-          <template slot="noResult">
-            <div>{{ $t("ei-hakutuloksia") }}</div>
-          </template>
-          <template slot="noOptions">{{ $t("ei-vaihtoehtoja") }}</template>
-        </multiselect>
+        </elsa-multiselect>
       </template>
     </elsa-form-group>
     <elsa-form-group :label="$t('epa-osaamisalue')" :required="true">
       <template v-slot="{ uid }">
-        <multiselect
+        <elsa-multiselect
           :id="uid"
           v-model="form.epaOsaamisalue"
           :options="epaOsaamisalueet"
-          :placeholder="$t('valitse')"
           label="name"
           track-by="name"
         >
-          <template slot="noResult">
-            <div>{{ $t("ei-hakutuloksia") }}</div>
-          </template>
-          <template slot="noOptions">{{ $t("ei-vaihtoehtoja") }}</template>
-        </multiselect>
+        </elsa-multiselect>
       </template>
     </elsa-form-group>
     <elsa-form-group :label="$t('arvioitava-tapahtuma')" :required="true">
@@ -67,19 +57,14 @@
           <lahikouluttaja-form />
         </template>
         <template v-slot="{ uid }">
-          <multiselect
+          <elsa-multiselect
             :id="uid"
             v-model="form.kouluttaja"
             :options="kouluttajat"
-            :placeholder="$t('valitse')"
-            label="name"
-            track-by="name"
+            label="nimi"
+            track-by="nimi"
           >
-            <template slot="noResult">
-              <div>{{ $t("ei-hakutuloksia") }}</div>
-            </template>
-            <template slot="noOptions">{{ $t("ei-vaihtoehtoja") }}</template>
-          </multiselect>
+          </elsa-multiselect>
         </template>
       </elsa-form-group>
       <elsa-form-group :label="$t('ajankohta')" class="col-md-4">
@@ -130,10 +115,11 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import Multiselect from "vue-multiselect";
+import { Prop } from "vue-property-decorator";
 import store from "@/store";
 import UserAvatar from "@/components/user-avatar/user-avatar.vue";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
+import ElsaMultiselect from "@/components/multiselect/multiselect.vue";
 import TyoskentelyjaksoForm from "@/forms/tyoskentelyjakso-form.vue";
 import LahikouluttajaForm from "@/forms/lahikouluttaja-form.vue";
 
@@ -141,12 +127,18 @@ import LahikouluttajaForm from "@/forms/lahikouluttaja-form.vue";
   components: {
     ElsaFormGroup,
     LahikouluttajaForm,
-    Multiselect,
+    ElsaMultiselect,
     TyoskentelyjaksoForm,
     UserAvatar
   }
 })
 export default class ArviointipyyntoForm extends Vue {
+  @Prop({ required: false, default: [] })
+  tyoskentelyjaksot!: any[];
+
+  @Prop({ required: false, default: [] })
+  kouluttajat!: any[];
+
   form = {
     tyoskentelyjakso: null,
     epaOsaamisalue: null,
@@ -156,9 +148,7 @@ export default class ArviointipyyntoForm extends Vue {
     lisatiedot: null
   };
 
-  tyoskentelyjaksot = [];
   epaOsaamisalueet = [];
-  kouluttajat = [];
 
   onSubmit(event: any) {
     event.preventDefault();

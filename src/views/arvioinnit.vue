@@ -43,42 +43,28 @@
                         class="mb-0"
                       >
                         <template v-slot="{ uid }">
-                          <multiselect
+                          <elsa-multiselect
                             :id="uid"
                             v-model="selected.osaamisalue"
                             :options="options.osaamisalue"
-                            :placeholder="$t('valitse')"
                             label="name"
                             track-by="name"
                           >
-                            <template slot="noResult">
-                              <div>{{ $t("ei-hakutuloksia") }}</div>
-                            </template>
-                            <template slot="noOptions">{{
-                              $t("ei-vaihtoehtoja")
-                            }}</template>
-                          </multiselect>
+                          </elsa-multiselect>
                         </template>
                       </elsa-form-group>
                     </b-col>
                     <b-col>
                       <elsa-form-group :label="$t('tapahtuma')" class="mb-0">
                         <template v-slot="{ uid }">
-                          <multiselect
+                          <elsa-multiselect
                             :id="uid"
                             v-model="selected.arviointi"
                             :options="options.arviointi"
-                            :placeholder="$t('valitse')"
                             label="name"
                             track-by="name"
                           >
-                            <template slot="noResult">
-                              <div>{{ $t("ei-hakutuloksia") }}</div>
-                            </template>
-                            <template slot="noOptions">{{
-                              $t("ei-vaihtoehtoja")
-                            }}</template>
-                          </multiselect>
+                          </elsa-multiselect>
                         </template>
                       </elsa-form-group>
                     </b-col>
@@ -89,21 +75,14 @@
                         class="mb-0"
                       >
                         <template v-slot="{ uid }">
-                          <multiselect
+                          <elsa-multiselect
                             :id="uid"
                             v-model="selected.tyoskentelyjakso"
                             :options="options.tyoskentelyjakso"
-                            :placeholder="$t('valitse')"
                             label="name"
                             track-by="name"
                           >
-                            <template slot="noResult">
-                              <div>{{ $t("ei-hakutuloksia") }}</div>
-                            </template>
-                            <template slot="noOptions">{{
-                              $t("ei-vaihtoehtoja")
-                            }}</template>
-                          </multiselect>
+                          </elsa-multiselect>
                         </template>
                       </elsa-form-group>
                     </b-col>
@@ -114,21 +93,14 @@
                         class="mb-0"
                       >
                         <template v-slot="{ uid }">
-                          <multiselect
+                          <elsa-multiselect
                             :id="uid"
                             v-model="selected.kouluttaja"
                             :options="options.kouluttaja"
-                            :placeholder="$t('valitse')"
                             label="name"
                             track-by="name"
                           >
-                            <template slot="noResult">
-                              <div>{{ $t("ei-hakutuloksia") }}</div>
-                            </template>
-                            <template slot="noOptions">{{
-                              $t("ei-vaihtoehtoja")
-                            }}</template>
-                          </multiselect>
+                          </elsa-multiselect>
                         </template>
                       </elsa-form-group>
                     </b-col>
@@ -185,17 +157,17 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import axios from "axios";
-import Multiselect from "vue-multiselect";
 import BCardSkeleton from "@/components/card/card.vue";
 import ArviointiCard from "@/components/arviointi-card/arviointi-card.vue";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
+import ElsaMultiselect from "@/components/multiselect/multiselect.vue";
 
 @Component({
   components: {
     BCardSkeleton,
-    Multiselect,
     ArviointiCard,
-    ElsaFormGroup
+    ElsaFormGroup,
+    ElsaMultiselect
   }
 })
 export default class Arvioinnit extends Vue {

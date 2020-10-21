@@ -2,36 +2,26 @@
   <b-form @submit="onSubmit">
     <elsa-form-group :label="$t('kunta')" :required="true">
       <template v-slot="{ uid }">
-        <multiselect
+        <elsa-multiselect
           :id="uid"
           v-model="form.kunta"
           :options="kunnat"
-          :placeholder="$t('valitse')"
           label="name"
           track-by="name"
         >
-          <template slot="noResult">
-            <div>{{ $t("ei-hakutuloksia") }}</div>
-          </template>
-          <template slot="noOptions">{{ $t("ei-vaihtoehtoja") }}</template>
-        </multiselect>
+        </elsa-multiselect>
       </template>
     </elsa-form-group>
     <elsa-form-group :label="$t('tyoskentelypaikka')" :required="true">
       <template v-slot="{ uid }">
-        <multiselect
+        <elsa-multiselect
           :id="uid"
           v-model="form.tyoskentelypaikka"
           :options="tyoskentelypaikat"
-          :placeholder="$t('valitse')"
           label="name"
           track-by="name"
         >
-          <template slot="noResult">
-            <div>{{ $t("ei-hakutuloksia") }}</div>
-          </template>
-          <template slot="noOptions">{{ $t("ei-vaihtoehtoja") }}</template>
-        </multiselect>
+        </elsa-multiselect>
       </template>
     </elsa-form-group>
     <elsa-form-group :label="$t('tyyppi')" :required="true">
@@ -126,13 +116,13 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import Multiselect from "vue-multiselect";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
+import ElsaMultiselect from "@/components/multiselect/multiselect.vue";
 
 @Component({
   components: {
     ElsaFormGroup,
-    Multiselect
+    ElsaMultiselect
   }
 })
 export default class TyoskentelyjaksoForm extends Vue {

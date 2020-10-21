@@ -102,7 +102,7 @@ export default class ArviointiCard extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/_variables.scss";
+@import "~@/styles/variables";
 
 ::v-deep table {
   thead tr {

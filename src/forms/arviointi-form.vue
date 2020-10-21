@@ -95,19 +95,14 @@
           <tyoskentelyjakso-form />
         </template>
         <template v-slot="{ uid }">
-          <multiselect
+          <elsa-multiselect
             :id="uid"
             v-model="form.vaativuustaso"
             :options="vaativuustasot"
-            :placeholder="$t('valitse')"
             label="name"
             track-by="name"
           >
-            <template slot="noResult">
-              <div>{{ $t("ei-hakutuloksia") }}</div>
-            </template>
-            <template slot="noOptions">{{ $t("ei-vaihtoehtoja") }}</template>
-          </multiselect>
+          </elsa-multiselect>
         </template>
       </elsa-form-group>
     </b-form-row>
@@ -297,16 +292,16 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import { Prop } from "vue-property-decorator";
-import Multiselect from "vue-multiselect";
 import store from "@/store";
 import UserAvatar from "@/components/user-avatar/user-avatar.vue";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
+import ElsaMultiselect from "@/components/multiselect/multiselect.vue";
 import TyoskentelyjaksoForm from "@/forms/tyoskentelyjakso-form.vue";
 
 @Component({
   components: {
     ElsaFormGroup,
-    Multiselect,
+    ElsaMultiselect,
     TyoskentelyjaksoForm,
     UserAvatar
   }
