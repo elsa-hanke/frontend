@@ -1,10 +1,7 @@
 @import "~@/styles/variables";
 @import "~vue-multiselect/dist/vue-multiselect.min.css";
 
-$font-weight-400: 400;
-$font-weight-500: 500;
-$font-weight-700: 700;
-$nav-tabs-border-bottom-width: 3px;
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap");
 
 .font-weight-400 {
   font-weight: $font-weight-400;
@@ -54,26 +51,6 @@ label {
 .custom-control.custom-radio {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
-}
-
-.multiselect {
-  .multiselect__tags {
-    padding: 0.375rem 1.75rem 0.375rem 0.75rem;
-    border: 1px solid #ced4da;
-    min-height: initial;
-    .multiselect__placeholder {
-      margin: 0;
-      padding: 0;
-    }
-    .multiselect__input {
-      font-size: 0.875rem;
-      padding: 0;
-      margin: 0;
-    }
-  }
-  .multiselect__content-wrapper {
-    font-size: 0.875rem;
-  }
 }
 
 .text-star,

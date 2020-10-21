@@ -8,7 +8,12 @@
             :loading="false"
             class="mb-3 arviointipyynto-card"
             :header="$t('pyyda-arviointia')"
-            ><arviointipyynto-form @submit="onSubmit" />
+          >
+            <arviointipyynto-form
+              @submit="onSubmit"
+              :tyoskentelyjaksot="tyoskentelyjaksot"
+              :kouluttajat="kouluttajat"
+            />
           </b-card-skeleton>
         </b-col>
       </b-row>
@@ -18,7 +23,9 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import axios from "axios";
 import { confimExit } from "@/utils/confirm";
+import { ArviointipyyntoLomake } from "@/types";
 import BCardSkeleton from "@/components/card/card.vue";
 import ArviointipyyntoForm from "@/forms/arviointipyynto-form.vue";
 
@@ -46,6 +53,25 @@ export default class Arviointipyynto extends Vue {
     }
   ];
   saved = false;
+  arviointipyyntoLomake: null | ArviointipyyntoLomake = null;
+
+  mounted() {
+    this.fetch();
+  }
+
+  async fetch() {
+    try {
+      // todo: yhteinen rajapinta arviointipynnön lomakkeelle?
+      this.arviointipyyntoLomake = (
+        await axios.get("suoritusarvioinnit/arviointipyynto-lomake")
+      ).data;
+    } catch (err) {
+      this.arviointipyyntoLomake = {
+        tyoskentelyjaksot: [],
+        kouluttajat: []
+      };
+    }
+  }
 
   onSubmit(form: any) {
     console.log(form);
@@ -62,6 +88,22 @@ export default class Arviointipyynto extends Vue {
       }
     } catch (err) {
       next(false);
+    }
+  }
+
+  get tyoskentelyjaksot() {
+    if (this.arviointipyyntoLomake) {
+      return this.arviointipyyntoLomake.tyoskentelyjaksot;
+    } else {
+      return [];
+    }
+  }
+
+  get kouluttajat() {
+    if (this.arviointipyyntoLomake) {
+      return this.arviointipyyntoLomake.kouluttajat;
+    } else {
+      return [];
     }
   }
 }
