@@ -109,7 +109,7 @@
                 <div class="arvioinnit">
                   <hr />
                   <div v-if="arvioinnit">
-                    <div v-for="(arviointi, idx) in arvioinnit" :key="idx">
+                    <div v-for="(arviointi, index) in arvioinnit" :key="index">
                       <arviointi-card :value="arviointi" />
                     </div>
                     <b-pagination
