@@ -4,7 +4,8 @@ import axios from "axios";
 const auth: Module<any, any> = {
   state: {
     status: "",
-    account: null
+    account: null,
+    loggedIn: false
   },
   mutations: {
     authRequest(state) {
@@ -13,16 +14,17 @@ const auth: Module<any, any> = {
     authSuccess(state, account) {
       state.status = "success";
       state.account = account;
+      state.loggedIn = true;
     },
     authError(state) {
       state.status = "error";
-      //state.account = null;
+      state.loggedIn = false;
     },
     logoutRequest(state) {
       state.status = "loading";
+      state.loggedIn = false;
     },
     logoutSuccess(state) {
-      //state.account = null;
       state.status = "success";
     },
     logoutError(state) {
@@ -52,9 +54,9 @@ const auth: Module<any, any> = {
     }
   },
   getters: {
-    isLoggedIn: state => !!state.account,
     status: state => state.status,
-    account: state => state.account
+    account: state => state.account,
+    isLoggedIn: state => state.loggedIn
   }
 };
 
