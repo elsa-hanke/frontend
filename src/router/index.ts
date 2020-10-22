@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
 import Meta from "vue-meta";
+
 import Arvioinnit from "../views/arvioinnit.vue";
 import Arviointi from "../views/arviointi.vue";
 import Arviointipyynto from "../views/arviointipyynto.vue";
@@ -9,6 +10,7 @@ import Asiakirjat from "../views/asiakirjat.vue";
 import Etusivu from "../views/etusivu.vue";
 import Itsearviointi from "../views/itsearviointi.vue";
 import ItsearviointiValmis from "../views/itsearviointi-valmis.vue";
+import Kayttooikeus from "../views/kayttooikeus.vue";
 import Koulutukset from "../views/koulutukset.vue";
 import Koulutussuunnitelma from "../views/koulutussuunnitelma.vue";
 import Login from "../views/login.vue";
@@ -88,6 +90,11 @@ const routes: Array<RouteConfig> = [
         component: Asiakirjat
       }
     ]
+  },
+  {
+    path: "/kayttooikeus",
+    name: "kayttooikeus",
+    component: Kayttooikeus
   },
   {
     path: "/login",
