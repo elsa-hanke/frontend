@@ -31,8 +31,9 @@
                   icon="question-circle"
                   fixed-width
                   v-b-popover.hover.top="$t('arvioinnit-kuvaus')"
-                /></div
-            ></template>
+                />
+              </div>
+            </template>
             <b-tabs content-class="mt-3" :no-fade="true">
               <b-tab :title="$t('arvioinnit-ja-itsearvioinnit')" active>
                 <b-container fluid class="px-0">
