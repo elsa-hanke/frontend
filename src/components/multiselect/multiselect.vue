@@ -1,6 +1,7 @@
 <template>
   <div>
     <multiselect
+      :id="id"
       v-bind="$attrs"
       v-on="$listeners"
       :placeholder="placeholderText"
@@ -36,6 +37,9 @@ import Multiselect from "vue-multiselect";
   }
 })
 export default class ElsaMultiselect extends Vue {
+  @Prop({ required: false, type: String })
+  id!: string | undefined;
+
   @Prop({ required: false, type: String })
   placeholder!: string | undefined;
 
