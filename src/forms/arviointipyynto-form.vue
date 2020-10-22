@@ -17,7 +17,7 @@
       <template v-slot="{ uid }">
         <elsa-multiselect
           :id="uid"
-          v-model="form.tyoskentelyjakso"
+          v-model="value.tyoskentelyjakso"
           :options="tyoskentelyjaksot"
           label="name"
           track-by="name"
@@ -29,7 +29,7 @@
       <template v-slot="{ uid }">
         <elsa-multiselect
           :id="uid"
-          v-model="form.epaOsaamisalue"
+          v-model="value.epaOsaamisalue"
           :options="epaOsaamisalueet"
           label="name"
           track-by="name"
@@ -41,7 +41,7 @@
       <template v-slot="{ uid }">
         <b-form-input
           :id="uid"
-          v-model="form.arvioitavaTapahtuma"
+          v-model="value.arvioitavaTapahtuma"
         ></b-form-input>
       </template>
     </elsa-form-group>
@@ -59,7 +59,7 @@
         <template v-slot="{ uid }">
           <elsa-multiselect
             :id="uid"
-            v-model="form.kouluttaja"
+            v-model="value.kouluttaja"
             :options="kouluttajat"
             label="nimi"
             track-by="nimi"
@@ -67,7 +67,8 @@
             <template v-slot:option="{ option }">
               <user-avatar
                 :displayName="option.nimi"
-                :src="decodeBase64Image(option)"
+                :src-content-type="option.profiilikuvaContentType"
+                :src-base64="option.profiilikuva"
               />
             </template>
           </elsa-multiselect>
@@ -77,7 +78,7 @@
         <template v-slot="{ uid }">
           <b-form-datepicker
             :id="uid"
-            v-model="form.ajankohta"
+            v-model="value.tapahtumanAjankohta"
             start-weekday="1"
             :locale="currentLocale"
             placeholder=""
@@ -100,7 +101,7 @@
       <template v-slot="{ uid }">
         <b-form-textarea
           :id="uid"
-          v-model="form.lisatiedot"
+          v-model="value.lisatiedot"
           rows="5"
         ></b-form-textarea>
       </template>
@@ -145,33 +146,31 @@ export default class ArviointipyyntoForm extends Vue {
   @Prop({ required: false, default: [] })
   kouluttajat!: any[];
 
-  form = {
+  value = {
     tyoskentelyjakso: null,
     epaOsaamisalue: null,
     arvioitavaTapahtuma: null,
     kouluttaja: null,
-    ajankohta: null,
+    tapahtumanAjankohta: null,
     lisatiedot: null
-  };
+  } as any;
 
   epaOsaamisalueet = [];
 
   onSubmit(event: any) {
     event.preventDefault();
-    console.log("onSubmit", this.form);
-    this.$emit("submit", this.form);
+    this.$emit("submit", {
+      tyoskentelyjaksoId: this.value.tyoskentelyjakso?.id,
+      arvioitavaOsaalueId: this.value.epaOsaamisalue?.id,
+      arvioitavaTapahtuma: this.value.arvioitavaTapahtuma,
+      arvioijaId: this.value.kouluttaja?.id,
+      tapahtumanAjankohta: this.value.tapahtumanAjankohta,
+      lisatiedot: this.value.lisatiedot
+    });
   }
 
   onSubmit2() {
     console.log("onSubmit2");
-  }
-
-  decodeBase64Image(option: any) {
-    if (option && option.profiilikuvaContentType && option.profiilikuva) {
-      return `data:${option.profiilikuvaContentType};base64,${option.profiilikuva}`;
-    } else {
-      return undefined;
-    }
   }
 
   get displayName() {

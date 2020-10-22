@@ -73,8 +73,8 @@ export default class Arviointipyynto extends Vue {
     }
   }
 
-  onSubmit(form: any) {
-    console.log(form);
+  async onSubmit(value: any) {
+    await axios.post("suoritusarvioinnit/arviointipyynto", value);
     this.saved = true;
     this.$router.push({ name: "arviointipyynto-lahetetty" });
   }
