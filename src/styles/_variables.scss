@@ -1,6 +1,7 @@
 // Boostrap variables
 $gray-300: #dee2e6;
 $gray-400: #ced4da;
+$gray-500: #adb5bd;
 $yellow: #ffc107;
 $red: #dc3545;
 $font-family-sans-serif: "Montserrat", system-ui, -apple-system, "Segoe UI",
@@ -41,7 +42,8 @@ $hr-color: $gray-300;
 $nav-tabs-border-width: 0;
 $nav-tabs-link-active-bg: none;
 $border-color: $gray-300;
-$alert-border-width: 0;
+$alert-border-width: 1px;
+$dark: $gray-500;
 
 // Custom variables
 $font-weight-400: 400;

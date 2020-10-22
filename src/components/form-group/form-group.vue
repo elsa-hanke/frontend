@@ -30,8 +30,10 @@
             <font-awesome-icon :icon="['far', 'circle']" />
             <font-awesome-icon icon="info" transform="shrink-8" />
           </font-awesome-layers>
-          <b-link @click="$refs[modalRef].show()">{{ addNewLabelText }}</b-link
-          ><b-modal :ref="modalRef" centered @hide="hideConfirm" size="lg">
+          &nbsp;
+          <b-link @click="$refs[modalRef].show()">{{ addNewLabelText }}</b-link>
+          <span>{{ $t("tai-valitse-alta") }}</span>
+          <b-modal :ref="modalRef" centered @hide="hideConfirm" size="lg">
             <template v-slot:modal-title>
               {{ addNewLabelText }}
             </template>
@@ -48,7 +50,7 @@
                 $t("lisaa")
               }}</b-button></template
             ></b-modal
-          ><span>{{ $t("tai-valitse-alta") }} </span>
+          >
         </div>
       </div></template
     ><slot v-bind:uid="uid"
