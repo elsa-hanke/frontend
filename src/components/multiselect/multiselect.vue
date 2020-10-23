@@ -109,9 +109,22 @@ export default class ElsaMultiselect extends Vue {
     }
   }
   .multiselect__tags {
-    padding: 0.375rem 1.75rem 0.375rem 0.75rem;
+    padding: 0.375rem 2.5rem 0.375rem 0.75rem;
     border: 1px solid #ced4da;
     min-height: initial;
+    .multiselect__spinner {
+      right: 5px;
+      width: 30px;
+      height: $font-size-base * $line-height-base + 2 * 0.375rem;
+      &::before {
+        border: 0.2em solid $primary;
+        border-right-color: transparent;
+        animation: spinner-border 0.75s linear infinite;
+      }
+      &::after {
+        display: none;
+      }
+    }
     .multiselect__single {
       margin: 0;
       padding: 0;

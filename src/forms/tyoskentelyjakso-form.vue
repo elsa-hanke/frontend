@@ -4,10 +4,13 @@
       <template v-slot="{ uid }">
         <elsa-multiselect
           :id="uid"
-          v-model="form.kunta"
+          v-model="value.kunta"
           :options="kunnat"
-          label="name"
-          track-by="name"
+          :loading="loading"
+          :internal-search="false"
+          label="postOffice"
+          track-by="organizationId"
+          @search-change="onSearchChange"
         >
         </elsa-multiselect>
       </template>
@@ -16,7 +19,7 @@
       <template v-slot="{ uid }">
         <elsa-multiselect
           :id="uid"
-          v-model="form.tyoskentelypaikka"
+          v-model="value.tyoskentelypaikka"
           :options="tyoskentelypaikat"
           label="name"
           track-by="name"
@@ -28,7 +31,7 @@
       <template v-slot="{ uid }">
         <b-form-radio-group
           :id="uid"
-          v-model="form.tyyppi"
+          v-model="value.tyyppi"
           :options="tyypit"
           name="tyoskentelyjakso-tyyppi"
           stacked
@@ -44,8 +47,8 @@
         <template v-slot="{ uid }">
           <b-form-datepicker
             :id="uid"
-            v-model="form.alkamispaiva"
-            :max="form.paattymispaiva"
+            v-model="value.alkamispaiva"
+            :max="value.paattymispaiva"
             start-weekday="1"
             :locale="currentLocale"
             placeholder=""
@@ -72,8 +75,8 @@
         <template v-slot="{ uid }">
           <b-form-datepicker
             :id="uid"
-            v-model="form.paattymispaiva"
-            :min="form.alkamispaiva"
+            v-model="value.paattymispaiva"
+            :min="value.alkamispaiva"
             start-weekday="1"
             :locale="currentLocale"
             placeholder=""
@@ -101,7 +104,7 @@
         <div class="d-flex align-items-center">
           <b-form-input
             :id="uid"
-            v-model="form.prosenttiosuus"
+            v-model="value.prosenttiosuus"
             type="number"
             min="50"
             max="100"
@@ -116,6 +119,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
+import axios from "axios";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
 import ElsaMultiselect from "@/components/multiselect/multiselect.vue";
 
@@ -126,7 +130,7 @@ import ElsaMultiselect from "@/components/multiselect/multiselect.vue";
   }
 })
 export default class TyoskentelyjaksoForm extends Vue {
-  form = {
+  value = {
     kunta: null,
     tyoskentelypaikka: null,
     tyyppi: null,
@@ -142,10 +146,32 @@ export default class TyoskentelyjaksoForm extends Vue {
     { text: this.$t("yliopistollinen-sairaala"), value: "ys" },
     { text: this.$t("yksityinen"), value: "y" }
   ];
+  kuntaFilter = "";
+  loading = false;
+
+  mounted() {
+    this.fetchOrganisaatiot();
+  }
+
+  async fetchOrganisaatiot() {
+    this.loading = true;
+    this.kunnat = (
+      await axios.get("sote-organisaatiot", {
+        params: {
+          "postOffice.contains": this.kuntaFilter
+        }
+      })
+    ).data;
+    this.loading = false;
+  }
+
+  onSearchChange(value: string) {
+    this.kuntaFilter = value;
+    this.fetchOrganisaatiot();
+  }
 
   onSubmit(event: any) {
     event.preventDefault();
-    console.log("onSubmit", this.form);
   }
 
   get currentLocale() {
