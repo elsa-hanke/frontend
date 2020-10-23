@@ -118,9 +118,7 @@
                         <font-awesome-icon :icon="['far', 'circle']" />
                         <font-awesome-icon icon="info" transform="shrink-8" />
                       </font-awesome-layers>
-                      <span class="text-black">
-                        {{ $t("arviointeja-ei-ole-viela-tehty") }}
-                      </span>
+                      {{ $t("arviointeja-ei-ole-viela-tehty") }}
                     </b-alert>
                     <b-pagination
                       v-model="page"
@@ -154,7 +152,18 @@
                 </div>
               </b-tab>
               <b-tab :title="$t('arviointipyynnot')">
-                Lorem ipsum...
+                <div v-if="pyynnot">
+                  <b-alert v-if="pyynnot.length === 0" variant="dark" show>
+                    <font-awesome-layers fixed-width>
+                      <font-awesome-icon :icon="['far', 'circle']" />
+                      <font-awesome-icon icon="info" transform="shrink-8" />
+                    </font-awesome-layers>
+                    {{ $t("arviointipyyntoja-ei-ole-viela-tehty") }}
+                  </b-alert>
+                </div>
+                <div class="text-center" v-else>
+                  <b-spinner variant="primary" label="Spinning"></b-spinner>
+                </div>
               </b-tab>
             </b-tabs>
           </b-card-skeleton>
@@ -194,7 +203,7 @@ export default class Arvioinnit extends Vue {
     tyoskentelyjakso: [],
     kouluttaja: []
   };
-  arvioinnit: null | any[] = null;
+  omat: null | any[] = null;
   page = 1;
   totalRows = 0;
   perPage = 5;
@@ -223,10 +232,24 @@ export default class Arvioinnit extends Vue {
         }
       });
       this.totalRows = omat.headers["x-total-count"];
-      this.arvioinnit = omat.data;
+      this.omat = omat.data;
     } catch (err) {
-      this.arvioinnit = [];
+      this.omat = [];
     }
+  }
+
+  get arvioinnit() {
+    if (this.omat) {
+      return this.omat.filter(arviointi => arviointi.arviointiAika);
+    }
+    return null;
+  }
+
+  get pyynnot() {
+    if (this.omat) {
+      return this.omat.filter(arviointi => !arviointi.arviointiAika);
+    }
+    return null;
   }
 }
 </script>
