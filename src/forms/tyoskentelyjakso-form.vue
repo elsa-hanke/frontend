@@ -11,6 +11,8 @@
           label="postOffice"
           track-by="organizationId"
           @search-change="onSearchChange"
+          @select="onSelect"
+          @remove="onRemove"
         >
         </elsa-multiselect>
       </template>
@@ -21,8 +23,8 @@
           :id="uid"
           v-model="value.tyoskentelypaikka"
           :options="tyoskentelypaikat"
-          label="name"
-          track-by="name"
+          label="abbreviation"
+          track-by="organizationId"
         >
         </elsa-multiselect>
       </template>
@@ -137,7 +139,7 @@ export default class TyoskentelyjaksoForm extends Vue {
     alkamispaiva: null,
     paattymispaiva: null,
     prosenttiosuus: 100
-  };
+  } as any;
   kunnat = [];
   tyoskentelypaikat = [];
   tyypit = [
@@ -153,21 +155,40 @@ export default class TyoskentelyjaksoForm extends Vue {
     this.fetchOrganisaatiot();
   }
 
-  async fetchOrganisaatiot() {
+  async fetchOrganisaatiot(selected?: any) {
     this.loading = true;
-    this.kunnat = (
-      await axios.get("sote-organisaatiot", {
-        params: {
-          "postOffice.contains": this.kuntaFilter
-        }
-      })
-    ).data;
+    if (selected) {
+      this.tyoskentelypaikat = (
+        await axios.get("sote-organisaatiot", {
+          params: {
+            "postOffice.equals": selected.postOffice
+          }
+        })
+      ).data;
+    } else {
+      this.kunnat = (
+        await axios.get("sote-organisaatiot", {
+          params: {
+            "postOffice.contains": this.kuntaFilter
+          }
+        })
+      ).data;
+    }
     this.loading = false;
   }
 
   onSearchChange(value: string) {
     this.kuntaFilter = value;
     this.fetchOrganisaatiot();
+  }
+
+  onSelect(selected: any) {
+    this.fetchOrganisaatiot(selected);
+  }
+
+  onRemove() {
+    this.tyoskentelypaikat = [];
+    this.value.tyoskentelypaikka = null;
   }
 
   onSubmit(event: any) {
