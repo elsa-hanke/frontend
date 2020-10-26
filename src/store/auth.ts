@@ -35,7 +35,12 @@ const auth: Module<any, any> = {
     async authorize({ commit }) {
       commit("authRequest");
       try {
-        const account = (await axios.get("account")).data;
+        const account = (await axios.get("kayttaja")).data;
+        if (account.authorities.includes("ROLE_ERIKOISTUVA_LAAKARI")) {
+          account.erikoistuvaLaakari = (
+            await axios.get("erikoistuva-laakari")
+          ).data;
+        }
         commit("authSuccess", account);
       } catch (err) {
         commit("authError");
