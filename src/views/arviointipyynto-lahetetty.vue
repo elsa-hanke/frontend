@@ -26,7 +26,8 @@
               <b-button
                 type="submit"
                 variant="primary"
-                :to="{ name: 'itsearviointi', params: { arviointiId: '1' } }"
+                v-if="itsearviointiLinkki"
+                :to="itsearviointiLinkki"
                 >{{ $t("tee-tapahtumasta-itsearviointi") }}</b-button
               >
             </div>
@@ -63,6 +64,26 @@ export default class ArviointipyyntoLahetetty extends Vue {
       active: true
     }
   ];
+
+  mounted() {
+    if (
+      this.$router &&
+      !(this.$route && this.$route.params && this.$route.params.arviointiId)
+    ) {
+      this.$router.replace({ name: "arvioinnit" });
+    }
+  }
+
+  get itsearviointiLinkki() {
+    if (this.$route && this.$route.params && this.$route.params.arviointiId) {
+      return {
+        name: "itsearviointi",
+        params: { arviointiId: this.$route.params.arviointiId }
+      };
+    } else {
+      return false;
+    }
+  }
 }
 </script>
 

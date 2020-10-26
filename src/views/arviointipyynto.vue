@@ -24,7 +24,6 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import axios from "axios";
-import store from "@/store";
 import { confimExit } from "@/utils/confirm";
 import { ArviointipyyntoLomake } from "@/types";
 import BCardSkeleton from "@/components/card/card.vue";
@@ -63,9 +62,7 @@ export default class Arviointipyynto extends Vue {
   async fetch() {
     try {
       this.arviointipyyntoLomake = (
-        await axios.get(
-          `erikoistuva-laakari/${store.getters.account.erikoistuvaLaakari.id}/arviointipyynto-lomake`
-        )
+        await axios.get(`erikoistuva-laakari/arviointipyynto-lomake`)
       ).data;
     } catch (err) {
       this.arviointipyyntoLomake = {
@@ -76,9 +73,14 @@ export default class Arviointipyynto extends Vue {
   }
 
   async onSubmit(value: any) {
-    await axios.post("suoritusarvioinnit/arviointipyynto", value);
+    const arviointipyynto = (
+      await axios.post("suoritusarvioinnit/arviointipyynto", value)
+    ).data;
     this.saved = true;
-    this.$router.push({ name: "arviointipyynto-lahetetty" });
+    this.$router.push({
+      name: "arviointipyynto-lahetetty",
+      params: { arviointiId: `${arviointipyynto.id}` }
+    });
   }
 
   async beforeRouteLeave(to: any, from: any, next: any) {
