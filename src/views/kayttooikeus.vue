@@ -8,6 +8,7 @@
           :src="`${publicPath}img/icons/favicon.svg`"
           style="height: 100px;"
           class="mr-3"
+          :alt="$t('elsa-palvelu')"
         />
         <h1 class="text-primary m-0">
           <span class="font-weight-bold text-uppercase">{{ $t("elsa") }}</span
