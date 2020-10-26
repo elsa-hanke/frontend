@@ -241,16 +241,11 @@ export default class Arvioinnit extends Vue {
   get arvioinnit() {
     if (this.omat) {
       return this.omat;
-      // Todo: vain arvioidut
-      //return this.omat.filter(arviointi => arviointi.arviointiAika);
     }
     return null;
   }
 
   get pyynnot() {
-    if (this.omat) {
-      return this.omat.filter(arviointi => !arviointi.arviointiAika);
-    }
     return null;
   }
 }
