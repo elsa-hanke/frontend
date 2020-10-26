@@ -20,7 +20,7 @@ Vue.config.productionTip = false;
 router.beforeEach(async (to, from, next) => {
   await store.dispatch("authorize");
   if (store.getters.isLoggedIn) {
-    // Ohjataan rooliton käyttäjä käyttäjäprofiiliin kirjautumisen jälkeen
+    // Ohjataan rooliton käyttäjä roolien lisäämisen näkymään kirjautumisen jälkeen
     if (
       store.getters.account.authorities.length === 0 &&
       to.name !== "kayttooikeus"

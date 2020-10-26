@@ -1,16 +1,22 @@
 import { Route, NavigationGuardNext } from "vue-router";
 import { ELSA_API_LOCATION } from "@/store";
 
-/** Palauttaa tallennetun näkymän polun selaimen muistista. */
+// Palauttaa tallennetun näkymän polun selaimen muistista.
 export function restoreRoute(next: NavigationGuardNext) {
   if (typeof localStorage !== "undefined") {
     try {
       const to = localStorage.getItem("to") as string;
       localStorage.removeItem("to");
-      next({
-        ...JSON.parse(to),
-        replace: true
-      });
+      try {
+        // Ohjataan routerilla jos kyseessä route
+        next({
+          ...JSON.parse(to),
+          replace: true
+        });
+      } catch (err) {
+        // Ohjataan locationilla jos kyseessä href
+        location.href = to;
+      }
     } catch (err) {
       console.warn(err);
     }
@@ -18,29 +24,33 @@ export function restoreRoute(next: NavigationGuardNext) {
   next();
 }
 
-/** Tallentaa näkymän polun selaimen muistiin. */
-export function storeRoute(to: Route) {
+// Tallentaa näkymän polun selaimen muistiin.
+export function storeRoute(to?: Route) {
   if (typeof localStorage !== "undefined") {
     try {
-      localStorage.setItem(
-        "to",
-        JSON.stringify({
-          path: to.path,
-          name: to.name,
-          hash: to.hash,
-          query: to.query,
-          params: to.params,
-          meta: to.meta
-        })
-      );
+      if (to) {
+        localStorage.setItem(
+          "to",
+          JSON.stringify({
+            path: to.path,
+            name: to.name,
+            hash: to.hash,
+            query: to.query,
+            params: to.params,
+            meta: to.meta
+          })
+        );
+      } else {
+        localStorage.setItem("to", location.href);
+      }
     } catch (err) {
       console.warn(err);
     }
   }
 }
 
-/** Tallentaa näkymän polun selaimen muistiin. */
-export function storeRouteAndRedirectToLogin(to: Route) {
+// Tallentaa näkymän polun selaimen muistiin.
+export function storeRouteAndRedirectToLogin(to?: Route) {
   storeRoute(to);
   location.href = `${ELSA_API_LOCATION}/oauth2/authorization/oidc`;
 }
