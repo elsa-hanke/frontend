@@ -24,6 +24,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import axios from "axios";
+import store from "@/store";
 import { confimExit } from "@/utils/confirm";
 import { ArviointipyyntoLomake } from "@/types";
 import BCardSkeleton from "@/components/card/card.vue";
@@ -61,9 +62,10 @@ export default class Arviointipyynto extends Vue {
 
   async fetch() {
     try {
-      // todo: yhteinen rajapinta arviointipynnön lomakkeelle?
       this.arviointipyyntoLomake = (
-        await axios.get("suoritusarvioinnit/arviointipyynto-lomake")
+        await axios.get(
+          `erikoistuva-laakari/${store.getters.account.erikoistuvaLaakari.id}/arviointipyynto-lomake`
+        )
       ).data;
     } catch (err) {
       this.arviointipyyntoLomake = {

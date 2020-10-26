@@ -2,7 +2,7 @@
   <b-form-group :label-for="uid" v-bind="$attrs"
     ><template v-slot:label
       ><div class="d-flex justify-content-between align-items-center flex-wrap">
-        <div class="text-nowrap" :class="{ 'mr-3': addNew }">
+        <div class="text-nowrap" :class="{ 'mr-3': addNewEnabled }">
           {{ label }}
           <span class="text-primary"
             >{{ required ? "*" : "" }}
@@ -25,7 +25,7 @@
           </font-awesome-layers>
           <slot name="help" />
         </div>
-        <div class="text-muted form-group-help" v-if="addNew">
+        <div class="text-muted form-group-help" v-if="addNewEnabled">
           <font-awesome-layers fixed-width>
             <font-awesome-icon :icon="['far', 'circle']" />
             <font-awesome-icon icon="info" transform="shrink-8" />
@@ -33,26 +33,23 @@
           &nbsp;
           <b-link @click="$refs[modalRef].show()">{{ addNewLabelText }}</b-link>
           <span>{{ $t("tai-valitse-alta") }}</span>
-          <b-modal :ref="modalRef" centered @hide="hideConfirm" size="lg">
+          <b-modal
+            :ref="modalRef"
+            centered
+            @hide="onHide"
+            size="lg"
+            :hide-footer="true"
+          >
             <template v-slot:modal-title>
               {{ addNewLabelText }}
             </template>
-            <slot name="modal-content" />
-            <template v-slot:modal-footer="{ ok, cancel }">
-              <b-button
-                type="reset"
-                variant="link"
-                @click="cancel()"
-                class="text-decoration-none font-weight-500 mr-2"
-                >{{ $t("peruuta") }}</b-button
-              >
-              <b-button variant="primary" @click="ok()">{{
-                $t("lisaa")
-              }}</b-button></template
-            ></b-modal
-          >
-        </div>
-      </div></template
+            <slot
+              name="modal-content"
+              v-bind:submit="onSubmit"
+              v-bind:cancel="onCancel"
+            />
+          </b-modal>
+        </div></div></template
     ><slot v-bind:uid="uid"
   /></b-form-group>
 </template>
@@ -74,8 +71,8 @@ export default class ElsaFormGroup extends Vue {
   @Prop({ required: false, type: String })
   addNewLabel!: string;
 
-  @Prop({ required: false, type: Function })
-  addNew!: () => void;
+  @Prop({ required: false, default: false })
+  addNewEnabled!: boolean;
 
   @Prop({ required: false, type: Boolean, default: false })
   required!: boolean;
@@ -83,7 +80,7 @@ export default class ElsaFormGroup extends Vue {
   @Prop({ required: false, type: String })
   help!: string;
 
-  async hideConfirm(event: any) {
+  async onHide(event: any) {
     // Tarkista, onko poistuminen jo vahvistettu
     if (event.trigger !== "confirm") {
       event.preventDefault();
@@ -91,15 +88,20 @@ export default class ElsaFormGroup extends Vue {
       return;
     }
 
-    if (event.trigger === "ok") {
-      // TODO: Välitä sisällön data vanhemmalle
-      await this.addNew();
+    // Pyydä poistumisen vahvistus
+    if (await confimExit(this)) {
       (this.$refs[this.modalRef] as any).hide("confirm");
-    } else {
-      // Pyydä poistumisen vahvistus
-      if (await confimExit(this)) {
-        (this.$refs[this.modalRef] as any).hide("confirm");
-      }
+    }
+  }
+
+  // Välitä tapahtuma vanhemmalle
+  onSubmit(value: any) {
+    this.$emit("submit", value, this.$refs[this.modalRef]);
+  }
+
+  async onCancel() {
+    if (await confimExit(this)) {
+      (this.$refs[this.modalRef] as any).hide("confirm");
     }
   }
 

@@ -7,12 +7,13 @@
     </elsa-form-group>
     <elsa-form-group
       :label="$t('tyoskentelyjakso')"
-      :add-new="onSubmit2"
+      :add-new-enabled="true"
       :add-new-label="$t('lisaa-tyoskentelyjakso')"
       :required="true"
+      @submit="onTyoskentelypaikkaSubmit"
     >
-      <template v-slot:modal-content>
-        <tyoskentelyjakso-form />
+      <template v-slot:modal-content="{ submit, cancel }">
+        <tyoskentelyjakso-form @submit="submit" @cancel="cancel" />
       </template>
       <template v-slot="{ uid }">
         <elsa-multiselect
@@ -48,7 +49,6 @@
     <b-form-row>
       <elsa-form-group
         :label="$t('kouluttaja-tai-lahikouluttaja')"
-        :add-new="onSubmit2"
         :add-new-label="$t('lisaa-lahikouluttaja')"
         :required="true"
         class="col-md-8"
@@ -123,6 +123,7 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import { Prop } from "vue-property-decorator";
+import axios from "axios";
 import store from "@/store";
 import UserAvatar from "@/components/user-avatar/user-avatar.vue";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
@@ -146,14 +147,21 @@ export default class ArviointipyyntoForm extends Vue {
   @Prop({ required: false, default: [] })
   kouluttajat!: any[];
 
-  value = {
-    tyoskentelyjakso: null,
-    epaOsaamisalue: null,
-    arvioitavaTapahtuma: null,
-    kouluttaja: null,
-    tapahtumanAjankohta: null,
-    lisatiedot: null
-  } as any;
+  @Prop({
+    required: false,
+    type: Object,
+    default: () => {
+      return {
+        tyoskentelyjakso: null,
+        epaOsaamisalue: null,
+        arvioitavaTapahtuma: null,
+        kouluttaja: null,
+        tapahtumanAjankohta: null,
+        lisatiedot: null
+      };
+    }
+  })
+  value!: any;
 
   epaOsaamisalueet = [];
 
@@ -169,8 +177,16 @@ export default class ArviointipyyntoForm extends Vue {
     });
   }
 
-  onSubmit2() {
-    console.log("onSubmit2");
+  async onTyoskentelypaikkaSubmit(value: any, modal: any) {
+    await axios.post(
+      `/erikoistuva-laakari/${this.erikoistuvaLaakariId}/tyoskentelyjaksot`,
+      value
+    );
+    modal.hide("confirm");
+  }
+
+  get erikoistuvaLaakariId() {
+    return 1;
   }
 
   get displayName() {

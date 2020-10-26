@@ -8,11 +8,12 @@
           :options="kunnat"
           :loading="loading"
           :internal-search="false"
+          :required="true"
           label="postOffice"
           track-by="organizationId"
-          @search-change="onSearchChange"
-          @select="onSelect"
-          @remove="onRemove"
+          @search-change="onKuntaSearchChange"
+          @select="onKuntaSelect"
+          @remove="onKuntaRemove"
         >
         </elsa-multiselect>
       </template>
@@ -23,6 +24,7 @@
           :id="uid"
           v-model="value.tyoskentelypaikka"
           :options="tyoskentelypaikat"
+          :required="true"
           label="abbreviation"
           track-by="organizationId"
         >
@@ -35,6 +37,7 @@
           :id="uid"
           v-model="value.tyyppi"
           :options="tyypit"
+          :required="true"
           name="tyoskentelyjakso-tyyppi"
           stacked
         ></b-form-radio-group>
@@ -50,6 +53,7 @@
           <b-form-datepicker
             :id="uid"
             v-model="value.alkamispaiva"
+            :required="true"
             :max="value.paattymispaiva"
             start-weekday="1"
             :locale="currentLocale"
@@ -110,11 +114,22 @@
             type="number"
             min="50"
             max="100"
+            :required="true"
           />
           <span class="mx-3">%</span>
         </div>
       </template>
     </elsa-form-group>
+    <div class="text-right">
+      <b-button
+        type="reset"
+        variant="link"
+        @click="onCancelClick"
+        class="text-decoration-none font-weight-500 mr-2"
+        >{{ $t("peruuta") }}</b-button
+      >
+      <b-button type="submit" variant="primary">{{ $t("lisaa") }}</b-button>
+    </div>
   </b-form>
 </template>
 
@@ -152,6 +167,7 @@ export default class TyoskentelyjaksoForm extends Vue {
   loading = false;
 
   mounted() {
+    console.log(this.value);
     this.fetchOrganisaatiot();
   }
 
@@ -177,22 +193,36 @@ export default class TyoskentelyjaksoForm extends Vue {
     this.loading = false;
   }
 
-  onSearchChange(value: string) {
+  onKuntaSearchChange(value: string) {
     this.kuntaFilter = value;
     this.fetchOrganisaatiot();
   }
 
-  onSelect(selected: any) {
+  onKuntaSelect(selected: any) {
     this.fetchOrganisaatiot(selected);
   }
 
-  onRemove() {
+  onKuntaRemove() {
     this.tyoskentelypaikat = [];
     this.value.tyoskentelypaikka = null;
   }
 
   onSubmit(event: any) {
     event.preventDefault();
+    this.$emit("submit", {
+      tyoskentelypaikka: this.value.tyoskentelypaikka?.organizationId,
+      tyyppi: this.value.tyyppi,
+      tunnus: "todo",
+      osasto: "todo",
+      alkamispaiva: this.value.alkamispaiva,
+      paattymispaiva: this.value.paattymispaiva,
+      prosenttiosuus: this.value.prosenttiosuus
+    });
+  }
+
+  onCancelClick(event: any) {
+    event.preventDefault();
+    this.$emit("cancel");
   }
 
   get currentLocale() {
