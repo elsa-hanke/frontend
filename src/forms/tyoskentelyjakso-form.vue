@@ -6,12 +6,8 @@
           :id="uid"
           v-model="value.kunta"
           :options="kunnat"
-          :loading="loading"
-          :internal-search="false"
+          :loading="kunnatLoading"
           :required="true"
-          label="postOffice"
-          track-by="organizationId"
-          @search-change="onKuntaSearchChange"
           @select="onKuntaSelect"
           @remove="onKuntaRemove"
         >
@@ -24,7 +20,9 @@
           :id="uid"
           v-model="value.tyoskentelypaikka"
           :options="tyoskentelypaikat"
+          :loading="organisaatiotLoading"
           :required="true"
+          :disabled="!value.kunta"
           label="abbreviation"
           track-by="organizationId"
         >
@@ -163,39 +161,29 @@ export default class TyoskentelyjaksoForm extends Vue {
     { text: this.$t("yliopistollinen-sairaala"), value: "ys" },
     { text: this.$t("yksityinen"), value: "y" }
   ];
-  kuntaFilter = "";
-  loading = false;
+  kunnatLoading = false;
+  organisaatiotLoading = false;
 
   mounted() {
-    console.log(this.value);
-    this.fetchOrganisaatiot();
+    this.fetchKunnat();
   }
 
-  async fetchOrganisaatiot(selected?: any) {
-    this.loading = true;
-    if (selected) {
-      this.tyoskentelypaikat = (
-        await axios.get("sote-organisaatiot", {
-          params: {
-            "postOffice.equals": selected.postOffice
-          }
-        })
-      ).data;
-    } else {
-      this.kunnat = (
-        await axios.get("sote-organisaatiot", {
-          params: {
-            "postOffice.contains": this.kuntaFilter
-          }
-        })
-      ).data;
-    }
-    this.loading = false;
+  async fetchKunnat() {
+    this.kunnatLoading = true;
+    this.kunnat = (await axios.get("sote-organisaatiot/kunnat")).data;
+    this.kunnatLoading = false;
   }
 
-  onKuntaSearchChange(value: string) {
-    this.kuntaFilter = value;
-    this.fetchOrganisaatiot();
+  async fetchOrganisaatiot(selected: string) {
+    this.organisaatiotLoading = true;
+    this.tyoskentelypaikat = (
+      await axios.get("sote-organisaatiot", {
+        params: {
+          "postOffice.equals": selected
+        }
+      })
+    ).data;
+    this.organisaatiotLoading = false;
   }
 
   onKuntaSelect(selected: any) {
