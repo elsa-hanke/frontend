@@ -101,6 +101,12 @@ export default class ElsaMultiselect extends Vue {
 @import "~@/styles/variables";
 
 ::v-deep .multiselect {
+  min-height: 35px;
+
+  &.multiselect--disabled {
+    background: transparent;
+  }
+
   .multiselect__select {
     height: $font-size-base * $line-height-base + 2 * 0.375rem;
 
