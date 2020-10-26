@@ -176,7 +176,6 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import axios from "axios";
-import store from "@/store";
 import BCardSkeleton from "@/components/card/card.vue";
 import ArviointiCard from "@/components/arviointi-card/arviointi-card.vue";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
@@ -226,15 +225,12 @@ export default class Arvioinnit extends Vue {
 
   async fetch() {
     try {
-      const omat = await axios.get(
-        `erikoistuva-laakari/${store.getters.account.erikoistuvaLaakari.id}/suoritusarvioinnit`,
-        {
-          params: {
-            page: this.page - 1,
-            size: this.perPage
-          }
+      const omat = await axios.get(`erikoistuva-laakari/suoritusarvioinnit`, {
+        params: {
+          page: this.page - 1,
+          size: this.perPage
         }
-      );
+      });
       this.totalRows = omat.headers["x-total-count"];
       this.omat = omat.data;
     } catch (err) {
@@ -244,7 +240,9 @@ export default class Arvioinnit extends Vue {
 
   get arvioinnit() {
     if (this.omat) {
-      return this.omat.filter(arviointi => arviointi.arviointiAika);
+      return this.omat;
+      // Todo: vain arvioidut
+      //return this.omat.filter(arviointi => arviointi.arviointiAika);
     }
     return null;
   }

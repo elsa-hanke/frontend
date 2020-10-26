@@ -60,7 +60,9 @@ export default class Itsearviointi extends Vue {
   async mounted() {
     if (this.$route && this.$route.params && this.$route.params.arviointiId) {
       this.value = (
-        await axios.get(`suoritusarvioinnit/${this.$route.params.arviointiId}`)
+        await axios.get(
+          `erikoistuva-laakari/suoritusarvioinnit/${this.$route.params.arviointiId}`
+        )
       ).data;
     }
   }

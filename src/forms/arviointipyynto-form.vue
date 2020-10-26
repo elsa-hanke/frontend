@@ -19,9 +19,10 @@
         <elsa-multiselect
           :id="uid"
           v-model="value.tyoskentelyjakso"
-          :options="tyoskentelyjaksot"
-          label="name"
-          track-by="name"
+          :options="tyoskentelyjaksotFormatted"
+          :required="true"
+          label="nimi"
+          track-by="nimi"
         >
         </elsa-multiselect>
       </template>
@@ -32,6 +33,7 @@
           :id="uid"
           v-model="value.epaOsaamisalue"
           :options="epaOsaamisalueet"
+          :required="true"
           label="name"
           track-by="name"
         >
@@ -43,6 +45,7 @@
         <b-form-input
           :id="uid"
           v-model="value.arvioitavaTapahtuma"
+          :required="true"
         ></b-form-input>
       </template>
     </elsa-form-group>
@@ -61,6 +64,7 @@
             :id="uid"
             v-model="value.kouluttaja"
             :options="kouluttajat"
+            :required="true"
             label="nimi"
             track-by="nimi"
           >
@@ -150,16 +154,14 @@ export default class ArviointipyyntoForm extends Vue {
   @Prop({
     required: false,
     type: Object,
-    default: () => {
-      return {
-        tyoskentelyjakso: null,
-        epaOsaamisalue: null,
-        arvioitavaTapahtuma: null,
-        kouluttaja: null,
-        tapahtumanAjankohta: null,
-        lisatiedot: null
-      };
-    }
+    default: () => ({
+      tyoskentelyjakso: null,
+      epaOsaamisalue: null,
+      arvioitavaTapahtuma: null,
+      kouluttaja: null,
+      tapahtumanAjankohta: null,
+      lisatiedot: null
+    })
   })
   value!: any;
 
@@ -178,15 +180,12 @@ export default class ArviointipyyntoForm extends Vue {
   }
 
   async onTyoskentelypaikkaSubmit(value: any, modal: any) {
-    await axios.post(
-      `/erikoistuva-laakari/${this.erikoistuvaLaakariId}/tyoskentelyjaksot`,
+    const tyoskentelypaikka = await axios.post(
+      `/erikoistuva-laakari/tyoskentelyjaksot`,
       value
     );
+    this.tyoskentelyjaksot.push(tyoskentelypaikka);
     modal.hide("confirm");
-  }
-
-  get erikoistuvaLaakariId() {
-    return 1;
   }
 
   get displayName() {
@@ -200,6 +199,13 @@ export default class ArviointipyyntoForm extends Vue {
 
   get currentLocale() {
     return this.$i18n.locale;
+  }
+
+  get tyoskentelyjaksotFormatted() {
+    return this.tyoskentelyjaksot.map(tj => ({
+      ...tj,
+      nimi: `(${tj.alkamispaiva} – ${tj.paattymispaiva})`
+    }));
   }
 }
 </script>
