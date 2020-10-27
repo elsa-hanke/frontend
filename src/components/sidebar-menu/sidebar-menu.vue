@@ -40,6 +40,11 @@
         -->
       </b-nav>
     </div>
+    <b-toaster
+      class="toaster"
+      :style="{ top: paddingTop + 'px' }"
+      name="b-toaster-top-right"
+    />
   </nav>
 </template>
 
@@ -91,5 +96,9 @@ export default class SidebarMenu extends Vue {
     overflow-x: hidden;
     overflow-y: auto;
   }
+}
+
+.toaster {
+  top: 64px;
 }
 </style>
