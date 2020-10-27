@@ -7,10 +7,12 @@
             <div class="text-size-lg font-weight-500 mr-3">
               {{ value.arvioitavaTapahtuma }}
             </div>
-            <div>{{ value.tapahtumanAjankohta }}</div>
+            <div class="separator">{{ value.tapahtumanAjankohta }}</div>
           </div>
         </b-col>
-        <b-col>Laaksolahden terveyskeskus</b-col>
+        <b-col class="d-flex align-items-center">
+          <div>Laaksolahden terveyskeskus</div>
+        </b-col>
       </b-row>
     </b-container>
     <b-container fluid class="px-0">
@@ -103,6 +105,18 @@ export default class ArviointiCard extends Vue {
 
 <style lang="scss" scoped>
 @import "~@/styles/variables";
+@import "~bootstrap/scss/mixins/breakpoints";
+
+.separator {
+  &::after {
+    content: "|";
+    position: absolute;
+    right: -2px;
+    @include media-breakpoint-down(md) {
+      display: none;
+    }
+  }
+}
 
 ::v-deep table {
   thead tr {
