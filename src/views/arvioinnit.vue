@@ -234,7 +234,6 @@ export default class Arvioinnit extends Vue {
 
   mounted() {
     this.fetchOptions();
-    this.fetch(false);
   }
 
   resetFilters() {
