@@ -74,7 +74,10 @@ export default class Arviointipyynto extends Vue {
 
   async onSubmit(value: any) {
     const arviointipyynto = (
-      await axios.post("suoritusarvioinnit/arviointipyynto", value)
+      await axios.post(
+        "erikoistuva-laakari/suoritusarvioinnit/arviointipyynto",
+        value
+      )
     ).data;
     this.saved = true;
     this.$router.push({
