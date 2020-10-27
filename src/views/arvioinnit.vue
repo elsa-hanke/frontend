@@ -34,41 +34,10 @@
                 />
               </div>
             </template>
-            <b-tabs content-class="mt-3" :no-fade="true">
+            <b-tabs content-class="mt-3" :no-fade="true" @input="onTabChange">
               <b-tab :title="$t('arvioinnit-ja-itsearvioinnit')" active>
                 <b-container fluid class="px-0">
                   <b-row>
-                    <b-col>
-                      <elsa-form-group
-                        :label="$t('epa-osaamisalue')"
-                        class="mb-0"
-                      >
-                        <template v-slot="{ uid }">
-                          <elsa-multiselect
-                            :id="uid"
-                            v-model="selected.osaamisalue"
-                            :options="options.osaamisalue"
-                            label="name"
-                            track-by="name"
-                          >
-                          </elsa-multiselect>
-                        </template>
-                      </elsa-form-group>
-                    </b-col>
-                    <b-col>
-                      <elsa-form-group :label="$t('tapahtuma')" class="mb-0">
-                        <template v-slot="{ uid }">
-                          <elsa-multiselect
-                            :id="uid"
-                            v-model="selected.arviointi"
-                            :options="options.arviointi"
-                            label="name"
-                            track-by="name"
-                          >
-                          </elsa-multiselect>
-                        </template>
-                      </elsa-form-group>
-                    </b-col>
                     <b-col>
                       <elsa-form-group
                         :label="$t('tyoskentelyjakso')"
@@ -79,7 +48,41 @@
                           <elsa-multiselect
                             :id="uid"
                             v-model="selected.tyoskentelyjakso"
-                            :options="options.tyoskentelyjakso"
+                            :options="options.tyoskentelyjaksot"
+                            label="name"
+                            track-by="name"
+                          >
+                          </elsa-multiselect>
+                        </template>
+                      </elsa-form-group>
+                    </b-col>
+                    <b-col>
+                      <elsa-form-group
+                        :label="$t('epa-osaamisalue')"
+                        class="mb-0"
+                      >
+                        <template v-slot="{ uid }">
+                          <elsa-multiselect
+                            :id="uid"
+                            v-model="selected.osaamisalue"
+                            :options="options.osaamisalueet"
+                            label="name"
+                            track-by="name"
+                          >
+                          </elsa-multiselect>
+                        </template>
+                      </elsa-form-group>
+                    </b-col>
+                    <b-col>
+                      <elsa-form-group
+                        :label="$t('arvioitu-tapahtuma')"
+                        class="mb-0"
+                      >
+                        <template v-slot="{ uid }">
+                          <elsa-multiselect
+                            :id="uid"
+                            v-model="selected.tapahtuma"
+                            :options="options.tapahtumat"
                             label="name"
                             track-by="name"
                           >
@@ -97,13 +100,25 @@
                           <elsa-multiselect
                             :id="uid"
                             v-model="selected.kouluttaja"
-                            :options="options.kouluttaja"
-                            label="name"
-                            track-by="name"
+                            :options="options.kouluttajat"
+                            label="nimi"
+                            track-by="nimi"
                           >
                           </elsa-multiselect>
                         </template>
                       </elsa-form-group>
+                    </b-col>
+                  </b-row>
+                  <b-row>
+                    <b-col>
+                      <div class="d-flex flex-row-reverse mt-4">
+                        <b-button
+                          :disabled="false"
+                          variant="link"
+                          @click="resetFilters"
+                          >{{ $t("tyhjenna-valinnat") }}</b-button
+                        >
+                      </div>
                     </b-col>
                   </b-row>
                 </b-container>
@@ -158,7 +173,7 @@
                       <font-awesome-icon :icon="['far', 'circle']" />
                       <font-awesome-icon icon="info" transform="shrink-8" />
                     </font-awesome-layers>
-                    {{ $t("arviointipyyntoja-ei-ole-viela-tehty") }}
+                    {{ $t("kaikkiin-arviointipyyntoihisi-on-tehty-arviointi") }}
                   </b-alert>
                 </div>
                 <div class="text-center" v-else>
@@ -191,23 +206,21 @@ import ElsaMultiselect from "@/components/multiselect/multiselect.vue";
 })
 export default class Arvioinnit extends Vue {
   selected = {
-    osaamisalue: null,
-    arviointi: null,
     tyoskentelyjakso: null,
+    osaamisalue: null,
+    tapahtuma: null,
     kouluttaja: null
   };
-
   options = {
-    osaamisalue: [],
-    arviointi: [],
-    tyoskentelyjakso: [],
-    kouluttaja: []
+    tyoskentelyjaksot: [],
+    osaamisalueet: [],
+    tapahtumat: [],
+    kouluttajat: []
   };
   omat: null | any[] = null;
   page = 1;
   totalRows = 0;
   perPage = 5;
-
   items = [
     {
       text: this.$t("etusivu"),
@@ -220,13 +233,43 @@ export default class Arvioinnit extends Vue {
   ];
 
   mounted() {
-    this.fetch();
+    this.fetchOptions();
+    this.fetch(false);
   }
 
-  async fetch() {
+  resetFilters() {
+    this.selected = {
+      tyoskentelyjakso: null,
+      osaamisalue: null,
+      tapahtuma: null,
+      kouluttaja: null
+    };
+  }
+
+  onTabChange(value: any) {
+    this.omat = null;
+    this.page = 1;
+    this.totalRows = 0;
+    if (value === 0) {
+      // Arvioinnit
+      this.fetch(false);
+    } else if (value === 1) {
+      // Arviointipyynnöt
+      this.fetch(true);
+    }
+  }
+
+  async fetchOptions() {
+    this.options = (
+      await axios.get("erikoistuva-laakari/suoritusarvioinnit-rajaimet")
+    ).data;
+  }
+
+  async fetch(isArviointipyynto: boolean) {
     try {
-      const omat = await axios.get(`erikoistuva-laakari/suoritusarvioinnit`, {
+      const omat = await axios.get("erikoistuva-laakari/suoritusarvioinnit", {
         params: {
+          "arviointiAika.specified": isArviointipyynto,
           page: this.page - 1,
           size: this.perPage
         }
@@ -246,6 +289,9 @@ export default class Arvioinnit extends Vue {
   }
 
   get pyynnot() {
+    if (this.omat) {
+      return this.omat;
+    }
     return null;
   }
 }
