@@ -186,6 +186,12 @@ export default class ArviointipyyntoForm extends Vue {
     );
     this.tyoskentelyjaksot.push(tyoskentelypaikka);
     modal.hide("confirm");
+    this.$bvToast.toast(this.$t("uusi-tyoskentelyjakso-lisatty") as string, {
+      title: this.$t("tyoskentelyjakson-lisaaminen") as string,
+      autoHideDelay: 5000,
+      variant: "default",
+      solid: true
+    });
   }
 
   get displayName() {
