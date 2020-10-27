@@ -26,13 +26,22 @@
             :items="tableValue.items"
           >
             <template v-slot:cell(epa)="data">
-              {{ data.item.epa }}
-              <b-link v-b-popover.hover.right="'Lorem ipsum...'">
-                <font-awesome-layers fixed-width>
-                  <font-awesome-icon :icon="['far', 'circle']" />
-                  <font-awesome-icon icon="info" transform="shrink-8" />
-                </font-awesome-layers>
-              </b-link>
+              <div
+                :class="{
+                  'ml-3': data.index !== 0,
+                  'font-weight-500': data.index === 0
+                }"
+              >
+                {{ data.item.epa }}
+                <!--
+                <b-link v-b-popover.hover.right="'Lorem ipsum...'">
+                  <font-awesome-layers fixed-width>
+                    <font-awesome-icon :icon="['far', 'circle']" />
+                    <font-awesome-icon icon="info" transform="shrink-8" />
+                  </font-awesome-layers>
+                </b-link>
+                -->
+              </div>
             </template>
             <template v-slot:cell(arviointi)="data">
               <b-form-rating
@@ -87,6 +96,11 @@ export default class ArviointiCard extends Vue {
       { key: "itsearviointi", label: "Itsearviointi" }
     ],
     items: [
+      {
+        epa: this.$t("kokonaisarviointi"),
+        arviointi: 3,
+        itsearviointi: 4
+      },
       {
         epa: "Terveyden ja hyvinvoinnin edistäminen",
         arviointi: 3,
