@@ -232,7 +232,7 @@ export default class Arvioinnit extends Vue {
         }
       });
       this.totalRows = omat.headers["x-total-count"];
-      this.omat = omat.data;
+      this.omat = omat.data.content;
     } catch (err) {
       this.omat = [];
     }
