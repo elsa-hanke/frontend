@@ -180,10 +180,9 @@ export default class ArviointipyyntoForm extends Vue {
   }
 
   async onTyoskentelypaikkaSubmit(value: any, modal: any) {
-    const tyoskentelypaikka = await axios.post(
-      `/erikoistuva-laakari/tyoskentelyjaksot`,
-      value
-    );
+    const tyoskentelypaikka = (
+      await axios.post(`/erikoistuva-laakari/tyoskentelyjaksot`, value)
+    ).data;
     this.tyoskentelyjaksot.push(tyoskentelypaikka);
     modal.hide("confirm");
     this.$bvToast.toast(this.$t("uusi-tyoskentelyjakso-lisatty") as string, {
