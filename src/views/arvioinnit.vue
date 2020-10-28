@@ -168,6 +168,9 @@
               </b-tab>
               <b-tab :title="$t('arviointipyynnot')">
                 <div v-if="pyynnot">
+                  <div v-for="(arviointipyynto, index) in pyynnot" :key="index">
+                    <pre>{{ arviointipyynto }}</pre>
+                  </div>
                   <b-alert v-if="pyynnot.length === 0" variant="dark" show>
                     <font-awesome-layers fixed-width>
                       <font-awesome-icon :icon="['far', 'circle']" />
@@ -268,7 +271,7 @@ export default class Arvioinnit extends Vue {
     try {
       const omat = await axios.get("erikoistuva-laakari/suoritusarvioinnit", {
         params: {
-          "arviointiAika.specified": isArviointipyynto,
+          "arviointiAika.specified": !isArviointipyynto,
           page: this.page - 1,
           size: this.perPage
         }
