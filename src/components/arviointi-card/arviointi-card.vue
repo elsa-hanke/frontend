@@ -97,7 +97,7 @@ export default class ArviointiCard extends Vue {
     ],
     items: [
       {
-        epa: this.$t("kokonaisarviointi"),
+        epa: this.$t("luottamuksen-taso"),
         arviointi: 3,
         itsearviointi: 4
       },

@@ -75,23 +75,6 @@
                     </b-col>
                     <b-col>
                       <elsa-form-group
-                        :label="$t('arvioitu-tapahtuma')"
-                        class="mb-0"
-                      >
-                        <template v-slot="{ uid }">
-                          <elsa-multiselect
-                            :id="uid"
-                            v-model="selected.tapahtuma"
-                            :options="options.tapahtumat"
-                            label="name"
-                            track-by="name"
-                          >
-                          </elsa-multiselect>
-                        </template>
-                      </elsa-form-group>
-                    </b-col>
-                    <b-col>
-                      <elsa-form-group
                         :label="$t('kouluttaja')"
                         label-for="arvioinnit-kouluttaja-filter"
                         class="mb-0"

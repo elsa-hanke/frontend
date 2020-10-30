@@ -19,11 +19,27 @@
         <elsa-multiselect
           :id="uid"
           v-model="value.tyoskentelyjakso"
-          :options="tyoskentelyjaksotFormatted"
+          :options="tyoskentelyjaksot"
           :required="true"
           label="nimi"
-          track-by="nimi"
+          track-by="id"
         >
+          <template slot="singleLabel" slot-scope="{ option }">
+            {{ option.tyoskentelypaikka.nimi }} ({{ option.alkamispaiva }} –
+            {{
+              option.paattymispaiva
+                ? option.paattymispaiva
+                : $t("kesken") | lowercase
+            }})
+          </template>
+          <template slot="option" slot-scope="{ option }">
+            {{ option.tyoskentelypaikka.nimi }} ({{ option.alkamispaiva }} –
+            {{
+              option.paattymispaiva
+                ? option.paattymispaiva
+                : $t("kesken") | lowercase
+            }})
+          </template>
         </elsa-multiselect>
       </template>
     </elsa-form-group>
@@ -180,17 +196,28 @@ export default class ArviointipyyntoForm extends Vue {
   }
 
   async onTyoskentelypaikkaSubmit(value: any, modal: any) {
-    const tyoskentelypaikka = (
-      await axios.post(`/erikoistuva-laakari/tyoskentelyjaksot`, value)
-    ).data;
-    this.tyoskentelyjaksot.push(tyoskentelypaikka);
-    modal.hide("confirm");
-    this.$bvToast.toast(this.$t("uusi-tyoskentelyjakso-lisatty") as string, {
-      title: this.$t("tyoskentelyjakson-lisaaminen") as string,
-      autoHideDelay: 5000,
-      variant: "default",
-      solid: true
-    });
+    try {
+      const tyoskentelyjakso = (
+        await axios.post("/erikoistuva-laakari/tyoskentelyjaksot", value)
+      ).data;
+      this.tyoskentelyjaksot.push(tyoskentelyjakso);
+      this.value.tyoskentelyjakso = tyoskentelyjakso;
+      modal.hide("confirm");
+      this.$bvToast.toast(this.$t("uusi-tyoskentelyjakso-lisatty") as string, {
+        title: this.$t("tyoskentelyjakson-lisaaminen") as string,
+        variant: "success",
+        solid: true
+      });
+    } catch (err) {
+      this.$bvToast.toast(
+        this.$t("uuden-tyoskentelyjakson-lisaaminen-epaonnistui") as string,
+        {
+          title: this.$t("tyoskentelyjakson-lisaaminen") as string,
+          variant: "danger",
+          solid: true
+        }
+      );
+    }
   }
 
   get displayName() {
@@ -204,13 +231,6 @@ export default class ArviointipyyntoForm extends Vue {
 
   get currentLocale() {
     return this.$i18n.locale;
-  }
-
-  get tyoskentelyjaksotFormatted() {
-    return this.tyoskentelyjaksot.map(tj => ({
-      ...tj,
-      nimi: `(${tj.alkamispaiva} – ${tj.paattymispaiva})`
-    }));
   }
 }
 </script>
