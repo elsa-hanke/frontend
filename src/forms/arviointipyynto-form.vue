@@ -21,7 +21,6 @@
           v-model="value.tyoskentelyjakso"
           :options="tyoskentelyjaksot"
           :required="true"
-          label="nimi"
           track-by="id"
         >
           <template slot="singleLabel" slot-scope="{ option }">
@@ -50,8 +49,7 @@
           v-model="value.epaOsaamisalue"
           :options="epaOsaamisalueet"
           :required="true"
-          label="name"
-          track-by="name"
+          track-by="id"
         >
         </elsa-multiselect>
       </template>
@@ -165,6 +163,9 @@ export default class ArviointipyyntoForm extends Vue {
   tyoskentelyjaksot!: any[];
 
   @Prop({ required: false, default: [] })
+  epaOsaamisalueet!: any[];
+
+  @Prop({ required: false, default: [] })
   kouluttajat!: any[];
 
   @Prop({
@@ -180,8 +181,6 @@ export default class ArviointipyyntoForm extends Vue {
     })
   })
   value!: any;
-
-  epaOsaamisalueet = [];
 
   onSubmit(event: any) {
     event.preventDefault();

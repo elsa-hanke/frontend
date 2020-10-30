@@ -12,6 +12,7 @@
             <arviointipyynto-form
               @submit="onSubmit"
               :tyoskentelyjaksot="tyoskentelyjaksot"
+              :epa-osaamisalueet="epaOsaamisalueet"
               :kouluttajat="kouluttajat"
             />
           </b-card-skeleton>
@@ -65,10 +66,14 @@ export default class Arviointipyynto extends Vue {
         await axios.get(`erikoistuva-laakari/arviointipyynto-lomake`)
       ).data;
     } catch (err) {
-      this.arviointipyyntoLomake = {
-        tyoskentelyjaksot: [],
-        kouluttajat: []
-      };
+      this.$bvToast.toast(
+        this.$t("arviointilomakkeen-hakeminen-epaonnistui") as string,
+        {
+          title: this.$t("arviointilomakkeen-hakeminen") as string,
+          variant: "danger",
+          solid: true
+        }
+      );
     }
   }
 
@@ -101,6 +106,14 @@ export default class Arviointipyynto extends Vue {
   get tyoskentelyjaksot() {
     if (this.arviointipyyntoLomake) {
       return this.arviointipyyntoLomake.tyoskentelyjaksot;
+    } else {
+      return [];
+    }
+  }
+
+  get epaOsaamisalueet() {
+    if (this.arviointipyyntoLomake) {
+      return this.arviointipyyntoLomake.epaOsaamisalueet;
     } else {
       return [];
     }
