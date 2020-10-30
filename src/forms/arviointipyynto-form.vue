@@ -49,6 +49,7 @@
           v-model="value.epaOsaamisalue"
           :options="epaOsaamisalueet"
           :required="true"
+          label="nimi"
           track-by="id"
         >
         </elsa-multiselect>
@@ -92,6 +93,7 @@
           </elsa-multiselect>
         </template>
       </elsa-form-group>
+      <!-- TODO: rajaa työskentelyjakson välille -->
       <elsa-form-group :label="$t('ajankohta')" class="col-md-4">
         <template v-slot="{ uid }">
           <b-form-datepicker
