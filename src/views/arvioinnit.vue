@@ -49,9 +49,33 @@
                             :id="uid"
                             v-model="selected.tyoskentelyjakso"
                             :options="options.tyoskentelyjaksot"
-                            label="name"
-                            track-by="name"
+                            track-by="id"
                           >
+                            <template
+                              slot="singleLabel"
+                              slot-scope="{ option }"
+                            >
+                              {{ option.tyoskentelypaikka.nimi }} ({{
+                                option.alkamispaiva
+                              }}
+                              –
+                              {{
+                                option.paattymispaiva
+                                  ? option.paattymispaiva
+                                  : $t("kesken") | lowercase
+                              }})
+                            </template>
+                            <template slot="option" slot-scope="{ option }">
+                              {{ option.tyoskentelypaikka.nimi }} ({{
+                                option.alkamispaiva
+                              }}
+                              –
+                              {{
+                                option.paattymispaiva
+                                  ? option.paattymispaiva
+                                  : $t("kesken") | lowercase
+                              }})
+                            </template>
                           </elsa-multiselect>
                         </template>
                       </elsa-form-group>
@@ -64,10 +88,10 @@
                         <template v-slot="{ uid }">
                           <elsa-multiselect
                             :id="uid"
-                            v-model="selected.osaamisalue"
-                            :options="options.osaamisalueet"
-                            label="name"
-                            track-by="name"
+                            v-model="selected.epaOsaamisalue"
+                            :options="options.epaOsaamisalueet"
+                            label="nimi"
+                            track-by="id"
                           >
                           </elsa-multiselect>
                         </template>
@@ -85,7 +109,7 @@
                             v-model="selected.kouluttaja"
                             :options="options.kouluttajat"
                             label="nimi"
-                            track-by="nimi"
+                            track-by="id"
                           >
                           </elsa-multiselect>
                         </template>
@@ -193,14 +217,12 @@ import ElsaMultiselect from "@/components/multiselect/multiselect.vue";
 export default class Arvioinnit extends Vue {
   selected = {
     tyoskentelyjakso: null,
-    osaamisalue: null,
-    tapahtuma: null,
+    epaOsaamisalue: null,
     kouluttaja: null
   };
   options = {
     tyoskentelyjaksot: [],
-    osaamisalueet: [],
-    tapahtumat: [],
+    epaOsaamisalueet: [],
     kouluttajat: []
   };
   omat: null | any[] = null;
@@ -225,8 +247,7 @@ export default class Arvioinnit extends Vue {
   resetFilters() {
     this.selected = {
       tyoskentelyjakso: null,
-      osaamisalue: null,
-      tapahtuma: null,
+      epaOsaamisalue: null,
       kouluttaja: null
     };
   }
@@ -281,3 +302,11 @@ export default class Arvioinnit extends Vue {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+::v-deep .multiselect {
+  .multiselect__option::after {
+    display: none;
+  }
+}
+</style>
