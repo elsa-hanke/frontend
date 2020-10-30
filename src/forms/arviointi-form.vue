@@ -108,9 +108,8 @@
     </b-form-row>
     <b-form-row v-if="editing">
       <elsa-form-group
-        :label="$t('kokonaisarviointi')"
+        :label="$t('luottamuksen-taso')"
         :required="true"
-        :help="$t('kokonaisarviointi-on-osa-aludeiden-keskiarvo')"
         class="col-lg-6"
       >
         <template v-slot="{ uid }">
@@ -119,8 +118,7 @@
             inline
             no-border
             stars="5"
-            :value="form.kokonaisarviointi"
-            @change="onKokonaisarviointiChange"
+            v-model="form.luottamuksenTaso"
             class="text-star p-0"
           />
         </template>
@@ -131,137 +129,6 @@
         </template>
       </elsa-form-group>
     </b-form-row>
-    <b-collapse id="arviointi-arviointi-osa-alueittain" v-if="editing">
-      <b-container fluid class="px-0">
-        <b-row>
-          <b-col>
-            <elsa-form-group
-              :label="$t('ammatillisuus')"
-              :required="true"
-              help="Todo"
-            >
-              <template v-slot="{ uid }">
-                <b-form-rating
-                  :id="uid"
-                  inline
-                  no-border
-                  stars="5"
-                  v-model="form.ammatillisuus"
-                  @change="onOsaAlueArviointiChange"
-                  class="text-star p-0"
-                />
-              </template>
-            </elsa-form-group>
-            <elsa-form-group
-              :label="$t('vuorovaikutustaidot')"
-              :required="true"
-              help="Todo"
-            >
-              <template v-slot="{ uid }">
-                <b-form-rating
-                  :id="uid"
-                  inline
-                  no-border
-                  stars="5"
-                  v-model="form.vuorovaikutustaidot"
-                  @change="onOsaAlueArviointiChange"
-                  class="text-star p-0"
-                />
-              </template>
-            </elsa-form-group>
-            <elsa-form-group
-              :label="$t('yhteistyotaidot')"
-              :required="true"
-              help="Todo"
-            >
-              <template v-slot="{ uid }">
-                <b-form-rating
-                  :id="uid"
-                  inline
-                  no-border
-                  stars="5"
-                  v-model="form.yhteistyotaidot"
-                  @change="onOsaAlueArviointiChange"
-                  class="text-star p-0"
-                />
-              </template>
-            </elsa-form-group>
-          </b-col>
-          <b-col>
-            <elsa-form-group
-              :label="$t('johtamistaidot')"
-              :required="true"
-              help="Todo"
-            >
-              <template v-slot="{ uid }">
-                <b-form-rating
-                  :id="uid"
-                  inline
-                  no-border
-                  stars="5"
-                  v-model="form.johtamistaidot"
-                  @change="onOsaAlueArviointiChange"
-                  class="text-star p-0"
-                />
-              </template>
-            </elsa-form-group>
-            <elsa-form-group
-              :label="$t('terveyden-ja-hyvinvoinnin-edistaminen')"
-              :required="true"
-              help="Todo"
-            >
-              <template v-slot="{ uid }">
-                <b-form-rating
-                  :id="uid"
-                  inline
-                  no-border
-                  stars="5"
-                  v-model="form.terveydenJaHyvinvoinninEdistaminen"
-                  @change="onOsaAlueArviointiChange"
-                  class="text-star p-0"
-                />
-              </template>
-            </elsa-form-group>
-            <elsa-form-group
-              :label="$t('oma-osaaminen-ja-tiedonhallinta')"
-              :required="true"
-              help="Todo"
-            >
-              <template v-slot="{ uid }">
-                <b-form-rating
-                  :id="uid"
-                  inline
-                  no-border
-                  stars="5"
-                  v-model="form.omaOsaaminenJaTiedonhallinta"
-                  @change="onOsaAlueArviointiChange"
-                  class="text-star p-0"
-                />
-              </template>
-            </elsa-form-group>
-          </b-col>
-          <b-col>
-            <elsa-form-group
-              :label="$t('laaketieteellinen-osaaminen')"
-              :required="true"
-              help="Todo"
-            >
-              <template v-slot="{ uid }">
-                <b-form-rating
-                  :id="uid"
-                  inline
-                  no-border
-                  stars="5"
-                  v-model="form.laaketieteellinenOsaaminen"
-                  @change="onOsaAlueArviointiChange"
-                  class="text-star p-0"
-                />
-              </template>
-            </elsa-form-group>
-          </b-col>
-        </b-row>
-      </b-container>
-    </b-collapse>
     <elsa-form-group
       :label="$t('sanallinen-arviointi')"
       :required="true"
@@ -314,14 +181,8 @@ export default class ArviointiForm extends Vue {
   value!: any;
 
   form: any = {
-    kokonaisarviointi: null,
-    ammatillisuus: null,
-    johtamistaidot: null,
-    laaketieteellinenOsaaminen: null,
-    vuorovaikutustaidot: null,
-    terveydenJaHyvinvoinninEdistaminen: null,
-    yhteistyotaidot: null,
-    omaOsaaminenJaTiedonhallinta: null,
+    vaativuustaso: null,
+    luottamuksenTaso: null,
     sanallinenArviointi: null
   };
   vaativuustasot = [];
@@ -330,31 +191,6 @@ export default class ArviointiForm extends Vue {
     event.preventDefault();
     console.log("onSubmit", this.form);
     this.$emit("submit", this.form);
-  }
-
-  onOsaAlueArviointiChange() {
-    // Lasketaan kokonaisarvioinniksi osa-alueiden arvioinnin keskiarvo
-    this.form.kokonaisarviointi = Math.round(
-      (this.form.ammatillisuus +
-        this.form.johtamistaidot +
-        this.form.laaketieteellinenOsaaminen +
-        this.form.vuorovaikutustaidot +
-        this.form.terveydenJaHyvinvoinninEdistaminen +
-        this.form.yhteistyotaidot +
-        this.form.omaOsaaminenJaTiedonhallinta) /
-        7
-    );
-  }
-
-  onKokonaisarviointiChange(value: number) {
-    this.form.kokonaisarviointi = value;
-    this.form.ammatillisuus = value;
-    this.form.johtamistaidot = value;
-    this.form.laaketieteellinenOsaaminen = value;
-    this.form.vuorovaikutustaidot = value;
-    this.form.terveydenJaHyvinvoinninEdistaminen = value;
-    this.form.yhteistyotaidot = value;
-    this.form.omaOsaaminenJaTiedonhallinta = value;
   }
 
   get displayName() {

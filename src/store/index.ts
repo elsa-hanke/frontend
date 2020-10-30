@@ -23,7 +23,7 @@ axios.interceptors.response.use(
       storeRouteAndRedirectToLogin();
       location.href = `${ELSA_API_LOCATION}/oauth2/authorization/oidc`;
     }
-    return error;
+    return Promise.reject({ ...error });
   }
 );
 

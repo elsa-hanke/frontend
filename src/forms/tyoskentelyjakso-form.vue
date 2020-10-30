@@ -2,9 +2,15 @@
   <b-form @submit="onSubmit">
     <elsa-form-group :label="$t('kunta')" :required="true">
       <template v-slot="{ uid }">
+        <b-form-input
+          :id="uid"
+          v-model="value.tyoskentelypaikka.kunta"
+          :required="true"
+        ></b-form-input>
+        <!--
         <elsa-multiselect
           :id="uid"
-          v-model="value.kunta"
+          v-model="value.tyoskentelypaikka.kunta"
           :options="kunnat"
           :loading="kunnatLoading"
           :required="true"
@@ -12,28 +18,36 @@
           @remove="onKuntaRemove"
         >
         </elsa-multiselect>
+        -->
       </template>
     </elsa-form-group>
     <elsa-form-group :label="$t('tyoskentelypaikka')" :required="true">
       <template v-slot="{ uid }">
+        <b-form-input
+          :id="uid"
+          v-model="value.tyoskentelypaikka.nimi"
+          :required="true"
+        ></b-form-input>
+        <!--
         <elsa-multiselect
           :id="uid"
           v-model="value.tyoskentelypaikka"
           :options="tyoskentelypaikat"
           :loading="organisaatiotLoading"
           :required="true"
-          :disabled="!value.kunta"
+          :disabled="!value.tyoskentelypaikka.kunta"
           label="abbreviation"
           track-by="organizationId"
         >
         </elsa-multiselect>
+        -->
       </template>
     </elsa-form-group>
     <elsa-form-group :label="$t('tyyppi')" :required="true">
       <template v-slot="{ uid }">
         <b-form-radio-group
           :id="uid"
-          v-model="value.tyyppi"
+          v-model="value.tyoskentelypaikka.tyyppi"
           :options="tyypit"
           :required="true"
           name="tyoskentelyjakso-tyyppi"
@@ -108,7 +122,7 @@
         <div class="d-flex align-items-center">
           <b-form-input
             :id="uid"
-            v-model="value.prosenttiosuus"
+            v-model="value.osaaikaprosentti"
             type="number"
             min="50"
             max="100"
@@ -146,20 +160,26 @@ import ElsaMultiselect from "@/components/multiselect/multiselect.vue";
 })
 export default class TyoskentelyjaksoForm extends Vue {
   value = {
-    kunta: null,
-    tyoskentelypaikka: null,
-    tyyppi: null,
+    tunnus: "wip",
     alkamispaiva: null,
     paattymispaiva: null,
-    prosenttiosuus: 100
+    osaaikaprosentti: 100,
+    tyoskentelypaikka: {
+      nimi: null,
+      kunta: null,
+      tyyppi: null
+    }
   } as any;
   kunnat = [];
   tyoskentelypaikat = [];
   tyypit = [
-    { text: this.$t("terveyskeskus"), value: "t" },
-    { text: this.$t("keskussairaala"), value: "k" },
-    { text: this.$t("yliopistollinen-sairaala"), value: "ys" },
-    { text: this.$t("yksityinen"), value: "y" }
+    { text: this.$t("terveyskeskus"), value: "TERVEYSKESKUS" },
+    { text: this.$t("keskussairaala"), value: "KESKUSSAIRAALA" },
+    {
+      text: this.$t("yliopistollinen-sairaala"),
+      value: "YLIOPISTOLLINEN_SAIRAALA"
+    },
+    { text: this.$t("yksityinen"), value: "YKSITYINEN" }
   ];
   kunnatLoading = false;
   organisaatiotLoading = false;
@@ -192,20 +212,16 @@ export default class TyoskentelyjaksoForm extends Vue {
 
   onKuntaRemove() {
     this.tyoskentelypaikat = [];
-    this.value.tyoskentelypaikka = null;
+    this.value.tyoskentelypaikka = {
+      nimi: null,
+      kunta: null,
+      tyyppi: null
+    };
   }
 
   onSubmit(event: any) {
     event.preventDefault();
-    this.$emit("submit", {
-      tyoskentelypaikka: this.value.tyoskentelypaikka?.organizationId,
-      tyyppi: this.value.tyyppi,
-      tunnus: "todo",
-      osasto: "todo",
-      alkamispaiva: this.value.alkamispaiva,
-      paattymispaiva: this.value.paattymispaiva,
-      prosenttiosuus: this.value.prosenttiosuus
-    });
+    this.$emit("submit", this.value);
   }
 
   onCancelClick(event: any) {
