@@ -11,61 +11,60 @@
           </div>
         </b-col>
         <b-col class="d-flex align-items-center">
-          <div>Laaksolahden terveyskeskus</div>
+          <div>{{ value.tyoskentelyjakso.tyoskentelypaikka.nimi }}</div>
         </b-col>
       </b-row>
     </b-container>
     <b-container fluid class="px-0">
       <b-row>
-        <b-col lg="8">
-          <b-table
-            responsive
-            small
-            borderless
-            :fields="tableValue.fields"
-            :items="tableValue.items"
-          >
-            <template v-slot:cell(epa)="data">
-              <div
-                :class="{
-                  'ml-3': data.index !== 0,
-                  'font-weight-500': data.index === 0
-                }"
-              >
-                {{ data.item.epa }}
-                <!--
-                <b-link v-b-popover.hover.right="'Lorem ipsum...'">
-                  <font-awesome-layers fixed-width>
-                    <font-awesome-icon :icon="['far', 'circle']" />
-                    <font-awesome-icon icon="info" transform="shrink-8" />
-                  </font-awesome-layers>
-                </b-link>
-                -->
-              </div>
-            </template>
-            <template v-slot:cell(arviointi)="data">
-              <elsa-luottamuksen-taso :value="data.item.arviointi" />
-            </template>
-            <template v-slot:cell(itsearviointi)="data">
-              <elsa-luottamuksen-taso
-                v-if="data.item.itsearviointi"
-                :value="data.item.itsearviointi"
-              />
-              <div v-else class="d-inline-flex">
-                <b-button
-                  v-if="data.index === 0"
-                  variant="primary"
-                  class="d-flex align-items-center text-decoration-none"
-                  :to="{
-                    name: 'itsearviointi',
-                    params: { arviointiId: value.id }
-                  }"
+        <b-col lg="12">
+          <b-table-simple borderless small responsive>
+            <thead>
+              <tr>
+                <th scope="col" style="width: 20%">
+                  {{ value.arvioitavaOsaalue.nimi }}
+                </th>
+                <th scope="col" style="width: 40%">{{ $t("arviointi") }}</th>
+                <th scope="col" style="width: 40%">
+                  {{ $t("itsearviointi") }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th
+                  scope="row"
+                  class="d-flex align-items-center font-weight-400"
                 >
-                  {{ $t("tee-itsearviointi") }}
-                </b-button>
-              </div>
-            </template>
-          </b-table>
+                  <div class="p-0">
+                    {{ $t("luottamuksen-taso") }}
+                  </div>
+                </th>
+                <td>
+                  <elsa-luottamuksen-taso :value="value.luottamuksenTaso" />
+                </td>
+                <td>
+                  <elsa-luottamuksen-taso
+                    v-if="value.itsearviointiLuottamuksenTaso"
+                    :value="value.itsearviointiLuottamuksenTaso"
+                  />
+                  <div v-else class="d-inline-flex">
+                    <b-button
+                      variant="primary"
+                      class="d-flex align-items-center text-decoration-none"
+                      :to="{
+                        name: 'itsearviointi',
+                        params: { arviointiId: value.id }
+                      }"
+                    >
+                      {{ $t("tee-itsearviointi") }}
+                    </b-button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </b-table-simple>
+
           <b-button
             variant="primary"
             :to="{ name: 'arviointi', params: { arviointiId: value.id } }"

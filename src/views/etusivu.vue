@@ -45,25 +45,39 @@
                     <th scope="col">{{ $t("arvo") }}</th>
                   </tr>
                   <tr>
-                    <td class="py-0 pl-0 pr-1 text-muted">{{ $t("nimi") }}</td>
+                    <th
+                      scope="row"
+                      class="py-0 pl-0 pr-1 text-muted font-weight-400"
+                    >
+                      {{ $t("nimi") }}
+                    </th>
                     <td class="py-0 pr-0 pl-1">{{ displayName }}</td>
                   </tr>
                   <tr>
-                    <td class="py-0 pl-0 pr-1 text-muted">
+                    <th
+                      scope="row"
+                      class="py-0 pl-0 pr-1 text-muted font-weight-400"
+                    >
                       {{ $t("puhelinnumero") }}
-                    </td>
+                    </th>
                     <td class="py-0 pr-0 pl-1">-</td>
                   </tr>
                   <tr>
-                    <td class="py-0 pl-0 pr-1 text-muted">
+                    <th
+                      scope="row"
+                      class="py-0 pl-0 pr-1 text-muted font-weight-400"
+                    >
                       {{ $t("erikoistumisala") }}
-                    </td>
+                    </th>
                     <td class="py-0 pr-0 pl-1">-</td>
                   </tr>
                   <tr>
-                    <td class="py-0 pl-0 pr-1 text-muted">
+                    <th
+                      scope="row"
+                      class="py-0 pl-0 pr-1 text-muted font-weight-400"
+                    >
                       {{ $t("vastuuhenkilo") }}
-                    </td>
+                    </th>
                     <td class="py-0 pr-0 pl-1">-</td>
                   </tr>
                 </table>
