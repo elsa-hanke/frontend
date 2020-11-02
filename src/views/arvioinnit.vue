@@ -118,11 +118,12 @@
                   </b-row>
                   <b-row>
                     <b-col>
-                      <div class="d-flex flex-row-reverse mt-4">
+                      <div class="d-flex flex-row-reverse">
                         <b-button
                           :disabled="false"
                           variant="link"
                           @click="resetFilters"
+                          class="shadow-none"
                           >{{ $t("tyhjenna-valinnat") }}</b-button
                         >
                       </div>
@@ -130,7 +131,7 @@
                   </b-row>
                 </b-container>
                 <div class="arvioinnit">
-                  <hr />
+                  <hr class="mt-0" />
                   <div v-if="arvioinnit">
                     <div v-for="(arviointi, index) in arvioinnit" :key="index">
                       <arviointi-card :value="arviointi" />
