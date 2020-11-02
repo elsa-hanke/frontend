@@ -50,6 +50,8 @@
                             v-model="selected.tyoskentelyjakso"
                             :options="options.tyoskentelyjaksot"
                             track-by="id"
+                            @select="onTyoskentelyjaksoSelect"
+                            @remove="onTyoskentelyjaksoRemove"
                           >
                             <template
                               slot="singleLabel"
@@ -92,6 +94,8 @@
                             :options="options.epaOsaamisalueet"
                             label="nimi"
                             track-by="id"
+                            @select="onEpaOsaamisalueSelect"
+                            @remove="onEpaOsaamisalueRemove"
                           >
                           </elsa-multiselect>
                         </template>
@@ -110,6 +114,8 @@
                             :options="options.kouluttajat"
                             label="nimi"
                             track-by="id"
+                            @select="onKouluttajaSelect"
+                            @remove="onKouluttajaRemove"
                           >
                           </elsa-multiselect>
                         </template>
@@ -220,7 +226,7 @@ export default class Arvioinnit extends Vue {
     tyoskentelyjakso: null,
     epaOsaamisalue: null,
     kouluttaja: null
-  };
+  } as any;
   options = {
     tyoskentelyjaksot: [],
     epaOsaamisalueet: [],
@@ -251,6 +257,8 @@ export default class Arvioinnit extends Vue {
       epaOsaamisalue: null,
       kouluttaja: null
     };
+    this.page = 1;
+    this.fetch(false);
   }
 
   onTabChange(value: any) {
@@ -266,6 +274,42 @@ export default class Arvioinnit extends Vue {
     }
   }
 
+  onTyoskentelyjaksoSelect(selected: any) {
+    this.selected.tyoskentelyjakso = selected;
+    this.page = 1;
+    this.fetch(false);
+  }
+
+  onTyoskentelyjaksoRemove() {
+    this.selected.tyoskentelyjakso = null;
+    this.page = 1;
+    this.fetch(false);
+  }
+
+  onEpaOsaamisalueSelect(selected: any) {
+    this.selected.epaOsaamisalue = selected;
+    this.page = 1;
+    this.fetch(false);
+  }
+
+  onEpaOsaamisalueRemove() {
+    this.selected.epaOsaamisalue = null;
+    this.page = 1;
+    this.fetch(false);
+  }
+
+  onKouluttajaSelect(selected: any) {
+    this.selected.kouluttaja = selected;
+    this.page = 1;
+    this.fetch(false);
+  }
+
+  onKouluttajaRemove() {
+    this.selected.kouluttaja = null;
+    this.page = 1;
+    this.fetch(false);
+  }
+
   async fetchOptions() {
     this.options = (
       await axios.get("erikoistuva-laakari/suoritusarvioinnit-rajaimet")
@@ -278,7 +322,10 @@ export default class Arvioinnit extends Vue {
         params: {
           "arviointiAika.specified": !isArviointipyynto,
           page: this.page - 1,
-          size: this.perPage
+          size: this.perPage,
+          "tyoskentelyjaksoId.equals": this.selected.tyoskentelyjakso?.id,
+          "arvioitavaOsaalueId.equals": this.selected.epaOsaamisalue?.id,
+          "arvioijaId.equals": this.selected.kouluttaja?.id
         }
       });
       this.totalRows = omat.headers["x-total-count"];
