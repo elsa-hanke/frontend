@@ -44,27 +44,26 @@
               </div>
             </template>
             <template v-slot:cell(arviointi)="data">
-              <b-form-rating
-                inline
-                no-border
-                stars="5"
-                :readonly="true"
-                :value="data.item.arviointi"
-                class="text-star p-0"
-              ></b-form-rating>
+              <elsa-luottamuksen-taso :value="data.item.arviointi" />
             </template>
             <template v-slot:cell(itsearviointi)="data">
-              <b-link
-                variant="link"
-                class="d-flex align-items-center text-decoration-none"
-                :to="{
-                  name: 'itsearviointi',
-                  params: { arviointiId: value.id }
-                }"
-                v-if="data.index === 0"
-              >
-                {{ $t("tee-itsearviointi") }}
-              </b-link>
+              <elsa-luottamuksen-taso
+                v-if="data.item.itsearviointi"
+                :value="data.item.itsearviointi"
+              />
+              <div v-else class="d-inline-flex">
+                <b-button
+                  v-if="data.index === 0"
+                  variant="primary"
+                  class="d-flex align-items-center text-decoration-none"
+                  :to="{
+                    name: 'itsearviointi',
+                    params: { arviointiId: value.id }
+                  }"
+                >
+                  {{ $t("tee-itsearviointi") }}
+                </b-button>
+              </div>
             </template>
           </b-table>
           <b-button
@@ -83,8 +82,13 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import { Prop } from "vue-property-decorator";
+import ElsaLuottamuksenTaso from "@/components/luottamuksen-taso/luottamuksen-taso.vue";
 
-@Component({})
+@Component({
+  components: {
+    ElsaLuottamuksenTaso
+  }
+})
 export default class ArviointiCard extends Vue {
   @Prop({})
   value!: any;
@@ -99,16 +103,6 @@ export default class ArviointiCard extends Vue {
       {
         epa: this.$t("luottamuksen-taso"),
         arviointi: 3,
-        itsearviointi: 4
-      },
-      {
-        epa: "Terveyden ja hyvinvoinnin edistäminen",
-        arviointi: 3,
-        itsearviointi: 4
-      },
-      {
-        epa: "Oma osaaminen ja tiedonhallinta",
-        arviointi: 2,
         itsearviointi: 4
       }
     ]
