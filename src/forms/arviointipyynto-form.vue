@@ -93,7 +93,6 @@
           </elsa-multiselect>
         </template>
       </elsa-form-group>
-      <!-- TODO: rajaa työskentelyjakson välille -->
       <elsa-form-group :label="$t('ajankohta')" class="col-md-4">
         <template v-slot="{ uid }">
           <b-form-datepicker
@@ -101,6 +100,8 @@
             v-model="value.tapahtumanAjankohta"
             start-weekday="1"
             :locale="currentLocale"
+            :min="tyoskentelyjaksonAlkamispaiva"
+            :max="tyoskentelyjaksonPaattymispaiva"
             placeholder=""
             :date-format-options="{
               year: 'numeric',
@@ -232,6 +233,20 @@ export default class ArviointipyyntoForm extends Vue {
 
   get currentLocale() {
     return this.$i18n.locale;
+  }
+
+  get tyoskentelyjaksonAlkamispaiva() {
+    if (this.value.tyoskentelyjakso) {
+      return this.value.tyoskentelyjakso.alkamispaiva;
+    }
+    return undefined;
+  }
+
+  get tyoskentelyjaksonPaattymispaiva() {
+    if (this.value.tyoskentelyjakso) {
+      return this.value.tyoskentelyjakso.paattymispaiva;
+    }
+    return undefined;
   }
 }
 </script>
