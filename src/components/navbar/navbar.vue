@@ -5,7 +5,7 @@
     type="dark"
     variant="primary"
     sticky
-    class="px-0"
+    class="px-0 py-lg-0"
   >
     <b-navbar-brand class="col-lg-2 mr-0 text-nowrap user-select-none">
       <span class="font-weight-bold text-uppercase">{{ $t("elsa") }}</span
@@ -36,7 +36,7 @@
       >
         <b-nav-item
           href="#"
-          class="text-nowrap align-self-center"
+          class="border-right text-nowrap align-self-center"
           :to="{ name: 'viestit' }"
         >
           <font-awesome-icon icon="envelope" fixed-width size="lg" />
@@ -45,10 +45,10 @@
 
         <b-nav-item
           href="#"
-          class="border-left text-nowrap align-self-center"
+          class="text-nowrap align-self-center"
           @click="logout()"
         >
-          <user-avatar :displayName="displayName" />
+          <user-avatar :display-name="displayName" :title="title" />
         </b-nav-item>
 
         <b-nav-item-dropdown
@@ -75,6 +75,7 @@ import Component from "vue-class-component";
 import Avatar from "vue-avatar";
 import store from "@/store";
 import UserAvatar from "@/components/user-avatar/user-avatar.vue";
+import { ELSA_ROLE } from "@/utils/roles";
 
 @Component({
   components: {
@@ -83,10 +84,27 @@ import UserAvatar from "@/components/user-avatar/user-avatar.vue";
   }
 })
 export default class Navbar extends Vue {
+  get account() {
+    return store.getters.account;
+  }
+
+  get authorities() {
+    if (this.account) {
+      return this.account.authorities;
+    }
+    return [];
+  }
+
+  get title() {
+    if (this.authorities.includes(ELSA_ROLE.ErikoistuvaLaakari)) {
+      return this.$t("erikoistuva-laakari");
+    }
+    return undefined;
+  }
+
   get displayName() {
-    const account = store.getters.account;
-    if (account) {
-      return `${account.firstName} ${account.lastName}`;
+    if (this.account) {
+      return `${this.account.firstName} ${this.account.lastName}`;
     } else {
       return "";
     }
