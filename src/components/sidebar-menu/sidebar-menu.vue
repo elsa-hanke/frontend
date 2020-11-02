@@ -74,6 +74,8 @@ export default class SidebarMenu extends Vue {
 <style lang="scss" scoped>
 @import "~@/styles/variables";
 
+$navbar-height: 64px;
+
 .sidebar {
   position: fixed;
   top: 0;
@@ -82,6 +84,7 @@ export default class SidebarMenu extends Vue {
   z-index: 100;
   padding: 0;
   box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
+  padding-top: $navbar-height;
 
   .nav-link {
     padding: 1rem;
@@ -96,15 +99,15 @@ export default class SidebarMenu extends Vue {
 
   .sidebar-sticky {
     position: sticky;
-    top: 0;
-    height: calc(100vh - 64px);
+    // top: 0;
+    height: calc(100vh - $navbar-height);
     overflow-x: hidden;
     overflow-y: auto;
   }
 }
 
 .toaster {
-  top: 64px;
+  top: $navbar-height;
 
   ::v-deep .b-toast {
     z-index: 1100;

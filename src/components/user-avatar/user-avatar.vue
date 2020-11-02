@@ -7,9 +7,12 @@
       background-color="gray"
       color="white"
       :size="32"
-      class="d-inline-block mr-2 avatar"
+      class="d-inline-block mr-2 avatar my-2"
     ></avatar>
-    <span class="align-middle">{{ displayName }}</span>
+    <div>
+      <span class="align-middle">{{ displayName }}</span>
+      <div class="text-size-sm font-weight-400" v-if="title">{{ title }}</div>
+    </div>
   </div>
 </template>
 
@@ -36,6 +39,9 @@ export default class UserAvatar extends Vue {
 
   @Prop({ required: false })
   srcBase64!: undefined | string;
+
+  @Prop({ required: false, type: String })
+  title!: undefined | string;
 
   get imageSrc() {
     if (this.srcContentType && this.srcBase64) {
