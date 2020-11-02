@@ -191,7 +191,7 @@ export default class ArviointipyyntoForm extends Vue {
       tyoskentelyjaksoId: this.value.tyoskentelyjakso?.id,
       arvioitavaOsaalueId: this.value.epaOsaamisalue?.id,
       arvioitavaTapahtuma: this.value.arvioitavaTapahtuma,
-      arvioijaId: this.value.kouluttaja?.id,
+      arvioinninAntajaId: this.value.kouluttaja?.id,
       tapahtumanAjankohta: this.value.tapahtumanAjankohta,
       lisatiedot: this.value.lisatiedot
     });

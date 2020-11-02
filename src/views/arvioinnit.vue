@@ -183,7 +183,7 @@
               <b-tab :title="$t('arviointipyynnot')">
                 <div v-if="pyynnot">
                   <div v-for="(arviointipyynto, index) in pyynnot" :key="index">
-                    <pre>{{ arviointipyynto }}</pre>
+                    <arviointipyynto-card :value="arviointipyynto" />
                   </div>
                   <b-alert v-if="pyynnot.length === 0" variant="dark" show>
                     <font-awesome-layers fixed-width>
@@ -192,6 +192,31 @@
                     </font-awesome-layers>
                     {{ $t("kaikkiin-arviointipyyntoihisi-on-tehty-arviointi") }}
                   </b-alert>
+                  <b-pagination
+                    v-model="page"
+                    :total-rows="totalRows"
+                    :per-page="perPage"
+                    @input="fetch"
+                    pills
+                    align="center"
+                    :hide-goto-end-buttons="true"
+                  >
+                    <template v-slot:prev-text
+                      ><font-awesome-icon
+                        icon="chevron-left"
+                        fixed-width
+                        size="lg"
+                        cl
+                      />{{ $t("edellinen") }}</template
+                    >
+                    <template v-slot:next-text
+                      >{{ $t("seuraava")
+                      }}<font-awesome-icon
+                        icon="chevron-right"
+                        fixed-width
+                        size="lg"
+                    /></template>
+                  </b-pagination>
                 </div>
                 <div class="text-center" v-else>
                   <b-spinner variant="primary" label="Spinning"></b-spinner>
@@ -210,6 +235,7 @@ import { Component, Vue } from "vue-property-decorator";
 import axios from "axios";
 import BCardSkeleton from "@/components/card/card.vue";
 import ArviointiCard from "@/components/arviointi-card/arviointi-card.vue";
+import ArviointipyyntoCard from "@/components/arviointipyynto-card/arviointipyynto-card.vue";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
 import ElsaMultiselect from "@/components/multiselect/multiselect.vue";
 
@@ -217,6 +243,7 @@ import ElsaMultiselect from "@/components/multiselect/multiselect.vue";
   components: {
     BCardSkeleton,
     ArviointiCard,
+    ArviointipyyntoCard,
     ElsaFormGroup,
     ElsaMultiselect
   }
@@ -325,7 +352,7 @@ export default class Arvioinnit extends Vue {
           size: this.perPage,
           "tyoskentelyjaksoId.equals": this.selected.tyoskentelyjakso?.id,
           "arvioitavaOsaalueId.equals": this.selected.epaOsaamisalue?.id,
-          "arvioijaId.equals": this.selected.kouluttaja?.id
+          "arvioinninAntajaId.equals": this.selected.kouluttaja?.id
         }
       });
       this.totalRows = omat.headers["x-total-count"];
