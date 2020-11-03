@@ -93,11 +93,16 @@
           </elsa-multiselect>
         </template>
       </elsa-form-group>
-      <elsa-form-group :label="$t('ajankohta')" class="col-md-4">
+      <elsa-form-group
+        :label="$t('ajankohta')"
+        class="col-md-4"
+        :required="true"
+      >
         <template v-slot="{ uid }">
           <b-form-datepicker
             :id="uid"
             v-model="value.tapahtumanAjankohta"
+            :required="true"
             start-weekday="1"
             :locale="currentLocale"
             :min="tyoskentelyjaksonAlkamispaiva"

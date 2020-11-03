@@ -7,7 +7,8 @@
       background-color="gray"
       color="white"
       :size="32"
-      class="d-inline-block mr-2 avatar my-2"
+      class="d-inline-block mr-2 avatar"
+      :class="{ 'my-2': title }"
     ></avatar>
     <div>
       <span class="align-middle">{{ displayName }}</span>

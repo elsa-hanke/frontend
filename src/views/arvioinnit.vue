@@ -293,11 +293,9 @@ export default class Arvioinnit extends Vue {
     this.page = 1;
     this.totalRows = 0;
     if (value === 0) {
-      // Arvioinnit
-      this.fetch(false);
+      this.fetch(false); // Arvioinnit
     } else if (value === 1) {
-      // Arviointipyynnöt
-      this.fetch(true);
+      this.fetch(true); // Arviointipyynnöt
     }
   }
 
