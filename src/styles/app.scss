@@ -89,3 +89,27 @@ hr {
 textarea::placeholder {
   color: $gray-600 !important;
 }
+
+.b-toast-success,
+.b-toast-danger {
+  .toast {
+    border: none;
+    color: white;
+    font-weight: 500;
+  }
+}
+
+.b-toast-success {
+  &.b-toast-solid {
+    .toast {
+      background-color: $success;
+    }
+  }
+}
+.b-toast-danger {
+  &.b-toast-solid {
+    .toast {
+      background-color: $danger;
+    }
+  }
+}
