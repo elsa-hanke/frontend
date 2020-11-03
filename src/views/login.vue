@@ -12,7 +12,7 @@
       <b-alert :show="error" variant="danger">{{
         $t("kirjautuminen-epaonnistui")
       }}</b-alert>
-      <b-form @submit="onSubmit">
+      <b-form @submit.stop.prevent="onSubmit">
         <h2 class="h3 mb-3 font-weight-normal">{{ $t("kirjaudu-sisaan") }}</h2>
         <b-form-group
           id="input-group-1"
@@ -69,9 +69,7 @@ export default class Login extends Vue {
     return store.getters.status;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async onSubmit(evt: any) {
-    evt.preventDefault();
+  async onSubmit() {
     this.error = false;
     await store.dispatch("login", this.form);
     if (store.getters.isLoggedIn) {

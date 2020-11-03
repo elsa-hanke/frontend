@@ -1,5 +1,5 @@
 <template>
-  <b-form @submit="onSubmit">
+  <b-form @submit.stop.prevent="onSubmit">
     <elsa-form-group :label="$t('lahikouluttajan-nimi')" :required="true">
       <template v-slot="{ uid }">
         <b-form-input :id="uid" v-model="form.nimi"></b-form-input>
@@ -29,8 +29,7 @@ export default class LahikouluttajaForm extends Vue {
     sahkoposti: null
   };
 
-  onSubmit(event: any) {
-    event.preventDefault();
+  onSubmit() {
     console.log("onSubmit", this.form);
   }
 }
