@@ -78,17 +78,28 @@ export default class Arviointipyynto extends Vue {
   }
 
   async onSubmit(value: any) {
-    const arviointipyynto = (
-      await axios.post(
-        "erikoistuva-laakari/suoritusarvioinnit/arviointipyynto",
-        value
-      )
-    ).data;
-    this.saved = true;
-    this.$router.push({
-      name: "arviointipyynto-lahetetty",
-      params: { arviointiId: `${arviointipyynto.id}` }
-    });
+    try {
+      const arviointipyynto = (
+        await axios.post(
+          "erikoistuva-laakari/suoritusarvioinnit/arviointipyynto",
+          value
+        )
+      ).data;
+      this.saved = true;
+      this.$router.push({
+        name: "arviointipyynto-lahetetty",
+        params: { arviointiId: `${arviointipyynto.id}` }
+      });
+    } catch (err) {
+      this.$bvToast.toast(
+        this.$t("uuden-arviointipyynnon-lisaaminen-epaonnistui") as string,
+        {
+          title: this.$t("arviointipyynnon-lisaaminen") as string,
+          variant: "danger",
+          solid: true
+        }
+      );
+    }
   }
 
   async beforeRouteLeave(to: any, from: any, next: any) {
