@@ -58,23 +58,23 @@
                               slot-scope="{ option }"
                             >
                               {{ option.tyoskentelypaikka.nimi }} ({{
-                                option.alkamispaiva
+                                $date(option.alkamispaiva)
                               }}
                               –
                               {{
                                 option.paattymispaiva
-                                  ? option.paattymispaiva
+                                  ? $date(option.paattymispaiva)
                                   : $t("kesken") | lowercase
                               }})
                             </template>
                             <template slot="option" slot-scope="{ option }">
                               {{ option.tyoskentelypaikka.nimi }} ({{
-                                option.alkamispaiva
+                                $date(option.alkamispaiva)
                               }}
                               –
                               {{
                                 option.paattymispaiva
-                                  ? option.paattymispaiva
+                                  ? $date(option.paattymispaiva)
                                   : $t("kesken") | lowercase
                               }})
                             </template>

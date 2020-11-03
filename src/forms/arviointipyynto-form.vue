@@ -27,7 +27,7 @@
             {{ option.tyoskentelypaikka.nimi }} ({{ option.alkamispaiva }} –
             {{
               option.paattymispaiva
-                ? option.paattymispaiva
+                ? $date(option.paattymispaiva)
                 : $t("kesken") | lowercase
             }})
           </template>
@@ -35,7 +35,7 @@
             {{ option.tyoskentelypaikka.nimi }} ({{ option.alkamispaiva }} –
             {{
               option.paattymispaiva
-                ? option.paattymispaiva
+                ? $date(option.paattymispaiva)
                 : $t("kesken") | lowercase
             }})
           </template>
