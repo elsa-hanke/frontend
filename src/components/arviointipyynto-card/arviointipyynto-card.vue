@@ -48,12 +48,25 @@
               </tr>
             </b-table-simple>
           </div>
-          <b-button variant="outline-primary" class="mr-2">{{
-            $t("tee-itsearviointi")
-          }}</b-button>
-          <b-button variant="primary">{{
-            $t("muokkaa-arviointipyyntoa")
-          }}</b-button>
+          <b-button
+            v-if="!value.itsearviointiAika"
+            variant="outline-primary"
+            class="mr-2"
+            :to="{
+              name: 'itsearviointi',
+              params: { arviointiId: value.id }
+            }"
+            >{{ $t("tee-itsearviointi") }}</b-button
+          >
+          <b-button
+            v-if="!value.arviointiAika"
+            variant="primary"
+            :to="{
+              name: 'arviointipyynto',
+              params: { arviointiId: value.id }
+            }"
+            >{{ $t("muokkaa-arviointipyyntoa") }}</b-button
+          >
         </b-col>
       </b-row>
     </b-container>
@@ -70,21 +83,6 @@ import { Prop } from "vue-property-decorator";
 export default class ArviointipyyntoCard extends Vue {
   @Prop({})
   value!: any;
-
-  tableValue = {
-    fields: [
-      { key: "epa", label: "Hoitovastuun siirtäminen" },
-      { key: "arviointi", label: "Arviointi" },
-      { key: "itsearviointi", label: "Itsearviointi" }
-    ],
-    items: [
-      {
-        epa: this.$t("luottamuksen-taso"),
-        arviointi: 3,
-        itsearviointi: 4
-      }
-    ]
-  };
 }
 </script>
 
