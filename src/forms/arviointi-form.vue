@@ -19,12 +19,12 @@
       <template v-slot="{ uid }">
         <span :id="uid">
           {{ value.tyoskentelyjakso.tyoskentelypaikka.nimi }} ({{
-            value.tyoskentelyjakso.alkamispaiva
+            $date(value.tyoskentelyjakso.alkamispaiva)
           }}
           –
           {{
             value.tyoskentelyjakso.paattymispaiva
-              ? value.tyoskentelyjakso.paattymispaiva
+              ? $date(value.tyoskentelyjakso.paattymispaiva)
               : $t("kesken") | lowercase
           }})</span
         >
@@ -67,7 +67,7 @@
       class="align-items-center mb-md-0"
     >
       <template v-slot="{ uid }">
-        <span :id="uid">{{ value.tapahtumanAjankohta }}</span>
+        <span :id="uid">{{ $date(value.tapahtumanAjankohta) }}</span>
       </template>
     </elsa-form-group>
     <elsa-form-group

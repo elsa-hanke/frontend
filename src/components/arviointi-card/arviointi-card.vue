@@ -7,7 +7,9 @@
             <div class="text-size-lg font-weight-500 mr-3">
               {{ value.arvioitavaTapahtuma }}
             </div>
-            <div class="separator">{{ value.tapahtumanAjankohta }}</div>
+            <div class="separator">
+              {{ $date(value.tapahtumanAjankohta) }}
+            </div>
           </div>
         </b-col>
         <b-col class="d-flex align-items-center">

@@ -3,6 +3,7 @@ import "mutationobserver-shim";
 import Vue from "vue";
 import "@/plugins/filters";
 import "@/plugins/bootstrap-vue";
+import "@/plugins/date";
 import i18n from "@/plugins/i18n";
 import "@/configs/fontawesome";
 import App from "@/app.vue";
