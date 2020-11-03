@@ -11,7 +11,9 @@
       :class="{ 'my-2': title }"
     ></avatar>
     <div>
-      <span class="align-middle">{{ displayName }}</span>
+      <span class="align-middle"
+        ><slot name="display-name">{{ displayName }}</slot></span
+      >
       <div class="text-size-sm font-weight-400" v-if="title">{{ title }}</div>
     </div>
   </div>
