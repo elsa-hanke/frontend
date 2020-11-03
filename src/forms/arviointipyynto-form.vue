@@ -20,7 +20,7 @@
           :id="uid"
           v-model="value.tyoskentelyjakso"
           :options="tyoskentelyjaksot"
-          :required="true"
+          :state="validateState('tyoskentelyjakso')"
           track-by="id"
         >
           <template slot="singleLabel" slot-scope="{ option }">
@@ -40,6 +40,14 @@
             }})
           </template>
         </elsa-multiselect>
+        <b-form-invalid-feedback
+          :id="`${uid}-feedback`"
+          :style="{
+            display:
+              validateState('tyoskentelyjakso') === false ? 'block' : 'none'
+          }"
+          >{{ $t("pakollinen-tieto") }}</b-form-invalid-feedback
+        >
       </template>
     </elsa-form-group>
     <elsa-form-group :label="$t('epa-osaamisalue')" :required="true">
@@ -48,11 +56,19 @@
           :id="uid"
           v-model="value.epaOsaamisalue"
           :options="epaOsaamisalueet"
-          :required="true"
+          :state="validateState('epaOsaamisalue')"
           label="nimi"
           track-by="id"
         >
         </elsa-multiselect>
+        <b-form-invalid-feedback
+          :id="`${uid}-feedback`"
+          :style="{
+            display:
+              validateState('epaOsaamisalue') === false ? 'block' : 'none'
+          }"
+          >{{ $t("pakollinen-tieto") }}</b-form-invalid-feedback
+        >
       </template>
     </elsa-form-group>
     <elsa-form-group :label="$t('arvioitava-tapahtuma')" :required="true">
@@ -60,8 +76,12 @@
         <b-form-input
           :id="uid"
           v-model="value.arvioitavaTapahtuma"
-          :required="true"
+          :state="validateState('arvioitavaTapahtuma')"
+          :aria-describedby="`${uid}-feedback`"
         ></b-form-input>
+        <b-form-invalid-feedback :id="`${uid}-feedback`">{{
+          $t("pakollinen-tieto")
+        }}</b-form-invalid-feedback>
       </template>
     </elsa-form-group>
     <b-form-row>
@@ -79,7 +99,7 @@
             :id="uid"
             v-model="value.kouluttaja"
             :options="kouluttajat"
-            :required="true"
+            :state="validateState('kouluttaja')"
             label="nimi"
             track-by="nimi"
           >
@@ -91,6 +111,13 @@
               />
             </template>
           </elsa-multiselect>
+          <b-form-invalid-feedback
+            :id="`${uid}-feedback`"
+            :style="{
+              display: validateState('kouluttaja') === false ? 'block' : 'none'
+            }"
+            >{{ $t("pakollinen-tieto") }}</b-form-invalid-feedback
+          >
         </template>
       </elsa-form-group>
       <elsa-form-group
@@ -102,7 +129,7 @@
           <b-form-datepicker
             :id="uid"
             v-model="value.tapahtumanAjankohta"
-            :required="true"
+            :state="validateState('tapahtumanAjankohta')"
             start-weekday="1"
             :locale="currentLocale"
             :min="tyoskentelyjaksonAlkamispaiva"
@@ -120,6 +147,9 @@
                 :icon="['far', 'calendar-alt']"
                 class="text-primary"/></template
           ></b-form-datepicker>
+          <b-form-invalid-feedback :id="`${uid}-feedback`">{{
+            $t("pakollinen-tieto")
+          }}</b-form-invalid-feedback>
         </template>
       </elsa-form-group>
     </b-form-row>
@@ -146,10 +176,11 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
 import Component from "vue-class-component";
-import { Prop } from "vue-property-decorator";
+import { Prop, Mixins } from "vue-property-decorator";
 import axios from "axios";
+import { validationMixin } from "vuelidate";
+import { required } from "vuelidate/lib/validators";
 import store from "@/store";
 import UserAvatar from "@/components/user-avatar/user-avatar.vue";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
@@ -164,9 +195,28 @@ import LahikouluttajaForm from "@/forms/lahikouluttaja-form.vue";
     ElsaMultiselect,
     TyoskentelyjaksoForm,
     UserAvatar
+  },
+  validations: {
+    value: {
+      tyoskentelyjakso: {
+        required
+      },
+      epaOsaamisalue: {
+        required
+      },
+      arvioitavaTapahtuma: {
+        required
+      },
+      kouluttaja: {
+        required
+      },
+      tapahtumanAjankohta: {
+        required
+      }
+    }
   }
 })
-export default class ArviointipyyntoForm extends Vue {
+export default class ArviointipyyntoForm extends Mixins(validationMixin) {
   @Prop({ required: false, default: [] })
   tyoskentelyjaksot!: any[];
 
@@ -190,7 +240,16 @@ export default class ArviointipyyntoForm extends Vue {
   })
   value!: any;
 
+  validateState(name: string) {
+    const { $dirty, $error } = this.$v.value[name] as any;
+    return $dirty ? ($error ? false : null) : null;
+  }
+
   onSubmit() {
+    this.$v.value.$touch();
+    if (this.$v.value.$anyError) {
+      return;
+    }
     this.$emit("submit", {
       tyoskentelyjaksoId: this.value.tyoskentelyjakso?.id,
       arvioitavaOsaalueId: this.value.epaOsaamisalue?.id,

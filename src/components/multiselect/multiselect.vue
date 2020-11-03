@@ -12,6 +12,7 @@
       :deselectLabel="deselectLabelText"
       :deselectGroupLabel="deselectGroupLabelText"
       :max="max"
+      :class="{ 'is-invalid': isInvalid, 'is-valid': isValid }"
     >
       <template slot="maxElements">{{
         $t("valittuna-enimmäismaara", { max })
@@ -63,6 +64,17 @@ export default class ElsaMultiselect extends Vue {
 
   @Prop({ required: false, type: Number })
   max!: number | undefined;
+
+  @Prop({ required: false })
+  state!: boolean | undefined;
+
+  get isValid() {
+    return this.state;
+  }
+
+  get isInvalid() {
+    return this.state === false;
+  }
 
   get placeholderText() {
     return this.placeholder || this.$t("valitse");
@@ -153,6 +165,7 @@ export default class ElsaMultiselect extends Vue {
       background: $primary;
     }
   }
+
   .multiselect__content-wrapper {
     font-size: 0.875rem;
     border-color: $gray-400;
@@ -176,5 +189,19 @@ export default class ElsaMultiselect extends Vue {
       background: $danger;
     }
   }
+}
+
+::v-deep .is-invalid .multiselect__content-wrapper {
+  border-color: $form-feedback-invalid-color;
+}
+::v-deep .is-valid .multiselect__content-wrapper {
+  border-color: $form-feedback-valid-color;
+}
+
+::v-deep .is-invalid .multiselect__tags {
+  border-color: $form-feedback-invalid-color;
+}
+::v-deep .is-valid .multiselect__tags {
+  border-color: $form-feedback-valid-color;
 }
 </style>
