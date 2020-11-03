@@ -187,6 +187,7 @@ import ElsaFormGroup from "@/components/form-group/form-group.vue";
 import ElsaMultiselect from "@/components/multiselect/multiselect.vue";
 import TyoskentelyjaksoForm from "@/forms/tyoskentelyjakso-form.vue";
 import LahikouluttajaForm from "@/forms/lahikouluttaja-form.vue";
+import { toastSuccess, toastFail } from "@/utils/toast";
 
 @Component({
   components: {
@@ -268,19 +269,11 @@ export default class ArviointipyyntoForm extends Mixins(validationMixin) {
       this.tyoskentelyjaksot.push(tyoskentelyjakso);
       this.value.tyoskentelyjakso = tyoskentelyjakso;
       modal.hide("confirm");
-      this.$bvToast.toast(this.$t("uusi-tyoskentelyjakso-lisatty") as string, {
-        title: this.$t("tyoskentelyjakson-lisaaminen") as string,
-        variant: "success",
-        solid: true
-      });
+      toastSuccess(this, this.$t("uusi-tyoskentelyjakso-lisatty"));
     } catch (err) {
-      this.$bvToast.toast(
-        this.$t("uuden-tyoskentelyjakson-lisaaminen-epaonnistui") as string,
-        {
-          title: this.$t("tyoskentelyjakson-lisaaminen") as string,
-          variant: "danger",
-          solid: true
-        }
+      toastFail(
+        this,
+        this.$t("uuden-tyoskentelyjakson-lisaaminen-epaonnistui")
       );
     }
   }

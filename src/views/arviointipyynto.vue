@@ -29,6 +29,7 @@ import { confimExit } from "@/utils/confirm";
 import { ArviointipyyntoLomake } from "@/types";
 import BCardSkeleton from "@/components/card/card.vue";
 import ArviointipyyntoForm from "@/forms/arviointipyynto-form.vue";
+import { toastFail } from "@/utils/toast";
 
 Component.registerHooks(["beforeRouteLeave"]);
 
@@ -66,14 +67,7 @@ export default class Arviointipyynto extends Vue {
         await axios.get(`erikoistuva-laakari/arviointipyynto-lomake`)
       ).data;
     } catch (err) {
-      this.$bvToast.toast(
-        this.$t("arviointilomakkeen-hakeminen-epaonnistui") as string,
-        {
-          title: this.$t("arviointilomakkeen-hakeminen") as string,
-          variant: "danger",
-          solid: true
-        }
-      );
+      toastFail(this, this.$t("arviointilomakkeen-hakeminen-epaonnistui"));
     }
   }
 
@@ -91,14 +85,7 @@ export default class Arviointipyynto extends Vue {
         params: { arviointiId: `${arviointipyynto.id}` }
       });
     } catch (err) {
-      this.$bvToast.toast(
-        this.$t("uuden-arviointipyynnon-lisaaminen-epaonnistui") as string,
-        {
-          title: this.$t("arviointipyynnon-lisaaminen") as string,
-          variant: "danger",
-          solid: true
-        }
-      );
+      toastFail(this, this.$t("uuden-arviointipyynnon-lisaaminen-epaonnistui"));
     }
   }
 
