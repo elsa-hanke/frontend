@@ -1,5 +1,5 @@
 <template>
-  <b-form @submit="onSubmit">
+  <b-form @submit.stop.prevent="onSubmit">
     <elsa-form-group
       :label="$t('erikoistuva-laakari')"
       label-cols-md="4"
@@ -253,8 +253,7 @@ export default class ArviointiForm extends Vue {
   vaativuustasot = vaativuustasot;
   luottamuksenTasot = luottamuksenTasot;
 
-  onSubmit(event: any) {
-    event.preventDefault();
+  onSubmit() {
     console.log("onSubmit", this.form);
     this.$emit("submit", this.form);
   }

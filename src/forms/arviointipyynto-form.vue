@@ -1,5 +1,5 @@
 <template>
-  <b-form @submit="onSubmit">
+  <b-form @submit.stop.prevent="onSubmit">
     <elsa-form-group :label="$t('erikoistuva-laakari')">
       <template v-slot="{ uid }">
         <user-avatar :id="uid" :displayName="displayName" />
@@ -190,8 +190,7 @@ export default class ArviointipyyntoForm extends Vue {
   })
   value!: any;
 
-  onSubmit(event: any) {
-    event.preventDefault();
+  onSubmit() {
     this.$emit("submit", {
       tyoskentelyjaksoId: this.value.tyoskentelyjakso?.id,
       arvioitavaOsaalueId: this.value.epaOsaamisalue?.id,

@@ -1,5 +1,5 @@
 <template>
-  <b-form @submit="onSubmit">
+  <b-form @submit.stop.prevent="onSubmit">
     <elsa-form-group :label="$t('kayttaja')">
       <template v-slot="{ uid }">
         <user-avatar :id="uid" :displayName="displayName" />
@@ -111,8 +111,7 @@ export default class KayttooikeusForm extends Vue {
     await store.dispatch("logout");
   }
 
-  onSubmit(event: any) {
-    event.preventDefault();
+  onSubmit() {
     this.$emit("submit", {
       kayttajaryhma: this.value.kayttajaryhma?.arvo,
       yliopisto: this.value.yliopisto?.arvo

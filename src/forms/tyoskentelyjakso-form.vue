@@ -1,5 +1,5 @@
 <template>
-  <b-form @submit="onSubmit">
+  <b-form @submit.stop.prevent="onSubmit">
     <elsa-form-group :label="$t('kunta')" :required="true">
       <template v-slot="{ uid }">
         <b-form-input
@@ -136,7 +136,7 @@
       <b-button
         type="reset"
         variant="link"
-        @click="onCancelClick"
+        @click.stop.prevent="onCancelClick"
         class="text-decoration-none font-weight-500 mr-2"
         >{{ $t("peruuta") }}</b-button
       >
@@ -219,13 +219,11 @@ export default class TyoskentelyjaksoForm extends Vue {
     };
   }
 
-  onSubmit(event: any) {
-    event.preventDefault();
+  onSubmit() {
     this.$emit("submit", this.value);
   }
 
-  onCancelClick(event: any) {
-    event.preventDefault();
+  onCancelClick() {
     this.$emit("cancel");
   }
 
