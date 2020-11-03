@@ -85,3 +85,7 @@ hr {
   border-color: #e8e9ec;
   color: #222222;
 }
+
+textarea::placeholder {
+  color: $gray-600 !important;
+}
