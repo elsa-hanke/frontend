@@ -5,6 +5,7 @@ $gray-500: #adb5bd;
 $gray-600: #6c757d;
 $yellow: #ffc107;
 $red: #dc3545;
+$green: #198754;
 $font-family-sans-serif: "Montserrat", system-ui, -apple-system, "Segoe UI",
   Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
   "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
@@ -12,6 +13,7 @@ $font-size-base: 0.875rem;
 $line-height-base: 1.5;
 $body-bg: #f7f7f7;
 $primary: rgb(65, 175, 235);
+$success: $green;
 $warning: $yellow;
 $danger: $red;
 $input-placeholder-color: $primary;
@@ -45,6 +47,8 @@ $nav-tabs-link-active-bg: none;
 $border-color: $gray-300;
 $alert-border-width: 1px;
 $btn-border-width: 2px;
+$form-feedback-valid-color: $success;
+$form-feedback-invalid-color: $danger;
 
 // Custom variables
 $font-weight-400: 400;
