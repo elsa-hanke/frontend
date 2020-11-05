@@ -113,3 +113,16 @@ textarea::placeholder {
     }
   }
 }
+
+// Piilotetaan validoinnin ikonit
+.was-validated .form-control:invalid,
+.was-validated .form-control:valid,
+.form-control.is-invalid,
+.form-control.is-valid {
+  padding-right: $input-btn-padding-x;
+  background-image: none;
+
+  &.b-form-datepicker {
+    padding-right: 0;
+  }
+}
