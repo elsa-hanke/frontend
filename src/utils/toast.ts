@@ -20,7 +20,17 @@ export function toastSuccess(vue: Vue, message: any) {
 }
 
 export function toastFail(vue: Vue, message: any) {
-  vue.$bvToast.toast(message, {
+  const h = vue.$createElement;
+
+  const vNodesMsg = h("div", { class: ["d-flex", "align-items-center"] }, [
+    h("font-awesome-icon", {
+      props: { icon: "exclamation-circle", "fixed-width": true, size: "lg" },
+      class: ["mr-2"]
+    }),
+    `${message}`
+  ]);
+
+  vue.$bvToast.toast(vNodesMsg, {
     variant: "danger",
     solid: true,
     // noAutoHide: true,

@@ -10,6 +10,7 @@ import {
   faClipboard,
   faClipboardList,
   faEnvelope,
+  faExclamationCircle,
   faFile,
   faFileAlt,
   faHome,
@@ -33,6 +34,7 @@ library.add(faCircle);
 library.add(faClipboard);
 library.add(faClipboardList);
 library.add(faEnvelope);
+library.add(faExclamationCircle);
 library.add(faFile);
 library.add(faFileAlt);
 library.add(faHome);
