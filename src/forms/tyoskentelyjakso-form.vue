@@ -5,15 +5,17 @@
         <b-form-input
           :id="uid"
           v-model="value.tyoskentelypaikka.kunta"
-          :required="true"
+          :state="validateState('tyoskentelypaikka.kunta')"
         ></b-form-input>
+        <b-form-invalid-feedback :id="`${uid}-feedback`">{{
+          $t("pakollinen-tieto")
+        }}</b-form-invalid-feedback>
         <!--
         <elsa-multiselect
           :id="uid"
           v-model="value.tyoskentelypaikka.kunta"
           :options="kunnat"
           :loading="kunnatLoading"
-          :required="true"
           @select="onKuntaSelect"
           @remove="onKuntaRemove"
         >
@@ -26,15 +28,17 @@
         <b-form-input
           :id="uid"
           v-model="value.tyoskentelypaikka.nimi"
-          :required="true"
+          :state="validateState('tyoskentelypaikka.nimi')"
         ></b-form-input>
+        <b-form-invalid-feedback :id="`${uid}-feedback`">{{
+          $t("pakollinen-tieto")
+        }}</b-form-invalid-feedback>
         <!--
         <elsa-multiselect
           :id="uid"
           v-model="value.tyoskentelypaikka"
           :options="tyoskentelypaikat"
           :loading="organisaatiotLoading"
-          :required="true"
           :disabled="!value.tyoskentelypaikka.kunta"
           label="abbreviation"
           track-by="organizationId"
@@ -48,24 +52,34 @@
         <b-form-radio-group
           :id="uid"
           v-model="value.tyoskentelypaikka.tyyppi"
+          :state="validateState('tyoskentelypaikka.tyyppi')"
           :options="tyypit"
-          :required="true"
           name="tyoskentelyjakso-tyyppi"
           stacked
         ></b-form-radio-group>
+        <b-form-invalid-feedback
+          :id="`${uid}-feedback`"
+          :style="{
+            display:
+              validateState('tyoskentelypaikka.tyyppi') === false
+                ? 'block'
+                : 'none'
+          }"
+          >{{ $t("pakollinen-tieto") }}</b-form-invalid-feedback
+        >
       </template>
     </elsa-form-group>
     <b-form-row>
       <elsa-form-group
         :label="$t('alkamispaiva')"
-        :required="true"
         class="col-sm-12 col-md-6 pr-md-3"
+        :required="true"
       >
         <template v-slot="{ uid }">
           <b-form-datepicker
             :id="uid"
             v-model="value.alkamispaiva"
-            :required="true"
+            :state="validateState('alkamispaiva')"
             :max="value.paattymispaiva"
             start-weekday="1"
             :locale="currentLocale"
@@ -84,6 +98,9 @@
                 class="text-primary"
             /></template>
           </b-form-datepicker>
+          <b-form-invalid-feedback :id="`${uid}-feedback`">{{
+            $t("pakollinen-tieto")
+          }}</b-form-invalid-feedback>
         </template>
       </elsa-form-group>
       <elsa-form-group
@@ -123,13 +140,20 @@
           <b-form-input
             :id="uid"
             v-model="value.osaaikaprosentti"
+            :state="validateState('osaaikaprosentti')"
             type="number"
-            min="50"
-            max="100"
-            :required="true"
+            :step="1"
           />
           <span class="mx-3">%</span>
         </div>
+        <b-form-invalid-feedback
+          :id="`${uid}-feedback`"
+          :style="{
+            display:
+              validateState('osaaikaprosentti') === false ? 'block' : 'none'
+          }"
+          >{{ $t("osaaikaprosentti-validointivirhe") }}</b-form-invalid-feedback
+        >
       </template>
     </elsa-form-group>
     <div class="text-right">
@@ -146,9 +170,11 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
 import Component from "vue-class-component";
 import axios from "axios";
+import { Mixins } from "vue-property-decorator";
+import { validationMixin } from "vuelidate";
+import { required, between } from "vuelidate/lib/validators";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
 import ElsaMultiselect from "@/components/multiselect/multiselect.vue";
 
@@ -156,9 +182,32 @@ import ElsaMultiselect from "@/components/multiselect/multiselect.vue";
   components: {
     ElsaFormGroup,
     ElsaMultiselect
+  },
+  validations: {
+    value: {
+      tyoskentelypaikka: {
+        required,
+        nimi: {
+          required
+        },
+        kunta: {
+          required
+        },
+        tyyppi: {
+          required
+        }
+      },
+      alkamispaiva: {
+        required
+      },
+      osaaikaprosentti: {
+        required,
+        between: between(50, 100)
+      }
+    }
   }
 })
-export default class TyoskentelyjaksoForm extends Vue {
+export default class TyoskentelyjaksoForm extends Mixins(validationMixin) {
   value = {
     tunnus: "wip",
     alkamispaiva: null,
@@ -206,6 +255,25 @@ export default class TyoskentelyjaksoForm extends Vue {
     this.organisaatiotLoading = false;
   }
 
+  validateState(name: string) {
+    // TODO: Vaatii refaktorointia
+    const get = (obj: any, path: any, defaultValue = undefined) => {
+      const travel = (regexp: any) =>
+        String.prototype.split
+          .call(path, regexp)
+          .filter(Boolean)
+          .reduce(
+            (res, key) => (res !== null && res !== undefined ? res[key] : res),
+            obj
+          );
+      const result = travel(/[,[\]]+?/) || travel(/[,[\].]+?/);
+      return result === undefined || result === obj ? defaultValue : result;
+    };
+
+    const { $dirty, $error } = get(this.$v.value, name);
+    return $dirty ? ($error ? false : null) : null;
+  }
+
   onKuntaSelect(selected: any) {
     this.fetchOrganisaatiot(selected);
   }
@@ -220,6 +288,10 @@ export default class TyoskentelyjaksoForm extends Vue {
   }
 
   onSubmit() {
+    this.$v.value.$touch();
+    if (this.$v.value.$anyError) {
+      return;
+    }
     this.$emit("submit", this.value);
   }
 
