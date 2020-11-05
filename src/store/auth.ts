@@ -5,7 +5,8 @@ const auth: Module<any, any> = {
   state: {
     status: "",
     account: null,
-    loggedIn: false
+    loggedIn: false,
+    unauthorized: true
   },
   mutations: {
     authRequest(state) {
@@ -15,6 +16,10 @@ const auth: Module<any, any> = {
       state.status = "success";
       state.account = account;
       state.loggedIn = true;
+    },
+    authUnauthorized(state) {
+      state.status = "unauthorized";
+      state.loggedIn = false;
     },
     authError(state) {
       state.status = "error";
@@ -43,7 +48,11 @@ const auth: Module<any, any> = {
         }
         commit("authSuccess", account);
       } catch (err) {
-        commit("authError");
+        if (err.response.status === 401) {
+          commit("authUnauthorized");
+        } else {
+          commit("authError");
+        }
       }
     },
     async logout({ commit }) {

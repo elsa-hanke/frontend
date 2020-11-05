@@ -34,7 +34,11 @@ router.beforeEach(async (to, from, next) => {
 
     restoreRoute(next);
   } else {
-    storeRouteAndRedirectToLogin(to);
+    if (store.getters.status === "error") {
+      // TODO: virhesivu
+    } else {
+      storeRouteAndRedirectToLogin(to);
+    }
   }
 });
 
