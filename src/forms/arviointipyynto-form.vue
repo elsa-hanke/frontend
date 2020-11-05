@@ -177,8 +177,8 @@
 
 <script lang="ts">
 import Component from "vue-class-component";
-import { Prop, Mixins } from "vue-property-decorator";
 import axios from "axios";
+import { Prop, Mixins } from "vue-property-decorator";
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
 import store from "@/store";
