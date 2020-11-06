@@ -152,7 +152,6 @@ export default class ElsaMultiselect extends Vue {
       font-size: $font-size-base;
     }
     .multiselect__placeholder {
-      font-size: $font-size-base;
       margin: 0;
       padding: 0;
     }
@@ -176,17 +175,18 @@ export default class ElsaMultiselect extends Vue {
     }
     .multiselect__option.multiselect__option--highlight,
     .multiselect__option.multiselect__option--highlight::after {
-      background: $primary;
+      color: $black;
+      background: #f5f5f6;
     }
     .multiselect__option.multiselect__option--selected,
     .multiselect__option.multiselect__option--selected::after {
-      color: #35495e;
-      background: $primary-light;
+      color: $white;
+      background: #b1b1b1;
     }
     .multiselect__option.multiselect__option--highlight.multiselect__option--selected,
     .multiselect__option.multiselect__option--highlight.multiselect__option--selected::after {
-      color: white;
-      background: $danger;
+      color: $white;
+      background: #b1b1b1;
     }
   }
 }
