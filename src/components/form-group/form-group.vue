@@ -6,30 +6,19 @@
           {{ label }}
           <span class="text-primary"
             >{{ required ? "*" : "" }}
-            <font-awesome-layers
+            <font-awesome-icon
               v-if="help"
+              icon="info-circle"
               fixed-width
               v-b-popover.hover.top="help"
-            >
-              <font-awesome-icon :icon="['far', 'circle']" />
-              <font-awesome-icon
-                icon="info"
-                transform="shrink-8"
-              /> </font-awesome-layers
-          ></span>
+          /></span>
         </div>
         <div class="text-muted form-group-help" v-if="$slots['help']">
-          <font-awesome-layers fixed-width>
-            <font-awesome-icon :icon="['far', 'circle']" />
-            <font-awesome-icon icon="info" transform="shrink-8" />
-          </font-awesome-layers>
+          <font-awesome-icon icon="info-circle" fixed-width />
           <slot name="help" />
         </div>
         <div class="text-muted form-group-help" v-if="addNewEnabled">
-          <font-awesome-layers fixed-width>
-            <font-awesome-icon :icon="['far', 'circle']" />
-            <font-awesome-icon icon="info" transform="shrink-8" />
-          </font-awesome-layers>
+          <font-awesome-icon icon="info-circle" fixed-width />
           &nbsp;
           <b-link @click="$refs[modalRef].show()">{{ addNewLabelText }}</b-link>
           <span>{{ $t("tai-valitse-alta") }}</span>

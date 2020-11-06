@@ -103,6 +103,10 @@ export default class ArviointipyyntoCard extends Vue {
   }
 }
 
+hr {
+  border-top-color: $hr-color;
+  border-top-width: 3px;
+}
 ::v-deep table {
   thead tr {
     border-bottom: solid $gray-300 1px;

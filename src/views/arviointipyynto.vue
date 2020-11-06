@@ -1,21 +1,17 @@
 <template>
   <div class="arviointipyynto">
-    <b-breadcrumb :items="items" class="mb-0"></b-breadcrumb>
+    <b-breadcrumb :items="items" class="mb-0 px-0"></b-breadcrumb>
     <b-container fluid>
       <b-row lg>
         <b-col class="px-0">
-          <b-card-skeleton
-            :loading="false"
-            class="mb-3 arviointipyynto-card"
-            :header="$t('pyyda-arviointia')"
-          >
-            <arviointipyynto-form
-              @submit="onSubmit"
-              :tyoskentelyjaksot="tyoskentelyjaksot"
-              :epa-osaamisalueet="epaOsaamisalueet"
-              :kouluttajat="kouluttajat"
-            />
-          </b-card-skeleton>
+          <h1>{{ $t("pyyda-arviointia") }}</h1>
+          <hr />
+          <arviointipyynto-form
+            @submit="onSubmit"
+            :tyoskentelyjaksot="tyoskentelyjaksot"
+            :epa-osaamisalueet="epaOsaamisalueet"
+            :kouluttajat="kouluttajat"
+          />
         </b-col>
       </b-row>
     </b-container>
@@ -27,7 +23,6 @@ import { Component, Vue } from "vue-property-decorator";
 import axios from "axios";
 import { confimExit } from "@/utils/confirm";
 import { ArviointipyyntoLomake } from "@/types";
-import BCardSkeleton from "@/components/card/card.vue";
 import ArviointipyyntoForm from "@/forms/arviointipyynto-form.vue";
 import { toastFail } from "@/utils/toast";
 
@@ -35,7 +30,6 @@ Component.registerHooks(["beforeRouteLeave"]);
 
 @Component({
   components: {
-    BCardSkeleton,
     ArviointipyyntoForm
   }
 })
@@ -128,7 +122,7 @@ export default class Arviointipyynto extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.arviointipyynto-card {
+.arviointipyynto {
   max-width: 970px;
 }
 </style>

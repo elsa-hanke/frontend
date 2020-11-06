@@ -1,24 +1,20 @@
 <template>
   <div class="itsearviointi">
-    <b-breadcrumb :items="items" class="mb-0"></b-breadcrumb>
+    <b-breadcrumb :items="items" class="mb-0 px-0"></b-breadcrumb>
     <b-container fluid>
       <b-row lg>
         <b-col class="px-0">
-          <b-card-skeleton
-            :loading="false"
-            class="mb-3 itsearviointi-card"
-            :header="$t('tee-itsearviointi')"
-          >
-            <arviointi-form
-              :value="value"
-              @submit="onSubmit"
-              :editing="true"
-              v-if="value"
-            />
-            <div class="text-center" v-else>
-              <b-spinner variant="primary" label="Spinning"></b-spinner>
-            </div>
-          </b-card-skeleton>
+          <h1>{{ $t("tee-itsearviointi") }}</h1>
+          <hr />
+          <arviointi-form
+            :value="value"
+            @submit="onSubmit"
+            :editing="true"
+            v-if="value"
+          />
+          <div class="text-center" v-else>
+            <b-spinner variant="primary" label="Spinning"></b-spinner>
+          </div>
         </b-col>
         <b-col class="pl-3 pr-0" lg="2"></b-col>
       </b-row>
@@ -30,12 +26,10 @@
 import { Component, Vue } from "vue-property-decorator";
 import axios from "axios";
 import { confimExit } from "@/utils/confirm";
-import BCardSkeleton from "@/components/card/card.vue";
 import ArviointiForm from "@/forms/arviointi-form.vue";
 
 @Component({
   components: {
-    BCardSkeleton,
     ArviointiForm
   }
 })
@@ -88,7 +82,7 @@ export default class Itsearviointi extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.itsearviointi-card {
+.itsearviointi {
   max-width: 970px;
 }
 </style>

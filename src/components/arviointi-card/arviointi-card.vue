@@ -2,18 +2,17 @@
   <div>
     <b-container fluid class="px-0">
       <b-row>
-        <b-col lg="8">
+        <b-col>
           <div class="d-flex justify-content-between align-items-center">
             <div class="text-size-lg font-weight-500 mr-3">
               {{ value.arvioitavaTapahtuma }}
             </div>
-            <div class="separator">
-              {{ $date(value.tapahtumanAjankohta) }}
+            <div>
+              {{ $date(value.tapahtumanAjankohta) }} |
+              {{ value.tyoskentelyjakso.tyoskentelypaikka.nimi }} |
+              {{ value.arvioinninAntaja.nimi }}
             </div>
           </div>
-        </b-col>
-        <b-col class="d-flex align-items-center">
-          <div>{{ value.tyoskentelyjakso.tyoskentelypaikka.nimi }}</div>
         </b-col>
       </b-row>
     </b-container>
@@ -116,15 +115,9 @@ export default class ArviointiCard extends Vue {
 @import "~@/styles/variables";
 @import "~bootstrap/scss/mixins/breakpoints";
 
-.separator {
-  &::after {
-    content: "|";
-    position: absolute;
-    right: -2px;
-    @include media-breakpoint-down(md) {
-      display: none;
-    }
-  }
+hr {
+  border-top-color: $hr-color;
+  border-top-width: 3px;
 }
 
 ::v-deep table {

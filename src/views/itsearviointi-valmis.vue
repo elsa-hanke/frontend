@@ -1,27 +1,22 @@
 <template>
   <div class="itsearviointi-valmis">
-    <b-breadcrumb :items="items" class="mb-0"></b-breadcrumb>
+    <b-breadcrumb :items="items" class="mb-0 px-0"></b-breadcrumb>
     <b-container fluid>
       <b-row lg>
         <b-col class="px-0">
-          <b-card-skeleton
-            :loading="false"
-            class="mb-3 arviointipyynto-card"
-            :header="$t('itsearviointi-valmis')"
-          >
-            <p class="text-center">
-              Lorem ipsum dolor sit amet...
-            </p>
-            <div class="d-flex justify-content-center">
-              <b-button
-                type="submit"
-                variant="primary"
-                class="mr-3"
-                :to="{ name: 'arvioinnit' }"
-                >{{ $t("palaa-arviointeihin") }}</b-button
-              >
-            </div>
-          </b-card-skeleton>
+          <h1 class="text-center">{{ $t("itsearviointi-valmis") }}</h1>
+          <p class="text-center">
+            Lorem ipsum dolor sit amet...
+          </p>
+          <div class="d-flex justify-content-center">
+            <b-button
+              type="submit"
+              variant="primary"
+              class="mr-3"
+              :to="{ name: 'arvioinnit' }"
+              >{{ $t("palaa-arviointeihin") }}</b-button
+            >
+          </div>
         </b-col>
       </b-row>
     </b-container>
@@ -30,14 +25,11 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import BCardSkeleton from "@/components/card/card.vue";
 
 Component.registerHooks(["beforeRouteLeave"]);
 
 @Component({
-  components: {
-    BCardSkeleton
-  }
+  components: {}
 })
 export default class ItsearviointiValmis extends Vue {
   items = [
@@ -58,7 +50,7 @@ export default class ItsearviointiValmis extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.arviointipyynto-card {
-  max-width: 970px;
+.itsearviointi-valmis {
+  max-width: 1024px;
 }
 </style>

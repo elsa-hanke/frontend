@@ -2,7 +2,7 @@
   <div class="kayttoikeus">
     <b-container>
       <div
-        class="d-flex justify-content-center align-items-center mt-5 user-select-none"
+        class="d-flex justify-content-center align-items-center pt-5 user-select-none"
       >
         <img
           :src="`${publicPath}img/icons/favicon.svg`"
@@ -67,3 +67,12 @@ export default class Kayttooikeus extends Vue {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+@import "~@/styles/variables";
+
+.kayttoikeus {
+  min-height: 100vh;
+  background-color: $backdrop-background-color;
+}
+</style>

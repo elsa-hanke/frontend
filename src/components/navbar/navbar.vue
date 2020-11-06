@@ -39,7 +39,11 @@
           class="border-right text-nowrap align-self-center"
           :to="{ name: 'viestit' }"
         >
-          <font-awesome-icon icon="envelope" fixed-width size="lg" />
+          <font-awesome-icon
+            :icon="['far', 'envelope']"
+            fixed-width
+            size="lg"
+          />
           {{ $t("viestit") }}
         </b-nav-item>
 

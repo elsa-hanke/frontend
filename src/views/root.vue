@@ -1,13 +1,11 @@
 <template>
-  <div id="root">
+  <div id="root" :class="{ 'gray-backdrop': hasGrayBackdrop }">
     <navbar />
     <b-container fluid>
       <b-row>
         <sidebar-menu />
         <main role="main" class="offset-lg-2 col-lg-10">
-          <!--<transition name="fade" mode="out-in">-->
           <router-view />
-          <!--</transition>-->
         </main>
       </b-row>
     </b-container>
@@ -26,19 +24,18 @@ import SidebarMenu from "@/components/sidebar-menu/sidebar-menu.vue";
     SidebarMenu
   }
 })
-export default class Root extends Vue {}
+export default class Root extends Vue {
+  get hasGrayBackdrop() {
+    return this.$route.meta.grayBackdrop;
+  }
+}
 </script>
 
-<style lang="scss">
-.fade-enter-active,
-.fade-leave-active {
-  transition-duration: 0.2s;
-  transition-property: opacity;
-  transition-timing-function: ease;
-}
+<style lang="scss" scoped>
+@import "~@/styles/variables";
 
-.fade-enter,
-.fade-leave-active {
-  opacity: 0;
+.gray-backdrop {
+  min-height: 100vh;
+  background-color: $backdrop-background-color;
 }
 </style>

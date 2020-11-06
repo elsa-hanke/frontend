@@ -24,13 +24,17 @@
 }
 
 label {
-  font-weight: 500;
+  font-weight: $font-weight-500;
+}
+
+label.custom-control-label {
+  font-weight: $font-weight-400;
 }
 
 .modal-content {
   box-shadow: 0 0 0.5rem rgba(black, 0.5);
   .modal-header {
-    color: white;
+    color: $white;
     background-color: $primary;
     display: flex;
     align-items: center;
@@ -38,7 +42,7 @@ label {
       font-size: 1rem;
     }
     .close {
-      color: white;
+      color: $white;
       text-shadow: none;
       opacity: 1;
       margin: -0.75rem -1.25rem -0.75rem auto;
@@ -77,7 +81,6 @@ ul.nav.nav-tabs {
 
 hr {
   border-top-color: $hr-color;
-  border-top-width: 3px;
 }
 
 .alert.alert-dark {
@@ -94,7 +97,7 @@ textarea::placeholder {
 .b-toast-danger {
   .toast {
     border: none;
-    color: white;
+    color: $white;
     font-weight: 500;
   }
 }
@@ -124,5 +127,74 @@ textarea::placeholder {
 
   &.b-form-datepicker {
     padding-right: 0;
+  }
+}
+
+h1 {
+  line-height: 1.272727273;
+}
+h2 {
+  line-height: 1.4;
+}
+h3 {
+  line-height: 1.444444444;
+}
+h4 {
+  line-height: 1.375;
+}
+h5 {
+  line-height: 1.466666667;
+}
+h6 {
+  line-height: 1.466666667;
+}
+
+.btn-primary {
+  color: $white;
+  &:hover {
+    background-color: $btn-primary-hover-background-color;
+    border-color: $btn-primary-hover-border-color;
+  }
+  &.disabled {
+    color: $btn-primary-disabled-color;
+    background-color: $btn-primary-disabled-background-color;
+    border-color: $btn-primary-disabled-border-color;
+  }
+}
+
+.btn-outline-primary {
+  color: $primary;
+  &:hover {
+    color: $btn-primary-hover-background-color;
+    background-color: transparent;
+    border-color: $btn-primary-hover-border-color;
+  }
+  &.disabled {
+    color: $btn-disabled-color;
+    border-color: $btn-disabled-color;
+  }
+}
+
+.btn-back {
+  color: $black;
+  &:hover {
+    color: #000000;
+  }
+  &.disabled {
+    color: $btn-disabled-color;
+  }
+}
+
+.btn-outline-danger {
+  color: $btn-danger-color;
+  border-color: $btn-danger-border-color;
+  &:hover {
+    color: $btn-danger-hover-color;
+    background-color: transparent;
+    border-color: $btn-danger-hover-border-color;
+  }
+  &.disabled {
+    color: $btn-disabled-color;
+    border-color: $btn-disabled-color;
   }
 }

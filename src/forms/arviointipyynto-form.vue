@@ -165,9 +165,9 @@
     <div class="text-right">
       <b-button
         type="reset"
-        variant="link"
+        variant="back"
         :to="{ name: 'arvioinnit' }"
-        class="text-decoration-none font-weight-500 mr-2"
+        class="mr-2"
         >{{ $t("peruuta") }}</b-button
       >
       <b-button type="submit" variant="primary">{{ $t("laheta") }}</b-button>
