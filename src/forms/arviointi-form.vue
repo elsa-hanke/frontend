@@ -95,10 +95,29 @@
           <tr>
             <th scope="row">{{ $t("vaativuustaso") }}</th>
             <td>
-              <elsa-luottamuksen-taso :value="value.vaativuustaso" />
+              <div v-if="!value.arviointiAika" class="text-size-sm">
+                {{ $t("arviointia-ei-ole-viela-annettu") }}
+              </div>
+              <elsa-luottamuksen-taso
+                v-if="value.vaativuustaso"
+                :value="value.vaativuustaso"
+              />
             </td>
             <td>
+              <div v-if="!value.itsearviointiAika" class="d-inline-flex">
+                <b-button
+                  variant="primary"
+                  class="d-flex align-items-center text-decoration-none"
+                  :to="{
+                    name: 'itsearviointi',
+                    params: { arviointiId: value.id }
+                  }"
+                >
+                  {{ $t("tee-itsearviointi") }}
+                </b-button>
+              </div>
               <elsa-luottamuksen-taso
+                v-if="value.itsearviointiAika"
                 :value="value.itsearviointiVaativuustaso"
               />
             </td>
@@ -106,27 +125,37 @@
           <tr>
             <th scope="row">{{ $t("luottamuksen-taso") }}</th>
             <td>
-              <elsa-luottamuksen-taso :value="value.luottamuksenTaso" />
+              <elsa-luottamuksen-taso
+                v-if="value.arviointiAika"
+                :value="value.luottamuksenTaso"
+              />
             </td>
             <td>
               <elsa-luottamuksen-taso
+                v-if="value.itsearviointiAika"
                 :value="value.itsearviointiLuottamuksenTaso"
               />
             </td>
           </tr>
         </tbody>
       </b-table-simple>
-      <elsa-form-group :label="$t('sanallinen-arviointi')">
+      <elsa-form-group
+        v-if="value.arviointiAika"
+        :label="$t('sanallinen-arviointi')"
+      >
         <template v-slot="{ uid }">
           <p :id="uid">{{ value.sanallinenArviointi }}</p>
         </template>
       </elsa-form-group>
-      <elsa-form-group :label="$t('sanallinen-itsearviointi')">
+      <elsa-form-group
+        v-if="value.itsearviointiAika"
+        :label="$t('sanallinen-itsearviointi')"
+      >
         <template v-slot="{ uid }">
           <p :id="uid">{{ value.sanallinenItsearviointi }}</p>
         </template>
       </elsa-form-group>
-      <div class="text-right">
+      <div v-if="value.itsearviointiAika" class="text-right">
         <b-button
           type="submit"
           variant="primary"
@@ -138,82 +167,84 @@
         >
       </div>
     </div>
-    <hr />
-    <b-form-row v-if="editing">
+    <div v-if="editing">
+      <hr />
+      <b-form-row>
+        <elsa-form-group
+          :label="$t('vaativuustaso')"
+          :required="true"
+          class="col-lg-6"
+        >
+          <template v-slot:modal-content>
+            <tyoskentelyjakso-form />
+          </template>
+          <template v-slot="{ uid }">
+            <elsa-multiselect
+              :id="uid"
+              v-model="form.vaativuustaso"
+              :options="vaativuustasot"
+              track-by="arvo"
+            >
+              <template slot="singleLabel" slot-scope="{ option }">
+                <span class="font-weight-700">{{ option.arvo }}</span>
+                {{ $t(option.kuvaus) }}
+              </template>
+              <template slot="option" slot-scope="{ option }">
+                <span class="font-weight-700">{{ option.arvo }}</span>
+                {{ $t(option.kuvaus) }}
+              </template>
+            </elsa-multiselect>
+          </template>
+        </elsa-form-group>
+      </b-form-row>
+      <b-form-row>
+        <elsa-form-group
+          :label="$t('luottamuksen-taso')"
+          :required="true"
+          class="col-lg-6"
+        >
+          <template v-slot="{ uid }">
+            <elsa-multiselect
+              :id="uid"
+              v-model="form.luottamuksenTaso"
+              :options="luottamuksenTasot"
+              track-by="arvo"
+            >
+              <template slot="singleLabel" slot-scope="{ option }">
+                <span class="font-weight-700">{{ option.arvo }}</span>
+                {{ $t(option.kuvaus) }}
+              </template>
+              <template slot="option" slot-scope="{ option }">
+                <span class="font-weight-700">{{ option.arvo }}</span>
+                {{ $t(option.kuvaus) }}
+              </template>
+            </elsa-multiselect>
+          </template>
+        </elsa-form-group>
+      </b-form-row>
       <elsa-form-group
-        :label="$t('vaativuustaso')"
+        :label="$t('sanallinen-arviointi')"
         :required="true"
-        class="col-lg-6"
+        v-if="editing"
       >
-        <template v-slot:modal-content>
-          <tyoskentelyjakso-form />
-        </template>
         <template v-slot="{ uid }">
-          <elsa-multiselect
+          <b-form-textarea
             :id="uid"
-            v-model="form.vaativuustaso"
-            :options="vaativuustasot"
-            track-by="arvo"
-          >
-            <template slot="singleLabel" slot-scope="{ option }">
-              <span class="font-weight-700">{{ option.arvo }}</span>
-              {{ $t(option.kuvaus) }}
-            </template>
-            <template slot="option" slot-scope="{ option }">
-              <span class="font-weight-700">{{ option.arvo }}</span>
-              {{ $t(option.kuvaus) }}
-            </template>
-          </elsa-multiselect>
+            v-model="form.sanallinenArviointi"
+            rows="5"
+          ></b-form-textarea>
         </template>
       </elsa-form-group>
-    </b-form-row>
-    <b-form-row v-if="editing">
-      <elsa-form-group
-        :label="$t('luottamuksen-taso')"
-        :required="true"
-        class="col-lg-6"
-      >
-        <template v-slot="{ uid }">
-          <elsa-multiselect
-            :id="uid"
-            v-model="form.luottamuksenTaso"
-            :options="luottamuksenTasot"
-            track-by="arvo"
-          >
-            <template slot="singleLabel" slot-scope="{ option }">
-              <span class="font-weight-700">{{ option.arvo }}</span>
-              {{ $t(option.kuvaus) }}
-            </template>
-            <template slot="option" slot-scope="{ option }">
-              <span class="font-weight-700">{{ option.arvo }}</span>
-              {{ $t(option.kuvaus) }}
-            </template>
-          </elsa-multiselect>
-        </template>
-      </elsa-form-group>
-    </b-form-row>
-    <elsa-form-group
-      :label="$t('sanallinen-arviointi')"
-      :required="true"
-      v-if="editing"
-    >
-      <template v-slot="{ uid }">
-        <b-form-textarea
-          :id="uid"
-          v-model="form.sanallinenArviointi"
-          rows="5"
-        ></b-form-textarea>
-      </template>
-    </elsa-form-group>
-    <div class="text-right" v-if="editing">
-      <b-button
-        type="reset"
-        variant="back"
-        :to="{ name: 'arvioinnit' }"
-        class="mr-2"
-        >{{ $t("peruuta") }}</b-button
-      >
-      <b-button type="submit" variant="primary">{{ $t("laheta") }}</b-button>
+      <div class="text-right">
+        <b-button
+          type="reset"
+          variant="back"
+          :to="{ name: 'arvioinnit' }"
+          class="mr-2"
+          >{{ $t("peruuta") }}</b-button
+        >
+        <b-button type="submit" variant="primary">{{ $t("laheta") }}</b-button>
+      </div>
     </div>
   </b-form>
 </template>

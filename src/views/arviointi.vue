@@ -5,6 +5,7 @@
       <b-row lg>
         <b-col class="px-0">
           <h1>{{ $t("arviointi") }}</h1>
+          <hr />
           <div v-if="value">
             <arviointi-form
               :value="value"
