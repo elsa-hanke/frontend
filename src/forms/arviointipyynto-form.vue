@@ -87,12 +87,14 @@
     <b-form-row>
       <elsa-form-group
         :label="$t('kouluttaja-tai-lahikouluttaja')"
+        :add-new-enabled="true"
         :add-new-label="$t('lisaa-lahikouluttaja')"
         :required="true"
+        @submit="onLahikouluttajaSubmit"
         class="col-md-8"
       >
-        <template v-slot:modal-content>
-          <lahikouluttaja-form />
+        <template v-slot:modal-content="{ submit, cancel }">
+          <lahikouluttaja-form @submit="submit" @cancel="cancel" />
         </template>
         <template v-slot="{ uid }">
           <elsa-multiselect
@@ -275,6 +277,20 @@ export default class ArviointipyyntoForm extends Mixins(validationMixin) {
         this,
         this.$t("uuden-tyoskentelyjakson-lisaaminen-epaonnistui")
       );
+    }
+  }
+
+  async onLahikouluttajaSubmit(value: any, modal: any) {
+    try {
+      const lahikouluttaja = (
+        await axios.post("/erikoistuva-laakari/lahikouluttajat", value)
+      ).data;
+      this.kouluttajat.push(lahikouluttaja);
+      this.value.kouluttaja = lahikouluttaja;
+      modal.hide("confirm");
+      toastSuccess(this, this.$t("uusi-lahikouluttaja-lisatty"));
+    } catch (err) {
+      toastFail(this, this.$t("uuden-lahikouluttajan-lisaaminen-epaonnistui"));
     }
   }
 
