@@ -35,7 +35,15 @@ $font-size-sm: $font-size-base * 0.866666667;
 $font-size-lg: $font-size-base * 1.25;
 $btn-font-weight: 500;
 $btn-box-shadow: none;
-$btn-focus-box-shadow: none;
+$component-active-bg: $primary;
+$input-btn-focus-color-opacity: 0.25;
+$input-btn-focus-width: 0.2rem;
+$input-btn-focus-color: rgba(
+  $component-active-bg,
+  $input-btn-focus-color-opacity
+);
+$input-btn-focus-box-shadow: 0 0 0 $input-btn-focus-width $input-btn-focus-color;
+$btn-focus-box-shadow: $input-btn-focus-box-shadow;
 $btn-active-box-shadow: none;
 $btn-border-radius: 50rem;
 $btn-disabled-opacity: 1;
