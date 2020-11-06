@@ -1,37 +1,34 @@
 <template>
   <div class="arviointipyynto-lahetetty">
-    <b-breadcrumb :items="items" class="mb-0"></b-breadcrumb>
+    <b-breadcrumb :items="items" class="mb-0 px-0"></b-breadcrumb>
     <b-container fluid>
       <b-row lg>
         <b-col class="px-0">
-          <b-card-skeleton
-            :loading="false"
-            class="mb-3 arviointipyynto-card"
-            :header="$t('arviointipyynto-lahetetty')"
-          >
-            <p class="text-center">
-              {{ $t("arviointipyynto-lahetetty-ilmoitus") }}
-            </p>
-            <p class="text-center">
-              {{ $t("arviointipyynto-lahetetty-itsearviointi-muistutus") }}
-            </p>
-            <div class="d-flex justify-content-center">
-              <b-button
-                type="submit"
-                variant="primary"
-                class="mr-3"
-                :to="{ name: 'arvioinnit' }"
-                >{{ $t("palaa-arviointeihin") }}</b-button
-              >
-              <b-button
-                type="submit"
-                variant="primary"
-                v-if="itsearviointiLinkki"
-                :to="itsearviointiLinkki"
-                >{{ $t("tee-tapahtumasta-itsearviointi") }}</b-button
-              >
-            </div>
-          </b-card-skeleton>
+          <h1 class="text-center mb-4">
+            {{ $t("arviointipyynto-lahetetty") }}
+          </h1>
+          <p class="text-center">
+            {{ $t("arviointipyynto-lahetetty-ilmoitus") }}
+          </p>
+          <p class="text-center">
+            {{ $t("arviointipyynto-lahetetty-itsearviointi-muistutus") }}
+          </p>
+          <div class="d-flex justify-content-center">
+            <b-button
+              type="submit"
+              variant="primary"
+              class="mr-3"
+              :to="{ name: 'arvioinnit' }"
+              >{{ $t("palaa-arviointeihin") }}</b-button
+            >
+            <b-button
+              type="submit"
+              variant="primary"
+              v-if="itsearviointiLinkki"
+              :to="itsearviointiLinkki"
+              >{{ $t("tee-tapahtumasta-itsearviointi") }}</b-button
+            >
+          </div>
         </b-col>
       </b-row>
     </b-container>
@@ -40,14 +37,11 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import BCardSkeleton from "@/components/card/card.vue";
 
 Component.registerHooks(["beforeRouteLeave"]);
 
 @Component({
-  components: {
-    BCardSkeleton
-  }
+  components: {}
 })
 export default class ArviointipyyntoLahetetty extends Vue {
   items = [
@@ -88,7 +82,7 @@ export default class ArviointipyyntoLahetetty extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.arviointipyynto-card {
-  max-width: 970px;
+.arviointipyynto-lahetetty {
+  max-width: 1024px;
 }
 </style>

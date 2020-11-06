@@ -1,6 +1,6 @@
 <template>
   <div class="itsearviointi">
-    <b-breadcrumb :items="items" class="mb-0"></b-breadcrumb>
+    <b-breadcrumb :items="items" class="mb-0 px-0"></b-breadcrumb>
     <b-container fluid>
       <b-row lg>
         <b-col class="px-0">
@@ -20,9 +20,12 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import BCardSkeleton from "@/components/card/card.vue";
 
 @Component({
-  components: {}
+  components: {
+    BCardSkeleton
+  }
 })
 export default class Kayttajaprofiili extends Vue {}
 </script>

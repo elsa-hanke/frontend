@@ -34,7 +34,7 @@
             {{ $t("koulutukset") }}
           </b-nav-item>
           <b-nav-item class="border-bottom" :to="{ name: 'viestit' }">
-            <font-awesome-icon icon="envelope" fixed-width size="lg" />
+            <font-awesome-icon :icon="['far', 'envelope']" fixed-width size="lg" />
             {{ $t("viestit") }}
           </b-nav-item>
           <b-nav-item class="border-bottom" :to="{ name: 'asiakirjat' }">

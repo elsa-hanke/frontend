@@ -13,7 +13,6 @@ import ItsearviointiValmis from "../views/itsearviointi-valmis.vue";
 import Kayttooikeus from "../views/kayttooikeus.vue";
 import Koulutukset from "../views/koulutukset.vue";
 import Koulutussuunnitelma from "../views/koulutussuunnitelma.vue";
-import Login from "../views/login.vue";
 import PageNotFound from "../views/page-not-found.vue";
 import Root from "../views/root.vue";
 import Tyoskentelyjaksot from "../views/tyoskentelyjaksot.vue";
@@ -32,6 +31,9 @@ const routes: Array<RouteConfig> = [
       {
         path: "/etusivu",
         name: "etusivu",
+        meta: {
+          grayBackdrop: true
+        },
         component: Etusivu
       },
       {
@@ -95,11 +97,6 @@ const routes: Array<RouteConfig> = [
     path: "/kayttooikeus",
     name: "kayttooikeus",
     component: Kayttooikeus
-  },
-  {
-    path: "/login",
-    name: "login",
-    component: Login
   },
   {
     path: "*",
