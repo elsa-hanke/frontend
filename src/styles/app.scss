@@ -180,6 +180,9 @@ h6 {
   &:hover {
     color: #000000;
   }
+  &:focus {
+    box-shadow: $btn-focus-box-shadow;
+  }
   &.disabled {
     color: $btn-disabled-color;
   }
