@@ -5,7 +5,7 @@ import VueI18n from "@/plugins/i18n";
 
 export class DatePlugin {
   public install(vue: typeof Vue) {
-    vue.prototype.$date = function(value: string, pattern = "d.M.y") {
+    function parseAndFormat(value: string, pattern: string) {
       const date = parseISO(value);
       let locale;
       switch (VueI18n.locale) {
@@ -20,6 +20,14 @@ export class DatePlugin {
           break;
       }
       return format(date, pattern, { locale });
+    }
+
+    vue.prototype.$date = function(value: string) {
+      return parseAndFormat(value, "P");
+    };
+
+    vue.prototype.$datetime = function(value: string) {
+      return parseAndFormat(value, "Pp");
     };
   }
 }

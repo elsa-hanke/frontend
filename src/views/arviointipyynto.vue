@@ -23,8 +23,8 @@ import { Component, Vue } from "vue-property-decorator";
 import axios from "axios";
 import { confimExit } from "@/utils/confirm";
 import { ArviointipyyntoLomake } from "@/types";
-import ArviointipyyntoForm from "@/forms/arviointipyynto-form.vue";
 import { toastFail } from "@/utils/toast";
+import ArviointipyyntoForm from "@/forms/arviointipyynto-form.vue";
 
 Component.registerHooks(["beforeRouteLeave"]);
 

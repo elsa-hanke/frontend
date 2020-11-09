@@ -118,7 +118,11 @@
                     <arviointi-card :value="arviointi" />
                   </div>
                   <b-alert v-if="arvioinnit.length === 0" variant="dark" show>
-                    <font-awesome-icon icon="info-circle" fixed-width />
+                    <font-awesome-icon
+                      icon="info-circle"
+                      fixed-width
+                      class="text-muted"
+                    />
                     {{ $t("arviointeja-ei-ole-viela-tehty") }}
                   </b-alert>
                   <b-pagination
@@ -147,7 +151,10 @@
                   </b-pagination>
                 </div>
                 <div class="text-center" v-else>
-                  <b-spinner variant="primary" label="Spinning"></b-spinner>
+                  <b-spinner
+                    variant="primary"
+                    :label="$t('ladataan')"
+                  ></b-spinner>
                 </div>
               </div>
             </b-tab>
@@ -157,7 +164,11 @@
                   <arviointipyynto-card :value="arviointipyynto" />
                 </div>
                 <b-alert v-if="pyynnot.length === 0" variant="dark" show>
-                  <font-awesome-icon icon="info-circle" fixed-width />
+                  <font-awesome-icon
+                    icon="info-circle"
+                    fixed-width
+                    class="text-muted"
+                  />
                   {{ $t("kaikkiin-arviointipyyntoihisi-on-tehty-arviointi") }}
                 </b-alert>
                 <b-pagination
@@ -187,7 +198,10 @@
                 </b-pagination>
               </div>
               <div class="text-center" v-else>
-                <b-spinner variant="primary" label="Spinning"></b-spinner>
+                <b-spinner
+                  variant="primary"
+                  :label="$t('ladataan')"
+                ></b-spinner>
               </div>
             </b-tab>
           </b-tabs>
@@ -250,7 +264,7 @@ export default class Arvioinnit extends Vue {
       kouluttaja: null
     };
     this.page = 1;
-    this.fetch(false);
+    this.fetch();
   }
 
   onTabChange(value: any) {
@@ -258,46 +272,49 @@ export default class Arvioinnit extends Vue {
     this.page = 1;
     this.totalRows = 0;
     if (value === 0) {
-      this.fetch(false); // Arvioinnit
+      this.fetch();
     } else if (value === 1) {
-      this.fetch(true); // Arviointipyynnöt
+      // Hetaan arviointipyynnöt pelkästään
+      this.fetch({
+        "arviointiAika.specified": false
+      });
     }
   }
 
   onTyoskentelyjaksoSelect(selected: any) {
     this.selected.tyoskentelyjakso = selected;
     this.page = 1;
-    this.fetch(false);
+    this.fetch();
   }
 
   onTyoskentelyjaksoRemove() {
     this.selected.tyoskentelyjakso = null;
     this.page = 1;
-    this.fetch(false);
+    this.fetch();
   }
 
   onEpaOsaamisalueSelect(selected: any) {
     this.selected.epaOsaamisalue = selected;
     this.page = 1;
-    this.fetch(false);
+    this.fetch();
   }
 
   onEpaOsaamisalueRemove() {
     this.selected.epaOsaamisalue = null;
     this.page = 1;
-    this.fetch(false);
+    this.fetch();
   }
 
   onKouluttajaSelect(selected: any) {
     this.selected.kouluttaja = selected;
     this.page = 1;
-    this.fetch(false);
+    this.fetch();
   }
 
   onKouluttajaRemove() {
     this.selected.kouluttaja = null;
     this.page = 1;
-    this.fetch(false);
+    this.fetch();
   }
 
   async fetchOptions() {
@@ -306,11 +323,11 @@ export default class Arvioinnit extends Vue {
     ).data;
   }
 
-  async fetch(isArviointipyynto: boolean) {
+  async fetch(options: any = {}) {
     try {
       const omat = await axios.get("erikoistuva-laakari/suoritusarvioinnit", {
         params: {
-          "arviointiAika.specified": !isArviointipyynto,
+          ...options,
           page: this.page - 1,
           size: this.perPage,
           "tyoskentelyjaksoId.equals": this.selected.tyoskentelyjakso?.id,

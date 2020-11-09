@@ -209,7 +209,6 @@ import ElsaMultiselect from "@/components/multiselect/multiselect.vue";
 })
 export default class TyoskentelyjaksoForm extends Mixins(validationMixin) {
   value = {
-    tunnus: "wip",
     alkamispaiva: null,
     paattymispaiva: null,
     osaaikaprosentti: 100,

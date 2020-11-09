@@ -38,10 +38,10 @@
 </template>
 
 <script lang="ts">
+import Component from "vue-class-component";
 import { Mixins } from "vue-property-decorator";
 import { validationMixin } from "vuelidate";
 import { required, email } from "vuelidate/lib/validators";
-import Component from "vue-class-component";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
 
 @Component({
