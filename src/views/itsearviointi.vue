@@ -7,13 +7,14 @@
           <h1>{{ $t("tee-itsearviointi") }}</h1>
           <hr />
           <arviointi-form
+            v-if="value"
             :value="value"
             @submit="onSubmit"
             :editing="true"
-            v-if="value"
+            :itsearviointi="true"
           />
           <div class="text-center" v-else>
-            <b-spinner variant="primary" label="Spinning"></b-spinner>
+            <b-spinner variant="primary" :label="$t('ladataan')"></b-spinner>
           </div>
         </b-col>
         <b-col class="pl-3 pr-0" lg="2"></b-col>
@@ -26,6 +27,7 @@
 import { Component, Vue } from "vue-property-decorator";
 import axios from "axios";
 import { confimExit } from "@/utils/confirm";
+import { toastFail } from "@/utils/toast";
 import ArviointiForm from "@/forms/arviointi-form.vue";
 
 @Component({
@@ -61,10 +63,14 @@ export default class Itsearviointi extends Vue {
     }
   }
 
-  onSubmit(form: any) {
-    console.log(form);
-    this.saved = true;
-    this.$router.push({ name: "itsearviointi-valmis" });
+  async onSubmit(value: any) {
+    try {
+      await axios.put("erikoistuva-laakari/suoritusarvioinnit", value);
+      this.saved = true;
+      this.$router.push({ name: "itsearviointi-valmis" });
+    } catch (err) {
+      toastFail(this, this.$t("itsearvioinnin-tallentaminen-epaonnistui"));
+    }
   }
 
   async beforeRouteLeave(to: any, from: any, next: any) {
