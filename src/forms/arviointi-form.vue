@@ -95,7 +95,7 @@
           <tr>
             <th scope="row">{{ $t("vaativuustaso") }}</th>
             <td>
-              <div v-if="!value.arviointiAika" class="text-size-sm">
+              <div v-if="!value.arviointiAika" class="text-size-sm text-muted">
                 {{ $t("arviointia-ei-ole-viela-annettu") }}
               </div>
               <elsa-luottamuksen-taso
@@ -183,6 +183,7 @@
               :id="uid"
               v-model="form.vaativuustaso"
               :options="vaativuustasot"
+              :state="validateState('vaativuustaso')"
               track-by="arvo"
             >
               <template slot="singleLabel" slot-scope="{ option }">
@@ -194,6 +195,14 @@
                 {{ $t(option.kuvaus) }}
               </template>
             </elsa-multiselect>
+            <b-form-invalid-feedback
+              :id="`${uid}-feedback`"
+              :style="{
+                display:
+                  validateState('vaativuustaso') === false ? 'block' : 'none'
+              }"
+              >{{ $t("pakollinen-tieto") }}</b-form-invalid-feedback
+            >
           </template>
         </elsa-form-group>
       </b-form-row>
@@ -208,6 +217,7 @@
               :id="uid"
               v-model="form.luottamuksenTaso"
               :options="luottamuksenTasot"
+              :state="validateState('luottamuksenTaso')"
               track-by="arvo"
             >
               <template slot="singleLabel" slot-scope="{ option }">
@@ -219,6 +229,14 @@
                 {{ $t(option.kuvaus) }}
               </template>
             </elsa-multiselect>
+            <b-form-invalid-feedback
+              :id="`${uid}-feedback`"
+              :style="{
+                display:
+                  validateState('luottamuksenTaso') === false ? 'block' : 'none'
+              }"
+              >{{ $t("pakollinen-tieto") }}</b-form-invalid-feedback
+            >
           </template>
         </elsa-form-group>
       </b-form-row>
@@ -231,8 +249,12 @@
           <b-form-textarea
             :id="uid"
             v-model="form.sanallinenArviointi"
+            :state="validateState('sanallinenArviointi')"
             rows="5"
           ></b-form-textarea>
+          <b-form-invalid-feedback :id="`${uid}-feedback`">{{
+            $t("pakollinen-tieto")
+          }}</b-form-invalid-feedback>
         </template>
       </elsa-form-group>
       <div class="text-right">
@@ -250,9 +272,10 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
 import Component from "vue-class-component";
-import { Prop } from "vue-property-decorator";
+import { Mixins, Prop } from "vue-property-decorator";
+import { validationMixin } from "vuelidate";
+import { required } from "vuelidate/lib/validators";
 import { vaativuustasot, luottamuksenTasot } from "@/utils/constants";
 import store from "@/store";
 import UserAvatar from "@/components/user-avatar/user-avatar.vue";
@@ -268,26 +291,66 @@ import ElsaLuottamuksenTaso from "@/components/luottamuksen-taso/luottamuksen-ta
     TyoskentelyjaksoForm,
     UserAvatar,
     ElsaLuottamuksenTaso
+  },
+  validations: {
+    form: {
+      vaativuustaso: {
+        required
+      },
+      luottamuksenTaso: {
+        required
+      },
+      sanallinenArviointi: {
+        required
+      }
+    }
   }
 })
-export default class ArviointiForm extends Vue {
+export default class ArviointiForm extends Mixins(validationMixin) {
   @Prop({ required: false, default: false })
   editing!: boolean;
 
-  @Prop({ required: true })
+  @Prop({ required: true, type: Object })
   value!: any;
 
+  @Prop({ required: false, default: false })
+  itsearviointi!: boolean;
+
+  // Joko arviointi tai itsearviointi
   form: any = {
     vaativuustaso: null,
     luottamuksenTaso: null,
     sanallinenArviointi: null
   };
+
   vaativuustasot = vaativuustasot;
   luottamuksenTasot = luottamuksenTasot;
 
+  validateState(name: string) {
+    const { $dirty, $error } = this.$v.form[name] as any;
+    return $dirty ? ($error ? false : null) : null;
+  }
+
   onSubmit() {
-    console.log("onSubmit", this.form);
-    this.$emit("submit", this.form);
+    this.$v.form.$touch();
+    if (this.$v.form.$anyError) {
+      return;
+    }
+    if (this.itsearviointi) {
+      this.$emit("submit", {
+        ...this.value,
+        itsearviointiVaativuustaso: this.form.vaativuustaso.arvo,
+        itsearviointiLuottamuksenTaso: this.form.luottamuksenTaso.arvo,
+        sanallinenItsearviointi: this.form.sanallinenArviointi
+      });
+    } else {
+      this.$emit("submit", {
+        ...this.value,
+        vaativuustaso: this.form.vaativuustaso.arvo,
+        luottamuksenTaso: this.form.luottamuksenTaso.arvo,
+        sanallinenArviointi: this.form.sanallinenArviointi
+      });
+    }
   }
 
   get displayName() {
