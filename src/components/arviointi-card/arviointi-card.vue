@@ -33,15 +33,18 @@
             </thead>
             <tbody>
               <tr>
-                <th
-                  scope="row"
-                  class="d-flex align-items-center font-weight-400"
-                >
-                  <div class="p-0">
+                <th scope="row" class="font-weight-400">
+                  <div>
                     {{ $t("luottamuksen-taso") }}
                   </div>
                 </th>
                 <td>
+                  <div
+                    v-if="!value.arviointiAika"
+                    class="text-size-sm text-muted"
+                  >
+                    {{ $t("arviointia-ei-ole-viela-annettu") }}
+                  </div>
                   <elsa-luottamuksen-taso :value="value.luottamuksenTaso" />
                 </td>
                 <td>
@@ -130,6 +133,7 @@ hr {
   th:last-child {
     padding-right: 0;
   }
+  th,
   td {
     vertical-align: middle;
   }

@@ -13,12 +13,20 @@
               v-b-popover.hover.top="help"
           /></span>
         </div>
-        <div class="text-muted form-group-help" v-if="$slots['help']">
-          <font-awesome-icon icon="info-circle" fixed-width />
+        <div class="form-group-help font-weight-400" v-if="$slots['help']">
+          <font-awesome-icon
+            icon="info-circle"
+            fixed-width
+            class="text-muted"
+          />
           <slot name="help" />
         </div>
-        <div class="text-muted form-group-help" v-if="addNewEnabled">
-          <font-awesome-icon icon="info-circle" fixed-width />
+        <div class="form-group-help font-weight-400" v-if="addNewEnabled">
+          <font-awesome-icon
+            icon="info-circle"
+            fixed-width
+            class="text-muted"
+          />
           &nbsp;
           <b-link @click="$refs[modalRef].show()">{{ addNewLabelText }}</b-link>
           <span>{{ $t("tai-valitse-alta") }}</span>

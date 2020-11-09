@@ -13,79 +13,55 @@
               :editing="false"
             />
             <hr />
-            <p class="text-right text-danger m-0">
-              WIP: vain visuaalinen ilme toteutettu
-            </p>
-            <div class="border-top border-bottom border-danger py-3">
-              <h4>{{ $t("kommentit") }}</h4>
-              <p>{{ $t("kommentit-kuvaus") }}</p>
-              <div class="kommentit d-flex flex-column border-bottom mb-3">
-                <div class="mr-auto">
-                  <div class="bg-light kommentti-left px-3 py-2 mb-3 mr-5">
-                    <div
-                      class="d-flex justify-content-between align-items-center mb-2"
-                    >
-                      <user-avatar :display-name="value.arvioinninAntaja.nimi">
-                        <template #display-name>
-                          {{ value.arvioinninAntaja.nimi }} |
-                          <span class="text-size-sm">19.10.2019 klo 10.24</span>
-                        </template>
-                      </user-avatar>
-                    </div>
-                    <span
-                      >Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                      sed do eiusmod tempor incididunt ut labore et dolore magna
-                      aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                      ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                      Duis aute irure dolor in reprehenderit in voluptate velit
-                      esse cillum dolore eu fugiat nulla pariatur. Excepteur
-                      sint occaecat cupidatat non proident, sunt in culpa qui
-                      officia deserunt mollit anim id est laborum.</span
-                    >
-                  </div>
-                </div>
-                <div class="ml-auto">
-                  <div
-                    class="bg-primary kommentti-right px-3 py-2 mb-3 text-white ml-5"
-                  >
-                    <div
-                      class="d-flex justify-content-between align-items-center mb-2"
-                    >
-                      <user-avatar :display-name="displayName">
-                        <template #display-name>
-                          {{ displayName }} |
-                          <span class="text-size-sm">19.10.2019 klo 11.36</span>
-                        </template>
-                      </user-avatar>
-                      <b-link class="text-white">{{ $t("muokkaa") }}</b-link>
-                    </div>
-                    <span
-                      >Sed ut perspiciatis unde omnis iste natus error.</span
-                    >
-                  </div>
-                </div>
+            <h4>{{ $t("kommentit") }}</h4>
+            <p>{{ $t("kommentit-kuvaus") }}</p>
+            <div class="border-bottom mb-3">
+              <div
+                v-if="kommentit && kommentit.length > 0"
+                class="d-flex flex-column"
+              >
+                <kommentti-card
+                  :value="kommentti"
+                  v-for="(kommentti, index) in kommentit"
+                  :key="index"
+                />
               </div>
-              <div class="uusi-kommentti">
+              <div v-else>
+                <b-alert variant="dark" show>
+                  <font-awesome-icon
+                    icon="info-circle"
+                    fixed-width
+                    class="text-muted"
+                  />
+                  {{ $t("suoritusarviointia-ei-ole-kommentoitu") }}
+                </b-alert>
+              </div>
+            </div>
+            <b-form @submit.stop.prevent="onKommenttiSubmit">
+              <div class="uusi-kommentti mb-3">
                 <elsa-form-group :label="$t('uusi-kommentti')">
                   <template v-slot="{ uid }">
                     <b-form-textarea
                       :id="uid"
-                      v-model="kommentti"
+                      v-model="kommentti.teksti"
                       :placeholder="$t('kirjoita-kommenttisi-tahan')"
                       rows="5"
                     ></b-form-textarea>
                   </template>
                 </elsa-form-group>
                 <div class="text-right">
-                  <b-button type="submit" variant="primary">{{
-                    $t("lisaa-kommentti")
-                  }}</b-button>
+                  <b-button
+                    type="submit"
+                    variant="primary"
+                    :disabled="!kommentti.teksti || saving"
+                    >{{ $t("lisaa-kommentti") }}</b-button
+                  >
                 </div>
               </div>
-            </div>
+            </b-form>
           </div>
           <div class="text-center" v-else>
-            <b-spinner variant="primary" label="Spinning"></b-spinner>
+            <b-spinner variant="primary" :label="$t('ladataan')"></b-spinner>
           </div>
         </b-col>
         <b-col class="pl-3 pr-0" lg="2"></b-col>
@@ -98,19 +74,22 @@
 import { Component, Vue } from "vue-property-decorator";
 import axios from "axios";
 import store from "@/store";
+import { toastFail } from "@/utils/toast";
 import ArviointiForm from "@/forms/arviointi-form.vue";
 import UserAvatar from "@/components/user-avatar/user-avatar.vue";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
+import KommenttiCard from "@/components/kommentti-card/kommentti-card.vue";
 
 @Component({
   components: {
     ArviointiForm,
     UserAvatar,
-    ElsaFormGroup
+    ElsaFormGroup,
+    KommenttiCard
   }
 })
 export default class Arviointi extends Vue {
-  value = null;
+  value: any = null;
   items = [
     {
       text: this.$t("etusivu"),
@@ -125,18 +104,62 @@ export default class Arviointi extends Vue {
       active: true
     }
   ];
-  kommentti = null;
+  kommentti = {
+    teksti: null
+  };
+  saving = false;
 
   async mounted() {
     if (this.$route && this.$route.params && this.$route.params.arviointiId) {
-      this.value = (
-        await axios.get(`suoritusarvioinnit/${this.$route.params.arviointiId}`)
-      ).data;
+      try {
+        this.value = (
+          await axios.get(
+            `suoritusarvioinnit/${this.$route.params.arviointiId}`
+          )
+        ).data;
+      } catch (err) {
+        this.$router.replace({ name: "arvioinnit" });
+      }
     }
   }
 
   onSubmit(form: any) {
     console.log(form);
+  }
+
+  async onKommenttiSubmit() {
+    this.saving = true;
+    try {
+      const kommentti = (
+        await axios.post(
+          `erikoistuva-laakari/suoritusarvioinnit/${this.value.id}/kommentti`,
+          this.kommentti
+        )
+      ).data;
+      this.value.kommentit.push(kommentti);
+      this.kommentti = {
+        teksti: null
+      };
+    } catch (err) {
+      toastFail(this, this.$t("uuden-kommentin-lisaaminen-epaonnistui"));
+    }
+    this.saving = false;
+  }
+
+  get kommentit() {
+    if (this.value) {
+      return this.value.kommentit
+        .sort((a: any, b: any) => a.luontiaika.localeCompare(b.luontiaika))
+        .map((k: any) => {
+          return {
+            kommentti: k,
+            self:
+              k.kommentoija?.id === this.account?.erikoistuvaLaakari?.kayttajaId
+          };
+        });
+    } else {
+      return [];
+    }
   }
 
   get account() {
@@ -154,22 +177,7 @@ export default class Arviointi extends Vue {
 </script>
 
 <style lang="scss" scoped>
-$kommentti-border-radius: 1.25rem;
-
 .arviointi {
   max-width: 970px;
-}
-
-.kommentit {
-  .kommentti-left {
-    border-top-left-radius: $kommentti-border-radius;
-    border-top-right-radius: $kommentti-border-radius;
-    border-bottom-right-radius: $kommentti-border-radius;
-  }
-  .kommentti-right {
-    border-top-left-radius: $kommentti-border-radius;
-    border-top-right-radius: $kommentti-border-radius;
-    border-bottom-left-radius: $kommentti-border-radius;
-  }
 }
 </style>
