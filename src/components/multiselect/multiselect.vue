@@ -130,6 +130,8 @@ export default class ElsaMultiselect extends Vue {
     padding: 0.375rem 2.5rem 0.375rem 0.75rem;
     border: 1px solid #ced4da;
     min-height: initial;
+    font-size: $font-size-base;
+    line-height: $line-height-base;
     .multiselect__spinner {
       right: 5px;
       width: 30px;
@@ -152,11 +154,14 @@ export default class ElsaMultiselect extends Vue {
       font-size: $font-size-base;
     }
     .multiselect__placeholder {
+      font-size: $font-size-base;
+      line-height: $line-height-base;
       margin: 0;
       padding: 0;
     }
     .multiselect__input {
       font-size: $font-size-base;
+      line-height: $line-height-base;
       padding: 0;
       margin: 0;
     }
