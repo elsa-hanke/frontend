@@ -110,12 +110,11 @@ export default class Arviointi extends Vue {
   saving = false;
 
   async mounted() {
-    if (this.$route && this.$route.params && this.$route.params.arviointiId) {
+    const arviointiId = this.$route?.params?.arviointiId;
+    if (arviointiId) {
       try {
         this.value = (
-          await axios.get(
-            `suoritusarvioinnit/${this.$route.params.arviointiId}`
-          )
+          await axios.get(`suoritusarvioinnit/${arviointiId}`)
         ).data;
       } catch (err) {
         this.$router.replace({ name: "arvioinnit" });

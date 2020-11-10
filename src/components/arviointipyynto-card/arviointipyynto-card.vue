@@ -64,7 +64,7 @@
             v-if="!value.arviointiAika"
             variant="primary"
             :to="{
-              name: 'arviointipyynto',
+              name: 'arviointipyynto-muokkaus',
               params: { arviointiId: value.id }
             }"
             >{{ $t("muokkaa-arviointipyyntoa") }}</b-button

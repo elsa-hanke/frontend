@@ -52,6 +52,11 @@ const routes: Array<RouteConfig> = [
         component: Arviointipyynto
       },
       {
+        path: "/arvioinnit/arviointipyynto/:arviointiId",
+        name: "arviointipyynto-muokkaus",
+        component: Arviointipyynto
+      },
+      {
         path: "/arvioinnit/arviointipyynto-lahetetty",
         name: "arviointipyynto-lahetetty",
         component: ArviointipyyntoLahetetty
