@@ -1,45 +1,55 @@
 export const vaativuustasot = [
   {
     arvo: 1,
-    kuvaus: "aloittelija"
+    nimi: "aloittelija",
+    kuvaus: "lorem-ipsum"
   },
   {
     arvo: 2,
-    kuvaus: "helppo"
+    nimi: "helppo",
+    kuvaus: "lorem-ipsum"
   },
   {
     arvo: 3,
-    kuvaus: "kohtalainen"
+    nimi: "kohtalainen",
+    kuvaus: "lorem-ipsum"
   },
   {
     arvo: 4,
-    kuvaus: "vaativa"
+    nimi: "vaativa",
+    kuvaus: "lorem-ipsum"
   },
   {
     arvo: 5,
-    kuvaus: "hyvin-vaativa"
+    nimi: "hyvin-vaativa",
+    kuvaus: "lorem-ipsum"
   }
 ] as const;
 
 export const luottamuksenTasot = [
   {
     arvo: 1,
-    kuvaus: "ohjaajan-toiminnan-seuraaminen"
+    nimi: "ohjaajan-toiminnan-seuraaminen",
+    kuvaus: "lorem-ipsum"
   },
   {
     arvo: 2,
-    kuvaus: "toiminta-suoran-ohjauksen-alaisena"
+    nimi: "toiminta-suoran-ohjauksen-alaisena",
+    kuvaus: "lorem-ipsum"
   },
   {
     arvo: 3,
-    kuvaus: "toiminta-epasuoran-ohjauksen-alaisena"
+    nimi: "toiminta-epasuoran-ohjauksen-alaisena",
+    kuvaus: "lorem-ipsum"
   },
   {
     arvo: 4,
-    kuvaus: "toiminta-ilman-ohjausta"
+    nimi: "toiminta-ilman-ohjausta",
+    kuvaus: "lorem-ipsum"
   },
   {
     arvo: 5,
-    kuvaus: "toiminta-ohjaajana"
+    nimi: "toiminta-ohjaajana",
+    kuvaus: "lorem-ipsum"
   }
 ] as const;
