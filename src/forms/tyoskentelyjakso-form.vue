@@ -156,6 +156,50 @@
         >
       </template>
     </elsa-form-group>
+    <elsa-form-group :label="$t('kaytannon-koulutus')" :required="true">
+      <template v-slot="{ uid }">
+        <b-form-radio
+          v-model="value.kaytannonKoulutus"
+          :state="validateState('kaytannonKoulutus')"
+          name="kaytannon-koulutus-tyyppi"
+          value="OMAN_ERIKOISALAN_KOULUTUS"
+          >{{ $t("oman-erikoisalan-koulutus") }}</b-form-radio
+        >
+        <b-form-radio
+          v-model="value.kaytannonKoulutus"
+          :state="validateState('kaytannonKoulutus')"
+          name="kaytannon-koulutus-tyyppi"
+          value="REUNAKOULUTUS"
+          class="mb-0"
+          >{{ $t("omaa-erikoisalaa-tukeva-koulutus-kerro-mika") }}
+          <span class="text-primary">*</span></b-form-radio
+        >
+        <div v-if="value.kaytannonKoulutus === 'REUNAKOULUTUS'" class="pl-4">
+          <b-form-input
+            v-model="value.reunakoulutuksenNimi"
+            :state="validateState('reunakoulutuksenNimi')"
+          ></b-form-input>
+          <b-form-invalid-feedback>{{
+            $t("pakollinen-tieto")
+          }}</b-form-invalid-feedback>
+        </div>
+        <b-form-radio
+          v-model="value.kaytannonKoulutus"
+          :state="validateState('kaytannonKoulutus')"
+          name="kaytannon-koulutus-tyyppi"
+          value="TUTKIMUSTYO"
+          >{{ $t("tutkimustyo") }}</b-form-radio
+        >
+        <b-form-invalid-feedback
+          :id="`${uid}-feedback`"
+          :style="{
+            display:
+              validateState('kaytannonKoulutus') === false ? 'block' : 'none'
+          }"
+          >{{ $t("pakollinen-tieto") }}</b-form-invalid-feedback
+        >
+      </template>
+    </elsa-form-group>
     <div class="text-right">
       <b-button
         type="reset"
@@ -174,7 +218,7 @@ import Component from "vue-class-component";
 import axios from "axios";
 import { Mixins } from "vue-property-decorator";
 import { validationMixin } from "vuelidate";
-import { required, between } from "vuelidate/lib/validators";
+import { required, between, requiredIf } from "vuelidate/lib/validators";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
 import ElsaMultiselect from "@/components/multiselect/multiselect.vue";
 
@@ -203,6 +247,14 @@ import ElsaMultiselect from "@/components/multiselect/multiselect.vue";
       osaaikaprosentti: {
         required,
         between: between(50, 100)
+      },
+      kaytannonKoulutus: {
+        required
+      },
+      reunakoulutuksenNimi: {
+        required: requiredIf(function(value) {
+          return value.kaytannonKoulutus === "REUNAKOULUTUS";
+        })
       }
     }
   }
@@ -231,6 +283,17 @@ export default class TyoskentelyjaksoForm extends Mixins(validationMixin) {
   ];
   kunnatLoading = false;
   organisaatiotLoading = false;
+  kaytannonKoulutusTyypit = [
+    {
+      text: this.$t("oman-erikoisalan-koulutus"),
+      value: "OMAN_ERIKOISALAN_KOULUTUS"
+    },
+    {
+      text: this.$t("omaa-erikoisalaa-tukeva-koulutus"),
+      value: "REUNAKOULUTUS"
+    },
+    { text: this.$t("tutkimustyo"), value: "TUTKIMUSTYO" }
+  ];
 
   mounted() {
     this.fetchKunnat();
