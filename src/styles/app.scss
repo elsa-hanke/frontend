@@ -87,7 +87,7 @@ hr {
 .alert.alert-dark {
   background-color: #f5f5f6;
   border-color: #e8e9ec;
-  color: #222222;
+  color: $black;
 }
 
 textarea::placeholder {
@@ -207,4 +207,8 @@ h6 {
   @include media-breakpoint-down(sm) {
     max-width: 276px;
   }
+}
+
+.breadcrumb-item.active {
+  color: $black;
 }

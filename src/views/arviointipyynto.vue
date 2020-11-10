@@ -7,11 +7,16 @@
           <h1>{{ $t("pyyda-arviointia") }}</h1>
           <hr />
           <arviointipyynto-form
+            v-if="!loading"
+            :value="arviointipyyntoWrapper"
             @submit="onSubmit"
             :tyoskentelyjaksot="tyoskentelyjaksot"
             :epa-osaamisalueet="epaOsaamisalueet"
             :kouluttajat="kouluttajat"
           />
+          <div class="text-center" v-else>
+            <b-spinner variant="primary" :label="$t('ladataan')"></b-spinner>
+          </div>
         </b-col>
       </b-row>
     </b-container>
@@ -50,12 +55,15 @@ export default class Arviointipyynto extends Vue {
   ];
   saved = false;
   arviointipyyntoLomake: null | ArviointipyyntoLomake = null;
+  arviointipyynto: any = null;
+  loading = true;
 
-  mounted() {
-    this.fetch();
+  async mounted() {
+    await Promise.all([this.fetchLomake(), this.fetchArviointipyynto()]);
+    this.loading = false;
   }
 
-  async fetch() {
+  async fetchLomake() {
     try {
       this.arviointipyyntoLomake = (
         await axios.get(`erikoistuva-laakari/arviointipyynto-lomake`)
@@ -65,21 +73,65 @@ export default class Arviointipyynto extends Vue {
     }
   }
 
+  async fetchArviointipyynto() {
+    const arviointiId = this.$route?.params?.arviointiId;
+    if (arviointiId) {
+      try {
+        this.arviointipyynto = (
+          await axios.get(`suoritusarvioinnit/${arviointiId}`)
+        ).data;
+      } catch (err) {
+        this.$router.replace({ name: "arvioinnit" });
+      }
+    }
+  }
+
   async onSubmit(value: any) {
-    try {
-      const arviointipyynto = (
-        await axios.post(
-          "erikoistuva-laakari/suoritusarvioinnit/arviointipyynto",
-          value
-        )
-      ).data;
-      this.saved = true;
-      this.$router.push({
-        name: "arviointipyynto-lahetetty",
-        params: { arviointiId: `${arviointipyynto.id}` }
-      });
-    } catch (err) {
-      toastFail(this, this.$t("uuden-arviointipyynnon-lisaaminen-epaonnistui"));
+    if (this.arviointipyynto) {
+      console.log(this.arviointipyynto, value);
+      // arviointipyynnon-muokkaaminen-epaonnistui
+      try {
+        const arviointipyynto = (
+          await axios.put(
+            "erikoistuva-laakari/suoritusarvioinnit/arviointipyynto",
+            {
+              id: this.arviointipyynto.id,
+              tyoskentelyjaksoId: value.arvioinninAntajaId,
+              arvioitavaOsaalueId: value.arvioitavaOsaalueId,
+              arvioitavaTapahtuma: value.tapahtumanAjankohta,
+              arvioinninAntajaId: value.arvioinninAntajaId,
+              tapahtumanAjankohta: value.tapahtumanAjankohta,
+              lisatiedot: value.lisatiedot
+            }
+          )
+        ).data;
+        this.saved = true;
+        this.$router.push({
+          name: "arviointipyynto-lahetetty",
+          params: { arviointiId: `${arviointipyynto.id}` }
+        });
+      } catch (err) {
+        toastFail(this, this.$t("arviointipyynnon-muokkaaminen-epaonnistui"));
+      }
+    } else {
+      try {
+        const arviointipyynto = (
+          await axios.post(
+            "erikoistuva-laakari/suoritusarvioinnit/arviointipyynto",
+            value
+          )
+        ).data;
+        this.saved = true;
+        this.$router.push({
+          name: "arviointipyynto-lahetetty",
+          params: { arviointiId: `${arviointipyynto.id}` }
+        });
+      } catch (err) {
+        toastFail(
+          this,
+          this.$t("uuden-arviointipyynnon-lisaaminen-epaonnistui")
+        );
+      }
     }
   }
 
@@ -116,6 +168,18 @@ export default class Arviointipyynto extends Vue {
       return this.arviointipyyntoLomake.kouluttajat;
     } else {
       return [];
+    }
+  }
+
+  get arviointipyyntoWrapper() {
+    if (this.arviointipyynto) {
+      return {
+        ...this.arviointipyynto,
+        epaOsaamisalue: this.arviointipyynto.arvioitavaOsaalue,
+        kouluttaja: this.arviointipyynto.arvioinninAntaja
+      };
+    } else {
+      return undefined;
     }
   }
 }
