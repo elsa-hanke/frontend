@@ -45,7 +45,10 @@
                   >
                     {{ $t("arviointia-ei-ole-viela-annettu") }}
                   </div>
-                  <elsa-luottamuksen-taso :value="value.luottamuksenTaso" />
+                  <elsa-luottamuksen-taso
+                    v-if="value.luottamuksenTaso"
+                    :value="value.luottamuksenTaso"
+                  />
                 </td>
                 <td>
                   <elsa-luottamuksen-taso

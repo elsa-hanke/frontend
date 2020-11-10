@@ -12,6 +12,7 @@
               fixed-width
               v-b-popover.hover.top="help"
           /></span>
+          <slot name="label-help" />
         </div>
         <div class="form-group-help font-weight-400" v-if="$slots['help']">
           <font-awesome-icon
