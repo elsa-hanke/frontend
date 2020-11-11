@@ -192,6 +192,11 @@ h6 {
 .btn-outline-danger {
   color: $btn-danger-color;
   border-color: $btn-danger-border-color;
+  &:active {
+    color: $btn-danger-hover-color !important;
+    background-color: transparent !important;
+    border-color: $btn-danger-hover-border-color !important;
+  }
   &:hover {
     color: $btn-danger-hover-color;
     background-color: transparent;
