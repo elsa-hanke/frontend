@@ -22,7 +22,7 @@
       >
         <template v-slot:header>
           <div class="d-flex justify-content-between align-items-center">
-            <span class="font-weight-500">{{ $t("käyttooikeushakemus") }}</span>
+            <span class="font-weight-500">{{ $t("kayttooikeushakemus") }}</span>
             <font-awesome-icon
               icon="question-circle"
               fixed-width

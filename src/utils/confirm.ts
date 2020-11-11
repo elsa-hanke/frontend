@@ -14,3 +14,18 @@ export async function confimExit(vue: Vue) {
     }
   );
 }
+
+export async function confimDelete(vue: Vue, title: string, name: string) {
+  return vue.$bvModal.msgBoxConfirm(
+    vue.$t("haluatko-varmasti-poistaa", { name }) as string,
+    {
+      title,
+      okVariant: "outline-danger",
+      okTitle: vue.$t("poista") as string,
+      cancelTitle: vue.$t("peruuta") as string,
+      cancelVariant: "back",
+      hideHeaderClose: false,
+      centered: true
+    }
+  );
+}

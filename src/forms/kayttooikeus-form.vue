@@ -34,10 +34,12 @@
       </template>
     </elsa-form-group>
     <div class="text-right">
-      <b-button type="reset" variant="back" @click="logout()" class="mr-2">{{
+      <b-button type="reset" variant="back" @click="logout()">{{
         $t("peruuta")
       }}</b-button>
-      <b-button type="submit" variant="primary">{{ $t("jatka") }}</b-button>
+      <b-button type="submit" variant="primary" class="ml-2">{{
+        $t("jatka")
+      }}</b-button>
     </div>
   </b-form>
 </template>

@@ -330,14 +330,12 @@
         </template>
       </elsa-form-group>
       <div class="text-right">
-        <b-button
-          type="reset"
-          variant="back"
-          :to="{ name: 'arvioinnit' }"
-          class="mr-2"
-          >{{ $t("peruuta") }}</b-button
-        >
-        <b-button type="submit" variant="primary">{{ $t("laheta") }}</b-button>
+        <b-button type="reset" variant="back" :to="{ name: 'arvioinnit' }">{{
+          $t("peruuta")
+        }}</b-button>
+        <b-button type="submit" variant="primary" class="ml-2">{{
+          $t("laheta")
+        }}</b-button>
       </div>
     </div>
   </b-form>

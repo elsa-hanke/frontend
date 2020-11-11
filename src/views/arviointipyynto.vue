@@ -10,9 +10,11 @@
             v-if="!loading"
             :value="arviointipyyntoWrapper"
             @submit="onSubmit"
+            @delete="onDelete"
             :tyoskentelyjaksot="tyoskentelyjaksot"
             :epa-osaamisalueet="epaOsaamisalueet"
             :kouluttajat="kouluttajat"
+            :editing="editing"
           />
           <div class="text-center" v-else>
             <b-spinner variant="primary" :label="$t('ladataan')"></b-spinner>
@@ -26,9 +28,9 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import axios from "axios";
-import { confimExit } from "@/utils/confirm";
+import { confimExit, confimDelete } from "@/utils/confirm";
 import { ArviointipyyntoLomake } from "@/types";
-import { toastFail } from "@/utils/toast";
+import { toastFail, toastSuccess } from "@/utils/toast";
 import ArviointipyyntoForm from "@/forms/arviointipyynto-form.vue";
 
 Component.registerHooks(["beforeRouteLeave"]);
@@ -92,18 +94,15 @@ export default class Arviointipyynto extends Vue {
       // arviointipyynnon-muokkaaminen-epaonnistui
       try {
         const arviointipyynto = (
-          await axios.put(
-            "erikoistuva-laakari/suoritusarvioinnit/arviointipyynto",
-            {
-              id: this.arviointipyynto.id,
-              tyoskentelyjaksoId: value.arvioinninAntajaId,
-              arvioitavaOsaalueId: value.arvioitavaOsaalueId,
-              arvioitavaTapahtuma: value.tapahtumanAjankohta,
-              arvioinninAntajaId: value.arvioinninAntajaId,
-              tapahtumanAjankohta: value.tapahtumanAjankohta,
-              lisatiedot: value.lisatiedot
-            }
-          )
+          await axios.put("erikoistuva-laakari/suoritusarvioinnit", {
+            id: this.arviointipyynto.id,
+            tyoskentelyjaksoId: value.tyoskentelyjaksoId,
+            arvioitavaOsaalueId: value.arvioitavaOsaalueId,
+            arvioitavaTapahtuma: value.arvioitavaTapahtuma,
+            arvioinninAntajaId: value.arvioinninAntajaId,
+            tapahtumanAjankohta: value.tapahtumanAjankohta,
+            lisatiedot: value.lisatiedot
+          })
         ).data;
         this.saved = true;
         this.$router.push({
@@ -132,6 +131,25 @@ export default class Arviointipyynto extends Vue {
           this.$t("uuden-arviointipyynnon-lisaaminen-epaonnistui")
         );
       }
+    }
+  }
+
+  async onDelete() {
+    if (
+      await confimDelete(
+        this,
+        this.$t("poista-arviointipyynto") as string,
+        (this.$t("arviointipyynnon") as string).toLowerCase()
+      )
+    ) {
+      await axios.delete(
+        `erikoistuva-laakari/suoritusarvioinnit/${this.arviointipyynto.id}`
+      );
+      toastSuccess(this, this.$t("arviointipyynto-poistettu-onnistuneesti"));
+      this.saved = true;
+      this.$router.push({
+        name: "arvioinnit"
+      });
     }
   }
 
@@ -181,6 +199,10 @@ export default class Arviointipyynto extends Vue {
     } else {
       return undefined;
     }
+  }
+
+  get editing() {
+    return this.arviointipyyntoWrapper ? true : false;
   }
 }
 </script>
