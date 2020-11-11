@@ -99,16 +99,27 @@
       <b-table-simple responsive bordered>
         <thead>
           <tr>
-            <th scope="col" style="width: 20%;"></th>
-            <th scope="col" style="width: 40%;">{{ $t("arviointi") }}</th>
-            <th scope="col" style="width: 40%;">
+            <th scope="col" style="width: 24%;"></th>
+            <th scope="col" style="width: 38%;">{{ $t("arviointi") }}</th>
+            <th scope="col" style="width: 38%;">
               {{ $t("itsearviointi") }}
             </th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <th scope="row">{{ $t("vaativuustaso") }}</th>
+            <th scope="row">
+              {{ $t("vaativuustaso") }}
+              <elsa-popover>
+                <template>
+                  <h2>{{ $t("vaativuustaso") }}</h2>
+                  <div v-for="(taso, index) in vaativuustasot" :key="index">
+                    <h3>{{ taso.arvo }} {{ $t(taso.nimi) }}</h3>
+                    <p>{{ $t(taso.kuvaus) }}</p>
+                  </div>
+                </template>
+              </elsa-popover>
+            </th>
             <td>
               <div v-if="!value.arviointiAika" class="text-size-sm text-muted">
                 {{ $t("arviointia-ei-ole-viela-annettu") }}
@@ -138,7 +149,18 @@
             </td>
           </tr>
           <tr>
-            <th scope="row">{{ $t("luottamuksen-taso") }}</th>
+            <th scope="row">
+              {{ $t("luottamuksen-taso") }}
+              <elsa-popover>
+                <template>
+                  <h2>{{ $t("luottamuksen-taso") }}</h2>
+                  <div v-for="(taso, index) in luottamuksenTasot" :key="index">
+                    <h3>{{ taso.arvo }} {{ $t(taso.nimi) }}</h3>
+                    <p>{{ $t(taso.kuvaus) }}</p>
+                  </div>
+                </template>
+              </elsa-popover>
+            </th>
             <td>
               <elsa-luottamuksen-taso
                 v-if="value.arviointiAika"
@@ -170,7 +192,10 @@
           <p :id="uid">{{ value.sanallinenItsearviointi }}</p>
         </template>
       </elsa-form-group>
-      <div v-if="!value.arviointiAika" class="text-right">
+      <div
+        v-if="!value.arviointiAika && value.itsearviointiAika"
+        class="text-right"
+      >
         <b-button
           type="submit"
           variant="primary"
