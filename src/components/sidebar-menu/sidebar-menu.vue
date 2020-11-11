@@ -100,7 +100,7 @@ $navbar-height: 64px;
   .sidebar-sticky {
     position: sticky;
     // top: 0;
-    height: calc(100vh - $navbar-height);
+    height: calc(100vh - 64px);
     overflow-x: hidden;
     overflow-y: auto;
   }
