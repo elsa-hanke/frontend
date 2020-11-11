@@ -42,17 +42,14 @@
             </template>
           </elsa-form-group>
           <div class="text-right">
-            <b-button
-              type="reset"
-              variant="back"
-              @click="cancelEditing"
-              class="mr-2"
-              >{{ $t("peruuta") }}</b-button
-            >
+            <b-button type="reset" variant="back" @click="cancelEditing">{{
+              $t("peruuta")
+            }}</b-button>
             <b-button
               type="submit"
               variant="primary"
               :disabled="!kommentti.teksti || saving"
+              class="ml-2"
               >{{ $t("tallenna") }}</b-button
             >
           </div>

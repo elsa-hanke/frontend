@@ -4,7 +4,7 @@
     <b-container fluid>
       <b-row>
         <sidebar-menu />
-        <main role="main" class="offset-lg-2 col-lg-10">
+        <main role="main" class="offset-lg-2 col-lg-10 mb-5">
           <router-view />
         </main>
       </b-row>

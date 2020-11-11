@@ -205,10 +205,11 @@
         type="reset"
         variant="back"
         @click.stop.prevent="onCancelClick"
-        class="mr-2"
         >{{ $t("peruuta") }}</b-button
       >
-      <b-button type="submit" variant="primary">{{ $t("lisaa") }}</b-button>
+      <b-button type="submit" variant="primary" class="ml-2">{{
+        $t("lisaa")
+      }}</b-button>
     </div>
   </b-form>
 </template>

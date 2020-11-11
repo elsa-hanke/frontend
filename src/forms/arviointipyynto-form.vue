@@ -87,7 +87,7 @@
     <b-form-row>
       <elsa-form-group
         :label="$t('kouluttaja-tai-lahikouluttaja')"
-        :add-new-enabled="true"
+        :add-new-enabled="!editing"
         :add-new-label="$t('lisaa-lahikouluttaja')"
         :required="true"
         @submit="onLahikouluttajaSubmit"
@@ -102,6 +102,7 @@
             v-model="value.kouluttaja"
             :options="kouluttajat"
             :state="validateState('kouluttaja')"
+            :disabled="editing"
             label="nimi"
             track-by="nimi"
           >
@@ -165,14 +166,19 @@
       </template>
     </elsa-form-group>
     <div class="text-right">
+      <b-button type="reset" variant="back" :to="{ name: 'arvioinnit' }">{{
+        $t("peruuta")
+      }}</b-button>
       <b-button
-        type="reset"
-        variant="back"
-        :to="{ name: 'arvioinnit' }"
-        class="mr-2"
-        >{{ $t("peruuta") }}</b-button
+        v-if="editing"
+        @click="deleteArviointipyynto"
+        variant="outline-danger"
+        class="ml-2"
+        >{{ $t("poista-arviointipyynto") }}</b-button
       >
-      <b-button type="submit" variant="primary">{{ $t("laheta") }}</b-button>
+      <b-button type="submit" variant="primary" class="ml-2">{{
+        $t("laheta")
+      }}</b-button>
     </div>
   </b-form>
 </template>
@@ -243,6 +249,9 @@ export default class ArviointipyyntoForm extends Mixins(validationMixin) {
   })
   value!: any;
 
+  @Prop({ required: false, default: false })
+  editing!: boolean;
+
   validateState(name: string) {
     const { $dirty, $error } = this.$v.value[name] as any;
     return $dirty ? ($error ? false : null) : null;
@@ -292,6 +301,10 @@ export default class ArviointipyyntoForm extends Mixins(validationMixin) {
     } catch (err) {
       toastFail(this, this.$t("uuden-lahikouluttajan-lisaaminen-epaonnistui"));
     }
+  }
+
+  async deleteArviointipyynto() {
+    this.$emit("delete");
   }
 
   get displayName() {
