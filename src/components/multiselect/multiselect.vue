@@ -117,6 +117,19 @@ export default class ElsaMultiselect extends Vue {
 
   &.multiselect--disabled {
     background: transparent;
+    opacity: 1;
+
+    .multiselect__current,
+    .multiselect__select {
+      background: transparent;
+    }
+    .multiselect__tags {
+      background-color: $input-disabled-bg;
+    }
+    .multiselect__single {
+      color: #495057;
+      background-color: $input-disabled-bg;
+    }
   }
 
   .multiselect__select {
@@ -128,7 +141,7 @@ export default class ElsaMultiselect extends Vue {
   }
   .multiselect__tags {
     padding: 0.375rem 2.5rem 0.375rem 0.75rem;
-    border: 1px solid #ced4da;
+    border: 1px solid $gray-400;
     min-height: initial;
     font-size: $font-size-base;
     line-height: $line-height-base;
