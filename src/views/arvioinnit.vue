@@ -16,11 +16,11 @@
             <b-tab :title="$t('arvioinnit-ja-itsearvioinnit')" active>
               <b-container fluid class="px-0">
                 <b-row>
-                  <b-col>
+                  <b-col md="4">
                     <elsa-form-group
                       :label="$t('tyoskentelyjakso')"
                       label-for="arvioinnit-tyoskentelyjakso-filter"
-                      class="mb-0"
+                      class="mb-md-0"
                     >
                       <template v-slot="{ uid }">
                         <elsa-multiselect
@@ -57,10 +57,10 @@
                       </template>
                     </elsa-form-group>
                   </b-col>
-                  <b-col>
+                  <b-col md="4">
                     <elsa-form-group
                       :label="$t('epa-osaamisalue')"
-                      class="mb-0"
+                      class="mb-md-0"
                     >
                       <template v-slot="{ uid }">
                         <elsa-multiselect
@@ -76,7 +76,7 @@
                       </template>
                     </elsa-form-group>
                   </b-col>
-                  <b-col>
+                  <b-col md="4">
                     <elsa-form-group
                       :label="$t('kouluttaja')"
                       label-for="arvioinnit-kouluttaja-filter"
