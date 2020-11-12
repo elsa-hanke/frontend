@@ -118,9 +118,9 @@ export default class KommenttiCard extends Vue {
 
   get selfClass() {
     if (this.value.self) {
-      return "bg-primary-dark kommentti-right px-3 py-2 mb-3 text-white ml-5";
+      return "bg-primary-dark kommentti-right px-3 py-2 mb-3 text-white ml-md-5";
     } else {
-      return "bg-light kommentti-left px-3 py-2 mb-3 mr-5";
+      return "bg-light kommentti-left px-3 py-2 mb-3 mr-md-5";
     }
   }
 }

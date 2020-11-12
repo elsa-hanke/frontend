@@ -102,7 +102,12 @@ export default class Navbar extends Vue {
   get title() {
     if (this.authorities.includes(ELSA_ROLE.ErikoistuvaLaakari)) {
       return this.$t("erikoistuva-laakari");
+    } else if (this.authorities.includes(ELSA_ROLE.Kouluttaja)) {
+      return this.$t("kouluttaja");
+    } else if (this.authorities.includes(ELSA_ROLE.Lahikouluttaja)) {
+      return this.$t("lahikouluttaja");
     }
+
     return undefined;
   }
 
