@@ -57,6 +57,26 @@
           name="tyoskentelyjakso-tyyppi"
           stacked
         ></b-form-radio-group>
+        <b-form-radio
+          v-model="value.tyoskentelypaikka.tyyppi"
+          :state="validateState('tyoskentelypaikka.tyyppi')"
+          name="tyoskentelyjakso-tyyppi"
+          value="MUU"
+          >{{ $t("muu")
+          }}<span v-if="value.tyoskentelypaikka.tyyppi === 'MUU'"
+            >, {{ $t("kerro-mika") | lowercase }}
+            <span class="text-primary">*</span></span
+          ></b-form-radio
+        >
+        <div v-if="value.tyoskentelypaikka.tyyppi === 'MUU'" class="pl-4">
+          <b-form-input
+            v-model="value.tyoskentelypaikka.muuTyyppi"
+            :state="validateState('tyoskentelypaikka.muuTyyppi')"
+          ></b-form-input>
+          <b-form-invalid-feedback>{{
+            $t("pakollinen-tieto")
+          }}</b-form-invalid-feedback>
+        </div>
         <b-form-invalid-feedback
           :id="`${uid}-feedback`"
           :style="{
@@ -171,8 +191,11 @@
           name="kaytannon-koulutus-tyyppi"
           value="REUNAKOULUTUS"
           class="mb-0"
-          >{{ $t("omaa-erikoisalaa-tukeva-koulutus-kerro-mika") }}
-          <span class="text-primary">*</span></b-form-radio
+          >{{ $t("omaa-erikoisalaa-tukeva-koulutus")
+          }}<span v-if="value.kaytannonKoulutus === 'REUNAKOULUTUS'"
+            >, {{ $t("kerro-mika") | lowercase }}
+            <span class="text-primary">*</span></span
+          ></b-form-radio
         >
         <div v-if="value.kaytannonKoulutus === 'REUNAKOULUTUS'" class="pl-4">
           <b-form-input
@@ -240,6 +263,11 @@ import ElsaMultiselect from "@/components/multiselect/multiselect.vue";
         },
         tyyppi: {
           required
+        },
+        muuTyyppi: {
+          required: requiredIf(function(value) {
+            return value.tyyppi === "MUU";
+          })
         }
       },
       alkamispaiva: {
@@ -268,7 +296,8 @@ export default class TyoskentelyjaksoForm extends Mixins(validationMixin) {
     tyoskentelypaikka: {
       nimi: null,
       kunta: null,
-      tyyppi: null
+      tyyppi: null,
+      muuTyyppi: null
     }
   } as any;
   kunnat = [];
@@ -284,17 +313,6 @@ export default class TyoskentelyjaksoForm extends Mixins(validationMixin) {
   ];
   kunnatLoading = false;
   organisaatiotLoading = false;
-  kaytannonKoulutusTyypit = [
-    {
-      text: this.$t("oman-erikoisalan-koulutus"),
-      value: "OMAN_ERIKOISALAN_KOULUTUS"
-    },
-    {
-      text: this.$t("omaa-erikoisalaa-tukeva-koulutus"),
-      value: "REUNAKOULUTUS"
-    },
-    { text: this.$t("tutkimustyo"), value: "TUTKIMUSTYO" }
-  ];
 
   mounted() {
     this.fetchKunnat();
