@@ -17,7 +17,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Mixins } from "vue-property-decorator";
+import ConfirmRouteExit from "@/mixins/confirm-route-exit";
 import SuoritemerkintaForm from "@/forms/suoritemerkinta-form.vue";
 
 @Component({
@@ -25,7 +26,7 @@ import SuoritemerkintaForm from "@/forms/suoritemerkinta-form.vue";
     SuoritemerkintaForm
   }
 })
-export default class UusiSuoritemerkinta extends Vue {
+export default class UusiSuoritemerkinta extends Mixins(ConfirmRouteExit) {
   items = [
     {
       text: this.$t("etusivu"),

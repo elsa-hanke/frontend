@@ -1,29 +1,27 @@
 <template>
-  <div>
-    <multiselect
-      :id="id"
-      v-bind="$attrs"
-      v-on="$listeners"
-      :placeholder="placeholderText"
-      :tagPlaceholder="tagPlaceholderText"
-      :selectLabel="selectLabelText"
-      :selectGroupLabel="selectGroupLabelText"
-      :selectedLabel="selectedLabelText"
-      :deselectLabel="deselectLabelText"
-      :deselectGroupLabel="deselectGroupLabelText"
-      :max="max"
-      :class="{ 'is-invalid': isInvalid, 'is-valid': isValid }"
-    >
-      <template slot="maxElements">{{
-        $t("valittuna-enimmäismaara", { max })
-      }}</template>
-      <template slot="noResult">{{ $t("ei-hakutuloksia") }}</template>
-      <template slot="noOptions">{{ $t("ei-vaihtoehtoja") }}</template>
-      <template v-for="(index, name) in $scopedSlots" v-slot:[name]="data">
-        <slot :name="name" v-bind="data"></slot>
-      </template>
-    </multiselect>
-  </div>
+  <multiselect
+    v-bind="$attrs"
+    v-on="$listeners"
+    :id="id"
+    :placeholder="placeholderText"
+    :tagPlaceholder="tagPlaceholderText"
+    :selectLabel="selectLabelText"
+    :selectGroupLabel="selectGroupLabelText"
+    :selectedLabel="selectedLabelText"
+    :deselectLabel="deselectLabelText"
+    :deselectGroupLabel="deselectGroupLabelText"
+    :max="max"
+    :class="{ 'is-invalid': isInvalid, 'is-valid': isValid }"
+  >
+    <template slot="maxElements">{{
+      $t("valittuna-enimmäismaara", { max })
+    }}</template>
+    <template slot="noResult">{{ $t("ei-hakutuloksia") }}</template>
+    <template slot="noOptions">{{ $t("ei-vaihtoehtoja") }}</template>
+    <template v-for="(index, name) in $scopedSlots" v-slot:[name]="data">
+      <slot :name="name" v-bind="data"></slot>
+    </template>
+  </multiselect>
 </template>
 
 <script lang="ts">
@@ -37,7 +35,7 @@ import Multiselect from "vue-multiselect";
     Multiselect
   }
 })
-export default class ElsaMultiselect extends Vue {
+export default class ElsaFormMultiselect extends Vue {
   @Prop({ required: false, type: String })
   id!: string | undefined;
 
@@ -109,7 +107,7 @@ export default class ElsaMultiselect extends Vue {
 <style lang="scss" scoped>
 @import "~@/styles/variables";
 
-::v-deep .multiselect {
+::v-deep {
   min-height: 35px;
 
   &.multiselect--disabled {
@@ -210,19 +208,15 @@ export default class ElsaMultiselect extends Vue {
       background: #b1b1b1;
     }
   }
-}
 
-::v-deep .is-invalid .multiselect__content-wrapper {
-  border-color: $form-feedback-invalid-color;
-}
-::v-deep .is-valid .multiselect__content-wrapper {
-  border-color: $form-feedback-valid-color;
-}
+  &.is-invalid .multiselect__content-wrapper,
+  &.is-invalid .multiselect__tags {
+    border-color: $form-feedback-invalid-color;
+  }
 
-::v-deep .is-invalid .multiselect__tags {
-  border-color: $form-feedback-invalid-color;
-}
-::v-deep .is-valid .multiselect__tags {
-  border-color: $form-feedback-valid-color;
+  &.is-valid .multiselect__content-wrapper,
+  &.is-valid .multiselect__tags {
+    border-color: $form-feedback-valid-color;
+  }
 }
 </style>

@@ -92,7 +92,7 @@
       class="align-items-center mb-md-0"
     >
       <template v-slot="{ uid }">
-        <span :id="uid">{{ value.lisatiedot }}</span>
+        <span :id="uid" class="text-prewrap">{{ value.lisatiedot }}</span>
       </template>
     </elsa-form-group>
     <div v-if="!editing">
@@ -109,11 +109,11 @@
         <tbody>
           <tr>
             <th scope="row">
-              {{ $t("vaativuustaso") }}
+              {{ $t("luottamuksen-taso") }}
               <elsa-popover>
                 <template>
-                  <h2>{{ $t("vaativuustaso") }}</h2>
-                  <div v-for="(taso, index) in vaativuustasot" :key="index">
+                  <h2>{{ $t("luottamuksen-taso") }}</h2>
+                  <div v-for="(taso, index) in luottamuksenTasot" :key="index">
                     <h3>{{ taso.arvo }} {{ $t(taso.nimi) }}</h3>
                     <p>{{ $t(taso.kuvaus) }}</p>
                   </div>
@@ -124,9 +124,9 @@
               <div v-if="!value.arviointiAika" class="text-size-sm text-muted">
                 {{ $t("arviointia-ei-ole-viela-annettu") }}
               </div>
-              <elsa-badge
-                v-if="value.vaativuustaso"
-                :value="value.vaativuustaso"
+              <elsa-luottamuksen-taso
+                v-if="value.arviointiAika"
+                :value="value.luottamuksenTaso"
               />
             </td>
             <td>
@@ -142,19 +142,19 @@
                   {{ $t("tee-itsearviointi") }}
                 </b-button>
               </div>
-              <elsa-badge
+              <elsa-luottamuksen-taso
                 v-if="value.itsearviointiAika"
-                :value="value.itsearviointiVaativuustaso"
+                :value="value.itsearviointiLuottamuksenTaso"
               />
             </td>
           </tr>
           <tr>
             <th scope="row">
-              {{ $t("luottamuksen-taso") }}
+              {{ $t("vaativuustaso") }}
               <elsa-popover>
                 <template>
-                  <h2>{{ $t("luottamuksen-taso") }}</h2>
-                  <div v-for="(taso, index) in luottamuksenTasot" :key="index">
+                  <h2>{{ $t("vaativuustaso") }}</h2>
+                  <div v-for="(taso, index) in vaativuustasot" :key="index">
                     <h3>{{ taso.arvo }} {{ $t(taso.nimi) }}</h3>
                     <p>{{ $t(taso.kuvaus) }}</p>
                   </div>
@@ -162,15 +162,15 @@
               </elsa-popover>
             </th>
             <td>
-              <elsa-luottamuksen-taso
-                v-if="value.arviointiAika"
-                :value="value.luottamuksenTaso"
+              <elsa-badge
+                v-if="value.vaativuustaso"
+                :value="value.vaativuustaso"
               />
             </td>
             <td>
-              <elsa-luottamuksen-taso
+              <elsa-badge
                 v-if="value.itsearviointiAika"
-                :value="value.itsearviointiLuottamuksenTaso"
+                :value="value.itsearviointiVaativuustaso"
               />
             </td>
           </tr>
@@ -181,7 +181,7 @@
         :label="$t('sanallinen-arviointi')"
       >
         <template v-slot="{ uid }">
-          <p :id="uid">{{ value.sanallinenArviointi }}</p>
+          <p :id="uid" class="text-prewrap">{{ value.sanallinenArviointi }}</p>
         </template>
       </elsa-form-group>
       <elsa-form-group
@@ -189,7 +189,9 @@
         :label="$t('sanallinen-itsearviointi')"
       >
         <template v-slot="{ uid }">
-          <p :id="uid">{{ value.sanallinenItsearviointi }}</p>
+          <p :id="uid" class="text-prewrap">
+            {{ value.sanallinenItsearviointi }}
+          </p>
         </template>
       </elsa-form-group>
       <div
@@ -211,6 +213,46 @@
       <hr />
       <b-form-row>
         <elsa-form-group
+          :label="$t('luottamuksen-taso')"
+          :required="true"
+          class="col-lg-6"
+        >
+          <template #label-help>
+            <elsa-popover>
+              <template>
+                <h2>{{ $t("luottamuksen-taso") }}</h2>
+                <div v-for="(taso, index) in luottamuksenTasot" :key="index">
+                  <h3>{{ taso.arvo }} {{ $t(taso.nimi) }}</h3>
+                  <p>{{ $t(taso.kuvaus) }}</p>
+                </div>
+              </template>
+            </elsa-popover>
+          </template>
+          <template v-slot="{ uid }">
+            <elsa-form-multiselect
+              :id="uid"
+              v-model="form.luottamuksenTaso"
+              :options="luottamuksenTasot"
+              :state="validateState('luottamuksenTaso')"
+              track-by="arvo"
+            >
+              <template slot="singleLabel" slot-scope="{ option }">
+                <span class="font-weight-700">{{ option.arvo }}</span>
+                {{ $t(option.nimi) }}
+              </template>
+              <template slot="option" slot-scope="{ option }">
+                <span class="font-weight-700">{{ option.arvo }}</span>
+                {{ $t(option.nimi) }}
+              </template>
+            </elsa-form-multiselect>
+            <b-form-invalid-feedback :id="`${uid}-feedback`">{{
+              $t("pakollinen-tieto")
+            }}</b-form-invalid-feedback>
+          </template>
+        </elsa-form-group>
+      </b-form-row>
+      <b-form-row>
+        <elsa-form-group
           :label="$t('vaativuustaso')"
           :required="true"
           class="col-lg-6"
@@ -230,7 +272,7 @@
             <tyoskentelyjakso-form />
           </template>
           <template v-slot="{ uid }">
-            <elsa-multiselect
+            <elsa-form-multiselect
               :id="uid"
               v-model="form.vaativuustaso"
               :options="vaativuustasot"
@@ -245,60 +287,10 @@
                 <span class="font-weight-700">{{ option.arvo }}</span>
                 {{ $t(option.nimi) }}
               </template>
-            </elsa-multiselect>
-            <b-form-invalid-feedback
-              :id="`${uid}-feedback`"
-              :style="{
-                display:
-                  validateState('vaativuustaso') === false ? 'block' : 'none'
-              }"
-              >{{ $t("pakollinen-tieto") }}</b-form-invalid-feedback
-            >
-          </template>
-        </elsa-form-group>
-      </b-form-row>
-      <b-form-row>
-        <elsa-form-group
-          :label="$t('luottamuksen-taso')"
-          :required="true"
-          class="col-lg-6"
-        >
-          <template #label-help>
-            <elsa-popover>
-              <template>
-                <h2>{{ $t("luottamuksen-taso") }}</h2>
-                <div v-for="(taso, index) in luottamuksenTasot" :key="index">
-                  <h3>{{ taso.arvo }} {{ $t(taso.nimi) }}</h3>
-                  <p>{{ $t(taso.kuvaus) }}</p>
-                </div>
-              </template>
-            </elsa-popover>
-          </template>
-          <template v-slot="{ uid }">
-            <elsa-multiselect
-              :id="uid"
-              v-model="form.luottamuksenTaso"
-              :options="luottamuksenTasot"
-              :state="validateState('luottamuksenTaso')"
-              track-by="arvo"
-            >
-              <template slot="singleLabel" slot-scope="{ option }">
-                <span class="font-weight-700">{{ option.arvo }}</span>
-                {{ $t(option.nimi) }}
-              </template>
-              <template slot="option" slot-scope="{ option }">
-                <span class="font-weight-700">{{ option.arvo }}</span>
-                {{ $t(option.nimi) }}
-              </template>
-            </elsa-multiselect>
-            <b-form-invalid-feedback
-              :id="`${uid}-feedback`"
-              :style="{
-                display:
-                  validateState('luottamuksenTaso') === false ? 'block' : 'none'
-              }"
-              >{{ $t("pakollinen-tieto") }}</b-form-invalid-feedback
-            >
+            </elsa-form-multiselect>
+            <b-form-invalid-feedback :id="`${uid}-feedback`">{{
+              $t("pakollinen-tieto")
+            }}</b-form-invalid-feedback>
           </template>
         </elsa-form-group>
       </b-form-row>
@@ -350,7 +342,7 @@ import { vaativuustasot, luottamuksenTasot } from "@/utils/constants";
 import store from "@/store";
 import UserAvatar from "@/components/user-avatar/user-avatar.vue";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
-import ElsaMultiselect from "@/components/multiselect/multiselect.vue";
+import ElsaFormMultiselect from "@/components/multiselect/multiselect.vue";
 import TyoskentelyjaksoForm from "@/forms/tyoskentelyjakso-form.vue";
 import ElsaLuottamuksenTaso from "@/components/luottamuksen-taso/luottamuksen-taso.vue";
 import ElsaBadge from "@/components/badge/badge.vue";
@@ -359,7 +351,7 @@ import ElsaPopover from "@/components/popover/popover.vue";
 @Component({
   components: {
     ElsaFormGroup,
-    ElsaMultiselect,
+    ElsaFormMultiselect,
     TyoskentelyjaksoForm,
     UserAvatar,
     ElsaLuottamuksenTaso,

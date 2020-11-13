@@ -7,14 +7,14 @@
     </elsa-form-group>
     <elsa-form-group :label="$t('valitse-oma-roolisi')" :required="true">
       <template v-slot="{ uid }">
-        <elsa-multiselect
+        <elsa-form-multiselect
           :id="uid"
           v-model="value.kayttajaryhma"
           :options="kayttajaryhmat"
           label="nimi"
           track-by="nimi"
         >
-        </elsa-multiselect>
+        </elsa-form-multiselect>
       </template>
     </elsa-form-group>
     <elsa-form-group
@@ -23,14 +23,14 @@
       v-if="isYliopistoRooli"
     >
       <template v-slot="{ uid }">
-        <elsa-multiselect
+        <elsa-form-multiselect
           :id="uid"
           v-model="value.yliopisto"
           :options="yliopistot"
           label="nimi"
           track-by="nimi"
         >
-        </elsa-multiselect>
+        </elsa-form-multiselect>
       </template>
     </elsa-form-group>
     <div class="text-right">
@@ -50,12 +50,12 @@ import Component from "vue-class-component";
 import store from "@/store";
 import UserAvatar from "@/components/user-avatar/user-avatar.vue";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
-import ElsaMultiselect from "@/components/multiselect/multiselect.vue";
+import ElsaFormMultiselect from "@/components/multiselect/multiselect.vue";
 
 @Component({
   components: {
     ElsaFormGroup,
-    ElsaMultiselect,
+    ElsaFormMultiselect,
     UserAvatar
   }
 })

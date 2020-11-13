@@ -27,7 +27,7 @@
         >
       </div>
       <div v-if="!editing">
-        <span>{{ value.kommentti.teksti }}</span>
+        <span class="text-prewrap">{{ value.kommentti.teksti }}</span>
       </div>
       <div v-else>
         <b-form @submit.stop.prevent="onSubmit">

@@ -23,7 +23,7 @@
                       class="mb-md-0"
                     >
                       <template v-slot="{ uid }">
-                        <elsa-multiselect
+                        <elsa-form-multiselect
                           :id="uid"
                           v-model="selected.tyoskentelyjakso"
                           :options="options.tyoskentelyjaksot"
@@ -53,7 +53,7 @@
                                 : $t("kesken") | lowercase
                             }})
                           </template>
-                        </elsa-multiselect>
+                        </elsa-form-multiselect>
                       </template>
                     </elsa-form-group>
                   </b-col>
@@ -63,7 +63,7 @@
                       class="mb-md-0"
                     >
                       <template v-slot="{ uid }">
-                        <elsa-multiselect
+                        <elsa-form-multiselect
                           :id="uid"
                           v-model="selected.epaOsaamisalue"
                           :options="options.epaOsaamisalueet"
@@ -72,7 +72,7 @@
                           @select="onEpaOsaamisalueSelect"
                           @remove="onEpaOsaamisalueRemove"
                         >
-                        </elsa-multiselect>
+                        </elsa-form-multiselect>
                       </template>
                     </elsa-form-group>
                   </b-col>
@@ -83,7 +83,7 @@
                       class="mb-0"
                     >
                       <template v-slot="{ uid }">
-                        <elsa-multiselect
+                        <elsa-form-multiselect
                           :id="uid"
                           v-model="selected.kouluttaja"
                           :options="options.kouluttajat"
@@ -92,7 +92,7 @@
                           @select="onKouluttajaSelect"
                           @remove="onKouluttajaRemove"
                         >
-                        </elsa-multiselect>
+                        </elsa-form-multiselect>
                       </template>
                     </elsa-form-group>
                   </b-col>
@@ -217,14 +217,14 @@ import axios from "axios";
 import ArviointiCard from "@/components/arviointi-card/arviointi-card.vue";
 import ArviointipyyntoCard from "@/components/arviointipyynto-card/arviointipyynto-card.vue";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
-import ElsaMultiselect from "@/components/multiselect/multiselect.vue";
+import ElsaFormMultiselect from "@/components/multiselect/multiselect.vue";
 
 @Component({
   components: {
     ArviointiCard,
     ArviointipyyntoCard,
     ElsaFormGroup,
-    ElsaMultiselect
+    ElsaFormMultiselect
   }
 })
 export default class Arvioinnit extends Vue {
@@ -268,6 +268,11 @@ export default class Arvioinnit extends Vue {
   }
 
   onTabChange(value: any) {
+    this.selected = {
+      tyoskentelyjakso: null,
+      epaOsaamisalue: null,
+      kouluttaja: null
+    };
     this.omat = null;
     this.page = 1;
     this.totalRows = 0;
@@ -330,8 +335,7 @@ export default class Arvioinnit extends Vue {
           ...options,
           page: this.page - 1,
           size: this.perPage,
-          sort: "id",
-          "id.dir": "desc",
+          sort: "tapahtumanAjankohta,desc",
           "tyoskentelyjaksoId.equals": this.selected.tyoskentelyjakso?.id,
           "arvioitavaOsaalueId.equals": this.selected.epaOsaamisalue?.id,
           "arvioinninAntajaId.equals": this.selected.kouluttaja?.id

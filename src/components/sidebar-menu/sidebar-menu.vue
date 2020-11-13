@@ -21,7 +21,7 @@
           </b-nav-item>
           -->
           <b-nav-item class="border-bottom" :to="{ name: 'suoritemerkinnat' }">
-            <font-awesome-icon icon="award" fixed-width size="lg" />
+            <font-awesome-icon icon="file-alt" fixed-width size="lg" />
             {{ $t("suoritemerkinnat") }}
           </b-nav-item>
           <b-nav-item class="border-bottom" :to="{ name: 'arvioinnit' }">

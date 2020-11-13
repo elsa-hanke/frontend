@@ -10,21 +10,25 @@
       :add-new-enabled="true"
       :add-new-label="$t('lisaa-tyoskentelyjakso')"
       :required="true"
-      @submit="onTyoskentelypaikkaSubmit"
+      @submit="onTyoskentelyjaksoSubmit"
     >
       <template v-slot:modal-content="{ submit, cancel }">
         <tyoskentelyjakso-form @submit="submit" @cancel="cancel" />
       </template>
       <template v-slot="{ uid }">
-        <elsa-multiselect
+        <elsa-form-multiselect
           :id="uid"
-          v-model="value.tyoskentelyjakso"
+          v-model="form.tyoskentelyjakso"
           :options="tyoskentelyjaksot"
           :state="validateState('tyoskentelyjakso')"
+          @select="onTyoskentelyjaksoSelect"
           track-by="id"
         >
           <template slot="singleLabel" slot-scope="{ option }">
-            {{ option.tyoskentelypaikka.nimi }} ({{ option.alkamispaiva }} –
+            {{ option.tyoskentelypaikka.nimi }} ({{
+              $date(option.alkamispaiva)
+            }}
+            –
             {{
               option.paattymispaiva
                 ? $date(option.paattymispaiva)
@@ -32,50 +36,43 @@
             }})
           </template>
           <template slot="option" slot-scope="{ option }">
-            {{ option.tyoskentelypaikka.nimi }} ({{ option.alkamispaiva }} –
+            {{ option.tyoskentelypaikka.nimi }} ({{
+              $date(option.alkamispaiva)
+            }}
+            –
             {{
               option.paattymispaiva
                 ? $date(option.paattymispaiva)
                 : $t("kesken") | lowercase
             }})
           </template>
-        </elsa-multiselect>
-        <b-form-invalid-feedback
-          :id="`${uid}-feedback`"
-          :style="{
-            display:
-              validateState('tyoskentelyjakso') === false ? 'block' : 'none'
-          }"
-          >{{ $t("pakollinen-tieto") }}</b-form-invalid-feedback
-        >
+        </elsa-form-multiselect>
+        <b-form-invalid-feedback :id="`${uid}-feedback`">{{
+          $t("pakollinen-tieto")
+        }}</b-form-invalid-feedback>
       </template>
     </elsa-form-group>
     <elsa-form-group :label="$t('epa-osaamisalue')" :required="true">
       <template v-slot="{ uid }">
-        <elsa-multiselect
+        <elsa-form-multiselect
           :id="uid"
-          v-model="value.epaOsaamisalue"
+          v-model="form.epaOsaamisalue"
           :options="epaOsaamisalueet"
           :state="validateState('epaOsaamisalue')"
           label="nimi"
           track-by="id"
         >
-        </elsa-multiselect>
-        <b-form-invalid-feedback
-          :id="`${uid}-feedback`"
-          :style="{
-            display:
-              validateState('epaOsaamisalue') === false ? 'block' : 'none'
-          }"
-          >{{ $t("pakollinen-tieto") }}</b-form-invalid-feedback
-        >
+        </elsa-form-multiselect>
+        <b-form-invalid-feedback :id="`${uid}-feedback`">{{
+          $t("pakollinen-tieto")
+        }}</b-form-invalid-feedback>
       </template>
     </elsa-form-group>
     <elsa-form-group :label="$t('arvioitava-tapahtuma')" :required="true">
       <template v-slot="{ uid }">
         <b-form-input
           :id="uid"
-          v-model="value.arvioitavaTapahtuma"
+          v-model="form.arvioitavaTapahtuma"
           :state="validateState('arvioitavaTapahtuma')"
           :aria-describedby="`${uid}-feedback`"
         ></b-form-input>
@@ -88,18 +85,18 @@
       <elsa-form-group
         :label="$t('kouluttaja-tai-lahikouluttaja')"
         :add-new-enabled="!editing"
-        :add-new-label="$t('lisaa-lahikouluttaja')"
+        :add-new-label="$t('lisaa-kouluttaja')"
         :required="true"
-        @submit="onLahikouluttajaSubmit"
+        @submit="onKouluttajaSubmit"
         class="col-md-8"
       >
         <template v-slot:modal-content="{ submit, cancel }">
-          <lahikouluttaja-form @submit="submit" @cancel="cancel" />
+          <kouluttaja-form @submit="submit" @cancel="cancel" />
         </template>
         <template v-slot="{ uid }">
-          <elsa-multiselect
+          <elsa-form-multiselect
             :id="uid"
-            v-model="value.kouluttaja"
+            v-model="form.kouluttaja"
             :options="kouluttajat"
             :state="validateState('kouluttaja')"
             :disabled="editing"
@@ -113,14 +110,10 @@
                 :src-base64="option.profiilikuva"
               />
             </template>
-          </elsa-multiselect>
-          <b-form-invalid-feedback
-            :id="`${uid}-feedback`"
-            :style="{
-              display: validateState('kouluttaja') === false ? 'block' : 'none'
-            }"
-            >{{ $t("pakollinen-tieto") }}</b-form-invalid-feedback
-          >
+          </elsa-form-multiselect>
+          <b-form-invalid-feedback :id="`${uid}-feedback`">{{
+            $t("pakollinen-tieto")
+          }}</b-form-invalid-feedback>
         </template>
       </elsa-form-group>
       <elsa-form-group
@@ -129,27 +122,13 @@
         :required="true"
       >
         <template v-slot="{ uid }">
-          <b-form-datepicker
+          <elsa-form-datepicker
             :id="uid"
-            v-model="value.tapahtumanAjankohta"
+            v-model="form.tapahtumanAjankohta"
             :state="validateState('tapahtumanAjankohta')"
-            start-weekday="1"
-            :locale="currentLocale"
             :min="tyoskentelyjaksonAlkamispaiva"
             :max="tyoskentelyjaksonPaattymispaiva"
-            placeholder=""
-            :date-format-options="{
-              year: 'numeric',
-              month: 'numeric',
-              day: 'numeric'
-            }"
-            :label-help="$t('datepicker-label-help')"
-            :label-no-date-selected="$t('datepicker-no-date-selected')"
-            ><template v-slot:button-content
-              ><font-awesome-icon
-                :icon="['far', 'calendar-alt']"
-                class="text-primary"/></template
-          ></b-form-datepicker>
+          ></elsa-form-datepicker>
           <b-form-invalid-feedback :id="`${uid}-feedback`">{{
             $t("pakollinen-tieto")
           }}</b-form-invalid-feedback>
@@ -160,7 +139,7 @@
       <template v-slot="{ uid }">
         <b-form-textarea
           :id="uid"
-          v-model="value.lisatiedot"
+          v-model="form.lisatiedot"
           rows="5"
         ></b-form-textarea>
       </template>
@@ -189,24 +168,29 @@ import axios from "axios";
 import { Prop, Mixins } from "vue-property-decorator";
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
+import { parseISO } from "date-fns";
 import store from "@/store";
+import isAfter from "date-fns/isAfter";
+import isBefore from "date-fns/isBefore";
 import UserAvatar from "@/components/user-avatar/user-avatar.vue";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
-import ElsaMultiselect from "@/components/multiselect/multiselect.vue";
+import ElsaFormMultiselect from "@/components/multiselect/multiselect.vue";
 import TyoskentelyjaksoForm from "@/forms/tyoskentelyjakso-form.vue";
-import LahikouluttajaForm from "@/forms/lahikouluttaja-form.vue";
+import KouluttajaForm from "@/forms/kouluttaja-form.vue";
+import ElsaFormDatepicker from "@/components/datepicker/datepicker.vue";
 import { toastSuccess, toastFail } from "@/utils/toast";
 
 @Component({
   components: {
-    ElsaFormGroup,
-    LahikouluttajaForm,
-    ElsaMultiselect,
+    KouluttajaForm,
     TyoskentelyjaksoForm,
-    UserAvatar
+    ElsaFormGroup,
+    ElsaFormMultiselect,
+    UserAvatar,
+    ElsaFormDatepicker
   },
   validations: {
-    value: {
+    form: {
       tyoskentelyjakso: {
         required
       },
@@ -249,36 +233,78 @@ export default class ArviointipyyntoForm extends Mixins(validationMixin) {
   })
   value!: any;
 
+  form = {
+    tyoskentelyjakso: null,
+    epaOsaamisalue: null,
+    arvioitavaTapahtuma: null,
+    kouluttaja: null,
+    tapahtumanAjankohta: null,
+    lisatiedot: null
+  } as any;
+
+  mounted() {
+    this.form.tyoskentelyjakso = this.value.tyoskentelyjakso;
+    this.form.epaOsaamisalue = this.value.epaOsaamisalue;
+    this.form.arvioitavaTapahtuma = this.value.arvioitavaTapahtuma;
+    this.form.kouluttaja = this.value.kouluttaja;
+    this.form.tapahtumanAjankohta = this.value.tapahtumanAjankohta;
+    this.form.lisatiedot = this.value.lisatiedot;
+  }
+
   @Prop({ required: false, default: false })
   editing!: boolean;
 
   validateState(name: string) {
-    const { $dirty, $error } = this.$v.value[name] as any;
+    const { $dirty, $error } = this.$v.form[name] as any;
     return $dirty ? ($error ? false : null) : null;
   }
 
   onSubmit() {
-    this.$v.value.$touch();
-    if (this.$v.value.$anyError) {
+    this.$v.form.$touch();
+    if (this.$v.form.$anyError) {
       return;
     }
     this.$emit("submit", {
-      tyoskentelyjaksoId: this.value.tyoskentelyjakso?.id,
-      arvioitavaOsaalueId: this.value.epaOsaamisalue?.id,
-      arvioitavaTapahtuma: this.value.arvioitavaTapahtuma,
-      arvioinninAntajaId: this.value.kouluttaja?.id,
-      tapahtumanAjankohta: this.value.tapahtumanAjankohta,
-      lisatiedot: this.value.lisatiedot
+      tyoskentelyjaksoId: this.form.tyoskentelyjakso?.id,
+      arvioitavaOsaalueId: this.form.epaOsaamisalue?.id,
+      arvioitavaTapahtuma: this.form.arvioitavaTapahtuma,
+      arvioinninAntajaId: this.form.kouluttaja?.id,
+      tapahtumanAjankohta: this.form.tapahtumanAjankohta,
+      lisatiedot: this.form.lisatiedot
     });
   }
 
-  async onTyoskentelypaikkaSubmit(value: any, modal: any) {
+  onTyoskentelyjaksoSelect(value: any) {
+    if (this.form.tapahtumanAjankohta) {
+      if (
+        isBefore(
+          parseISO(this.form.tapahtumanAjankohta),
+          parseISO(value.alkamispaiva)
+        )
+      ) {
+        this.form.tapahtumanAjankohta = null;
+      }
+      if (value.paattymispaiva) {
+        if (
+          isAfter(
+            parseISO(this.form.tapahtumanAjankohta),
+            parseISO(value.paattymispaiva)
+          )
+        ) {
+          this.form.tapahtumanAjankohta = null;
+        }
+      }
+    }
+  }
+
+  async onTyoskentelyjaksoSubmit(value: any, modal: any) {
     try {
       const tyoskentelyjakso = (
         await axios.post("/erikoistuva-laakari/tyoskentelyjaksot", value)
       ).data;
       this.tyoskentelyjaksot.push(tyoskentelyjakso);
-      this.value.tyoskentelyjakso = tyoskentelyjakso;
+      this.form.tyoskentelyjakso = tyoskentelyjakso;
+      this.onTyoskentelyjaksoSelect(tyoskentelyjakso);
       modal.hide("confirm");
       toastSuccess(this, this.$t("uusi-tyoskentelyjakso-lisatty"));
     } catch (err) {
@@ -289,17 +315,17 @@ export default class ArviointipyyntoForm extends Mixins(validationMixin) {
     }
   }
 
-  async onLahikouluttajaSubmit(value: any, modal: any) {
+  async onKouluttajaSubmit(value: any, modal: any) {
     try {
-      const lahikouluttaja = (
+      const kouluttaja = (
         await axios.post("/erikoistuva-laakari/lahikouluttajat", value)
       ).data;
-      this.kouluttajat.push(lahikouluttaja);
-      this.value.kouluttaja = lahikouluttaja;
+      this.kouluttajat.push(kouluttaja);
+      this.form.kouluttaja = kouluttaja;
       modal.hide("confirm");
-      toastSuccess(this, this.$t("uusi-lahikouluttaja-lisatty"));
+      toastSuccess(this, this.$t("uusi-kouluttaja-lisatty"));
     } catch (err) {
-      toastFail(this, this.$t("uuden-lahikouluttajan-lisaaminen-epaonnistui"));
+      toastFail(this, this.$t("uuden-kouluttajan-lisaaminen-epaonnistui"));
     }
   }
 
@@ -321,15 +347,15 @@ export default class ArviointipyyntoForm extends Mixins(validationMixin) {
   }
 
   get tyoskentelyjaksonAlkamispaiva() {
-    if (this.value.tyoskentelyjakso) {
-      return this.value.tyoskentelyjakso.alkamispaiva;
+    if (this.form.tyoskentelyjakso) {
+      return this.form.tyoskentelyjakso.alkamispaiva;
     }
     return undefined;
   }
 
   get tyoskentelyjaksonPaattymispaiva() {
-    if (this.value.tyoskentelyjakso) {
-      return this.value.tyoskentelyjakso.paattymispaiva;
+    if (this.form.tyoskentelyjakso) {
+      return this.form.tyoskentelyjakso.paattymispaiva;
     }
     return undefined;
   }

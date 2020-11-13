@@ -1,10 +1,5 @@
 <template>
   <b-form @submit.stop.prevent="onSubmit">
-    <elsa-form-group :label="$t('erikoistuva-laakari')">
-      <template v-slot="{ uid }">
-        <user-avatar :id="uid" :displayName="displayName" />
-      </template>
-    </elsa-form-group>
     <elsa-form-group
       :label="$t('tyoskentelyjakso')"
       :add-new-enabled="true"
@@ -16,7 +11,7 @@
         <tyoskentelyjakso-form @submit="submit" @cancel="cancel" />
       </template>
       <template v-slot="{ uid }">
-        <elsa-multiselect
+        <elsa-form-multiselect
           :id="uid"
           v-model="value.tyoskentelyjakso"
           :options="tyoskentelyjaksot"
@@ -24,7 +19,10 @@
           track-by="id"
         >
           <template slot="singleLabel" slot-scope="{ option }">
-            {{ option.tyoskentelypaikka.nimi }} ({{ option.alkamispaiva }} –
+            {{ option.tyoskentelypaikka.nimi }} ({{
+              $date(option.alkamispaiva)
+            }}
+            –
             {{
               option.paattymispaiva
                 ? $date(option.paattymispaiva)
@@ -32,27 +30,25 @@
             }})
           </template>
           <template slot="option" slot-scope="{ option }">
-            {{ option.tyoskentelypaikka.nimi }} ({{ option.alkamispaiva }} –
+            {{ option.tyoskentelypaikka.nimi }} ({{
+              $date(option.alkamispaiva)
+            }}
+            –
             {{
               option.paattymispaiva
                 ? $date(option.paattymispaiva)
                 : $t("kesken") | lowercase
             }})
           </template>
-        </elsa-multiselect>
-        <b-form-invalid-feedback
-          :id="`${uid}-feedback`"
-          :style="{
-            display:
-              validateState('tyoskentelyjakso') === false ? 'block' : 'none'
-          }"
-          >{{ $t("pakollinen-tieto") }}</b-form-invalid-feedback
-        >
+        </elsa-form-multiselect>
+        <b-form-invalid-feedback :id="`${uid}-feedback`">{{
+          $t("pakollinen-tieto")
+        }}</b-form-invalid-feedback>
       </template>
     </elsa-form-group>
     <elsa-form-group :label="$t('oppimistavoite')" :required="true">
       <template v-slot="{ uid }">
-        <elsa-multiselect
+        <elsa-form-multiselect
           :id="uid"
           v-model="value.oppimistavoite"
           :options="[]"
@@ -60,35 +56,47 @@
           label="nimi"
           track-by="id"
         >
-        </elsa-multiselect>
-        <b-form-invalid-feedback
-          :id="`${uid}-feedback`"
-          :style="{
-            display:
-              validateState('oppimistavoite') === false ? 'block' : 'none'
-          }"
-          >{{ $t("pakollinen-tieto") }}</b-form-invalid-feedback
-        >
+        </elsa-form-multiselect>
+        <b-form-invalid-feedback :id="`${uid}-feedback`">{{
+          $t("pakollinen-tieto")
+        }}</b-form-invalid-feedback>
       </template>
     </elsa-form-group>
     <elsa-form-group :label="$t('vaativuustaso')" :required="true">
+      <template #label-help>
+        <elsa-popover>
+          <template>
+            <h2>{{ $t("vaativuustaso") }}</h2>
+            <div v-for="(taso, index) in vaativuustasot" :key="index">
+              <h3>{{ taso.arvo }} {{ $t(taso.nimi) }}</h3>
+              <p>{{ $t(taso.kuvaus) }}</p>
+            </div>
+          </template>
+        </elsa-popover>
+      </template>
+      <template v-slot:modal-content>
+        <tyoskentelyjakso-form />
+      </template>
       <template v-slot="{ uid }">
-        <elsa-multiselect
+        <elsa-form-multiselect
           :id="uid"
           v-model="value.vaativuustaso"
-          :options="[]"
+          :options="vaativuustasot"
           :state="validateState('vaativuustaso')"
-          label="nimi"
-          track-by="id"
+          track-by="arvo"
         >
-        </elsa-multiselect>
-        <b-form-invalid-feedback
-          :id="`${uid}-feedback`"
-          :style="{
-            display: validateState('vaativuustaso') === false ? 'block' : 'none'
-          }"
-          >{{ $t("pakollinen-tieto") }}</b-form-invalid-feedback
-        >
+          <template slot="singleLabel" slot-scope="{ option }">
+            <span class="font-weight-700">{{ option.arvo }}</span>
+            {{ $t(option.nimi) }}
+          </template>
+          <template slot="option" slot-scope="{ option }">
+            <span class="font-weight-700">{{ option.arvo }}</span>
+            {{ $t(option.nimi) }}
+          </template>
+        </elsa-form-multiselect>
+        <b-form-invalid-feedback :id="`${uid}-feedback`">{{
+          $t("pakollinen-tieto")
+        }}</b-form-invalid-feedback>
       </template>
     </elsa-form-group>
     <b-form-row>
@@ -97,31 +105,37 @@
         :required="true"
         class="col-md-8"
       >
+        <template #label-help>
+          <elsa-popover>
+            <template>
+              <h2>{{ $t("luottamuksen-taso") }}</h2>
+              <div v-for="(taso, index) in luottamuksenTasot" :key="index">
+                <h3>{{ taso.arvo }} {{ $t(taso.nimi) }}</h3>
+                <p>{{ $t(taso.kuvaus) }}</p>
+              </div>
+            </template>
+          </elsa-popover>
+        </template>
         <template v-slot="{ uid }">
-          <elsa-multiselect
+          <elsa-form-multiselect
             :id="uid"
             v-model="value.luottamuksenTaso"
-            :options="[]"
+            :options="luottamuksenTasot"
             :state="validateState('luottamuksenTaso')"
-            label="nimi"
-            track-by="nimi"
+            track-by="arvo"
           >
-            <template v-slot:option="{ option }">
-              <user-avatar
-                :displayName="option.nimi"
-                :src-content-type="option.profiilikuvaContentType"
-                :src-base64="option.profiilikuva"
-              />
+            <template slot="singleLabel" slot-scope="{ option }">
+              <span class="font-weight-700">{{ option.arvo }}</span>
+              {{ $t(option.nimi) }}
             </template>
-          </elsa-multiselect>
-          <b-form-invalid-feedback
-            :id="`${uid}-feedback`"
-            :style="{
-              display:
-                validateState('luottamuksenTaso') === false ? 'block' : 'none'
-            }"
-            >{{ $t("pakollinen-tieto") }}</b-form-invalid-feedback
-          >
+            <template slot="option" slot-scope="{ option }">
+              <span class="font-weight-700">{{ option.arvo }}</span>
+              {{ $t(option.nimi) }}
+            </template>
+          </elsa-form-multiselect>
+          <b-form-invalid-feedback :id="`${uid}-feedback`">{{
+            $t("pakollinen-tieto")
+          }}</b-form-invalid-feedback>
         </template>
       </elsa-form-group>
       <elsa-form-group
@@ -130,27 +144,13 @@
         :required="true"
       >
         <template v-slot="{ uid }">
-          <b-form-datepicker
+          <elsa-form-datepicker
             :id="uid"
             v-model="value.suorituspaiva"
             :state="validateState('suorituspaiva')"
-            start-weekday="1"
-            :locale="currentLocale"
             :min="tyoskentelyjaksonAlkamispaiva"
             :max="tyoskentelyjaksonPaattymispaiva"
-            placeholder=""
-            :date-format-options="{
-              year: 'numeric',
-              month: 'numeric',
-              day: 'numeric'
-            }"
-            :label-help="$t('datepicker-label-help')"
-            :label-no-date-selected="$t('datepicker-no-date-selected')"
-            ><template v-slot:button-content
-              ><font-awesome-icon
-                :icon="['far', 'calendar-alt']"
-                class="text-primary"/></template
-          ></b-form-datepicker>
+          ></elsa-form-datepicker>
           <b-form-invalid-feedback :id="`${uid}-feedback`">{{
             $t("pakollinen-tieto")
           }}</b-form-invalid-feedback>
@@ -162,8 +162,12 @@
         <b-form-textarea
           :id="uid"
           v-model="value.lisatiedot"
+          :state="validateState('lisatiedot')"
           rows="5"
         ></b-form-textarea>
+        <b-form-invalid-feedback :id="`${uid}-feedback`">{{
+          $t("pakollinen-tieto")
+        }}</b-form-invalid-feedback>
       </template>
     </elsa-form-group>
     <div class="text-right">
@@ -178,19 +182,54 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
 import Component from "vue-class-component";
-import { Prop } from "vue-property-decorator";
+import axios from "axios";
+import { Mixins, Prop } from "vue-property-decorator";
+import { validationMixin } from "vuelidate";
+import { required } from "vuelidate/lib/validators";
+import { vaativuustasot, luottamuksenTasot } from "@/utils/constants";
+import { toastSuccess, toastFail } from "@/utils/toast";
+import TyoskentelyjaksoForm from "@/forms/tyoskentelyjakso-form.vue";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
-import ElsaMultiselect from "@/components/multiselect/multiselect.vue";
+import ElsaFormMultiselect from "@/components/multiselect/multiselect.vue";
+import ElsaPopover from "@/components/popover/popover.vue";
+import ElsaFormDatepicker from "@/components/datepicker/datepicker.vue";
 
 @Component({
   components: {
+    TyoskentelyjaksoForm,
     ElsaFormGroup,
-    ElsaMultiselect
+    ElsaFormMultiselect,
+    ElsaPopover,
+    ElsaFormDatepicker
+  },
+  validations: {
+    value: {
+      tyoskentelyjakso: {
+        required
+      },
+      oppimistavoite: {
+        required
+      },
+      vaativuustaso: {
+        required
+      },
+      luottamuksenTaso: {
+        required
+      },
+      suorituspaiva: {
+        required
+      },
+      lisatiedot: {
+        required
+      }
+    }
   }
 })
-export default class SuoritemerkintaForm extends Vue {
+export default class SuoritemerkintaForm extends Mixins(validationMixin) {
+  @Prop({ required: false, default: [] })
+  tyoskentelyjaksot!: any[];
+
   @Prop({
     required: false,
     type: Object,
@@ -204,5 +243,52 @@ export default class SuoritemerkintaForm extends Vue {
     })
   })
   value!: any;
+
+  vaativuustasot = vaativuustasot;
+  luottamuksenTasot = luottamuksenTasot;
+
+  validateState(name: string) {
+    const { $dirty, $error } = this.$v.value[name] as any;
+    return $dirty ? ($error ? false : null) : null;
+  }
+
+  onSubmit() {
+    this.$v.value.$touch();
+    if (this.$v.value.$anyError) {
+      return;
+    }
+    this.$emit("submit", this.value);
+  }
+
+  async onTyoskentelypaikkaSubmit(value: any, modal: any) {
+    try {
+      const tyoskentelyjakso = (
+        await axios.post("/erikoistuva-laakari/tyoskentelyjaksot", value)
+      ).data;
+      this.tyoskentelyjaksot.push(tyoskentelyjakso);
+      this.value.tyoskentelyjakso = tyoskentelyjakso;
+      modal.hide("confirm");
+      toastSuccess(this, this.$t("uusi-tyoskentelyjakso-lisatty"));
+    } catch (err) {
+      toastFail(
+        this,
+        this.$t("uuden-tyoskentelyjakson-lisaaminen-epaonnistui")
+      );
+    }
+  }
+
+  get tyoskentelyjaksonAlkamispaiva() {
+    if (this.value.tyoskentelyjakso) {
+      return this.value.tyoskentelyjakso.alkamispaiva;
+    }
+    return undefined;
+  }
+
+  get tyoskentelyjaksonPaattymispaiva() {
+    if (this.value.tyoskentelyjakso) {
+      return this.value.tyoskentelyjakso.paattymispaiva;
+    }
+    return undefined;
+  }
 }
 </script>
