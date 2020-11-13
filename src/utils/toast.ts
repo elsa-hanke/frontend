@@ -1,7 +1,7 @@
 import { Vue } from "vue-property-decorator";
 
 export function toastSuccess(vue: Vue, message: any) {
-  const h = vue.$createElement;
+  const h = vue.$root.$createElement;
   const vNodesMsg = h("div", { class: ["d-flex", "align-items-center"] }, [
     h("font-awesome-icon", {
       props: { icon: "check-circle", "fixed-width": true, size: "lg" },
@@ -10,7 +10,7 @@ export function toastSuccess(vue: Vue, message: any) {
     `${message}`
   ]);
 
-  vue.$bvToast.toast([vNodesMsg], {
+  vue.$root.$bvToast.toast([vNodesMsg], {
     variant: "success",
     solid: true,
     // noAutoHide: true,
@@ -20,7 +20,7 @@ export function toastSuccess(vue: Vue, message: any) {
 }
 
 export function toastFail(vue: Vue, message: any) {
-  const h = vue.$createElement;
+  const h = vue.$root.$createElement;
 
   const vNodesMsg = h("div", { class: ["d-flex", "align-items-center"] }, [
     h("font-awesome-icon", {
@@ -30,7 +30,7 @@ export function toastFail(vue: Vue, message: any) {
     `${message}`
   ]);
 
-  vue.$bvToast.toast(vNodesMsg, {
+  vue.$root.$bvToast.toast(vNodesMsg, {
     variant: "danger",
     solid: true,
     // noAutoHide: true,
