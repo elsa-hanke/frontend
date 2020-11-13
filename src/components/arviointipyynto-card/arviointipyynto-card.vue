@@ -36,7 +36,7 @@
               </tr>
               <tr>
                 <th scope="row" class="py-0 pl-0 pr-1 font-weight-500">
-                  {{ $t("arvioitavana") }}
+                  {{ $t("kouluttaja") }}
                 </th>
                 <td class="py-0 pr-0 pl-1">
                   {{ value.arvioinninAntaja.nimi }}
@@ -46,7 +46,9 @@
                 <th scope="row" class="py-0 pl-0 pr-1 font-weight-500">
                   {{ $t("lisatiedot") }}
                 </th>
-                <td class="py-0 pr-0 pl-1">{{ value.lisatiedot }}</td>
+                <td class="py-0 pr-0 pl-1">
+                  <span class="text-prewrap">{{ value.lisatiedot }}</span>
+                </td>
               </tr>
             </b-table-simple>
           </div>

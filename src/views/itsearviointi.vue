@@ -24,18 +24,18 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Mixins } from "vue-property-decorator";
 import axios from "axios";
-import { confimExit } from "@/utils/confirm";
 import { toastFail, toastSuccess } from "@/utils/toast";
 import ArviointiForm from "@/forms/arviointi-form.vue";
+import ConfirmRouteExit from "@/mixins/confirm-route-exit";
 
 @Component({
   components: {
     ArviointiForm
   }
 })
-export default class Itsearviointi extends Vue {
+export default class Itsearviointi extends Mixins(ConfirmRouteExit) {
   value = null;
   items = [
     {
@@ -51,7 +51,6 @@ export default class Itsearviointi extends Vue {
       active: true
     }
   ];
-  saved = false;
 
   async mounted() {
     if (this.$route && this.$route.params && this.$route.params.arviointiId) {
@@ -67,24 +66,12 @@ export default class Itsearviointi extends Vue {
     try {
       await axios.put("erikoistuva-laakari/suoritusarvioinnit", value);
       toastSuccess(this, this.$t("itsearvioinnin-tallentaminen-onnistui"));
-      this.saved = true;
+      this.skipRouteExitConfirm = true;
       this.$router.push({
         name: "arvioinnit"
       });
     } catch (err) {
       toastFail(this, this.$t("itsearvioinnin-tallentaminen-epaonnistui"));
-    }
-  }
-
-  async beforeRouteLeave(to: any, from: any, next: any) {
-    try {
-      if (this.saved || (await confimExit(this))) {
-        next();
-      } else {
-        next(false);
-      }
-    } catch (err) {
-      next(false);
     }
   }
 }

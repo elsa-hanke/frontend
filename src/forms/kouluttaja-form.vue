@@ -1,6 +1,6 @@
 <template>
   <b-form @submit.stop.prevent="onSubmit">
-    <elsa-form-group :label="$t('lahikouluttajan-nimi')" :required="true">
+    <elsa-form-group :label="$t('kouluttajan-nimi')" :required="true">
       <template v-slot="{ uid }">
         <b-form-input
           :id="uid"
@@ -12,7 +12,7 @@
         }}</b-form-invalid-feedback>
       </template>
     </elsa-form-group>
-    <elsa-form-group :label="$t('lahikouluttajan-sahkoposti')" :required="true">
+    <elsa-form-group :label="$t('kouluttajan-sahkoposti')" :required="true">
       <template v-slot="{ uid }">
         <b-form-input
           :id="uid"
@@ -61,7 +61,7 @@ import ElsaFormGroup from "@/components/form-group/form-group.vue";
     }
   }
 })
-export default class LahikouluttajaForm extends Mixins(validationMixin) {
+export default class KouluttajaForm extends Mixins(validationMixin) {
   value = {
     nimi: null,
     sahkoposti: null

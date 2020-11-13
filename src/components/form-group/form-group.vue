@@ -56,7 +56,7 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import { Prop } from "vue-property-decorator";
-import { confimExit } from "@/utils/confirm";
+import { confirmExit } from "@/utils/confirm";
 
 @Component({})
 export default class ElsaFormGroup extends Vue {
@@ -87,7 +87,7 @@ export default class ElsaFormGroup extends Vue {
     }
 
     // Pyydä poistumisen vahvistus
-    if (await confimExit(this)) {
+    if (await confirmExit(this)) {
       (this.$refs[this.modalRef] as any).hide("confirm");
     }
   }
@@ -98,7 +98,7 @@ export default class ElsaFormGroup extends Vue {
   }
 
   async onCancel() {
-    if (await confimExit(this)) {
+    if (await confirmExit(this)) {
       (this.$refs[this.modalRef] as any).hide("confirm");
     }
   }

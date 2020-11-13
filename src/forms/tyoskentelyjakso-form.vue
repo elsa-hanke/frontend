@@ -11,7 +11,7 @@
           $t("pakollinen-tieto")
         }}</b-form-invalid-feedback>
         <!--
-        <elsa-multiselect
+        <elsa-form-multiselect
           :id="uid"
           v-model="value.tyoskentelypaikka.kunta"
           :options="kunnat"
@@ -19,7 +19,7 @@
           @select="onKuntaSelect"
           @remove="onKuntaRemove"
         >
-        </elsa-multiselect>
+        </elsa-form-multiselect>
         -->
       </template>
     </elsa-form-group>
@@ -34,7 +34,7 @@
           $t("pakollinen-tieto")
         }}</b-form-invalid-feedback>
         <!--
-        <elsa-multiselect
+        <elsa-form-multiselect
           :id="uid"
           v-model="value.tyoskentelypaikka"
           :options="tyoskentelypaikat"
@@ -43,7 +43,7 @@
           label="abbreviation"
           track-by="organizationId"
         >
-        </elsa-multiselect>
+        </elsa-form-multiselect>
         -->
       </template>
     </elsa-form-group>
@@ -96,28 +96,12 @@
         :required="true"
       >
         <template v-slot="{ uid }">
-          <b-form-datepicker
+          <elsa-form-datepicker
             :id="uid"
             v-model="value.alkamispaiva"
             :state="validateState('alkamispaiva')"
             :max="value.paattymispaiva"
-            start-weekday="1"
-            :locale="currentLocale"
-            placeholder=""
-            :date-format-options="{
-              year: 'numeric',
-              month: 'numeric',
-              day: 'numeric'
-            }"
-            :label-help="$t('datepicker-label-help')"
-            :label-no-date-selected="$t('datepicker-no-date-selected')"
-          >
-            <template v-slot:button-content
-              ><font-awesome-icon
-                :icon="['far', 'calendar-alt']"
-                class="text-primary"
-            /></template>
-          </b-form-datepicker>
+          ></elsa-form-datepicker>
           <b-form-invalid-feedback :id="`${uid}-feedback`">{{
             $t("pakollinen-tieto")
           }}</b-form-invalid-feedback>
@@ -128,26 +112,11 @@
         class="col-sm-12 col-md-6 pl-md-3"
       >
         <template v-slot="{ uid }">
-          <b-form-datepicker
+          <elsa-form-datepicker
             :id="uid"
             v-model="value.paattymispaiva"
             :min="value.alkamispaiva"
-            start-weekday="1"
-            :locale="currentLocale"
-            placeholder=""
-            :date-format-options="{
-              year: 'numeric',
-              month: 'numeric',
-              day: 'numeric'
-            }"
-            :label-help="$t('datepicker-label-help')"
-            :label-no-date-selected="$t('datepicker-no-date-selected')"
-            class="datepicker-range"
-            ><template v-slot:button-content
-              ><font-awesome-icon
-                :icon="['far', 'calendar-alt']"
-                class="text-primary"/></template
-          ></b-form-datepicker>
+          ></elsa-form-datepicker>
         </template>
       </elsa-form-group>
     </b-form-row>
@@ -166,14 +135,9 @@
           />
           <span class="mx-3">%</span>
         </div>
-        <b-form-invalid-feedback
-          :id="`${uid}-feedback`"
-          :style="{
-            display:
-              validateState('osaaikaprosentti') === false ? 'block' : 'none'
-          }"
-          >{{ $t("osaaikaprosentti-validointivirhe") }}</b-form-invalid-feedback
-        >
+        <b-form-invalid-feedback :id="`${uid}-feedback`">{{
+          $t("osaaikaprosentti-validointivirhe")
+        }}</b-form-invalid-feedback>
       </template>
     </elsa-form-group>
     <elsa-form-group :label="$t('kaytannon-koulutus')" :required="true">
@@ -213,14 +177,9 @@
           value="TUTKIMUSTYO"
           >{{ $t("tutkimustyo") }}</b-form-radio
         >
-        <b-form-invalid-feedback
-          :id="`${uid}-feedback`"
-          :style="{
-            display:
-              validateState('kaytannonKoulutus') === false ? 'block' : 'none'
-          }"
-          >{{ $t("pakollinen-tieto") }}</b-form-invalid-feedback
-        >
+        <b-form-invalid-feedback :id="`${uid}-feedback`">{{
+          $t("pakollinen-tieto")
+        }}</b-form-invalid-feedback>
       </template>
     </elsa-form-group>
     <div class="text-right">
@@ -244,12 +203,14 @@ import { Mixins } from "vue-property-decorator";
 import { validationMixin } from "vuelidate";
 import { required, between, requiredIf } from "vuelidate/lib/validators";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
-import ElsaMultiselect from "@/components/multiselect/multiselect.vue";
+import ElsaFormMultiselect from "@/components/multiselect/multiselect.vue";
+import ElsaFormDatepicker from "@/components/datepicker/datepicker.vue";
 
 @Component({
   components: {
     ElsaFormGroup,
-    ElsaMultiselect
+    ElsaFormMultiselect,
+    ElsaFormDatepicker
   },
   validations: {
     value: {

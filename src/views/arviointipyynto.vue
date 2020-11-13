@@ -26,21 +26,20 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Mixins } from "vue-property-decorator";
 import axios from "axios";
-import { confimExit, confimDelete } from "@/utils/confirm";
+import { confirmDelete } from "@/utils/confirm";
 import { ArviointipyyntoLomake } from "@/types";
 import { toastFail, toastSuccess } from "@/utils/toast";
 import ArviointipyyntoForm from "@/forms/arviointipyynto-form.vue";
-
-Component.registerHooks(["beforeRouteLeave"]);
+import ConfirmRouteExit from "@/mixins/confirm-route-exit";
 
 @Component({
   components: {
     ArviointipyyntoForm
   }
 })
-export default class Arviointipyynto extends Vue {
+export default class Arviointipyynto extends Mixins(ConfirmRouteExit) {
   items = [
     {
       text: this.$t("etusivu"),
@@ -55,7 +54,6 @@ export default class Arviointipyynto extends Vue {
       active: true
     }
   ];
-  saved = false;
   arviointipyyntoLomake: null | ArviointipyyntoLomake = null;
   arviointipyynto: any = null;
   loading = true;
@@ -101,7 +99,7 @@ export default class Arviointipyynto extends Vue {
           lisatiedot: value.lisatiedot
         });
         toastSuccess(this, this.$t("arviointipyynnon-tallentaminen-onnistui"));
-        this.saved = true;
+        this.skipRouteExitConfirm = true;
         this.$router.push({
           name: "arvioinnit"
         });
@@ -116,7 +114,7 @@ export default class Arviointipyynto extends Vue {
             value
           )
         ).data;
-        this.saved = true;
+        this.skipRouteExitConfirm = true;
         this.$router.push({
           name: "arviointipyynto-lahetetty",
           params: { arviointiId: `${arviointipyynto.id}` }
@@ -132,7 +130,7 @@ export default class Arviointipyynto extends Vue {
 
   async onDelete() {
     if (
-      await confimDelete(
+      await confirmDelete(
         this,
         this.$t("poista-arviointipyynto") as string,
         (this.$t("arviointipyynnon") as string).toLowerCase()
@@ -142,22 +140,10 @@ export default class Arviointipyynto extends Vue {
         `erikoistuva-laakari/suoritusarvioinnit/${this.arviointipyynto.id}`
       );
       toastSuccess(this, this.$t("arviointipyynto-poistettu-onnistuneesti"));
-      this.saved = true;
+      this.skipRouteExitConfirm = true;
       this.$router.push({
         name: "arvioinnit"
       });
-    }
-  }
-
-  async beforeRouteLeave(to: any, from: any, next: any) {
-    try {
-      if (this.saved || (await confimExit(this))) {
-        next();
-      } else {
-        next(false);
-      }
-    } catch (err) {
-      next(false);
     }
   }
 
