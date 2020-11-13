@@ -330,6 +330,8 @@ export default class Arvioinnit extends Vue {
           ...options,
           page: this.page - 1,
           size: this.perPage,
+          sort: "id",
+          "id.dir": "desc",
           "tyoskentelyjaksoId.equals": this.selected.tyoskentelyjakso?.id,
           "arvioitavaOsaalueId.equals": this.selected.epaOsaamisalue?.id,
           "arvioinninAntajaId.equals": this.selected.kouluttaja?.id
