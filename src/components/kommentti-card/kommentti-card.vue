@@ -111,7 +111,7 @@ export default class KommenttiCard extends Vue {
         teksti: null
       };
     } catch (err) {
-      toastFail(this, this.$t("kommentin-muokkaaminen-epaonnistui"));
+      toastFail(this, this.$t("kommentin-tallentaminen-epaonnistui"));
     }
     this.saving = false;
   }

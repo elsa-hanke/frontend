@@ -177,7 +177,7 @@
         >{{ $t("poista-arviointipyynto") }}</b-button
       >
       <b-button type="submit" variant="primary" class="ml-2">{{
-        $t("laheta")
+        editing ? $t("tallenna") : $t("laheta")
       }}</b-button>
     </div>
   </b-form>

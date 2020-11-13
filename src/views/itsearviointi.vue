@@ -27,7 +27,7 @@
 import { Component, Vue } from "vue-property-decorator";
 import axios from "axios";
 import { confimExit } from "@/utils/confirm";
-import { toastFail } from "@/utils/toast";
+import { toastFail, toastSuccess } from "@/utils/toast";
 import ArviointiForm from "@/forms/arviointi-form.vue";
 
 @Component({
@@ -66,8 +66,11 @@ export default class Itsearviointi extends Vue {
   async onSubmit(value: any) {
     try {
       await axios.put("erikoistuva-laakari/suoritusarvioinnit", value);
+      toastSuccess(this, this.$t("itsearvioinnin-tallentaminen-onnistui"));
       this.saved = true;
-      this.$router.push({ name: "itsearviointi-valmis" });
+      this.$router.push({
+        name: "arvioinnit"
+      });
     } catch (err) {
       toastFail(this, this.$t("itsearvioinnin-tallentaminen-epaonnistui"));
     }
