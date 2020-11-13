@@ -81,30 +81,27 @@ export default class ElsaMultiselect extends Vue {
   }
 
   get tagPlaceholderText() {
-    return this.tagPlaceholder || this.$t("lisaa-tagi-enter-nappaimella");
+    return "";
   }
 
   get selectLabelText() {
-    return this.selectLabel || this.$t("valitse-enter-nappaimella");
+    return "";
   }
 
   get selectGroupLabelText() {
-    return this.selectGroupLabel || this.$t("valitse-ryhma-enter-nappaimella");
+    return "";
   }
 
   get selectedLabelText() {
-    return this.selectedLabel || this.$t("valittu");
+    return "";
   }
 
   get deselectLabelText() {
-    return this.deselectLabel || this.$t("poista-valinta-enter-nappaimella");
+    return "";
   }
 
   get deselectGroupLabelText() {
-    return (
-      this.deselectGroupLabel ||
-      this.$t("poista-ryhman-valinta-enter-nappaimella")
-    );
+    return "";
   }
 }
 </script>
@@ -186,6 +183,12 @@ export default class ElsaMultiselect extends Vue {
   .multiselect__content-wrapper {
     font-size: 0.875rem;
     border-color: $gray-400;
+
+    .multiselect__option {
+      padding: 0.75rem;
+      white-space: normal;
+      min-height: unset;
+    }
 
     .multiselect__option::after {
       top: 50%;
