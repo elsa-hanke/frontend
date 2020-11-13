@@ -90,27 +90,23 @@ export default class Arviointipyynto extends Vue {
 
   async onSubmit(value: any) {
     if (this.arviointipyynto) {
-      console.log(this.arviointipyynto, value);
-      // arviointipyynnon-muokkaaminen-epaonnistui
       try {
-        const arviointipyynto = (
-          await axios.put("erikoistuva-laakari/suoritusarvioinnit", {
-            id: this.arviointipyynto.id,
-            tyoskentelyjaksoId: value.tyoskentelyjaksoId,
-            arvioitavaOsaalueId: value.arvioitavaOsaalueId,
-            arvioitavaTapahtuma: value.arvioitavaTapahtuma,
-            arvioinninAntajaId: value.arvioinninAntajaId,
-            tapahtumanAjankohta: value.tapahtumanAjankohta,
-            lisatiedot: value.lisatiedot
-          })
-        ).data;
+        await axios.put("erikoistuva-laakari/suoritusarvioinnit", {
+          id: this.arviointipyynto.id,
+          tyoskentelyjaksoId: value.tyoskentelyjaksoId,
+          arvioitavaOsaalueId: value.arvioitavaOsaalueId,
+          arvioitavaTapahtuma: value.arvioitavaTapahtuma,
+          arvioinninAntajaId: value.arvioinninAntajaId,
+          tapahtumanAjankohta: value.tapahtumanAjankohta,
+          lisatiedot: value.lisatiedot
+        });
+        toastSuccess(this, this.$t("arviointipyynnon-tallentaminen-onnistui"));
         this.saved = true;
         this.$router.push({
-          name: "arviointipyynto-lahetetty",
-          params: { arviointiId: `${arviointipyynto.id}` }
+          name: "arvioinnit"
         });
       } catch (err) {
-        toastFail(this, this.$t("arviointipyynnon-muokkaaminen-epaonnistui"));
+        toastFail(this, this.$t("arviointipyynnon-tallentaminen-epaonnistui"));
       }
     } else {
       try {
