@@ -3,3 +3,8 @@ export interface ArviointipyyntoLomake {
   epaOsaamisalueet: any[];
   kouluttajat: any[];
 }
+
+export interface SuoritemerkintaLomake {
+  tyoskentelyjaksot: any[];
+  oppimistavoitteenKategoriat: any[];
+}

@@ -276,7 +276,7 @@ export default class TyoskentelyjaksoForm extends Mixins(validationMixin) {
   organisaatiotLoading = false;
 
   mounted() {
-    this.fetchKunnat();
+    // this.fetchKunnat();
   }
 
   async fetchKunnat() {

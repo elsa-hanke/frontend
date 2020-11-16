@@ -207,6 +207,20 @@ export default class ElsaFormMultiselect extends Vue {
       color: $white;
       background: #b1b1b1;
     }
+
+    .multiselect__option.multiselect__option--group {
+      color: $black;
+      background: transparent;
+      font-weight: $font-weight-500;
+
+      &.multiselect__option--highlight {
+        background: #f5f5f6;
+      }
+      &.multiselect__option--disabled {
+        color: $black !important;
+        background: transparent !important;
+      }
+    }
   }
 
   &.is-invalid .multiselect__content-wrapper,

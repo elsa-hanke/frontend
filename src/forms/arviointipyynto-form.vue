@@ -19,34 +19,12 @@
         <elsa-form-multiselect
           :id="uid"
           v-model="form.tyoskentelyjakso"
-          :options="tyoskentelyjaksot"
+          :options="tyoskentelyjaksotFormatted"
           :state="validateState('tyoskentelyjakso')"
           @select="onTyoskentelyjaksoSelect"
+          label="label"
           track-by="id"
-        >
-          <template slot="singleLabel" slot-scope="{ option }">
-            {{ option.tyoskentelypaikka.nimi }} ({{
-              $date(option.alkamispaiva)
-            }}
-            –
-            {{
-              option.paattymispaiva
-                ? $date(option.paattymispaiva)
-                : $t("kesken") | lowercase
-            }})
-          </template>
-          <template slot="option" slot-scope="{ option }">
-            {{ option.tyoskentelypaikka.nimi }} ({{
-              $date(option.alkamispaiva)
-            }}
-            –
-            {{
-              option.paattymispaiva
-                ? $date(option.paattymispaiva)
-                : $t("kesken") | lowercase
-            }})
-          </template>
-        </elsa-form-multiselect>
+        />
         <b-form-invalid-feedback :id="`${uid}-feedback`">{{
           $t("pakollinen-tieto")
         }}</b-form-invalid-feedback>
@@ -165,13 +143,13 @@
 <script lang="ts">
 import Component from "vue-class-component";
 import axios from "axios";
+import isAfter from "date-fns/isAfter";
+import isBefore from "date-fns/isBefore";
 import { Prop, Mixins } from "vue-property-decorator";
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
 import { parseISO } from "date-fns";
 import store from "@/store";
-import isAfter from "date-fns/isAfter";
-import isBefore from "date-fns/isBefore";
 import UserAvatar from "@/components/user-avatar/user-avatar.vue";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
 import ElsaFormMultiselect from "@/components/multiselect/multiselect.vue";
@@ -179,6 +157,7 @@ import TyoskentelyjaksoForm from "@/forms/tyoskentelyjakso-form.vue";
 import KouluttajaForm from "@/forms/kouluttaja-form.vue";
 import ElsaFormDatepicker from "@/components/datepicker/datepicker.vue";
 import { toastSuccess, toastFail } from "@/utils/toast";
+import { tyoskentelyjaksoLabel } from "@/utils/tyoskentelyjakso";
 
 @Component({
   components: {
@@ -302,6 +281,7 @@ export default class ArviointipyyntoForm extends Mixins(validationMixin) {
       const tyoskentelyjakso = (
         await axios.post("/erikoistuva-laakari/tyoskentelyjaksot", value)
       ).data;
+      tyoskentelyjakso.label = tyoskentelyjaksoLabel(this, tyoskentelyjakso);
       this.tyoskentelyjaksot.push(tyoskentelyjakso);
       this.form.tyoskentelyjakso = tyoskentelyjakso;
       this.onTyoskentelyjaksoSelect(tyoskentelyjakso);
@@ -344,6 +324,13 @@ export default class ArviointipyyntoForm extends Mixins(validationMixin) {
 
   get currentLocale() {
     return this.$i18n.locale;
+  }
+
+  get tyoskentelyjaksotFormatted() {
+    return this.tyoskentelyjaksot.map(tj => ({
+      ...tj,
+      label: tyoskentelyjaksoLabel(this, tj)
+    }));
   }
 
   get tyoskentelyjaksonAlkamispaiva() {

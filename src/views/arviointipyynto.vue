@@ -26,8 +26,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Mixins } from "vue-property-decorator";
 import axios from "axios";
+import { Component, Mixins } from "vue-property-decorator";
 import { confirmDelete } from "@/utils/confirm";
 import { ArviointipyyntoLomake } from "@/types";
 import { toastFail, toastSuccess } from "@/utils/toast";
@@ -69,7 +69,10 @@ export default class Arviointipyynto extends Mixins(ConfirmRouteExit) {
         await axios.get(`erikoistuva-laakari/arviointipyynto-lomake`)
       ).data;
     } catch (err) {
-      toastFail(this, this.$t("arviointilomakkeen-hakeminen-epaonnistui"));
+      toastFail(
+        this,
+        this.$t("arviointipyynnon-lomakkeen-hakeminen-epaonnistui")
+      );
     }
   }
 
