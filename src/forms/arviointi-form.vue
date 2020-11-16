@@ -234,6 +234,7 @@
               v-model="form.luottamuksenTaso"
               :options="luottamuksenTasot"
               :state="validateState('luottamuksenTaso')"
+              :custom-label="value => `${value.arvo} ${value.nimi}`"
               track-by="arvo"
             >
               <template slot="singleLabel" slot-scope="{ option }">
@@ -277,6 +278,7 @@
               v-model="form.vaativuustaso"
               :options="vaativuustasot"
               :state="validateState('vaativuustaso')"
+              :custom-label="value => `${value.arvo} ${value.nimi}`"
               track-by="arvo"
             >
               <template slot="singleLabel" slot-scope="{ option }">

@@ -4,9 +4,14 @@
     <b-container fluid>
       <b-row lg>
         <b-col class="px-0">
-          <h1>{{ $t("pyyda-arviointia") }}</h1>
+          <h1>{{ $t("lisaa-suoritemerkinta") }}</h1>
           <hr />
-          <suoritemerkinta-form v-if="suoritemerkintaLomake" />
+          <suoritemerkinta-form
+            v-if="!loading"
+            @submit="onSubmit"
+            :tyoskentelyjaksot="tyoskentelyjaksot"
+            :oppimistavoitteen-kategoriat="oppimistavoitteenKategoriat"
+          />
           <div class="text-center" v-else>
             <b-spinner variant="primary" :label="$t('ladataan')"></b-spinner>
           </div>
@@ -17,9 +22,12 @@
 </template>
 
 <script lang="ts">
+import axios from "axios";
 import { Component, Mixins } from "vue-property-decorator";
 import ConfirmRouteExit from "@/mixins/confirm-route-exit";
 import SuoritemerkintaForm from "@/forms/suoritemerkinta-form.vue";
+import { SuoritemerkintaLomake } from "@/types";
+import { toastFail } from "@/utils/toast";
 
 @Component({
   components: {
@@ -41,7 +49,46 @@ export default class UusiSuoritemerkinta extends Mixins(ConfirmRouteExit) {
       active: true
     }
   ];
-  suoritemerkintaLomake = {};
+  suoritemerkintaLomake: null | SuoritemerkintaLomake = null;
+  loading = true;
+
+  async mounted() {
+    await this.fetchLomake();
+    this.loading = false;
+  }
+
+  async fetchLomake() {
+    try {
+      this.suoritemerkintaLomake = (
+        await axios.get(`erikoistuva-laakari/suoritemerkinta-lomake`)
+      ).data;
+    } catch (err) {
+      toastFail(
+        this,
+        this.$t("suoritemerkinnan-lomakkeen-hakeminen-epaonnistui")
+      );
+    }
+  }
+
+  async onSubmit(value: any) {
+    console.log(value);
+  }
+
+  get tyoskentelyjaksot() {
+    if (this.suoritemerkintaLomake) {
+      return this.suoritemerkintaLomake.tyoskentelyjaksot;
+    } else {
+      return [];
+    }
+  }
+
+  get oppimistavoitteenKategoriat() {
+    if (this.suoritemerkintaLomake) {
+      return this.suoritemerkintaLomake.oppimistavoitteenKategoriat;
+    } else {
+      return [];
+    }
+  }
 }
 </script>
 

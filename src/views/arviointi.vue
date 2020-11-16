@@ -114,7 +114,9 @@ export default class Arviointi extends Vue {
     if (arviointiId) {
       try {
         this.value = (
-          await axios.get(`suoritusarvioinnit/${arviointiId}`)
+          await axios.get(
+            `erikoistuva-laakari/suoritusarvioinnit/${arviointiId}`
+          )
         ).data;
       } catch (err) {
         this.$router.replace({ name: "arvioinnit" });

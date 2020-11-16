@@ -26,33 +26,12 @@
                         <elsa-form-multiselect
                           :id="uid"
                           v-model="selected.tyoskentelyjakso"
-                          :options="options.tyoskentelyjaksot"
+                          :options="tyoskentelyjaksotFormatted"
+                          label="label"
                           track-by="id"
                           @select="onTyoskentelyjaksoSelect"
                           @remove="onTyoskentelyjaksoRemove"
                         >
-                          <template slot="singleLabel" slot-scope="{ option }">
-                            {{ option.tyoskentelypaikka.nimi }} ({{
-                              $date(option.alkamispaiva)
-                            }}
-                            –
-                            {{
-                              option.paattymispaiva
-                                ? $date(option.paattymispaiva)
-                                : $t("kesken") | lowercase
-                            }})
-                          </template>
-                          <template slot="option" slot-scope="{ option }">
-                            {{ option.tyoskentelypaikka.nimi }} ({{
-                              $date(option.alkamispaiva)
-                            }}
-                            –
-                            {{
-                              option.paattymispaiva
-                                ? $date(option.paattymispaiva)
-                                : $t("kesken") | lowercase
-                            }})
-                          </template>
                         </elsa-form-multiselect>
                       </template>
                     </elsa-form-group>
@@ -212,12 +191,13 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
 import axios from "axios";
+import { Component, Vue } from "vue-property-decorator";
 import ArviointiCard from "@/components/arviointi-card/arviointi-card.vue";
 import ArviointipyyntoCard from "@/components/arviointipyynto-card/arviointipyynto-card.vue";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
 import ElsaFormMultiselect from "@/components/multiselect/multiselect.vue";
+import { tyoskentelyjaksoLabel } from "@/utils/tyoskentelyjakso";
 
 @Component({
   components: {
@@ -237,7 +217,7 @@ export default class Arvioinnit extends Vue {
     tyoskentelyjaksot: [],
     epaOsaamisalueet: [],
     kouluttajat: []
-  };
+  } as any;
   omat: null | any[] = null;
   page = 1;
   totalRows = 0;
@@ -360,6 +340,13 @@ export default class Arvioinnit extends Vue {
       return this.omat;
     }
     return null;
+  }
+
+  get tyoskentelyjaksotFormatted() {
+    return this.options.tyoskentelyjaksot.map((tj: any) => ({
+      ...tj,
+      label: tyoskentelyjaksoLabel(this, tj)
+    }));
   }
 }
 </script>
