@@ -2,7 +2,7 @@
   <b-form @submit.stop.prevent="onSubmit">
     <elsa-form-group :label="$t('erikoistuva-laakari')">
       <template v-slot="{ uid }">
-        <user-avatar :id="uid" :displayName="displayName" />
+        <user-avatar :id="uid" />
       </template>
     </elsa-form-group>
     <elsa-form-group
@@ -143,13 +143,9 @@
 <script lang="ts">
 import Component from "vue-class-component";
 import axios from "axios";
-import isAfter from "date-fns/isAfter";
-import isBefore from "date-fns/isBefore";
 import { Prop, Mixins } from "vue-property-decorator";
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
-import { parseISO } from "date-fns";
-import store from "@/store";
 import UserAvatar from "@/components/user-avatar/user-avatar.vue";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
 import ElsaFormMultiselect from "@/components/multiselect/multiselect.vue";
@@ -157,7 +153,7 @@ import TyoskentelyjaksoForm from "@/forms/tyoskentelyjakso-form.vue";
 import KouluttajaForm from "@/forms/kouluttaja-form.vue";
 import ElsaFormDatepicker from "@/components/datepicker/datepicker.vue";
 import { toastSuccess, toastFail } from "@/utils/toast";
-import { tyoskentelyjaksoLabel } from "@/utils/tyoskentelyjakso";
+import TyoskentelyjaksoMixin from "@/mixins/tyoskentelyjakso";
 
 @Component({
   components: {
@@ -188,7 +184,10 @@ import { tyoskentelyjaksoLabel } from "@/utils/tyoskentelyjakso";
     }
   }
 })
-export default class ArviointipyyntoForm extends Mixins(validationMixin) {
+export default class ArviointipyyntoForm extends Mixins(
+  validationMixin,
+  TyoskentelyjaksoMixin
+) {
   @Prop({ required: false, default: [] })
   tyoskentelyjaksot!: any[];
 
@@ -253,48 +252,6 @@ export default class ArviointipyyntoForm extends Mixins(validationMixin) {
     });
   }
 
-  onTyoskentelyjaksoSelect(value: any) {
-    if (this.form.tapahtumanAjankohta) {
-      if (
-        isBefore(
-          parseISO(this.form.tapahtumanAjankohta),
-          parseISO(value.alkamispaiva)
-        )
-      ) {
-        this.form.tapahtumanAjankohta = null;
-      }
-      if (value.paattymispaiva) {
-        if (
-          isAfter(
-            parseISO(this.form.tapahtumanAjankohta),
-            parseISO(value.paattymispaiva)
-          )
-        ) {
-          this.form.tapahtumanAjankohta = null;
-        }
-      }
-    }
-  }
-
-  async onTyoskentelyjaksoSubmit(value: any, modal: any) {
-    try {
-      const tyoskentelyjakso = (
-        await axios.post("/erikoistuva-laakari/tyoskentelyjaksot", value)
-      ).data;
-      tyoskentelyjakso.label = tyoskentelyjaksoLabel(this, tyoskentelyjakso);
-      this.tyoskentelyjaksot.push(tyoskentelyjakso);
-      this.form.tyoskentelyjakso = tyoskentelyjakso;
-      this.onTyoskentelyjaksoSelect(tyoskentelyjakso);
-      modal.hide("confirm");
-      toastSuccess(this, this.$t("uusi-tyoskentelyjakso-lisatty"));
-    } catch (err) {
-      toastFail(
-        this,
-        this.$t("uuden-tyoskentelyjakson-lisaaminen-epaonnistui")
-      );
-    }
-  }
-
   async onKouluttajaSubmit(value: any, modal: any) {
     try {
       const kouluttaja = (
@@ -311,40 +268,6 @@ export default class ArviointipyyntoForm extends Mixins(validationMixin) {
 
   async deleteArviointipyynto() {
     this.$emit("delete");
-  }
-
-  get displayName() {
-    const account = store.getters.account;
-    if (account) {
-      return `${account.firstName} ${account.lastName}`;
-    } else {
-      return "";
-    }
-  }
-
-  get currentLocale() {
-    return this.$i18n.locale;
-  }
-
-  get tyoskentelyjaksotFormatted() {
-    return this.tyoskentelyjaksot.map(tj => ({
-      ...tj,
-      label: tyoskentelyjaksoLabel(this, tj)
-    }));
-  }
-
-  get tyoskentelyjaksonAlkamispaiva() {
-    if (this.form.tyoskentelyjakso) {
-      return this.form.tyoskentelyjakso.alkamispaiva;
-    }
-    return undefined;
-  }
-
-  get tyoskentelyjaksonPaattymispaiva() {
-    if (this.form.tyoskentelyjakso) {
-      return this.form.tyoskentelyjakso.paattymispaiva;
-    }
-    return undefined;
   }
 }
 </script>

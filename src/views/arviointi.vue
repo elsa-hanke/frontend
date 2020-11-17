@@ -166,14 +166,6 @@ export default class Arviointi extends Vue {
   get account() {
     return store.getters.account;
   }
-
-  get displayName() {
-    if (this.account) {
-      return `${this.account.firstName} ${this.account.lastName}`;
-    } else {
-      return "";
-    }
-  }
 }
 </script>
 

@@ -7,7 +7,7 @@
       class="align-items-center mb-md-0"
     >
       <template v-slot="{ uid }">
-        <user-avatar :id="uid" :displayName="displayName" />
+        <user-avatar :id="uid" :displayName="value.arvioinninSaaja.nimi" />
       </template>
     </elsa-form-group>
     <elsa-form-group
@@ -341,7 +341,6 @@ import { Mixins, Prop } from "vue-property-decorator";
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
 import { vaativuustasot, luottamuksenTasot } from "@/utils/constants";
-import store from "@/store";
 import UserAvatar from "@/components/user-avatar/user-avatar.vue";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
 import ElsaFormMultiselect from "@/components/multiselect/multiselect.vue";
@@ -442,15 +441,6 @@ export default class ArviointiForm extends Mixins(validationMixin) {
         luottamuksenTaso: this.form.luottamuksenTaso.arvo,
         sanallinenArviointi: this.form.sanallinenArviointi
       });
-    }
-  }
-
-  get displayName() {
-    const account = store.getters.account;
-    if (account) {
-      return `${account.firstName} ${account.lastName}`;
-    } else {
-      return "";
     }
   }
 }

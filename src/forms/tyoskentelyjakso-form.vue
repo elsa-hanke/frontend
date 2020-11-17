@@ -340,10 +340,6 @@ export default class TyoskentelyjaksoForm extends Mixins(validationMixin) {
   onCancelClick() {
     this.$emit("cancel");
   }
-
-  get currentLocale() {
-    return this.$i18n.locale;
-  }
 }
 </script>
 
