@@ -3,8 +3,6 @@ import VueRouter, { RouteConfig } from "vue-router";
 import Meta from "vue-meta";
 
 import Arvioinnit from "../views/arvioinnit.vue";
-import Suoritemerkinnat from "../views/suoritemerkinnat.vue";
-import UusiSuoritemerkinta from "../views/uusi-suoritemerkinta.vue";
 import Arviointi from "../views/arviointi.vue";
 import Arviointipyynto from "../views/arviointipyynto.vue";
 import ArviointipyyntoLahetetty from "../views/arviointipyynto-lahetetty.vue";
@@ -17,7 +15,11 @@ import Koulutukset from "../views/koulutukset.vue";
 import Koulutussuunnitelma from "../views/koulutussuunnitelma.vue";
 import PageNotFound from "../views/page-not-found.vue";
 import Root from "../views/root.vue";
+import Suoritemerkinnat from "../views/suoritemerkinnat.vue";
+import Suoritemerkinta from "../views/suoritemerkinta.vue";
 import Tyoskentelyjaksot from "../views/tyoskentelyjaksot.vue";
+import UusiSuoritemerkinta from "../views/uusi-suoritemerkinta.vue";
+import MuokkaaSuoritemerkintaa from "../views/muokkaa-suoritemerkintaa.vue";
 import Viestit from "../views/viestit.vue";
 
 Vue.use(VueRouter);
@@ -52,6 +54,16 @@ const routes: Array<RouteConfig> = [
         path: "/suoritemerkinnat/uusi",
         name: "uusi-suoritemerkinta",
         component: UusiSuoritemerkinta
+      },
+      {
+        path: "/suoritemerkinnat/:suoritemerkintaId/muokkaus",
+        name: "muokkaa-suoritemerkintaa",
+        component: MuokkaaSuoritemerkintaa
+      },
+      {
+        path: "/suoritemerkinnat/:suoritemerkintaId",
+        name: "suoritemerkinta",
+        component: Suoritemerkinta
       },
       {
         path: "/arvioinnit",

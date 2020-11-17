@@ -1,0 +1,190 @@
+<template>
+  <div class="suoritemerkinta">
+    <b-breadcrumb :items="items" class="mb-0 px-0"></b-breadcrumb>
+    <b-container fluid>
+      <b-row lg>
+        <b-col class="px-0">
+          <h1>{{ $t("suoritemerkinta") }}</h1>
+          <hr />
+          <div v-if="suoritemerkintaWrapper">
+            <elsa-form-group :label="$t('tyoskentelyjakso')">
+              <template v-slot="{ uid }">
+                <span :id="uid">{{
+                  suoritemerkintaWrapper.tyoskentelyjakso.label
+                }}</span>
+              </template>
+            </elsa-form-group>
+            <elsa-form-group :label="$t('oppimistavoite')">
+              <template v-slot="{ uid }">
+                <span :id="uid">{{
+                  suoritemerkintaWrapper.oppimistavoite.nimi
+                }}</span>
+              </template>
+            </elsa-form-group>
+            <elsa-form-group :label="$t('vaativuustaso')">
+              <template v-slot="{ uid }">
+                <span :id="uid">
+                  <elsa-badge :value="suoritemerkintaWrapper.vaativuustaso" />
+                </span>
+              </template>
+            </elsa-form-group>
+            <elsa-form-group :label="$t('luottamuksen-taso')">
+              <template #label-help>
+                <elsa-popover>
+                  <template>
+                    <h2>{{ $t("luottamuksen-taso") }}</h2>
+                    <div
+                      v-for="(taso, index) in luottamuksenTasot"
+                      :key="index"
+                    >
+                      <h3>{{ taso.arvo }} {{ $t(taso.nimi) }}</h3>
+                      <p>{{ $t(taso.kuvaus) }}</p>
+                    </div>
+                  </template>
+                </elsa-popover>
+              </template>
+              <template v-slot="{ uid }">
+                <span :id="uid">
+                  <elsa-luottamuksen-taso
+                    :value="suoritemerkintaWrapper.luottamuksenTaso"
+                  />
+                </span>
+              </template>
+            </elsa-form-group>
+            <elsa-form-group :label="$t('suorituspaiva')">
+              <template v-slot="{ uid }">
+                <span :id="uid">{{
+                  $date(suoritemerkintaWrapper.suorituspaiva)
+                }}</span>
+              </template>
+            </elsa-form-group>
+            <elsa-form-group :label="$t('lisatiedot')">
+              <template v-slot="{ uid }">
+                <span :id="uid" class="text-prewrap">{{
+                  suoritemerkintaWrapper.lisatiedot
+                }}</span>
+              </template>
+            </elsa-form-group>
+            <div class="text-right">
+              <b-button
+                @click="deleteSuoritemerkinta"
+                variant="outline-danger"
+                >{{ $t("poista-merkinta") }}</b-button
+              >
+              <b-button
+                :to="{ name: 'muokkaa-suoritemerkintaa' }"
+                variant="primary"
+                class="ml-2"
+                >{{ $t("muokkaa-merkintaa") }}</b-button
+              >
+            </div>
+          </div>
+          <div class="text-center" v-else>
+            <b-spinner variant="primary" :label="$t('ladataan')"></b-spinner>
+          </div>
+        </b-col>
+      </b-row>
+    </b-container>
+  </div>
+</template>
+
+<script lang="ts">
+import axios from "axios";
+import { Vue, Component } from "vue-property-decorator";
+import ElsaFormGroup from "@/components/form-group/form-group.vue";
+import ElsaPopover from "@/components/popover/popover.vue";
+import ElsaBadge from "@/components/badge/badge.vue";
+import ElsaLuottamuksenTaso from "@/components/luottamuksen-taso/luottamuksen-taso.vue";
+import { vaativuustasot, luottamuksenTasot } from "@/utils/constants";
+import { tyoskentelyjaksoLabel } from "@/utils/tyoskentelyjakso";
+import { confirmDelete } from "@/utils/confirm";
+import { toastFail, toastSuccess } from "@/utils/toast";
+
+@Component({
+  components: {
+    ElsaFormGroup,
+    ElsaPopover,
+    ElsaBadge,
+    ElsaLuottamuksenTaso
+  }
+})
+export default class Suoritemerkinta extends Vue {
+  items = [
+    {
+      text: this.$t("etusivu"),
+      to: { name: "etusivu" }
+    },
+    {
+      text: this.$t("suoritemerkinnat"),
+      to: { name: "suoritemerkinnat" }
+    },
+    {
+      text: this.$t("suoritemerkinta"),
+      active: true
+    }
+  ];
+  suoritemerkinta: any = null;
+  vaativuustasot = vaativuustasot;
+  luottamuksenTasot = luottamuksenTasot;
+
+  async mounted() {
+    const suoritemerkintaId = this.$route?.params?.suoritemerkintaId;
+    if (suoritemerkintaId) {
+      try {
+        this.suoritemerkinta = (
+          await axios.get(
+            `erikoistuva-laakari/suoritemerkinnat/${suoritemerkintaId}`
+          )
+        ).data;
+      } catch (err) {
+        this.$router.replace({ name: "suoritemerkinnat" });
+      }
+    }
+  }
+
+  async deleteSuoritemerkinta() {
+    if (
+      await confirmDelete(
+        this,
+        this.$t("poista-suoritemerkinta") as string,
+        (this.$t("suoritemerkinnan") as string).toLowerCase()
+      )
+    ) {
+      try {
+        await axios.delete(
+          `erikoistuva-laakari/suoritemerkinnat/${this.suoritemerkinta.id}`
+        );
+        toastSuccess(this, this.$t("suoritemerkinnan-poistettu-onnistuneesti"));
+        this.$router.push({
+          name: "suoritemerkinnat"
+        });
+      } catch (err) {
+        toastFail(this, this.$t("suoritemerkinnan-poistaminen-epaonnistui"));
+      }
+    }
+  }
+
+  get suoritemerkintaWrapper() {
+    if (this.suoritemerkinta) {
+      return {
+        ...this.suoritemerkinta,
+        tyoskentelyjakso: {
+          ...this.suoritemerkinta.tyoskentelyjakso,
+          label: tyoskentelyjaksoLabel(
+            this,
+            this.suoritemerkinta.tyoskentelyjakso
+          )
+        }
+      };
+    } else {
+      return undefined;
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.suoritemerkinta {
+  max-width: 970px;
+}
+</style>

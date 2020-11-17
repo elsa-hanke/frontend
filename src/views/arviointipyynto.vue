@@ -30,9 +30,10 @@ import axios from "axios";
 import { Component, Mixins } from "vue-property-decorator";
 import { confirmDelete } from "@/utils/confirm";
 import { ArviointipyyntoLomake } from "@/types";
-import { toastFail, toastSuccess } from "@/utils/toast";
 import ArviointipyyntoForm from "@/forms/arviointipyynto-form.vue";
 import ConfirmRouteExit from "@/mixins/confirm-route-exit";
+import { tyoskentelyjaksoLabel } from "@/utils/tyoskentelyjakso";
+import { toastFail, toastSuccess } from "@/utils/toast";
 
 @Component({
   components: {
@@ -81,7 +82,9 @@ export default class Arviointipyynto extends Mixins(ConfirmRouteExit) {
     if (arviointiId) {
       try {
         this.arviointipyynto = (
-          await axios.get(`suoritusarvioinnit/${arviointiId}`)
+          await axios.get(
+            `erikoistuva-laakari/suoritusarvioinnit/${arviointiId}`
+          )
         ).data;
       } catch (err) {
         this.$router.replace({ name: "arvioinnit" });
@@ -139,14 +142,18 @@ export default class Arviointipyynto extends Mixins(ConfirmRouteExit) {
         (this.$t("arviointipyynnon") as string).toLowerCase()
       )
     ) {
-      await axios.delete(
-        `erikoistuva-laakari/suoritusarvioinnit/${this.arviointipyynto.id}`
-      );
-      toastSuccess(this, this.$t("arviointipyynto-poistettu-onnistuneesti"));
-      this.skipRouteExitConfirm = true;
-      this.$router.push({
-        name: "arvioinnit"
-      });
+      try {
+        await axios.delete(
+          `erikoistuva-laakari/suoritusarvioinnit/${this.arviointipyynto.id}`
+        );
+        toastSuccess(this, this.$t("arviointipyynto-poistettu-onnistuneesti"));
+        this.skipRouteExitConfirm = true;
+        this.$router.push({
+          name: "arvioinnit"
+        });
+      } catch (err) {
+        toastFail(this, this.$t("arviointipyynnon-poistaminen-epaonnistui"));
+      }
     }
   }
 
@@ -178,6 +185,13 @@ export default class Arviointipyynto extends Mixins(ConfirmRouteExit) {
     if (this.arviointipyynto) {
       return {
         ...this.arviointipyynto,
+        tyoskentelyjakso: {
+          ...this.arviointipyynto.tyoskentelyjakso,
+          label: tyoskentelyjaksoLabel(
+            this,
+            this.arviointipyynto.tyoskentelyjakso
+          )
+        },
         epaOsaamisalue: this.arviointipyynto.arvioitavaOsaalue,
         kouluttaja: this.arviointipyynto.arvioinninAntaja
       };
