@@ -3,7 +3,7 @@
     <avatar
       v-bind="$attrs"
       :src="imageSrc"
-      :username="displayName"
+      :username="displayNameOrAccountName"
       background-color="gray"
       color="white"
       :size="32"
@@ -12,7 +12,7 @@
     ></avatar>
     <div>
       <span class="align-middle"
-        ><slot name="display-name">{{ displayName }}</slot></span
+        ><slot name="display-name">{{ displayNameOrAccountName }}</slot></span
       >
       <div class="text-size-sm font-weight-400" v-if="title">{{ title }}</div>
     </div>
@@ -22,8 +22,9 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import { Prop } from "vue-property-decorator";
 import Avatar from "vue-avatar";
+import { Prop } from "vue-property-decorator";
+import store from "@/store";
 
 @Component({
   components: {
@@ -31,7 +32,7 @@ import Avatar from "vue-avatar";
   }
 })
 export default class UserAvatar extends Vue {
-  @Prop({ required: true })
+  @Prop({ required: false })
   displayName!: string;
 
   @Prop({ required: false })
@@ -54,6 +55,19 @@ export default class UserAvatar extends Vue {
     } else {
       return undefined;
     }
+  }
+
+  get currentAccountName() {
+    const account = store.getters.account;
+    if (account) {
+      return `${account.firstName} ${account.lastName}`;
+    } else {
+      return "";
+    }
+  }
+
+  get displayNameOrAccountName() {
+    return this.displayName ? this.displayName : this.currentAccountName;
   }
 }
 </script>

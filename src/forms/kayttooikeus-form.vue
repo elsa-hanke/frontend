@@ -2,7 +2,7 @@
   <b-form @submit.stop.prevent="onSubmit">
     <elsa-form-group :label="$t('kayttaja')">
       <template v-slot="{ uid }">
-        <user-avatar :id="uid" :displayName="displayName" />
+        <user-avatar :id="uid" />
       </template>
     </elsa-form-group>
     <elsa-form-group :label="$t('valitse-oma-roolisi')" :required="true">
@@ -125,15 +125,6 @@ export default class KayttooikeusForm extends Vue {
       return true;
     }
     return false;
-  }
-
-  get displayName() {
-    const account = store.getters.account;
-    if (account) {
-      return `${account.firstName} ${account.lastName}`;
-    } else {
-      return "";
-    }
   }
 }
 </script>

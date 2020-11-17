@@ -13,7 +13,7 @@
       <template v-slot="{ uid }">
         <elsa-form-multiselect
           :id="uid"
-          v-model="value.tyoskentelyjakso"
+          v-model="form.tyoskentelyjakso"
           :options="tyoskentelyjaksotFormatted"
           :state="validateState('tyoskentelyjakso')"
           @select="onTyoskentelyjaksoSelect"
@@ -29,7 +29,7 @@
       <template v-slot="{ uid }">
         <elsa-form-multiselect
           :id="uid"
-          v-model="value.oppimistavoite"
+          v-model="form.oppimistavoite"
           :options="oppimistavoitteenKategoriat"
           :state="validateState('oppimistavoite')"
           group-values="oppimistavoitteet"
@@ -68,7 +68,7 @@
       <template v-slot="{ uid }">
         <elsa-form-multiselect
           :id="uid"
-          v-model="value.vaativuustaso"
+          v-model="form.vaativuustaso"
           :options="vaativuustasot"
           :state="validateState('vaativuustaso')"
           :custom-label="value => `${value.arvo} ${value.nimi}`"
@@ -108,7 +108,7 @@
         <template v-slot="{ uid }">
           <elsa-form-multiselect
             :id="uid"
-            v-model="value.luottamuksenTaso"
+            v-model="form.luottamuksenTaso"
             :options="luottamuksenTasot"
             :state="validateState('luottamuksenTaso')"
             :custom-label="value => `${value.arvo} ${value.nimi}`"
@@ -129,15 +129,15 @@
         </template>
       </elsa-form-group>
       <elsa-form-group
-        :label="$t('ajankohta')"
+        :label="$t('suorituspaiva')"
         class="col-md-4"
         :required="true"
       >
         <template v-slot="{ uid }">
           <elsa-form-datepicker
             :id="uid"
-            v-model="value.suorituspaiva"
-            :state="validateState('suorituspaiva')"
+            v-model="form.tapahtumanAjankohta"
+            :state="validateState('tapahtumanAjankohta')"
             :min="tyoskentelyjaksonAlkamispaiva"
             :max="tyoskentelyjaksonPaattymispaiva"
           ></elsa-form-datepicker>
@@ -151,7 +151,7 @@
       <template v-slot="{ uid }">
         <b-form-textarea
           :id="uid"
-          v-model="value.lisatiedot"
+          v-model="form.lisatiedot"
           rows="5"
         ></b-form-textarea>
       </template>
@@ -169,21 +169,16 @@
 
 <script lang="ts">
 import Component from "vue-class-component";
-import axios from "axios";
-import isAfter from "date-fns/isAfter";
-import isBefore from "date-fns/isBefore";
 import { Mixins, Prop } from "vue-property-decorator";
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
-import { parseISO } from "date-fns";
 import TyoskentelyjaksoForm from "@/forms/tyoskentelyjakso-form.vue";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
 import ElsaFormMultiselect from "@/components/multiselect/multiselect.vue";
 import ElsaPopover from "@/components/popover/popover.vue";
 import ElsaFormDatepicker from "@/components/datepicker/datepicker.vue";
 import { vaativuustasot, luottamuksenTasot } from "@/utils/constants";
-import { toastSuccess, toastFail } from "@/utils/toast";
-import { tyoskentelyjaksoLabel } from "@/utils/tyoskentelyjakso";
+import TyoskentelyjaksoMixin from "@/mixins/tyoskentelyjakso";
 
 @Component({
   components: {
@@ -194,7 +189,7 @@ import { tyoskentelyjaksoLabel } from "@/utils/tyoskentelyjakso";
     ElsaFormDatepicker
   },
   validations: {
-    value: {
+    form: {
       tyoskentelyjakso: {
         required
       },
@@ -207,31 +202,20 @@ import { tyoskentelyjaksoLabel } from "@/utils/tyoskentelyjakso";
       luottamuksenTaso: {
         required
       },
-      suorituspaiva: {
+      tapahtumanAjankohta: {
         required
       }
     }
   }
 })
-export default class SuoritemerkintaForm extends Mixins(validationMixin) {
-  @Prop({ required: false, default: [] })
-  tyoskentelyjaksot!: any[];
-
+export default class SuoritemerkintaForm extends Mixins(
+  validationMixin,
+  TyoskentelyjaksoMixin
+) {
   @Prop({ required: false, default: [] })
   oppimistavoitteenKategoriat!: any[];
 
-  @Prop({
-    required: false,
-    type: Object,
-    default: () => ({
-      tyoskentelyjakso: null,
-      oppimistavoite: null,
-      vaativuustaso: null,
-      luottamuksenTaso: null,
-      suorituspaiva: null,
-      lisatiedot: null
-    })
-  })
+  @Prop({ required: false })
   value!: any;
 
   form = {
@@ -239,87 +223,30 @@ export default class SuoritemerkintaForm extends Mixins(validationMixin) {
     oppimistavoite: null,
     vaativuustaso: null,
     luottamuksenTaso: null,
-    suorituspaiva: null,
+    tapahtumanAjankohta: null,
     lisatiedot: null
   } as any;
-
   vaativuustasot = vaativuustasot;
   luottamuksenTasot = luottamuksenTasot;
 
   validateState(name: string) {
-    const { $dirty, $error } = this.$v.value[name] as any;
+    const { $dirty, $error } = this.$v.form[name] as any;
     return $dirty ? ($error ? false : null) : null;
   }
 
-  onTyoskentelyjaksoSelect(value: any) {
-    if (this.form.suorituspaiva) {
-      if (
-        isBefore(
-          parseISO(this.form.suorituspaiva),
-          parseISO(value.alkamispaiva)
-        )
-      ) {
-        this.form.suorituspaiva = null;
-      }
-      if (value.paattymispaiva) {
-        if (
-          isAfter(
-            parseISO(this.form.suorituspaiva),
-            parseISO(value.paattymispaiva)
-          )
-        ) {
-          this.form.suorituspaiva = null;
-        }
-      }
-    }
-  }
-
   onSubmit() {
-    this.$v.value.$touch();
-    if (this.$v.value.$anyError) {
+    this.$v.form.$touch();
+    if (this.$v.form.$anyError) {
       return;
     }
-    this.$emit("submit", {});
-  }
-
-  async onTyoskentelyjaksoSubmit(value: any, modal: any) {
-    try {
-      const tyoskentelyjakso = (
-        await axios.post("/erikoistuva-laakari/tyoskentelyjaksot", value)
-      ).data;
-      this.tyoskentelyjaksot.push(tyoskentelyjakso);
-      tyoskentelyjakso.label = tyoskentelyjaksoLabel(this, tyoskentelyjakso);
-      this.form.tyoskentelyjakso = tyoskentelyjakso;
-      this.onTyoskentelyjaksoSelect(tyoskentelyjakso);
-      modal.hide("confirm");
-      toastSuccess(this, this.$t("uusi-tyoskentelyjakso-lisatty"));
-    } catch (err) {
-      toastFail(
-        this,
-        this.$t("uuden-tyoskentelyjakson-lisaaminen-epaonnistui")
-      );
-    }
-  }
-
-  get tyoskentelyjaksotFormatted() {
-    return this.tyoskentelyjaksot.map(tj => ({
-      ...tj,
-      label: tyoskentelyjaksoLabel(this, tj)
-    }));
-  }
-
-  get tyoskentelyjaksonAlkamispaiva() {
-    if (this.form.tyoskentelyjakso) {
-      return this.form.tyoskentelyjakso.alkamispaiva;
-    }
-    return undefined;
-  }
-
-  get tyoskentelyjaksonPaattymispaiva() {
-    if (this.form.tyoskentelyjakso) {
-      return this.form.tyoskentelyjakso.paattymispaiva;
-    }
-    return undefined;
+    this.$emit("submit", {
+      tyoskentelyjaksoId: this.form.tyoskentelyjakso.id,
+      oppimistavoiteId: this.form.oppimistavoite.id,
+      vaativuustaso: this.form.vaativuustaso.arvo,
+      luottamuksenTaso: this.form.luottamuksenTaso.arvo,
+      suorituspaiva: this.form.tapahtumanAjankohta,
+      lisatiedot: this.form.lisatiedot
+    });
   }
 }
 </script>

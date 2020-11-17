@@ -52,7 +52,7 @@
           class="text-nowrap align-self-center"
           @click="logout()"
         >
-          <user-avatar :display-name="displayName" :title="title" />
+          <user-avatar :title="title" />
         </b-nav-item>
 
         <b-nav-item-dropdown
@@ -109,14 +109,6 @@ export default class Navbar extends Vue {
     }
 
     return undefined;
-  }
-
-  get displayName() {
-    if (this.account) {
-      return `${this.account.firstName} ${this.account.lastName}`;
-    } else {
-      return "";
-    }
   }
 
   get currentLocale() {
