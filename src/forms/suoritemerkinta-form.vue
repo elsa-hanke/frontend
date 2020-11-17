@@ -215,7 +215,18 @@ export default class SuoritemerkintaForm extends Mixins(
   @Prop({ required: false, default: [] })
   oppimistavoitteenKategoriat!: any[];
 
-  @Prop({ required: false })
+  @Prop({
+    required: false,
+    type: Object,
+    default: () => ({
+      tyoskentelyjakso: null,
+      oppimistavoite: null,
+      vaativuustaso: null,
+      luottamuksenTaso: null,
+      tapahtumanAjankohta: null,
+      lisatiedot: null
+    })
+  })
   value!: any;
 
   form = {
@@ -228,6 +239,21 @@ export default class SuoritemerkintaForm extends Mixins(
   } as any;
   vaativuustasot = vaativuustasot;
   luottamuksenTasot = luottamuksenTasot;
+
+  mounted() {
+    this.form = {
+      tyoskentelyjakso: this.value.tyoskentelyjakso,
+      oppimistavoite: this.value.oppimistavoite,
+      vaativuustaso: vaativuustasot.find(
+        taso => taso.arvo === this.value.vaativuustaso
+      ),
+      luottamuksenTaso: luottamuksenTasot.find(
+        taso => taso.arvo === this.value.luottamuksenTaso
+      ),
+      tapahtumanAjankohta: this.value.suorituspaiva,
+      lisatiedot: this.value.lisatiedot
+    };
+  }
 
   validateState(name: string) {
     const { $dirty, $error } = this.$v.form[name] as any;

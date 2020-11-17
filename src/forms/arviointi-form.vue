@@ -340,7 +340,6 @@ import Component from "vue-class-component";
 import { Mixins, Prop } from "vue-property-decorator";
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
-import { vaativuustasot, luottamuksenTasot } from "@/utils/constants";
 import UserAvatar from "@/components/user-avatar/user-avatar.vue";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
 import ElsaFormMultiselect from "@/components/multiselect/multiselect.vue";
@@ -348,6 +347,7 @@ import TyoskentelyjaksoForm from "@/forms/tyoskentelyjakso-form.vue";
 import ElsaLuottamuksenTaso from "@/components/luottamuksen-taso/luottamuksen-taso.vue";
 import ElsaBadge from "@/components/badge/badge.vue";
 import ElsaPopover from "@/components/popover/popover.vue";
+import { vaativuustasot, luottamuksenTasot } from "@/utils/constants";
 
 @Component({
   components: {
@@ -389,7 +389,6 @@ export default class ArviointiForm extends Mixins(validationMixin) {
     luottamuksenTaso: null,
     sanallinenArviointi: null
   };
-
   vaativuustasot = vaativuustasot;
   luottamuksenTasot = luottamuksenTasot;
 

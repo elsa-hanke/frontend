@@ -19,9 +19,11 @@ export function restoreRoute(next: NavigationGuardNext) {
       }
     } catch (err) {
       console.warn(err);
+      next();
     }
+  } else {
+    next();
   }
-  next();
 }
 
 // Tallentaa näkymän polun selaimen muistiin.
