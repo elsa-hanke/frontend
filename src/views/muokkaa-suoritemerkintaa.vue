@@ -153,7 +153,14 @@ export default class MuokkaaSuoritemerkintaa extends Mixins(ConfirmRouteExit) {
 
   get oppimistavoitteenKategoriat() {
     if (this.suoritemerkintaLomake) {
-      return this.suoritemerkintaLomake.oppimistavoitteenKategoriat;
+      return this.suoritemerkintaLomake.oppimistavoitteenKategoriat.map(
+        kategoria => ({
+          ...kategoria,
+          nimi: `${kategoria.nimi} / ${(this.$t(
+            "toimenpiteet"
+          ) as string).toLowerCase()}`
+        })
+      );
     } else {
       return [];
     }
