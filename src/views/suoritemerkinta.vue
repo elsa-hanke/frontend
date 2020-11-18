@@ -159,7 +159,7 @@ export default class Suoritemerkinta extends Vue {
         await axios.delete(
           `erikoistuva-laakari/suoritemerkinnat/${this.suoritemerkinta.id}`
         );
-        toastSuccess(this, this.$t("suoritemerkinnan-poistettu-onnistuneesti"));
+        toastSuccess(this, this.$t("suoritemerkinta-poistettu-onnistuneesti"));
         this.$router.push({
           name: "suoritemerkinnat"
         });
