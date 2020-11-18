@@ -14,7 +14,7 @@
             :oppimistavoitteen-kategoriat="oppimistavoitteenKategoriat"
           />
           <div class="text-center" v-else>
-            <b-spinner variant="primary" :label="$t('ladataan')"></b-spinner>
+            <b-spinner variant="primary" :label="$t('ladataan')" />
           </div>
         </b-col>
       </b-row>
@@ -88,7 +88,8 @@ export default class MuokkaaSuoritemerkintaa extends Mixins(ConfirmRouteExit) {
     }
   }
 
-  async onSubmit(value: any) {
+  async onSubmit(value: any, params: any) {
+    params.saving = true;
     try {
       this.suoritemerkinta = (
         await axios.put("erikoistuva-laakari/suoritemerkinnat", {
@@ -112,6 +113,7 @@ export default class MuokkaaSuoritemerkintaa extends Mixins(ConfirmRouteExit) {
     } catch (err) {
       toastFail(this, this.$t("suoritemerkinnan-tallentaminen-epaonnistui"));
     }
+    params.saving = false;
   }
 
   get tyoskentelyjaksot() {

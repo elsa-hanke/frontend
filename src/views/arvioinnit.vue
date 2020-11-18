@@ -6,11 +6,11 @@
         <b-col class="px-0">
           <h1>{{ $t("arvioinnit") }}</h1>
           <p>{{ $t("arvioinnit-kuvaus") }}</p>
-          <b-button
+          <elsa-button
             variant="primary"
             :to="{ name: 'arviointipyynto' }"
             class="mb-4"
-            >{{ $t("pyyda-arviointia") }}</b-button
+            >{{ $t("pyyda-arviointia") }}</elsa-button
           >
           <b-tabs content-class="mt-3" :no-fade="true" @input="onTabChange">
             <b-tab :title="$t('arvioinnit-ja-itsearvioinnit')" active>
@@ -79,12 +79,12 @@
                 <b-row>
                   <b-col>
                     <div class="d-flex flex-row-reverse">
-                      <b-button
+                      <elsa-button
                         :disabled="false"
                         variant="link"
                         @click="resetFilters"
                         class="shadow-none"
-                        >{{ $t("tyhjenna-valinnat") }}</b-button
+                        >{{ $t("tyhjenna-valinnat") }}</elsa-button
                       >
                     </div>
                   </b-col>
@@ -130,10 +130,7 @@
                   </b-pagination>
                 </div>
                 <div class="text-center" v-else>
-                  <b-spinner
-                    variant="primary"
-                    :label="$t('ladataan')"
-                  ></b-spinner>
+                  <b-spinner variant="primary" :label="$t('ladataan')" />
                 </div>
               </div>
             </b-tab>
@@ -177,10 +174,7 @@
                 </b-pagination>
               </div>
               <div class="text-center" v-else>
-                <b-spinner
-                  variant="primary"
-                  :label="$t('ladataan')"
-                ></b-spinner>
+                <b-spinner variant="primary" :label="$t('ladataan')" />
               </div>
             </b-tab>
           </b-tabs>
@@ -197,6 +191,7 @@ import ArviointiCard from "@/components/arviointi-card/arviointi-card.vue";
 import ArviointipyyntoCard from "@/components/arviointipyynto-card/arviointipyynto-card.vue";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
 import ElsaFormMultiselect from "@/components/multiselect/multiselect.vue";
+import ElsaButton from "@/components/button/button.vue";
 import { tyoskentelyjaksoLabel } from "@/utils/tyoskentelyjakso";
 
 @Component({
@@ -204,7 +199,8 @@ import { tyoskentelyjaksoLabel } from "@/utils/tyoskentelyjakso";
     ArviointiCard,
     ArviointipyyntoCard,
     ElsaFormGroup,
-    ElsaFormMultiselect
+    ElsaFormMultiselect,
+    ElsaButton
   }
 })
 export default class Arvioinnit extends Vue {

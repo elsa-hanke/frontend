@@ -26,7 +26,8 @@ export default class TyoskentelyjaksoMixin extends Vue {
     }
   }
 
-  async onTyoskentelyjaksoSubmit(value: any, modal: any) {
+  async onTyoskentelyjaksoSubmit(value: any, params: any, modal: any) {
+    params.saving = true;
     try {
       const tyoskentelyjakso = (
         await axios.post("/erikoistuva-laakari/tyoskentelyjaksot", value)
@@ -43,6 +44,7 @@ export default class TyoskentelyjaksoMixin extends Vue {
         this.$t("uuden-tyoskentelyjakson-lisaaminen-epaonnistui")
       );
     }
+    params.saving = false;
   }
 
   get tyoskentelyjaksotFormatted() {

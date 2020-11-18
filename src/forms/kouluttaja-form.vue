@@ -25,15 +25,19 @@
       </template>
     </elsa-form-group>
     <div class="text-right">
-      <b-button
+      <elsa-button
         type="reset"
         variant="back"
         @click.stop.prevent="onCancelClick"
-        >{{ $t("peruuta") }}</b-button
+        >{{ $t("peruuta") }}</elsa-button
       >
-      <b-button type="submit" variant="primary" class="ml-2">{{
-        $t("lisaa")
-      }}</b-button>
+      <elsa-button
+        :loading="params.saving"
+        type="submit"
+        variant="primary"
+        class="ml-2"
+        >{{ $t("lisaa") }}</elsa-button
+      >
     </div>
   </b-form>
 </template>
@@ -44,10 +48,12 @@ import { Mixins } from "vue-property-decorator";
 import { validationMixin } from "vuelidate";
 import { required, email } from "vuelidate/lib/validators";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
+import ElsaButton from "@/components/button/button.vue";
 
 @Component({
   components: {
-    ElsaFormGroup
+    ElsaFormGroup,
+    ElsaButton
   },
   validations: {
     value: {
@@ -66,6 +72,9 @@ export default class KouluttajaForm extends Mixins(validationMixin) {
     nimi: null,
     sahkoposti: null
   };
+  params = {
+    saving: false
+  };
 
   validateState(name: string) {
     const { $dirty, $error } = this.$v.value[name] as any;
@@ -77,7 +86,7 @@ export default class KouluttajaForm extends Mixins(validationMixin) {
     if (this.$v.value.$anyError) {
       return;
     }
-    this.$emit("submit", this.value);
+    this.$emit("submit", this.value, this.params);
   }
 
   onCancelClick() {

@@ -9,12 +9,11 @@
             Lorem ipsum dolor sit amet...
           </p>
           <div class="d-flex justify-content-center">
-            <b-button
-              type="submit"
+            <elsa-button
               variant="primary"
               class="mr-3"
               :to="{ name: 'arvioinnit' }"
-              >{{ $t("palaa-arviointeihin") }}</b-button
+              >{{ $t("palaa-arviointeihin") }}</elsa-button
             >
           </div>
         </b-col>
@@ -25,9 +24,12 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import ElsaButton from "@/components/button/button.vue";
 
 @Component({
-  components: {}
+  components: {
+    ElsaButton
+  }
 })
 export default class ItsearviointiValmis extends Vue {
   items = [

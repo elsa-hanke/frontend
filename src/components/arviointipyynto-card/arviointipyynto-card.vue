@@ -52,7 +52,7 @@
               </tr>
             </b-table-simple>
           </div>
-          <b-button
+          <elsa-button
             v-if="!value.itsearviointiAika"
             variant="outline-primary"
             class="mr-2"
@@ -60,16 +60,16 @@
               name: 'itsearviointi',
               params: { arviointiId: value.id }
             }"
-            >{{ $t("tee-itsearviointi") }}</b-button
+            >{{ $t("tee-itsearviointi") }}</elsa-button
           >
-          <b-button
+          <elsa-button
             v-if="!value.arviointiAika"
             variant="primary"
             :to="{
               name: 'arviointipyynto-muokkaus',
               params: { arviointiId: value.id }
             }"
-            >{{ $t("muokkaa-arviointipyyntoa") }}</b-button
+            >{{ $t("muokkaa-arviointipyyntoa") }}</elsa-button
           >
         </b-col>
       </b-row>
@@ -82,8 +82,13 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import { Prop } from "vue-property-decorator";
+import ElsaButton from "@/components/button/button.vue";
 
-@Component({})
+@Component({
+  components: {
+    ElsaButton
+  }
+})
 export default class ArviointipyyntoCard extends Vue {
   @Prop({})
   value!: any;

@@ -36,11 +36,7 @@
         class="d-flex justify-content-center align-items-center mt-5 mb-3"
         v-else
       >
-        <b-spinner
-          variant="primary"
-          :label="$t('ladataan')"
-          class="mr-3"
-        ></b-spinner>
+        <b-spinner variant="primary" :label="$t('ladataan')" class="mr-3" />
         <span>{{ $t("lisataan-tiedot-kayttajalle") }}</span>
       </div>
     </b-container>

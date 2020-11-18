@@ -14,7 +14,7 @@
             :itsearviointi="true"
           />
           <div class="text-center" v-else>
-            <b-spinner variant="primary" :label="$t('ladataan')"></b-spinner>
+            <b-spinner variant="primary" :label="$t('ladataan')" />
           </div>
         </b-col>
         <b-col class="pl-3 pr-0" lg="2"></b-col>
@@ -62,7 +62,8 @@ export default class Itsearviointi extends Mixins(ConfirmRouteExit) {
     }
   }
 
-  async onSubmit(value: any) {
+  async onSubmit(value: any, params: any) {
+    params.saving = true;
     try {
       await axios.put("erikoistuva-laakari/suoritusarvioinnit", value);
       toastSuccess(this, this.$t("itsearvioinnin-tallentaminen-onnistui"));
@@ -73,6 +74,7 @@ export default class Itsearviointi extends Mixins(ConfirmRouteExit) {
     } catch (err) {
       toastFail(this, this.$t("itsearvioinnin-tallentaminen-epaonnistui"));
     }
+    params.saving = false;
   }
 }
 </script>

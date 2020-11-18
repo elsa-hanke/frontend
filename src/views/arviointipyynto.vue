@@ -17,7 +17,7 @@
             :editing="editing"
           />
           <div class="text-center" v-else>
-            <b-spinner variant="primary" :label="$t('ladataan')"></b-spinner>
+            <b-spinner variant="primary" :label="$t('ladataan')" />
           </div>
         </b-col>
       </b-row>
@@ -92,7 +92,8 @@ export default class Arviointipyynto extends Mixins(ConfirmRouteExit) {
     }
   }
 
-  async onSubmit(value: any) {
+  async onSubmit(value: any, params: any) {
+    params.saving = true;
     if (this.arviointipyynto) {
       try {
         await axios.put("erikoistuva-laakari/suoritusarvioinnit", {
@@ -132,9 +133,10 @@ export default class Arviointipyynto extends Mixins(ConfirmRouteExit) {
         );
       }
     }
+    params.saving = false;
   }
 
-  async onDelete() {
+  async onDelete(params: any) {
     if (
       await confirmDelete(
         this,
@@ -142,6 +144,7 @@ export default class Arviointipyynto extends Mixins(ConfirmRouteExit) {
         (this.$t("arviointipyynnon") as string).toLowerCase()
       )
     ) {
+      params.deleting = true;
       try {
         await axios.delete(
           `erikoistuva-laakari/suoritusarvioinnit/${this.arviointipyynto.id}`
@@ -154,6 +157,7 @@ export default class Arviointipyynto extends Mixins(ConfirmRouteExit) {
       } catch (err) {
         toastFail(this, this.$t("arviointipyynnon-poistaminen-epaonnistui"));
       }
+      params.deleting = false;
     }
   }
 

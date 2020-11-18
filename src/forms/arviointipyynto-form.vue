@@ -123,19 +123,24 @@
       </template>
     </elsa-form-group>
     <div class="text-right">
-      <b-button type="reset" variant="back" :to="{ name: 'arvioinnit' }">{{
+      <elsa-button type="reset" variant="back" :to="{ name: 'arvioinnit' }">{{
         $t("peruuta")
-      }}</b-button>
-      <b-button
+      }}</elsa-button>
+      <elsa-button
         v-if="editing"
-        @click="deleteArviointipyynto"
+        @click="onArviointipyyntoDelete"
+        :loading="params.deleting"
         variant="outline-danger"
         class="ml-2"
-        >{{ $t("poista-arviointipyynto") }}</b-button
+        >{{ $t("poista-arviointipyynto") }}</elsa-button
       >
-      <b-button type="submit" variant="primary" class="ml-2">{{
-        editing ? $t("tallenna") : $t("laheta")
-      }}</b-button>
+      <elsa-button
+        :loading="params.saving"
+        type="submit"
+        variant="primary"
+        class="ml-2"
+        >{{ editing ? $t("tallenna") : $t("laheta") }}</elsa-button
+      >
     </div>
   </b-form>
 </template>
@@ -146,14 +151,15 @@ import axios from "axios";
 import { Prop, Mixins } from "vue-property-decorator";
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
+import TyoskentelyjaksoMixin from "@/mixins/tyoskentelyjakso";
+import KouluttajaForm from "@/forms/kouluttaja-form.vue";
+import TyoskentelyjaksoForm from "@/forms/tyoskentelyjakso-form.vue";
 import UserAvatar from "@/components/user-avatar/user-avatar.vue";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
 import ElsaFormMultiselect from "@/components/multiselect/multiselect.vue";
-import TyoskentelyjaksoForm from "@/forms/tyoskentelyjakso-form.vue";
-import KouluttajaForm from "@/forms/kouluttaja-form.vue";
 import ElsaFormDatepicker from "@/components/datepicker/datepicker.vue";
+import ElsaButton from "@/components/button/button.vue";
 import { toastSuccess, toastFail } from "@/utils/toast";
-import TyoskentelyjaksoMixin from "@/mixins/tyoskentelyjakso";
 
 @Component({
   components: {
@@ -162,7 +168,8 @@ import TyoskentelyjaksoMixin from "@/mixins/tyoskentelyjakso";
     ElsaFormGroup,
     ElsaFormMultiselect,
     UserAvatar,
-    ElsaFormDatepicker
+    ElsaFormDatepicker,
+    ElsaButton
   },
   validations: {
     form: {
@@ -219,6 +226,10 @@ export default class ArviointipyyntoForm extends Mixins(
     tapahtumanAjankohta: null,
     lisatiedot: null
   } as any;
+  params = {
+    saving: false,
+    deleting: false
+  };
 
   mounted() {
     this.form.tyoskentelyjakso = this.value.tyoskentelyjakso;
@@ -242,17 +253,22 @@ export default class ArviointipyyntoForm extends Mixins(
     if (this.$v.form.$anyError) {
       return;
     }
-    this.$emit("submit", {
-      tyoskentelyjaksoId: this.form.tyoskentelyjakso?.id,
-      arvioitavaOsaalueId: this.form.epaOsaamisalue?.id,
-      arvioitavaTapahtuma: this.form.arvioitavaTapahtuma,
-      arvioinninAntajaId: this.form.kouluttaja?.id,
-      tapahtumanAjankohta: this.form.tapahtumanAjankohta,
-      lisatiedot: this.form.lisatiedot
-    });
+    this.$emit(
+      "submit",
+      {
+        tyoskentelyjaksoId: this.form.tyoskentelyjakso?.id,
+        arvioitavaOsaalueId: this.form.epaOsaamisalue?.id,
+        arvioitavaTapahtuma: this.form.arvioitavaTapahtuma,
+        arvioinninAntajaId: this.form.kouluttaja?.id,
+        tapahtumanAjankohta: this.form.tapahtumanAjankohta,
+        lisatiedot: this.form.lisatiedot
+      },
+      this.params
+    );
   }
 
-  async onKouluttajaSubmit(value: any, modal: any) {
+  async onKouluttajaSubmit(value: any, params: any, modal: any) {
+    params.saving = true;
     try {
       const kouluttaja = (
         await axios.post("/erikoistuva-laakari/lahikouluttajat", value)
@@ -264,10 +280,11 @@ export default class ArviointipyyntoForm extends Mixins(
     } catch (err) {
       toastFail(this, this.$t("uuden-kouluttajan-lisaaminen-epaonnistui"));
     }
+    params.saving = false;
   }
 
-  async deleteArviointipyynto() {
-    this.$emit("delete");
+  async onArviointipyyntoDelete() {
+    this.$emit("delete", this.params);
   }
 }
 </script>
