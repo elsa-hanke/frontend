@@ -4,11 +4,14 @@ import {
   faArrowUp,
   faAward,
   faCheckCircle,
+  faChevronDown,
   faChevronLeft,
   faChevronRight,
+  faChevronUp,
   faCircle,
   faClipboard,
   faClipboardList,
+  faEdit,
   faEnvelope,
   faExclamationCircle,
   faFile,
@@ -28,11 +31,14 @@ library.add(faArrowsAlt);
 library.add(faArrowUp);
 library.add(faAward);
 library.add(faCheckCircle);
+library.add(faChevronDown);
 library.add(faChevronLeft);
 library.add(faChevronRight);
+library.add(faChevronUp);
 library.add(faCircle);
 library.add(faClipboard);
 library.add(faClipboardList);
+library.add(faEdit);
 library.add(faEnvelope);
 library.add(faExclamationCircle);
 library.add(faFile);
