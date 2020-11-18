@@ -56,7 +56,7 @@
                     :value="value.itsearviointiLuottamuksenTaso"
                   />
                   <div v-else class="d-inline-flex">
-                    <b-button
+                    <elsa-button
                       variant="primary"
                       class="d-flex align-items-center text-decoration-none"
                       :to="{
@@ -65,17 +65,17 @@
                       }"
                     >
                       {{ $t("tee-itsearviointi") }}
-                    </b-button>
+                    </elsa-button>
                   </div>
                 </td>
               </tr>
             </tbody>
           </b-table-simple>
 
-          <b-button
+          <elsa-button
             variant="primary"
             :to="{ name: 'arviointi', params: { arviointiId: value.id } }"
-            >{{ $t("avaa-arviointi") }}</b-button
+            >{{ $t("avaa-arviointi") }}</elsa-button
           >
         </b-col>
       </b-row>
@@ -89,10 +89,12 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import { Prop } from "vue-property-decorator";
 import ElsaLuottamuksenTaso from "@/components/luottamuksen-taso/luottamuksen-taso.vue";
+import ElsaButton from "@/components/button/button.vue";
 
 @Component({
   components: {
-    ElsaLuottamuksenTaso
+    ElsaLuottamuksenTaso,
+    ElsaButton
   }
 })
 export default class ArviointiCard extends Vue {

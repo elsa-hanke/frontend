@@ -34,12 +34,12 @@
       </template>
     </elsa-form-group>
     <div class="text-right">
-      <b-button type="reset" variant="back" @click="logout()">{{
+      <elsa-button type="reset" variant="back" @click="logout()">{{
         $t("peruuta")
-      }}</b-button>
-      <b-button type="submit" variant="primary" class="ml-2">{{
+      }}</elsa-button>
+      <elsa-button type="submit" variant="primary" class="ml-2">{{
         $t("jatka")
-      }}</b-button>
+      }}</elsa-button>
     </div>
   </b-form>
 </template>
@@ -51,12 +51,14 @@ import store from "@/store";
 import UserAvatar from "@/components/user-avatar/user-avatar.vue";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
 import ElsaFormMultiselect from "@/components/multiselect/multiselect.vue";
+import ElsaButton from "@/components/button/button.vue";
 
 @Component({
   components: {
     ElsaFormGroup,
     ElsaFormMultiselect,
-    UserAvatar
+    UserAvatar,
+    ElsaButton
   }
 })
 export default class KayttooikeusForm extends Vue {

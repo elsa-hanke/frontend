@@ -93,8 +93,8 @@ export default class ElsaFormGroup extends Vue {
   }
 
   // Välitä tapahtuma vanhemmalle
-  onSubmit(value: any) {
-    this.$emit("submit", value, this.$refs[this.modalRef]);
+  onSubmit(value: any, params: any) {
+    this.$emit("submit", value, params, this.$refs[this.modalRef]);
   }
 
   async onCancel() {

@@ -50,18 +50,19 @@
                   </template>
                 </elsa-form-group>
                 <div class="text-right">
-                  <b-button
+                  <elsa-button
+                    :disabled="!kommentti.teksti || saving"
+                    :loading="saving"
                     type="submit"
                     variant="primary"
-                    :disabled="!kommentti.teksti || saving"
-                    >{{ $t("lisaa-kommentti") }}</b-button
+                    >{{ $t("lisaa-kommentti") }}</elsa-button
                   >
                 </div>
               </div>
             </b-form>
           </div>
           <div class="text-center" v-else>
-            <b-spinner variant="primary" :label="$t('ladataan')"></b-spinner>
+            <b-spinner variant="primary" :label="$t('ladataan')" />
           </div>
         </b-col>
         <b-col class="pl-3 pr-0" lg="2"></b-col>
@@ -74,18 +75,20 @@
 import { Component, Vue } from "vue-property-decorator";
 import axios from "axios";
 import store from "@/store";
-import { toastFail } from "@/utils/toast";
 import ArviointiForm from "@/forms/arviointi-form.vue";
 import UserAvatar from "@/components/user-avatar/user-avatar.vue";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
 import KommenttiCard from "@/components/kommentti-card/kommentti-card.vue";
+import ElsaButton from "@/components/button/button.vue";
+import { toastFail } from "@/utils/toast";
 
 @Component({
   components: {
     ArviointiForm,
     UserAvatar,
     ElsaFormGroup,
-    KommenttiCard
+    KommenttiCard,
+    ElsaButton
   }
 })
 export default class Arviointi extends Vue {

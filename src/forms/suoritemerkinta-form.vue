@@ -157,12 +157,16 @@
       </template>
     </elsa-form-group>
     <div class="text-right">
-      <b-button type="reset" variant="back" :to="{ name: 'arvioinnit' }">{{
+      <elsa-button type="reset" variant="back" :to="{ name: 'arvioinnit' }">{{
         $t("peruuta")
-      }}</b-button>
-      <b-button type="submit" variant="primary" class="ml-2">{{
-        $t("tallenna")
-      }}</b-button>
+      }}</elsa-button>
+      <elsa-button
+        :loading="params.saving"
+        type="submit"
+        variant="primary"
+        class="ml-2"
+        >{{ $t("tallenna") }}</elsa-button
+      >
     </div>
   </b-form>
 </template>
@@ -172,13 +176,14 @@ import Component from "vue-class-component";
 import { Mixins, Prop } from "vue-property-decorator";
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
+import TyoskentelyjaksoMixin from "@/mixins/tyoskentelyjakso";
 import TyoskentelyjaksoForm from "@/forms/tyoskentelyjakso-form.vue";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
 import ElsaFormMultiselect from "@/components/multiselect/multiselect.vue";
 import ElsaPopover from "@/components/popover/popover.vue";
 import ElsaFormDatepicker from "@/components/datepicker/datepicker.vue";
+import ElsaButton from "@/components/button/button.vue";
 import { vaativuustasot, luottamuksenTasot } from "@/utils/constants";
-import TyoskentelyjaksoMixin from "@/mixins/tyoskentelyjakso";
 
 @Component({
   components: {
@@ -186,7 +191,8 @@ import TyoskentelyjaksoMixin from "@/mixins/tyoskentelyjakso";
     ElsaFormGroup,
     ElsaFormMultiselect,
     ElsaPopover,
-    ElsaFormDatepicker
+    ElsaFormDatepicker,
+    ElsaButton
   },
   validations: {
     form: {
@@ -239,6 +245,9 @@ export default class SuoritemerkintaForm extends Mixins(
   } as any;
   vaativuustasot = vaativuustasot;
   luottamuksenTasot = luottamuksenTasot;
+  params = {
+    saving: false
+  };
 
   mounted() {
     this.form = {
@@ -265,14 +274,18 @@ export default class SuoritemerkintaForm extends Mixins(
     if (this.$v.form.$anyError) {
       return;
     }
-    this.$emit("submit", {
-      tyoskentelyjaksoId: this.form.tyoskentelyjakso.id,
-      oppimistavoiteId: this.form.oppimistavoite.id,
-      vaativuustaso: this.form.vaativuustaso.arvo,
-      luottamuksenTaso: this.form.luottamuksenTaso.arvo,
-      suorituspaiva: this.form.tapahtumanAjankohta,
-      lisatiedot: this.form.lisatiedot
-    });
+    this.$emit(
+      "submit",
+      {
+        tyoskentelyjaksoId: this.form.tyoskentelyjakso.id,
+        oppimistavoiteId: this.form.oppimistavoite.id,
+        vaativuustaso: this.form.vaativuustaso.arvo,
+        luottamuksenTaso: this.form.luottamuksenTaso.arvo,
+        suorituspaiva: this.form.tapahtumanAjankohta,
+        lisatiedot: this.form.lisatiedot
+      },
+      this.params
+    );
   }
 }
 </script>

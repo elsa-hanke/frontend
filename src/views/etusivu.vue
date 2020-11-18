@@ -3,7 +3,7 @@
     <b-container fluid class="mt-3">
       <b-row class="mt-3" lg>
         <b-col class="pl-0 pl-lg-3 pr-0" lg="2" order-lg="3" order-xl="3">
-          <b-button
+          <elsa-button
             variant="link"
             class="d-flex align-items-center text-decoration-none"
           >
@@ -18,7 +18,7 @@
               </font-awesome-layers>
             </div>
             <span class="text-left">{{ $t("lisaa-ja-muokkaa-osioita") }}</span>
-          </b-button>
+          </elsa-button>
         </b-col>
         <b-col class="px-0 pr-lg-2 mt-3 mt-lg-0 mt-xl-0">
           <b-card-skeleton
@@ -82,12 +82,12 @@
                   </tr>
                 </table>
               </div>
-              <b-button
+              <elsa-button
                 size="sm"
                 variant="primary"
                 class="rounded-pill d-none d-lg-block d-xl-block ml-3"
                 >{{ $t("muokkaa-tietoja") }}
-              </b-button>
+              </elsa-button>
             </div>
           </b-card-skeleton>
           <b-card-skeleton
@@ -128,11 +128,13 @@ import { Component, Vue } from "vue-property-decorator";
 import BCardSkeleton from "@/components/card/card.vue";
 import Avatar from "vue-avatar";
 import store from "@/store";
+import ElsaButton from "@/components/button/button.vue";
 
 @Component({
   components: {
     BCardSkeleton,
-    Avatar
+    Avatar,
+    ElsaButton
   }
 })
 export default class Etusivu extends Vue {

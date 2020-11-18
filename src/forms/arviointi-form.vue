@@ -131,7 +131,7 @@
             </td>
             <td>
               <div v-if="!value.itsearviointiAika" class="d-inline-flex">
-                <b-button
+                <elsa-button
                   variant="primary"
                   class="d-flex align-items-center text-decoration-none"
                   :to="{
@@ -140,7 +140,7 @@
                   }"
                 >
                   {{ $t("tee-itsearviointi") }}
-                </b-button>
+                </elsa-button>
               </div>
               <elsa-luottamuksen-taso
                 v-if="value.itsearviointiAika"
@@ -198,14 +198,13 @@
         v-if="!value.arviointiAika && value.itsearviointiAika"
         class="text-right"
       >
-        <b-button
-          type="submit"
+        <elsa-button
           variant="primary"
           :to="{
             name: 'itsearviointi',
             params: { arviointiId: value.id }
           }"
-          >{{ $t("muokkaa-itsearviointia") }}</b-button
+          >{{ $t("muokkaa-itsearviointia") }}</elsa-button
         >
       </div>
     </div>
@@ -324,12 +323,16 @@
         </template>
       </elsa-form-group>
       <div class="text-right">
-        <b-button type="reset" variant="back" :to="{ name: 'arvioinnit' }">{{
+        <elsa-button type="reset" variant="back" :to="{ name: 'arvioinnit' }">{{
           $t("peruuta")
-        }}</b-button>
-        <b-button type="submit" variant="primary" class="ml-2">{{
-          $t("laheta")
-        }}</b-button>
+        }}</elsa-button>
+        <elsa-button
+          :loading="params.saving"
+          type="submit"
+          variant="primary"
+          class="ml-2"
+          >{{ $t("laheta") }}</elsa-button
+        >
       </div>
     </div>
   </b-form>
@@ -347,6 +350,7 @@ import TyoskentelyjaksoForm from "@/forms/tyoskentelyjakso-form.vue";
 import ElsaLuottamuksenTaso from "@/components/luottamuksen-taso/luottamuksen-taso.vue";
 import ElsaBadge from "@/components/badge/badge.vue";
 import ElsaPopover from "@/components/popover/popover.vue";
+import ElsaButton from "@/components/button/button.vue";
 import { vaativuustasot, luottamuksenTasot } from "@/utils/constants";
 
 @Component({
@@ -357,7 +361,8 @@ import { vaativuustasot, luottamuksenTasot } from "@/utils/constants";
     UserAvatar,
     ElsaLuottamuksenTaso,
     ElsaBadge,
-    ElsaPopover
+    ElsaPopover,
+    ElsaButton
   },
   validations: {
     form: {
@@ -391,6 +396,9 @@ export default class ArviointiForm extends Mixins(validationMixin) {
   };
   vaativuustasot = vaativuustasot;
   luottamuksenTasot = luottamuksenTasot;
+  params = {
+    saving: false
+  };
 
   mounted() {
     if (this.itsearviointi) {
@@ -427,19 +435,27 @@ export default class ArviointiForm extends Mixins(validationMixin) {
       return;
     }
     if (this.itsearviointi) {
-      this.$emit("submit", {
-        ...this.value,
-        itsearviointiVaativuustaso: this.form.vaativuustaso.arvo,
-        itsearviointiLuottamuksenTaso: this.form.luottamuksenTaso.arvo,
-        sanallinenItsearviointi: this.form.sanallinenArviointi
-      });
+      this.$emit(
+        "submit",
+        {
+          ...this.value,
+          itsearviointiVaativuustaso: this.form.vaativuustaso.arvo,
+          itsearviointiLuottamuksenTaso: this.form.luottamuksenTaso.arvo,
+          sanallinenItsearviointi: this.form.sanallinenArviointi
+        },
+        this.params
+      );
     } else {
-      this.$emit("submit", {
-        ...this.value,
-        vaativuustaso: this.form.vaativuustaso.arvo,
-        luottamuksenTaso: this.form.luottamuksenTaso.arvo,
-        sanallinenArviointi: this.form.sanallinenArviointi
-      });
+      this.$emit(
+        "submit",
+        {
+          ...this.value,
+          vaativuustaso: this.form.vaativuustaso.arvo,
+          luottamuksenTaso: this.form.luottamuksenTaso.arvo,
+          sanallinenArviointi: this.form.sanallinenArviointi
+        },
+        this.params
+      );
     }
   }
 }

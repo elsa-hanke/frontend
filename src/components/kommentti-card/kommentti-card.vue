@@ -42,15 +42,16 @@
             </template>
           </elsa-form-group>
           <div class="text-right">
-            <b-button type="reset" variant="back" @click="cancelEditing">{{
+            <elsa-button type="reset" variant="back" @click="cancelEditing">{{
               $t("peruuta")
-            }}</b-button>
-            <b-button
+            }}</elsa-button>
+            <elsa-button
+              :disabled="!kommentti.teksti || saving"
+              :loading="saving"
               type="submit"
               variant="primary"
-              :disabled="!kommentti.teksti || saving"
               class="ml-2"
-              >{{ $t("tallenna") }}</b-button
+              >{{ $t("tallenna") }}</elsa-button
             >
           </div>
         </b-form>
@@ -67,11 +68,13 @@ import { Prop } from "vue-property-decorator";
 import { toastFail } from "@/utils/toast";
 import UserAvatar from "@/components/user-avatar/user-avatar.vue";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
+import ElsaButton from "@/components/button/button.vue";
 
 @Component({
   components: {
     UserAvatar,
-    ElsaFormGroup
+    ElsaFormGroup,
+    ElsaButton
   }
 })
 export default class KommenttiCard extends Vue {

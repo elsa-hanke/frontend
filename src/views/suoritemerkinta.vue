@@ -66,21 +66,22 @@
               </template>
             </elsa-form-group>
             <div class="text-right">
-              <b-button
-                @click="deleteSuoritemerkinta"
+              <elsa-button
+                @click="onSuoritemerkintaDelete"
+                :loading="deleting"
                 variant="outline-danger"
-                >{{ $t("poista-merkinta") }}</b-button
+                >{{ $t("poista-merkinta") }}</elsa-button
               >
-              <b-button
+              <elsa-button
                 :to="{ name: 'muokkaa-suoritemerkintaa' }"
                 variant="primary"
                 class="ml-2"
-                >{{ $t("muokkaa-merkintaa") }}</b-button
+                >{{ $t("muokkaa-merkintaa") }}</elsa-button
               >
             </div>
           </div>
           <div class="text-center" v-else>
-            <b-spinner variant="primary" :label="$t('ladataan')"></b-spinner>
+            <b-spinner variant="primary" :label="$t('ladataan')" />
           </div>
         </b-col>
       </b-row>
@@ -95,6 +96,7 @@ import ElsaFormGroup from "@/components/form-group/form-group.vue";
 import ElsaPopover from "@/components/popover/popover.vue";
 import ElsaBadge from "@/components/badge/badge.vue";
 import ElsaLuottamuksenTaso from "@/components/luottamuksen-taso/luottamuksen-taso.vue";
+import ElsaButton from "@/components/button/button.vue";
 import { vaativuustasot, luottamuksenTasot } from "@/utils/constants";
 import { tyoskentelyjaksoLabel } from "@/utils/tyoskentelyjakso";
 import { confirmDelete } from "@/utils/confirm";
@@ -105,7 +107,8 @@ import { toastFail, toastSuccess } from "@/utils/toast";
     ElsaFormGroup,
     ElsaPopover,
     ElsaBadge,
-    ElsaLuottamuksenTaso
+    ElsaLuottamuksenTaso,
+    ElsaButton
   }
 })
 export default class Suoritemerkinta extends Vue {
@@ -126,6 +129,7 @@ export default class Suoritemerkinta extends Vue {
   suoritemerkinta: any = null;
   vaativuustasot = vaativuustasot;
   luottamuksenTasot = luottamuksenTasot;
+  deleting = false;
 
   async mounted() {
     const suoritemerkintaId = this.$route?.params?.suoritemerkintaId;
@@ -142,7 +146,7 @@ export default class Suoritemerkinta extends Vue {
     }
   }
 
-  async deleteSuoritemerkinta() {
+  async onSuoritemerkintaDelete() {
     if (
       await confirmDelete(
         this,
@@ -150,6 +154,7 @@ export default class Suoritemerkinta extends Vue {
         (this.$t("suoritemerkinnan") as string).toLowerCase()
       )
     ) {
+      this.deleting = true;
       try {
         await axios.delete(
           `erikoistuva-laakari/suoritemerkinnat/${this.suoritemerkinta.id}`
@@ -161,6 +166,7 @@ export default class Suoritemerkinta extends Vue {
       } catch (err) {
         toastFail(this, this.$t("suoritemerkinnan-poistaminen-epaonnistui"));
       }
+      this.deleting = false;
     }
   }
 

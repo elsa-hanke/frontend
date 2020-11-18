@@ -6,14 +6,20 @@
         <b-col class="px-0">
           <h1>{{ $t("suoritemerkinnat") }}</h1>
           <p>{{ $t("suoritemerkinnat-kuvaus") }}</p>
-          <b-button
+          <elsa-button
             variant="primary"
             :to="{ name: 'uusi-suoritemerkinta' }"
             class="mb-4"
-            >{{ $t("lisaa-suoritemerkinta") }}</b-button
+            >{{ $t("lisaa-suoritemerkinta") }}</elsa-button
           >
           <h2>{{ $t("oppimistavoitteet") }}</h2>
-          TODO
+          <b-table
+            v-if="osaamistavoitteet"
+            striped
+            hover
+            :items="osaamistavoitteet"
+          ></b-table>
+          <b-spinner v-else />
         </b-col>
       </b-row>
     </b-container>
@@ -22,9 +28,12 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import ElsaButton from "@/components/button/button.vue";
 
 @Component({
-  components: {}
+  components: {
+    ElsaButton
+  }
 })
 export default class Suoritemerkinnat extends Vue {
   items = [
@@ -37,6 +46,11 @@ export default class Suoritemerkinnat extends Vue {
       active: true
     }
   ];
+  osaamistavoitteet: any = null;
+
+  mounted() {
+    this.osaamistavoitteet = [];
+  }
 }
 </script>
 
