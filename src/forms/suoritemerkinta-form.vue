@@ -162,7 +162,7 @@
       }}</elsa-button>
       <elsa-button
         @click="onSuoritemerkintaDelete"
-        :loading="deleting"
+        :loading="params.deleting"
         variant="outline-danger"
         >{{ $t("poista-merkinta") }}</elsa-button
       >
