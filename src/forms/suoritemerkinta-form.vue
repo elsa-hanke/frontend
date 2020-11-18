@@ -161,6 +161,12 @@
         $t("peruuta")
       }}</elsa-button>
       <elsa-button
+        @click="onSuoritemerkintaDelete"
+        :loading="deleting"
+        variant="outline-danger"
+        >{{ $t("poista-merkinta") }}</elsa-button
+      >
+      <elsa-button
         :loading="params.saving"
         type="submit"
         variant="primary"
@@ -246,7 +252,8 @@ export default class SuoritemerkintaForm extends Mixins(
   vaativuustasot = vaativuustasot;
   luottamuksenTasot = luottamuksenTasot;
   params = {
-    saving: false
+    saving: false,
+    deleting: false
   };
 
   mounted() {
@@ -286,6 +293,10 @@ export default class SuoritemerkintaForm extends Mixins(
       },
       this.params
     );
+  }
+
+  onSuoritemerkintaDelete() {
+    this.$emit("delete", this.params);
   }
 }
 </script>

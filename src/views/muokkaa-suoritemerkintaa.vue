@@ -9,6 +9,7 @@
           <suoritemerkinta-form
             v-if="!loading"
             @submit="onSubmit"
+            @delete="onDelete"
             :value="suoritemerkintaWrapper"
             :tyoskentelyjaksot="tyoskentelyjaksot"
             :oppimistavoitteen-kategoriat="oppimistavoitteenKategoriat"
@@ -29,6 +30,7 @@ import ConfirmRouteExit from "@/mixins/confirm-route-exit";
 import SuoritemerkintaForm from "@/forms/suoritemerkinta-form.vue";
 import { SuoritemerkintaLomake } from "@/types";
 import { toastFail, toastSuccess } from "@/utils/toast";
+import { confirmDelete } from "@/utils/confirm";
 import { tyoskentelyjaksoLabel } from "@/utils/tyoskentelyjakso";
 
 @Component({
@@ -114,6 +116,31 @@ export default class MuokkaaSuoritemerkintaa extends Mixins(ConfirmRouteExit) {
       toastFail(this, this.$t("suoritemerkinnan-tallentaminen-epaonnistui"));
     }
     params.saving = false;
+  }
+
+  async onDelete(params: any) {
+    if (
+      await confirmDelete(
+        this,
+        this.$t("poista-suoritemerkinta") as string,
+        (this.$t("suoritemerkinnan") as string).toLowerCase()
+      )
+    ) {
+      params.deleting = true;
+      try {
+        await axios.delete(
+          `erikoistuva-laakari/suoritemerkinnat/${this.suoritemerkinta.id}`
+        );
+        toastSuccess(this, this.$t("suoritemerkinta-poistettu-onnistuneesti"));
+        this.skipRouteExitConfirm = true;
+        this.$router.push({
+          name: "suoritemerkinnat"
+        });
+      } catch (err) {
+        toastFail(this, this.$t("suoritemerkinnan-poistaminen-epaonnistui"));
+      }
+      params.deleting = false;
+    }
   }
 
   get tyoskentelyjaksot() {

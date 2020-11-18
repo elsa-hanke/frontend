@@ -267,6 +267,10 @@ export default class ArviointipyyntoForm extends Mixins(
     );
   }
 
+  onArviointipyyntoDelete() {
+    this.$emit("delete", this.params);
+  }
+
   async onKouluttajaSubmit(value: any, params: any, modal: any) {
     params.saving = true;
     try {
@@ -281,10 +285,6 @@ export default class ArviointipyyntoForm extends Mixins(
       toastFail(this, this.$t("uuden-kouluttajan-lisaaminen-epaonnistui"));
     }
     params.saving = false;
-  }
-
-  async onArviointipyyntoDelete() {
-    this.$emit("delete", this.params);
   }
 }
 </script>
