@@ -22,6 +22,7 @@
               <b-table
                 :fields="kategoria.fields"
                 :items="kategoria.oppimistavoitteet"
+                responsive
               >
                 <template #table-colgroup="scope">
                   <col
@@ -46,7 +47,7 @@
                   </elsa-popover>
                 </template>
                 <template #cell(nimi)="data">
-                  <div class="py-2">
+                  <div>
                     {{ data.value
                     }}{{
                       data.item.firstSuoritemerkinta
@@ -56,85 +57,86 @@
                   </div>
                 </template>
                 <template #cell(luottamuksenTaso)="data">
-                  <div v-if="data.item.firstSuoritemerkinta">
-                    <elsa-luottamuksen-taso
-                      :value="data.item.firstSuoritemerkinta.luottamuksenTaso"
-                      class="py-1"
-                    />
-                    <b-collapse v-model="data.item.open">
-                      <div
-                        v-for="(suoritemerkinta, index) in data.item
-                          .suoritemerkinnatWithoutFirst"
-                        :key="index"
-                        class="d-inline-flex"
-                      >
-                        <elsa-luottamuksen-taso
-                          :value="suoritemerkinta.luottamuksenTaso"
-                          class="py-1"
-                        />
-                      </div>
-                    </b-collapse>
-                  </div>
+                  <elsa-luottamuksen-taso
+                    v-if="data.item.firstSuoritemerkinta"
+                    :value="data.item.firstSuoritemerkinta.luottamuksenTaso"
+                  />
                 </template>
                 <template #cell(suorituspaiva)="data">
-                  <div v-if="data.item.firstSuoritemerkinta">
-                    <elsa-button
-                      :to="{
-                        name: 'suoritemerkinta',
-                        params: {
-                          suoritemerkintaId: data.item.firstSuoritemerkinta.id
-                        }
-                      }"
-                      variant="link"
-                      class="shadow-none"
-                      >{{ $date(data.item.firstSuoritemerkinta.suorituspaiva)
-                      }}<font-awesome-icon
-                        icon="edit"
-                        fixed-width
-                        class="ml-2"
-                      />
-                    </elsa-button>
-                    <b-collapse v-model="data.item.open">
-                      <div
-                        v-for="(suoritemerkinta, index) in data.item
-                          .suoritemerkinnatWithoutFirst"
-                        :key="index"
-                        class="d-inline-flex"
-                      >
-                        <elsa-button
-                          v-if="suoritemerkinta.suorituspaiva"
-                          :to="{
-                            name: 'suoritemerkinta',
-                            params: {
-                              suoritemerkintaId: suoritemerkinta.id
-                            }
-                          }"
-                          variant="link"
-                          class="shadow-none"
-                          >{{ $date(suoritemerkinta.suorituspaiva)
-                          }}<font-awesome-icon
-                            icon="edit"
-                            fixed-width
-                            class="ml-2"
-                          />
-                        </elsa-button>
-                      </div>
-                    </b-collapse>
-                  </div>
+                  <elsa-button
+                    v-if="data.item.firstSuoritemerkinta"
+                    :to="{
+                      name: 'suoritemerkinta',
+                      params: {
+                        suoritemerkintaId: data.item.firstSuoritemerkinta.id
+                      }
+                    }"
+                    variant="link"
+                    class="shadow-none"
+                    >{{ $date(data.item.firstSuoritemerkinta.suorituspaiva)
+                    }}<font-awesome-icon icon="edit" fixed-width class="ml-2" />
+                  </elsa-button>
                 </template>
                 <template #cell(actions)="data">
-                  <div v-if="data.item.firstSuoritemerkinta">
+                  <div
+                    v-if="
+                      data.item.firstSuoritemerkinta &&
+                        data.item.suoritemerkinnatWithoutFirst.length > 0
+                    "
+                  >
                     <elsa-button
                       variant="link"
                       class="shadow-none text-dark px-0"
-                      @click="toggleItem(data.item)"
+                      @click="data.toggleDetails"
                     >
                       <font-awesome-icon
-                        :icon="data.item.open ? 'chevron-up' : 'chevron-down'"
+                        :icon="
+                          data.item._showDetails ? 'chevron-up' : 'chevron-down'
+                        "
                         fixed-width
                         size="lg"
                       />
                     </elsa-button>
+                  </div>
+                </template>
+                <template #row-details="row">
+                  <div class="row-details">
+                    <b-table-simple borderless class="mb-0">
+                      <b-tbody>
+                        <b-tr
+                          v-for="(suoritemerkinta, index) in row.item
+                            .suoritemerkinnatWithoutFirst"
+                          :key="index"
+                        >
+                          <b-td :style="{ width: row.fields[0].width }"></b-td>
+                          <b-td :style="{ width: row.fields[1].width }">
+                            <elsa-luottamuksen-taso
+                              :value="suoritemerkinta.luottamuksenTaso"
+                            />
+                          </b-td>
+                          <b-td :style="{ width: row.fields[2].width }">
+                            <elsa-button
+                              v-if="suoritemerkinta.suorituspaiva"
+                              :to="{
+                                name: 'suoritemerkinta',
+                                params: {
+                                  suoritemerkintaId: suoritemerkinta.id
+                                }
+                              }"
+                              variant="link"
+                              class="shadow-none"
+                              >{{ $date(suoritemerkinta.suorituspaiva)
+                              }}<font-awesome-icon
+                                icon="edit"
+                                fixed-width
+                                class="ml-2"
+                              />
+                            </elsa-button>
+                          </b-td>
+                          <b-td :style="{ width: row.fields[3].width }"></b-td>
+                        </b-tr>
+                      </b-tbody>
+                    </b-table-simple>
                   </div>
                 </template>
               </b-table>
@@ -209,22 +211,22 @@ export default class Suoritemerkinnat extends Vue {
               label: `${kategoria.nimi} (${(this.$t(
                 "toimenpiteita"
               ) as any).toLowerCase()})`,
-              width: "45%"
+              width: "424px"
             },
             {
               key: "luottamuksenTaso",
               label: this.$t("luottamuksen-taso"),
-              width: "40%"
+              width: "350px"
             },
             {
               key: "suorituspaiva",
               label: this.$t("suorituspaiva"),
-              width: "15%"
+              width: "200px"
             },
             {
               key: "actions",
               label: "",
-              width: ""
+              width: "50px"
             }
           ],
           oppimistavoitteet: kategoria.oppimistavoitteet.map(
@@ -243,8 +245,7 @@ export default class Suoritemerkinnat extends Vue {
                 ...oppimistavoite,
                 suoritemerkinnat,
                 suoritemerkinnatWithoutFirst,
-                firstSuoritemerkinta,
-                open: false
+                firstSuoritemerkinta
               };
             }
           )
@@ -252,10 +253,6 @@ export default class Suoritemerkinnat extends Vue {
       );
     }
     return [];
-  }
-
-  toggleItem(item: any) {
-    item.open = !item.open;
   }
 }
 </script>
@@ -266,10 +263,22 @@ export default class Suoritemerkinnat extends Vue {
 }
 
 ::v-deep table {
+  min-width: 1024px;
+  thead th {
+    border-top: none;
+  }
   td {
-    //background: #f5f5f6;
     padding-top: 0;
     padding-bottom: 0;
+    vertical-align: middle;
   }
+  .b-table-details td {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+.row-details {
+  background: #f5f5f6;
 }
 </style>
