@@ -58,7 +58,10 @@
                 }}</span>
               </template>
             </elsa-form-group>
-            <elsa-form-group :label="$t('lisatiedot')">
+            <elsa-form-group
+              v-if="suoritemerkintaWrapper.lisatiedot"
+              :label="$t('lisatiedot')"
+            >
               <template v-slot="{ uid }">
                 <span :id="uid" class="text-prewrap">{{
                   suoritemerkintaWrapper.lisatiedot

@@ -42,7 +42,7 @@
                   {{ value.arvioinninAntaja.nimi }}
                 </td>
               </tr>
-              <tr>
+              <tr v-if="value.lisatiedot">
                 <th scope="row" class="py-0 pl-0 pr-1 font-weight-500">
                   {{ $t("lisatiedot") }}
                 </th>
