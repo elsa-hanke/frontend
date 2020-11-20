@@ -86,6 +86,7 @@
       </template>
     </elsa-form-group>
     <elsa-form-group
+      v-if="value.lisatiedot"
       :label="$t('lisatiedot')"
       label-cols-md="4"
       label-cols="12"
