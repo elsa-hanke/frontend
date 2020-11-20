@@ -72,8 +72,10 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
 import axios from "axios";
+import compareAsc from "date-fns/compareAsc";
+import { Component, Vue } from "vue-property-decorator";
+import { parseISO } from "date-fns";
 import store from "@/store";
 import ArviointiForm from "@/forms/arviointi-form.vue";
 import UserAvatar from "@/components/user-avatar/user-avatar.vue";
@@ -153,7 +155,12 @@ export default class Arviointi extends Vue {
   get kommentit() {
     if (this.value) {
       return this.value.kommentit
-        .sort((a: any, b: any) => a.luontiaika.localeCompare(b.luontiaika))
+        .sort((a: any, b: any) =>
+          compareAsc(
+            parseISO(a.luontiaika as string),
+            parseISO(b.luontiaika as string)
+          )
+        )
         .map((k: any) => {
           return {
             kommentti: k,
