@@ -50,7 +50,7 @@
                     :key="index"
                     :class="{ 'row-details': row.details }"
                   >
-                    <b-td>
+                    <b-td style="width: 45%;">
                       <div
                         v-if="!row.details"
                         class="d-flex align-items-center"
@@ -58,7 +58,7 @@
                         {{ row.nimi }}
                       </div>
                     </b-td>
-                    <b-td>
+                    <b-td style="width: 40%;">
                       <div class="d-flex align-items-center">
                         <elsa-luottamuksen-taso
                           v-if="row.suoritemerkinta"
@@ -66,7 +66,7 @@
                         />
                       </div>
                     </b-td>
-                    <b-td>
+                    <b-td style="width: 15%;">
                       <div
                         v-if="row.suoritemerkinta"
                         class="d-flex align-items-center"
