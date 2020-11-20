@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <span>
     <span class="text-size-lg">
       <b-badge pill variant="light">{{ value }}</b-badge>
     </span>
     <span v-if="help">
       {{ help }}
     </span>
-  </div>
+  </span>
 </template>
 
 <script lang="ts">
