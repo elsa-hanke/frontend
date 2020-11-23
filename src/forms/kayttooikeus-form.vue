@@ -1,27 +1,11 @@
 <template>
   <b-form @submit.stop.prevent="onSubmit">
-    <elsa-form-group :label="$t('kayttaja')">
+    <elsa-form-group :label="$t('erikoistuva-laakari')">
       <template v-slot="{ uid }">
         <user-avatar :id="uid" />
       </template>
     </elsa-form-group>
-    <elsa-form-group :label="$t('valitse-oma-roolisi')" :required="true">
-      <template v-slot="{ uid }">
-        <elsa-form-multiselect
-          :id="uid"
-          v-model="value.kayttajaryhma"
-          :options="kayttajaryhmat"
-          label="nimi"
-          track-by="nimi"
-        >
-        </elsa-form-multiselect>
-      </template>
-    </elsa-form-group>
-    <elsa-form-group
-      :label="$t('valitse-oma-yliopistosi')"
-      :required="true"
-      v-if="isYliopistoRooli"
-    >
+    <elsa-form-group :label="$t('valitse-oma-yliopistosi')" :required="true">
       <template v-slot="{ uid }">
         <elsa-form-multiselect
           :id="uid"
@@ -37,9 +21,13 @@
       <elsa-button type="reset" variant="back" @click="logout()">{{
         $t("peruuta")
       }}</elsa-button>
-      <elsa-button type="submit" variant="primary" class="ml-2">{{
-        $t("jatka")
-      }}</elsa-button>
+      <elsa-button
+        type="submit"
+        :disabled="!value.yliopisto"
+        variant="primary"
+        class="ml-2"
+        >{{ $t("jatka") }}</elsa-button
+      >
     </div>
   </b-form>
 </template>
@@ -62,50 +50,31 @@ import ElsaButton from "@/components/button/button.vue";
   }
 })
 export default class KayttooikeusForm extends Vue {
-  value = {
-    kayttajaryhma: null,
-    yliopisto: null
-  } as any;
-  kayttajaryhmat = [
-    {
-      nimi: this.$t("erikoistuva-laakari"),
-      arvo: "GROUP_ERIKOISTUVA_LAAKARI"
-    },
-    {
-      nimi: this.$t("lahikouluttaja"),
-      arvo: "GROUP_LAHIKOULUTTAJA"
-    },
-    {
-      nimi: this.$t("kouluttaja"),
-      arvo: "GROUP_KOULUTTAJA"
-    },
-    {
-      nimi: this.$t("vastuuhenkilo"),
-      arvo: "GROUP_VASTUUHENKILO"
-    }
-  ];
   yliopistot = [
     {
       nimi: "Yliopisto 1",
-      arvo: "1"
+      arvo: 1
     },
     {
       nimi: "Yliopisto 2",
-      arvo: "2"
+      arvo: 2
     },
     {
       nimi: "Yliopisto 3",
-      arvo: "3"
+      arvo: 3
     },
     {
       nimi: "Yliopisto 4",
-      arvo: "4"
+      arvo: 4
     },
     {
       nimi: "Yliopisto 5",
-      arvo: "5"
+      arvo: 5
     }
   ];
+  value = {
+    yliopisto: null
+  } as any;
 
   async logout() {
     await store.dispatch("logout");
@@ -113,20 +82,8 @@ export default class KayttooikeusForm extends Vue {
 
   onSubmit() {
     this.$emit("submit", {
-      kayttajaryhma: this.value.kayttajaryhma?.arvo,
       yliopisto: this.value.yliopisto?.arvo
     });
-  }
-
-  get isYliopistoRooli() {
-    if (
-      this.value.kayttajaryhma &&
-      (this.value.kayttajaryhma.arvo === "GROUP_ERIKOISTUVA_LAAKARI" ||
-        this.value.kayttajaryhma.arvo === "GROUP_VASTUUHENKILO")
-    ) {
-      return true;
-    }
-    return false;
   }
 }
 </script>

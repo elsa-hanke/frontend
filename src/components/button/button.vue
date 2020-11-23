@@ -1,5 +1,5 @@
 <template>
-  <b-button v-bind="$attrs" v-on="$listeners" :disabled="loading">
+  <b-button v-bind="$attrs" v-on="$listeners" :disabled="disabled || loading">
     <slot v-if="!loadingEnabled" />
     <span v-else>
       <slot />
@@ -19,6 +19,9 @@ import { Prop } from "vue-property-decorator";
 export default class ElsaButton extends Vue {
   @Prop({ required: false, default: undefined })
   loading!: boolean | undefined;
+
+  @Prop({ required: false, default: undefined })
+  disabled!: boolean | undefined;
 
   get loadingEnabled() {
     return this.loading !== undefined;
