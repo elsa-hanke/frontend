@@ -17,19 +17,16 @@
       </div>
       <b-card-skeleton
         v-if="!loading"
-        :loading="false"
+        :header="$t('opintooikeuden-tarkistaminen')"
         class="mt-5 mb-3 kayttoikeus-card"
       >
-        <template v-slot:header>
-          <div class="d-flex justify-content-between align-items-center">
-            <span class="font-weight-500">{{ $t("kayttooikeushakemus") }}</span>
-            <font-awesome-icon
-              icon="question-circle"
-              fixed-width
-              v-b-popover.hover.top="$t('roolin-valinta-kuvaus')"
-            />
-          </div>
-        </template>
+        <section>
+          <p>{{ $t("arvoisa-erikoistuva-laakari") }},</p>
+          <p>{{ $t("kayttooikeus-kuvaus") }}</p>
+          <p>{{ $t("kayttooikeus-kuvaus-ohje") }}</p>
+          <p>{{ $t("terveisin") }}<br />{{ $t("elsa-palvelu") }}</p>
+        </section>
+        <hr />
         <kayttooikeus-form @submit="onSubmit" />
       </b-card-skeleton>
       <div
@@ -44,9 +41,11 @@
 </template>
 
 <script lang="ts">
+import axios from "axios";
 import { Component, Vue } from "vue-property-decorator";
 import KayttooikeusForm from "@/forms/kayttooikeus-form.vue";
 import BCardSkeleton from "@/components/card/card.vue";
+import { toastSuccess, toastFail } from "@/utils/toast";
 
 @Component({
   components: {
@@ -59,11 +58,15 @@ export default class Kayttooikeus extends Vue {
   publicPath = process.env.BASE_URL;
 
   async onSubmit(value: any) {
-    console.log(value);
     this.loading = true;
-    setTimeout(() => {
+    try {
+      await axios.put(`erikoistuva-laakari/kayttooikeushakemus`, value);
+      toastSuccess(this, this.$t("kayttooikeuden-lisaaminen-onnistui"));
+      this.$router.push({ name: "etusivu" });
+    } catch (err) {
       this.loading = false;
-    }, 5000);
+      toastFail(this, this.$t("kayttooikeuden-lisaaminen-epaonnistui"));
+    }
   }
 }
 </script>
