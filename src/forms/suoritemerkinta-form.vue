@@ -157,9 +157,12 @@
       </template>
     </elsa-form-group>
     <div class="text-right">
-      <elsa-button type="reset" variant="back" :to="{ name: 'arvioinnit' }">{{
-        $t("peruuta")
-      }}</elsa-button>
+      <elsa-button
+        type="reset"
+        variant="back"
+        :to="{ name: 'suoritemerkinnat' }"
+        >{{ $t("peruuta") }}</elsa-button
+      >
       <elsa-button
         @click="onSuoritemerkintaDelete"
         :loading="params.deleting"
