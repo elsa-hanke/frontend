@@ -21,10 +21,8 @@
         class="mt-5 mb-3 kayttoikeus-card"
       >
         <section>
-          <p>{{ $t("arvoisa-erikoistuva-laakari") }},</p>
           <p>{{ $t("kayttooikeus-kuvaus") }}</p>
           <p>{{ $t("kayttooikeus-kuvaus-ohje") }}</p>
-          <p>{{ $t("terveisin") }}<br />{{ $t("elsa-palvelu") }}</p>
         </section>
         <hr />
         <kayttooikeus-form @submit="onSubmit" />
