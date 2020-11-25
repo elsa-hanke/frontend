@@ -164,6 +164,7 @@
         >{{ $t("peruuta") }}</elsa-button
       >
       <elsa-button
+        v-if="value.id"
         @click="onSuoritemerkintaDelete"
         :loading="params.deleting"
         variant="outline-danger"
