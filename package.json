@@ -7,6 +7,7 @@
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
+    "test:e2e:headless": "vue-cli-service test:e2e --headless",
     "lint": "vue-cli-service lint --no-fix --max-errors 0 --max-warnings 0",
     "lint:fix": "vue-cli-service lint",
     "i18n:report": "vue-cli-service i18n:report --src './src/**/*.?(js|vue)' --locales './src/locales/**/*.json'"
@@ -21,6 +22,7 @@
     "bootstrap": "^4.5.2",
     "bootstrap-vue": "^2.17.0",
     "core-js": "^3.6.5",
+    "cypress": "6.0.0",
     "date-fns": "^2.16.1",
     "register-service-worker": "^1.7.1",
     "vue": "^2.6.12",

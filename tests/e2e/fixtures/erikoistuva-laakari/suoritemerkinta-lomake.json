@@ -1,0 +1,62 @@
+{
+  "tyoskentelyjaksot": [
+     {
+        "id": 1151,
+        "alkamispaiva": "2020-11-23",
+        "paattymispaiva": "2020-11-29",
+        "osaaikaprosentti": 100,
+        "kaytannonKoulutus": "OMAN_ERIKOISALAN_KOULUTUS",
+        "reunakoulutuksenNimi": null,
+        "hyvaksyttyAiempaanErikoisalaan": false,
+        "tyoskentelypaikka": {
+           "id": 1201,
+           "nimi": "b",
+           "kunta": "a",
+           "tyyppi": "TERVEYSKESKUS",
+           "muuTyyppi": null
+        },
+        "erikoistuvaLaakariId": 1101
+     }
+  ],
+  "oppimistavoitteenKategoriat": [
+     {
+        "id": 1,
+        "nimi": "Oppimistavoitteen kategoria 1",
+        "erikoisalaId": 1,
+        "oppimistavoitteet": [
+           {
+              "id": 1,
+              "nimi": "Oppimistavoite 1",
+              "kategoriaId": 1
+           },
+           {
+              "id": 2,
+              "nimi": "Oppimistavoite 2",
+              "kategoriaId": 1
+           },
+           {
+              "id": 3,
+              "nimi": "Oppimistavoite 3",
+              "kategoriaId": 1
+           }
+        ]
+     },
+     {
+        "id": 2,
+        "nimi": "Oppimistavoitteen kategoria 2",
+        "erikoisalaId": 1,
+        "oppimistavoitteet": [
+           {
+              "id": 4,
+              "nimi": "Oppimistavoite 4",
+              "kategoriaId": 2
+           },
+           {
+              "id": 5,
+              "nimi": "Oppimistavoite 5",
+              "kategoriaId": 2
+           }
+        ]
+     }
+  ]
+}

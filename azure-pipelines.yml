@@ -34,6 +34,9 @@ stages:
               yarn test:unit
             displayName: "Test"
           - script: |
+              yarn test:e2e:headless
+            displayName: "E2E Test"
+          - script: |
               yarn build
             displayName: "Build"
           - publish: $(System.DefaultWorkingDirectory)/dist
@@ -57,11 +60,11 @@ stages:
                   artifact: ElsaFrontendApp
                 - task: AWSCLI@1
                   inputs:
-                    awsCredentials: 'elsa-ci'
-                    regionName: 'eu-west-1'
-                    awsCommand: 's3'
-                    awsSubCommand: 'rm'
-                    awsArguments: 's3://kehitys.elsapalvelu.fi/'
+                    awsCredentials: "elsa-ci"
+                    regionName: "eu-west-1"
+                    awsCommand: "s3"
+                    awsSubCommand: "rm"
+                    awsArguments: "s3://kehitys.elsapalvelu.fi/"
                 - task: S3Upload@1
                   inputs:
                     awsCredentials: "elsa-ci"
@@ -72,8 +75,8 @@ stages:
                   displayName: "Deploy to S3"
                 - task: AWSCLI@1
                   inputs:
-                    awsCredentials: 'elsa-ci'
-                    regionName: 'eu-west-1'
-                    awsCommand: 'cloudfront'
-                    awsSubCommand: 'create-invalidation'
+                    awsCredentials: "elsa-ci"
+                    regionName: "eu-west-1"
+                    awsCommand: "cloudfront"
+                    awsSubCommand: "create-invalidation"
                     awsArguments: '--distribution-id E12KDI5JPO05NG --paths "/*"'
