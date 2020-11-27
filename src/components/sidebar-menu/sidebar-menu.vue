@@ -20,6 +20,14 @@
             {{ $t("koulutussuunnitelma") }}
           </b-nav-item>
           -->
+          <b-nav-item class="border-bottom" :to="{ name: 'tyoskentelyjaksot' }">
+            <font-awesome-icon
+              :icon="['far', 'hospital']"
+              fixed-width
+              size="lg"
+            />
+            {{ $t("tyoskentelyjaksot") }}
+          </b-nav-item>
           <b-nav-item class="border-bottom" :to="{ name: 'suoritemerkinnat' }">
             <font-awesome-icon icon="clipboard-check" fixed-width size="lg" />
             {{ $t("suoritemerkinnat") }}
@@ -29,10 +37,6 @@
             {{ $t("arvioinnit") }}
           </b-nav-item>
           <!--
-          <b-nav-item class="border-bottom" :to="{ name: 'tyoskentelyjaksot' }">
-            <font-awesome-icon icon="calendar" fixed-width size="lg" />
-            {{ $t("tyoskentelyjaksot") }}
-          </b-nav-item>
           <b-nav-item class="border-bottom" :to="{ name: 'koulutukset' }">
             <font-awesome-icon icon="file-alt" fixed-width size="lg" />
             {{ $t("koulutukset") }}

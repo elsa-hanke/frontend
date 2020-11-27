@@ -89,6 +89,32 @@
         >
       </template>
     </elsa-form-group>
+    <elsa-form-group
+      :label="$t('tyoaika-taydesta-tyopaivasta')"
+      :required="true"
+    >
+      <template v-slot="{ uid }">
+        <div class="d-flex align-items-center">
+          <b-form-input
+            :id="uid"
+            :value="value.osaaikaprosentti"
+            @input="onOsaaikaprosenttiInput"
+            :state="validateState('osaaikaprosentti')"
+            type="number"
+            :step="1"
+          />
+          <span class="mx-3">%</span>
+        </div>
+        <b-form-invalid-feedback
+          :id="`${uid}-feedback`"
+          :style="{
+            display:
+              validateState('osaaikaprosentti') === false ? 'block' : 'none'
+          }"
+          >{{ $t("osaaikaprosentti-validointivirhe") }}</b-form-invalid-feedback
+        >
+      </template>
+    </elsa-form-group>
     <b-form-row>
       <elsa-form-group
         :label="$t('alkamispaiva')"
@@ -100,7 +126,7 @@
             :id="uid"
             v-model="value.alkamispaiva"
             :state="validateState('alkamispaiva')"
-            :max="value.paattymispaiva"
+            :max="maxAlkamispaiva"
           ></elsa-form-datepicker>
           <b-form-invalid-feedback :id="`${uid}-feedback`">{{
             $t("pakollinen-tieto")
@@ -115,31 +141,16 @@
           <elsa-form-datepicker
             :id="uid"
             v-model="value.paattymispaiva"
-            :min="value.alkamispaiva"
+            :min="minPaattymispaiva"
+            :aria-describedby="`${uid}-help`"
+            class="datepicker-range"
           ></elsa-form-datepicker>
+          <small :id="`${uid}-help`" class="form-text text-muted">{{
+            $t("tyoskentelyjakson-minimikesto-on-30-taytta-tyopaivaa")
+          }}</small>
         </template>
       </elsa-form-group>
     </b-form-row>
-    <elsa-form-group
-      :label="$t('tyoaika-taydesta-tyopaivasta')"
-      :required="true"
-    >
-      <template v-slot="{ uid }">
-        <div class="d-flex align-items-center">
-          <b-form-input
-            :id="uid"
-            v-model="value.osaaikaprosentti"
-            :state="validateState('osaaikaprosentti')"
-            type="number"
-            :step="1"
-          />
-          <span class="mx-3">%</span>
-        </div>
-        <b-form-invalid-feedback :id="`${uid}-feedback`">{{
-          $t("osaaikaprosentti-validointivirhe")
-        }}</b-form-invalid-feedback>
-      </template>
-    </elsa-form-group>
     <elsa-form-group :label="$t('kaytannon-koulutus')" :required="true">
       <template v-slot="{ uid }">
         <b-form-radio
@@ -155,9 +166,9 @@
           name="kaytannon-koulutus-tyyppi"
           value="REUNAKOULUTUS"
           class="mb-0"
-          >{{ $t("omaa-erikoisalaa-tukeva-koulutus")
+          >{{ $t("omaa-erikoisalaa-tukeva-tai-taydentava-koulutus")
           }}<span v-if="value.kaytannonKoulutus === 'REUNAKOULUTUS'"
-            >, {{ $t("kerro-mika") | lowercase }}
+            >, {{ $t("valitse-erikoisala") | lowercase }}
             <span class="text-primary">*</span></span
           ></b-form-radio
         >
@@ -177,9 +188,27 @@
           value="TUTKIMUSTYO"
           >{{ $t("tutkimustyo") }}</b-form-radio
         >
+        <b-form-radio
+          v-model="value.kaytannonKoulutus"
+          :state="validateState('kaytannonKoulutus')"
+          name="kaytannon-koulutus-tyyppi"
+          value="TERVEYSKESKUSTYO"
+          >{{ $t("terveyskeskustyo") }}</b-form-radio
+        >
         <b-form-invalid-feedback :id="`${uid}-feedback`">{{
           $t("pakollinen-tieto")
         }}</b-form-invalid-feedback>
+      </template>
+    </elsa-form-group>
+    <elsa-form-group v-if="!modal" :label="$t('lisatiedot')">
+      <template v-slot="{ uid }">
+        <b-form-checkbox
+          :id="uid"
+          v-model="value.hyvaksyttyAiempaanErikoisalaan"
+          >{{
+            $t("tyoskentelyjakso-on-aiemmin-hyvaksytty-toiselle-erikoisalalle")
+          }}</b-form-checkbox
+        >
       </template>
     </elsa-form-group>
     <div class="text-right">
@@ -203,13 +232,15 @@
 <script lang="ts">
 import Component from "vue-class-component";
 import axios from "axios";
-import { Mixins } from "vue-property-decorator";
+import { Mixins, Prop } from "vue-property-decorator";
 import { validationMixin } from "vuelidate";
 import { required, between, requiredIf } from "vuelidate/lib/validators";
+import { parseISO, addDays, subDays, formatISO } from "date-fns";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
 import ElsaFormMultiselect from "@/components/multiselect/multiselect.vue";
 import ElsaFormDatepicker from "@/components/datepicker/datepicker.vue";
 import ElsaButton from "@/components/button/button.vue";
+import { clamp } from "@/utils/functions";
 
 @Component({
   components: {
@@ -237,12 +268,12 @@ import ElsaButton from "@/components/button/button.vue";
           })
         }
       },
-      alkamispaiva: {
-        required
-      },
       osaaikaprosentti: {
         required,
         between: between(50, 100)
+      },
+      alkamispaiva: {
+        required
       },
       kaytannonKoulutus: {
         required
@@ -256,6 +287,9 @@ import ElsaButton from "@/components/button/button.vue";
   }
 })
 export default class TyoskentelyjaksoForm extends Mixins(validationMixin) {
+  @Prop({ required: false, default: true })
+  modal!: boolean;
+
   value = {
     alkamispaiva: null,
     paattymispaiva: null,
@@ -265,7 +299,10 @@ export default class TyoskentelyjaksoForm extends Mixins(validationMixin) {
       kunta: null,
       tyyppi: null,
       muuTyyppi: null
-    }
+    },
+    kaytannonKoulutus: null,
+    reunakoulutuksenNimi: null,
+    hyvaksyttyAiempaanErikoisalaan: null
   } as any;
   kunnat = [];
   tyoskentelypaikat = [];
@@ -320,7 +357,6 @@ export default class TyoskentelyjaksoForm extends Mixins(validationMixin) {
       const result = travel(/[,[\]]+?/) || travel(/[,[\].]+?/);
       return result === undefined || result === obj ? defaultValue : result;
     };
-
     const { $dirty, $error } = get(this.$v.value, name);
     return $dirty ? ($error ? false : null) : null;
   }
@@ -348,6 +384,41 @@ export default class TyoskentelyjaksoForm extends Mixins(validationMixin) {
 
   onCancelClick() {
     this.$emit("cancel");
+  }
+
+  onOsaaikaprosenttiInput(value: number) {
+    this.value.osaaikaprosentti = value;
+    this.value.paattymispaiva = null;
+  }
+
+  get maxAlkamispaiva() {
+    if (this.value.paattymispaiva) {
+      // Työskentelyjakson minimikesto on 30 täyttä työpäivää
+      return formatISO(
+        subDays(
+          parseISO(this.value.paattymispaiva),
+          Math.floor(30 * (100 / clamp(this.value.osaaikaprosentti, 50, 100))) -
+            1
+        ),
+        { representation: "date" }
+      );
+    }
+    return undefined;
+  }
+
+  get minPaattymispaiva() {
+    if (this.value.alkamispaiva) {
+      // Työskentelyjakson minimikesto on 30 täyttä työpäivää
+      return formatISO(
+        addDays(
+          parseISO(this.value.alkamispaiva),
+          Math.ceil(30 * (100 / clamp(this.value.osaaikaprosentti, 50, 100))) -
+            1
+        ),
+        { representation: "date" }
+      );
+    }
+    return undefined;
   }
 }
 </script>

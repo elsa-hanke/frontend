@@ -67,7 +67,7 @@
                       scope="row"
                       class="py-0 pl-0 pr-1 text-muted font-weight-400"
                     >
-                      {{ $t("erikoistumisala") }}
+                      {{ $t("erikoisala") }}
                     </th>
                     <td class="py-0 pr-0 pl-1">-</td>
                   </tr>
