@@ -10,6 +10,7 @@ import {
   faChevronUp,
   faCircle,
   faClipboard,
+  faClipboardCheck,
   faClipboardList,
   faEdit,
   faEnvelope,
@@ -37,6 +38,7 @@ library.add(faChevronRight);
 library.add(faChevronUp);
 library.add(faCircle);
 library.add(faClipboard);
+library.add(faClipboardCheck);
 library.add(faClipboardList);
 library.add(faEdit);
 library.add(faEnvelope);
