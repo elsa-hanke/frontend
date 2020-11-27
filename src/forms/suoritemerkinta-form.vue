@@ -62,9 +62,6 @@
           </template>
         </elsa-popover>
       </template>
-      <template v-slot:modal-content>
-        <tyoskentelyjakso-form />
-      </template>
       <template v-slot="{ uid }">
         <elsa-form-multiselect
           :id="uid"

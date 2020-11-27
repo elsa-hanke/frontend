@@ -13,13 +13,15 @@ import ItsearviointiValmis from "../views/itsearviointi-valmis.vue";
 import Kayttooikeus from "../views/kayttooikeus.vue";
 import Koulutukset from "../views/koulutukset.vue";
 import Koulutussuunnitelma from "../views/koulutussuunnitelma.vue";
+import MuokkaaSuoritemerkintaa from "../views/muokkaa-suoritemerkintaa.vue";
 import PageNotFound from "../views/page-not-found.vue";
 import Root from "../views/root.vue";
 import Suoritemerkinnat from "../views/suoritemerkinnat.vue";
 import Suoritemerkinta from "../views/suoritemerkinta.vue";
+import Tyoskentelyjakso from "../views/tyoskentelyjakso.vue";
 import Tyoskentelyjaksot from "../views/tyoskentelyjaksot.vue";
 import UusiSuoritemerkinta from "../views/uusi-suoritemerkinta.vue";
-import MuokkaaSuoritemerkintaa from "../views/muokkaa-suoritemerkintaa.vue";
+import UusiTyoskentelyjakso from "../views/uusi-tyoskentelyjakso.vue";
 import Viestit from "../views/viestit.vue";
 
 Vue.use(VueRouter);
@@ -104,6 +106,16 @@ const routes: Array<RouteConfig> = [
         path: "/tyoskentelyjaksot",
         name: "tyoskentelyjaksot",
         component: Tyoskentelyjaksot
+      },
+      {
+        path: "/tyoskentelyjaksot/uusi",
+        name: "uusi-tyoskentelyjakso",
+        component: UusiTyoskentelyjakso
+      },
+      {
+        path: "/tyoskentelyjaksot/:tyoskentelyjaksoId",
+        name: "tyoskentelyjakso",
+        component: Tyoskentelyjakso
       },
       {
         path: "/koulutukset",

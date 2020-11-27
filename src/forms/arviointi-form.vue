@@ -269,9 +269,6 @@
               </template>
             </elsa-popover>
           </template>
-          <template v-slot:modal-content>
-            <tyoskentelyjakso-form />
-          </template>
           <template v-slot="{ uid }">
             <elsa-form-multiselect
               :id="uid"
@@ -347,7 +344,6 @@ import { required } from "vuelidate/lib/validators";
 import UserAvatar from "@/components/user-avatar/user-avatar.vue";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
 import ElsaFormMultiselect from "@/components/multiselect/multiselect.vue";
-import TyoskentelyjaksoForm from "@/forms/tyoskentelyjakso-form.vue";
 import ElsaLuottamuksenTaso from "@/components/luottamuksen-taso/luottamuksen-taso.vue";
 import ElsaBadge from "@/components/badge/badge.vue";
 import ElsaPopover from "@/components/popover/popover.vue";
@@ -358,7 +354,6 @@ import { vaativuustasot, luottamuksenTasot } from "@/utils/constants";
   components: {
     ElsaFormGroup,
     ElsaFormMultiselect,
-    TyoskentelyjaksoForm,
     UserAvatar,
     ElsaLuottamuksenTaso,
     ElsaBadge,
