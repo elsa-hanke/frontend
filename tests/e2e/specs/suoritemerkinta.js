@@ -58,7 +58,7 @@ describe("Suoritemerkinnät", () => {
     cy.contains("Oppimistavoite 5");
   });
 
-  it("Näkymästä löytyvät oleelliset elementit", () => {
+  it("Navigoidaan uuden suoritemerkinnän lisäämiseen", () => {
     setupMocks();
     cy.get("a")
       .contains("Lisää suoritemerkintä")
@@ -168,7 +168,7 @@ describe("Suoritemerkinnän muokkaaminen", () => {
     cy.contains("h1", "Suoritemerkintä");
   });
 
-  it("Poistetaan suoritemerkintä", () => {
+  it("Poistetaan suoritemerkintä muokkauksessa", () => {
     setupMocks();
     cy.get("button")
       .contains("Poista merkintä")
