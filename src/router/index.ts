@@ -14,6 +14,7 @@ import Kayttooikeus from "../views/kayttooikeus.vue";
 import Koulutukset from "../views/koulutukset.vue";
 import Koulutussuunnitelma from "../views/koulutussuunnitelma.vue";
 import MuokkaaSuoritemerkintaa from "../views/muokkaa-suoritemerkintaa.vue";
+import MuokkaaTyoskentelyjaksoa from "../views/muokkaa-tyoskentelyjaksoa.vue";
 import PageNotFound from "../views/page-not-found.vue";
 import Root from "../views/root.vue";
 import Suoritemerkinnat from "../views/suoritemerkinnat.vue";
@@ -116,6 +117,11 @@ const routes: Array<RouteConfig> = [
         path: "/tyoskentelyjaksot/:tyoskentelyjaksoId",
         name: "tyoskentelyjakso",
         component: Tyoskentelyjakso
+      },
+      {
+        path: "/tyoskentelyjaksot/:tyoskentelyjaksoId/muokkaus",
+        name: "muokkaa-tyoskentelyjaksoa",
+        component: MuokkaaTyoskentelyjaksoa
       },
       {
         path: "/koulutukset",
