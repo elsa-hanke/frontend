@@ -18,7 +18,7 @@
       </template>
     </elsa-form-group>
     <div class="text-right">
-      <elsa-button type="reset" variant="back" @click="logout()">{{
+      <elsa-button variant="back" @click="logout()">{{
         $t("peruuta")
       }}</elsa-button>
       <elsa-button

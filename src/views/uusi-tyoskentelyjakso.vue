@@ -9,6 +9,7 @@
           <tyoskentelyjakso-form
             v-if="!loading"
             @submit="onSubmit"
+            @cancel="onCancel"
             :modal="false"
           />
           <div class="text-center" v-else>
@@ -74,6 +75,12 @@ export default class UusiTyoskentelyjakso extends Mixins(ConfirmRouteExit) {
       );
     }
     params.saving = false;
+  }
+
+  onCancel() {
+    this.$router.push({
+      name: "tyoskentelyjaksot"
+    });
   }
 }
 </script>

@@ -24,7 +24,7 @@ export const vaativuustasot = [
     nimi: "hyvin-vaativa",
     kuvaus: "lorem-ipsum"
   }
-] as const;
+];
 
 export const luottamuksenTasot = [
   {
@@ -52,4 +52,19 @@ export const luottamuksenTasot = [
     nimi: "toiminta-ohjaajana",
     kuvaus: "lorem-ipsum"
   }
-] as const;
+];
+
+export const tyoskentelypaikkaTyypit = {
+  TERVEYSKESKUS: "terveyskeskus",
+  KESKUSSAIRAALA: "keskussairaala",
+  YLIOPISTOLLINEN_SAIRAALA: "yliopistollinen-sairaala",
+  YKSITYINEN: "yksityinen",
+  MUU: "muu"
+} as any;
+
+export const tyoskentelyjaksoKaytannonKoulutusTyypit = {
+  OMAN_ERIKOISALAN_KOULUTUS: "oman-erikoisalan-koulutus",
+  REUNAKOULUTUS: "omaa-erikoisalaa-tukeva-tai-taydentava-koulutus",
+  TUTKIMUSTYO: "tutkimustyo",
+  TERVEYSKESKUSTYO: "terveyskeskustyo"
+} as any;

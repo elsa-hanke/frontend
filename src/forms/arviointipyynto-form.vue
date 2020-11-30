@@ -123,7 +123,7 @@
       </template>
     </elsa-form-group>
     <div class="text-right">
-      <elsa-button type="reset" variant="back" :to="{ name: 'arvioinnit' }">{{
+      <elsa-button variant="back" :to="{ name: 'arvioinnit' }">{{
         $t("peruuta")
       }}</elsa-button>
       <elsa-button
@@ -204,6 +204,9 @@ export default class ArviointipyyntoForm extends Mixins(
   @Prop({ required: false, default: [] })
   kouluttajat!: any[];
 
+  @Prop({ required: false, default: false })
+  editing!: boolean;
+
   @Prop({
     required: false,
     type: Object,
@@ -239,9 +242,6 @@ export default class ArviointipyyntoForm extends Mixins(
     this.form.tapahtumanAjankohta = this.value.tapahtumanAjankohta;
     this.form.lisatiedot = this.value.lisatiedot;
   }
-
-  @Prop({ required: false, default: false })
-  editing!: boolean;
 
   validateState(name: string) {
     const { $dirty, $error } = this.$v.form[name] as any;

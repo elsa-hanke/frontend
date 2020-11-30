@@ -1,136 +1,142 @@
 <template>
   <b-form @submit.stop.prevent="onSubmit">
-    <elsa-form-group :label="$t('kunta')" :required="true">
+    <elsa-form-group :label="$t('kunta')" :required="!editing">
       <template v-slot="{ uid }">
-        <b-form-input
-          :id="uid"
-          v-model="value.tyoskentelypaikka.kunta"
-          :state="validateState('tyoskentelypaikka.kunta')"
-        ></b-form-input>
-        <b-form-invalid-feedback :id="`${uid}-feedback`">{{
-          $t("pakollinen-tieto")
-        }}</b-form-invalid-feedback>
-        <!--
-        <elsa-form-multiselect
-          :id="uid"
-          v-model="value.tyoskentelypaikka.kunta"
-          :options="kunnat"
-          :loading="kunnatLoading"
-          @select="onKuntaSelect"
-          @remove="onKuntaRemove"
-        >
-        </elsa-form-multiselect>
-        -->
-      </template>
-    </elsa-form-group>
-    <elsa-form-group :label="$t('tyoskentelypaikka')" :required="true">
-      <template v-slot="{ uid }">
-        <b-form-input
-          :id="uid"
-          v-model="value.tyoskentelypaikka.nimi"
-          :state="validateState('tyoskentelypaikka.nimi')"
-        ></b-form-input>
-        <b-form-invalid-feedback :id="`${uid}-feedback`">{{
-          $t("pakollinen-tieto")
-        }}</b-form-invalid-feedback>
-        <!--
-        <elsa-form-multiselect
-          :id="uid"
-          v-model="value.tyoskentelypaikka"
-          :options="tyoskentelypaikat"
-          :loading="organisaatiotLoading"
-          :disabled="!value.tyoskentelypaikka.kunta"
-          label="abbreviation"
-          track-by="organizationId"
-        >
-        </elsa-form-multiselect>
-        -->
-      </template>
-    </elsa-form-group>
-    <elsa-form-group :label="$t('tyyppi')" :required="true">
-      <template v-slot="{ uid }">
-        <b-form-radio-group
-          :id="uid"
-          v-model="value.tyoskentelypaikka.tyyppi"
-          :state="validateState('tyoskentelypaikka.tyyppi')"
-          :options="tyypit"
-          name="tyoskentelyjakso-tyyppi"
-          stacked
-        ></b-form-radio-group>
-        <b-form-radio
-          v-model="value.tyoskentelypaikka.tyyppi"
-          :state="validateState('tyoskentelypaikka.tyyppi')"
-          name="tyoskentelyjakso-tyyppi"
-          value="MUU"
-          >{{ $t("muu")
-          }}<span v-if="value.tyoskentelypaikka.tyyppi === 'MUU'"
-            >, {{ $t("kerro-mika") | lowercase }}
-            <span class="text-primary">*</span></span
-          ></b-form-radio
-        >
-        <div v-if="value.tyoskentelypaikka.tyyppi === 'MUU'" class="pl-4">
+        <div v-if="!editing">
           <b-form-input
-            v-model="value.tyoskentelypaikka.muuTyyppi"
-            :state="validateState('tyoskentelypaikka.muuTyyppi')"
+            :id="uid"
+            v-model="form.tyoskentelypaikka.kunta"
+            :state="validateState('tyoskentelypaikka.kunta')"
           ></b-form-input>
-          <b-form-invalid-feedback>{{
+          <b-form-invalid-feedback :id="`${uid}-feedback`">{{
             $t("pakollinen-tieto")
           }}</b-form-invalid-feedback>
         </div>
-        <b-form-invalid-feedback
-          :id="`${uid}-feedback`"
-          :style="{
-            display:
-              validateState('tyoskentelypaikka.tyyppi') === false
-                ? 'block'
-                : 'none'
-          }"
-          >{{ $t("pakollinen-tieto") }}</b-form-invalid-feedback
-        >
+        <div v-else>
+          <span :id="uid">{{ form.tyoskentelypaikka.kunta }}</span>
+        </div>
+      </template>
+    </elsa-form-group>
+    <elsa-form-group :label="$t('tyoskentelypaikka')" :required="!editing">
+      <template v-slot="{ uid }">
+        <div v-if="!editing">
+          <b-form-input
+            :id="uid"
+            v-model="form.tyoskentelypaikka.nimi"
+            :state="validateState('tyoskentelypaikka.nimi')"
+          ></b-form-input>
+          <b-form-invalid-feedback :id="`${uid}-feedback`">{{
+            $t("pakollinen-tieto")
+          }}</b-form-invalid-feedback>
+        </div>
+        <div v-else>
+          <span :id="uid">{{ form.tyoskentelypaikka.nimi }}</span>
+        </div>
+      </template>
+    </elsa-form-group>
+    <elsa-form-group :label="$t('tyyppi')" :required="!editing">
+      <template v-slot="{ uid }">
+        <div v-if="!editing">
+          <b-form-radio-group
+            :id="uid"
+            v-model="form.tyoskentelypaikka.tyyppi"
+            :state="validateState('tyoskentelypaikka.tyyppi')"
+            :options="tyypit"
+            name="tyoskentelyjakso-tyyppi"
+            stacked
+          ></b-form-radio-group>
+          <b-form-radio
+            v-model="form.tyoskentelypaikka.tyyppi"
+            :state="validateState('tyoskentelypaikka.tyyppi')"
+            name="tyoskentelyjakso-tyyppi"
+            value="MUU"
+            >{{ $t("muu")
+            }}<span v-if="form.tyoskentelypaikka.tyyppi === 'MUU'"
+              >, {{ $t("kerro-mika") | lowercase }}
+              <span class="text-primary">*</span></span
+            ></b-form-radio
+          >
+          <div v-if="form.tyoskentelypaikka.tyyppi === 'MUU'" class="pl-4">
+            <b-form-input
+              v-model="form.tyoskentelypaikka.muuTyyppi"
+              :state="validateState('tyoskentelypaikka.muuTyyppi')"
+            ></b-form-input>
+            <b-form-invalid-feedback>{{
+              $t("pakollinen-tieto")
+            }}</b-form-invalid-feedback>
+          </div>
+          <b-form-invalid-feedback
+            :id="`${uid}-feedback`"
+            :style="{
+              display:
+                validateState('tyoskentelypaikka.tyyppi') === false
+                  ? 'block'
+                  : 'none'
+            }"
+            >{{ $t("pakollinen-tieto") }}</b-form-invalid-feedback
+          >
+        </div>
+        <div v-else>
+          <span :id="uid">{{ form.tyoskentelypaikka.tyyppiLabel }}</span
+          ><span v-if="form.tyoskentelypaikka.muuTyyppi"
+            >: {{ form.tyoskentelypaikka.muuTyyppi }}</span
+          >
+        </div>
       </template>
     </elsa-form-group>
     <elsa-form-group
       :label="$t('tyoaika-taydesta-tyopaivasta')"
-      :required="true"
+      :required="!editing"
     >
       <template v-slot="{ uid }">
-        <div class="d-flex align-items-center">
-          <b-form-input
-            :id="uid"
-            :value="value.osaaikaprosentti"
-            @input="onOsaaikaprosenttiInput"
-            :state="validateState('osaaikaprosentti')"
-            type="number"
-            :step="1"
-          />
-          <span class="mx-3">%</span>
+        <div v-if="!editing">
+          <div class="d-flex align-items-center">
+            <b-form-input
+              :id="uid"
+              :value="form.osaaikaprosentti"
+              @input="onOsaaikaprosenttiInput"
+              :state="validateState('osaaikaprosentti')"
+              type="number"
+              :step="1"
+            />
+            <span class="mx-3">%</span>
+          </div>
+          <b-form-invalid-feedback
+            :id="`${uid}-feedback`"
+            :style="{
+              display:
+                validateState('osaaikaprosentti') === false ? 'block' : 'none'
+            }"
+            >{{
+              $t("osaaikaprosentti-validointivirhe")
+            }}</b-form-invalid-feedback
+          >
         </div>
-        <b-form-invalid-feedback
-          :id="`${uid}-feedback`"
-          :style="{
-            display:
-              validateState('osaaikaprosentti') === false ? 'block' : 'none'
-          }"
-          >{{ $t("osaaikaprosentti-validointivirhe") }}</b-form-invalid-feedback
-        >
+        <div v-else>{{ form.osaaikaprosentti }} %</div>
       </template>
     </elsa-form-group>
     <b-form-row>
       <elsa-form-group
+        v-if="form.alkamispaiva"
         :label="$t('alkamispaiva')"
         class="col-sm-12 col-md-6 pr-md-3"
-        :required="true"
+        :required="!editing"
       >
         <template v-slot="{ uid }">
-          <elsa-form-datepicker
-            :id="uid"
-            v-model="value.alkamispaiva"
-            :state="validateState('alkamispaiva')"
-            :max="maxAlkamispaiva"
-          ></elsa-form-datepicker>
-          <b-form-invalid-feedback :id="`${uid}-feedback`">{{
-            $t("pakollinen-tieto")
-          }}</b-form-invalid-feedback>
+          <div v-if="!editing">
+            <elsa-form-datepicker
+              :id="uid"
+              v-model="form.alkamispaiva"
+              :state="validateState('alkamispaiva')"
+              :max="maxAlkamispaiva"
+            ></elsa-form-datepicker>
+            <b-form-invalid-feedback :id="`${uid}-feedback`">{{
+              $t("pakollinen-tieto")
+            }}</b-form-invalid-feedback>
+          </div>
+          <div v-else>
+            <span :id="uid">{{ $date(form.alkamispaiva) }}</span>
+          </div>
         </template>
       </elsa-form-group>
       <elsa-form-group
@@ -140,7 +146,7 @@
         <template v-slot="{ uid }">
           <elsa-form-datepicker
             :id="uid"
-            v-model="value.paattymispaiva"
+            v-model="form.paattymispaiva"
             :min="minPaattymispaiva"
             :aria-describedby="`${uid}-help`"
             class="datepicker-range"
@@ -151,60 +157,68 @@
         </template>
       </elsa-form-group>
     </b-form-row>
-    <elsa-form-group :label="$t('kaytannon-koulutus')" :required="true">
+    <elsa-form-group :label="$t('kaytannon-koulutus')" :required="!editing">
       <template v-slot="{ uid }">
-        <b-form-radio
-          v-model="value.kaytannonKoulutus"
-          :state="validateState('kaytannonKoulutus')"
-          name="kaytannon-koulutus-tyyppi"
-          value="OMAN_ERIKOISALAN_KOULUTUS"
-          >{{ $t("oman-erikoisalan-koulutus") }}</b-form-radio
-        >
-        <b-form-radio
-          v-model="value.kaytannonKoulutus"
-          :state="validateState('kaytannonKoulutus')"
-          name="kaytannon-koulutus-tyyppi"
-          value="REUNAKOULUTUS"
-          class="mb-0"
-          >{{ $t("omaa-erikoisalaa-tukeva-tai-taydentava-koulutus")
-          }}<span v-if="value.kaytannonKoulutus === 'REUNAKOULUTUS'"
-            >, {{ $t("valitse-erikoisala") | lowercase }}
-            <span class="text-primary">*</span></span
-          ></b-form-radio
-        >
-        <div v-if="value.kaytannonKoulutus === 'REUNAKOULUTUS'" class="pl-4">
-          <b-form-input
-            v-model="value.reunakoulutuksenNimi"
-            :state="validateState('reunakoulutuksenNimi')"
-          ></b-form-input>
-          <b-form-invalid-feedback>{{
+        <div v-if="!editing">
+          <b-form-radio
+            v-model="form.kaytannonKoulutus"
+            :state="validateState('kaytannonKoulutus')"
+            name="kaytannon-koulutus-tyyppi"
+            value="OMAN_ERIKOISALAN_KOULUTUS"
+            >{{ $t("oman-erikoisalan-koulutus") }}</b-form-radio
+          >
+          <b-form-radio
+            v-model="form.kaytannonKoulutus"
+            :state="validateState('kaytannonKoulutus')"
+            name="kaytannon-koulutus-tyyppi"
+            value="REUNAKOULUTUS"
+            class="mb-0"
+            >{{ $t("omaa-erikoisalaa-tukeva-tai-taydentava-koulutus")
+            }}<span v-if="form.kaytannonKoulutus === 'REUNAKOULUTUS'"
+              >, {{ $t("valitse-erikoisala") | lowercase }}
+              <span class="text-primary">*</span></span
+            ></b-form-radio
+          >
+          <div v-if="form.kaytannonKoulutus === 'REUNAKOULUTUS'" class="pl-4">
+            <b-form-input
+              v-model="form.reunakoulutuksenNimi"
+              :state="validateState('reunakoulutuksenNimi')"
+            ></b-form-input>
+            <b-form-invalid-feedback>{{
+              $t("pakollinen-tieto")
+            }}</b-form-invalid-feedback>
+          </div>
+          <b-form-radio
+            v-model="form.kaytannonKoulutus"
+            :state="validateState('kaytannonKoulutus')"
+            name="kaytannon-koulutus-tyyppi"
+            value="TUTKIMUSTYO"
+            >{{ $t("tutkimustyo") }}</b-form-radio
+          >
+          <b-form-radio
+            v-model="form.kaytannonKoulutus"
+            :state="validateState('kaytannonKoulutus')"
+            name="kaytannon-koulutus-tyyppi"
+            value="TERVEYSKESKUSTYO"
+            >{{ $t("terveyskeskustyo") }}</b-form-radio
+          >
+          <b-form-invalid-feedback :id="`${uid}-feedback`">{{
             $t("pakollinen-tieto")
           }}</b-form-invalid-feedback>
         </div>
-        <b-form-radio
-          v-model="value.kaytannonKoulutus"
-          :state="validateState('kaytannonKoulutus')"
-          name="kaytannon-koulutus-tyyppi"
-          value="TUTKIMUSTYO"
-          >{{ $t("tutkimustyo") }}</b-form-radio
-        >
-        <b-form-radio
-          v-model="value.kaytannonKoulutus"
-          :state="validateState('kaytannonKoulutus')"
-          name="kaytannon-koulutus-tyyppi"
-          value="TERVEYSKESKUSTYO"
-          >{{ $t("terveyskeskustyo") }}</b-form-radio
-        >
-        <b-form-invalid-feedback :id="`${uid}-feedback`">{{
-          $t("pakollinen-tieto")
-        }}</b-form-invalid-feedback>
+        <div v-else>
+          <span :id="uid">{{ form.kaytannonKoulutusLabel }}</span
+          ><span v-if="form.reunakoulutuksenNimi"
+            >: {{ form.reunakoulutuksenNimi }}</span
+          >
+        </div>
       </template>
     </elsa-form-group>
     <elsa-form-group v-if="!modal" :label="$t('lisatiedot')">
       <template v-slot="{ uid }">
         <b-form-checkbox
           :id="uid"
-          v-model="value.hyvaksyttyAiempaanErikoisalaan"
+          v-model="form.hyvaksyttyAiempaanErikoisalaan"
           >{{
             $t("tyoskentelyjakso-on-aiemmin-hyvaksytty-toiselle-erikoisalalle")
           }}</b-form-checkbox
@@ -212,18 +226,23 @@
       </template>
     </elsa-form-group>
     <div class="text-right">
+      <elsa-button variant="back" @click.stop.prevent="onCancel">{{
+        $t("peruuta")
+      }}</elsa-button>
       <elsa-button
-        type="reset"
-        variant="back"
-        @click.stop.prevent="onCancelClick"
-        >{{ $t("peruuta") }}</elsa-button
+        v-if="editing"
+        @click="onTyoskentelyjaksoDelete"
+        :loading="params.deleting"
+        variant="outline-danger"
+        class="ml-2"
+        >{{ $t("poista-tyoskentelyjakso") }}</elsa-button
       >
       <elsa-button
         :loading="params.saving"
         type="submit"
         variant="primary"
         class="ml-2"
-        >{{ $t("lisaa") }}</elsa-button
+        >{{ editing ? $t("tallenna") : $t("lisaa") }}</elsa-button
       >
     </div>
   </b-form>
@@ -231,7 +250,6 @@
 
 <script lang="ts">
 import Component from "vue-class-component";
-import axios from "axios";
 import { Mixins, Prop } from "vue-property-decorator";
 import { validationMixin } from "vuelidate";
 import { required, between, requiredIf } from "vuelidate/lib/validators";
@@ -241,6 +259,10 @@ import ElsaFormMultiselect from "@/components/multiselect/multiselect.vue";
 import ElsaFormDatepicker from "@/components/datepicker/datepicker.vue";
 import ElsaButton from "@/components/button/button.vue";
 import { clamp } from "@/utils/functions";
+import {
+  tyoskentelypaikkaTyyppiLabel,
+  tyoskentelyjaksoKaytannonKoulutusLabel
+} from "@/utils/tyoskentelyjakso";
 
 @Component({
   components: {
@@ -250,7 +272,7 @@ import { clamp } from "@/utils/functions";
     ElsaButton
   },
   validations: {
-    value: {
+    form: {
       tyoskentelypaikka: {
         required,
         nimi: {
@@ -290,7 +312,30 @@ export default class TyoskentelyjaksoForm extends Mixins(validationMixin) {
   @Prop({ required: false, default: true })
   modal!: boolean;
 
-  value = {
+  @Prop({ required: false, default: false })
+  editing!: boolean;
+
+  @Prop({
+    required: false,
+    type: Object,
+    default: () => ({
+      alkamispaiva: null,
+      paattymispaiva: null,
+      osaaikaprosentti: 100,
+      tyoskentelypaikka: {
+        nimi: null,
+        kunta: null,
+        tyyppi: null,
+        muuTyyppi: null
+      },
+      kaytannonKoulutus: null,
+      reunakoulutuksenNimi: null,
+      hyvaksyttyAiempaanErikoisalaan: null
+    })
+  })
+  value!: any;
+
+  form = {
     alkamispaiva: null,
     paattymispaiva: null,
     osaaikaprosentti: 100,
@@ -304,8 +349,6 @@ export default class TyoskentelyjaksoForm extends Mixins(validationMixin) {
     reunakoulutuksenNimi: null,
     hyvaksyttyAiempaanErikoisalaan: null
   } as any;
-  kunnat = [];
-  tyoskentelypaikat = [];
   tyypit = [
     { text: this.$t("terveyskeskus"), value: "TERVEYSKESKUS" },
     { text: this.$t("keskussairaala"), value: "KESKUSSAIRAALA" },
@@ -315,32 +358,26 @@ export default class TyoskentelyjaksoForm extends Mixins(validationMixin) {
     },
     { text: this.$t("yksityinen"), value: "YKSITYINEN" }
   ];
-  kunnatLoading = false;
-  organisaatiotLoading = false;
   params = {
-    saving: false
+    saving: false,
+    deleting: false
   };
 
   mounted() {
-    // this.fetchKunnat();
-  }
-
-  async fetchKunnat() {
-    this.kunnatLoading = true;
-    this.kunnat = (await axios.get("sote-organisaatiot/kunnat")).data;
-    this.kunnatLoading = false;
-  }
-
-  async fetchOrganisaatiot(selected: string) {
-    this.organisaatiotLoading = true;
-    this.tyoskentelypaikat = (
-      await axios.get("sote-organisaatiot", {
-        params: {
-          "postOffice.equals": selected
-        }
-      })
-    ).data;
-    this.organisaatiotLoading = false;
+    this.form = {
+      ...this.value,
+      tyoskentelypaikka: {
+        ...this.value.tyoskentelypaikka,
+        tyyppiLabel: tyoskentelypaikkaTyyppiLabel(
+          this,
+          this.value.tyoskentelypaikka.tyyppi
+        )
+      },
+      kaytannonKoulutusLabel: tyoskentelyjaksoKaytannonKoulutusLabel(
+        this,
+        this.value.kaytannonKoulutus
+      )
+    };
   }
 
   validateState(name: string) {
@@ -357,47 +394,38 @@ export default class TyoskentelyjaksoForm extends Mixins(validationMixin) {
       const result = travel(/[,[\]]+?/) || travel(/[,[\].]+?/);
       return result === undefined || result === obj ? defaultValue : result;
     };
-    const { $dirty, $error } = get(this.$v.value, name);
+    const { $dirty, $error } = get(this.$v.form, name);
     return $dirty ? ($error ? false : null) : null;
   }
 
-  onKuntaSelect(selected: any) {
-    this.fetchOrganisaatiot(selected);
-  }
-
-  onKuntaRemove() {
-    this.tyoskentelypaikat = [];
-    this.value.tyoskentelypaikka = {
-      nimi: null,
-      kunta: null,
-      tyyppi: null
-    };
-  }
-
   onSubmit() {
-    this.$v.value.$touch();
-    if (this.$v.value.$anyError) {
+    this.$v.form.$touch();
+    if (this.$v.form.$anyError) {
       return;
     }
-    this.$emit("submit", this.value, this.params);
+    this.$emit("submit", this.form, this.params);
   }
 
-  onCancelClick() {
-    this.$emit("cancel");
+  async onTyoskentelyjaksoDelete() {
+    this.$emit("delete", this.params);
   }
 
   onOsaaikaprosenttiInput(value: number) {
-    this.value.osaaikaprosentti = value;
-    this.value.paattymispaiva = null;
+    this.form.osaaikaprosentti = value;
+    this.form.paattymispaiva = null;
+  }
+
+  onCancel() {
+    this.$emit("cancel");
   }
 
   get maxAlkamispaiva() {
-    if (this.value.paattymispaiva) {
+    if (this.form.paattymispaiva) {
       // Työskentelyjakson minimikesto on 30 täyttä työpäivää
       return formatISO(
         subDays(
-          parseISO(this.value.paattymispaiva),
-          Math.floor(30 * (100 / clamp(this.value.osaaikaprosentti, 50, 100))) -
+          parseISO(this.form.paattymispaiva),
+          Math.floor(30 * (100 / clamp(this.form.osaaikaprosentti, 50, 100))) -
             1
         ),
         { representation: "date" }
@@ -407,13 +435,12 @@ export default class TyoskentelyjaksoForm extends Mixins(validationMixin) {
   }
 
   get minPaattymispaiva() {
-    if (this.value.alkamispaiva) {
+    if (this.form.alkamispaiva) {
       // Työskentelyjakson minimikesto on 30 täyttä työpäivää
       return formatISO(
         addDays(
-          parseISO(this.value.alkamispaiva),
-          Math.ceil(30 * (100 / clamp(this.value.osaaikaprosentti, 50, 100))) -
-            1
+          parseISO(this.form.alkamispaiva),
+          Math.ceil(30 * (100 / clamp(this.form.osaaikaprosentti, 50, 100))) - 1
         ),
         { representation: "date" }
       );
