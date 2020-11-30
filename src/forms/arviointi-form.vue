@@ -321,7 +321,7 @@
         </template>
       </elsa-form-group>
       <div class="text-right">
-        <elsa-button type="reset" variant="back" :to="{ name: 'arvioinnit' }">{{
+        <elsa-button variant="back" :to="{ name: 'arvioinnit' }">{{
           $t("peruuta")
         }}</elsa-button>
         <elsa-button

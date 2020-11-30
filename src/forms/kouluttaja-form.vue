@@ -25,12 +25,9 @@
       </template>
     </elsa-form-group>
     <div class="text-right">
-      <elsa-button
-        type="reset"
-        variant="back"
-        @click.stop.prevent="onCancelClick"
-        >{{ $t("peruuta") }}</elsa-button
-      >
+      <elsa-button variant="back" @click.stop.prevent="onCancel">{{
+        $t("peruuta")
+      }}</elsa-button>
       <elsa-button
         :loading="params.saving"
         type="submit"
@@ -89,7 +86,7 @@ export default class KouluttajaForm extends Mixins(validationMixin) {
     this.$emit("submit", this.value, this.params);
   }
 
-  onCancelClick() {
+  onCancel() {
     this.$emit("cancel");
   }
 }

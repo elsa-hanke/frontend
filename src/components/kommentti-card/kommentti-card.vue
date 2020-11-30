@@ -42,7 +42,7 @@
             </template>
           </elsa-form-group>
           <div class="text-right">
-            <elsa-button type="reset" variant="back" @click="cancelEditing">{{
+            <elsa-button variant="back" @click="cancelEditing">{{
               $t("peruuta")
             }}</elsa-button>
             <elsa-button
