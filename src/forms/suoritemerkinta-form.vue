@@ -222,7 +222,7 @@ export default class SuoritemerkintaForm extends Mixins(
   validationMixin,
   TyoskentelyjaksoMixin
 ) {
-  @Prop({ required: false, default: [] })
+  @Prop({ required: false, default: () => [] })
   oppimistavoitteenKategoriat!: any[];
 
   @Prop({

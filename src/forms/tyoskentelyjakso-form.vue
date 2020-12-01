@@ -3,17 +3,20 @@
     <elsa-form-group :label="$t('kunta')" :required="!editing">
       <template v-slot="{ uid }">
         <div v-if="!editing">
-          <b-form-input
+          <elsa-form-multiselect
             :id="uid"
             v-model="form.tyoskentelypaikka.kunta"
+            :options="kunnat"
             :state="validateState('tyoskentelypaikka.kunta')"
-          ></b-form-input>
+            label="abbreviation"
+            track-by="id"
+          />
           <b-form-invalid-feedback :id="`${uid}-feedback`">{{
             $t("pakollinen-tieto")
           }}</b-form-invalid-feedback>
         </div>
         <div v-else>
-          <span :id="uid">{{ form.tyoskentelypaikka.kunta }}</span>
+          <span :id="uid">{{ form.tyoskentelypaikka.kunta.abbreviation }}</span>
         </div>
       </template>
     </elsa-form-group>
@@ -117,7 +120,6 @@
     </elsa-form-group>
     <b-form-row>
       <elsa-form-group
-        v-if="form.alkamispaiva"
         :label="$t('alkamispaiva')"
         class="col-sm-12 col-md-6 pr-md-3"
         :required="!editing"
@@ -135,7 +137,9 @@
             }}</b-form-invalid-feedback>
           </div>
           <div v-else>
-            <span :id="uid">{{ $date(form.alkamispaiva) }}</span>
+            <span :id="uid" v-if="form.alkamispaiva">{{
+              $date(form.alkamispaiva)
+            }}</span>
           </div>
         </template>
       </elsa-form-group>
@@ -171,19 +175,28 @@
             v-model="form.kaytannonKoulutus"
             :state="validateState('kaytannonKoulutus')"
             name="kaytannon-koulutus-tyyppi"
-            value="REUNAKOULUTUS"
+            value="OMAA_ERIKOISALAA_TUKEVA_KOULUTUS"
             class="mb-0"
             >{{ $t("omaa-erikoisalaa-tukeva-tai-taydentava-koulutus")
-            }}<span v-if="form.kaytannonKoulutus === 'REUNAKOULUTUS'"
+            }}<span
+              v-if="
+                form.kaytannonKoulutus === 'OMAA_ERIKOISALAA_TUKEVA_KOULUTUS'
+              "
               >, {{ $t("valitse-erikoisala") | lowercase }}
               <span class="text-primary">*</span></span
             ></b-form-radio
           >
-          <div v-if="form.kaytannonKoulutus === 'REUNAKOULUTUS'" class="pl-4">
-            <b-form-input
-              v-model="form.reunakoulutuksenNimi"
-              :state="validateState('reunakoulutuksenNimi')"
-            ></b-form-input>
+          <div
+            v-if="form.kaytannonKoulutus === 'OMAA_ERIKOISALAA_TUKEVA_KOULUTUS'"
+            class="pl-4"
+          >
+            <elsa-form-multiselect
+              v-model="form.omaaErikoisalaaTukeva"
+              :options="erikoisalatFormatted"
+              :state="validateState('omaaErikoisalaaTukeva')"
+              label="nimi"
+              track-by="id"
+            />
             <b-form-invalid-feedback>{{
               $t("pakollinen-tieto")
             }}</b-form-invalid-feedback>
@@ -208,8 +221,8 @@
         </div>
         <div v-else>
           <span :id="uid">{{ form.kaytannonKoulutusLabel }}</span
-          ><span v-if="form.reunakoulutuksenNimi"
-            >: {{ form.reunakoulutuksenNimi }}</span
+          ><span v-if="form.omaaErikoisalaaTukeva"
+            >: {{ form.omaaErikoisalaaTukeva.nimi }}</span
           >
         </div>
       </template>
@@ -300,9 +313,9 @@ import {
       kaytannonKoulutus: {
         required
       },
-      reunakoulutuksenNimi: {
+      omaaErikoisalaaTukeva: {
         required: requiredIf(function(value) {
-          return value.kaytannonKoulutus === "REUNAKOULUTUS";
+          return value.kaytannonKoulutus === "OMAA_ERIKOISALAA_TUKEVA_KOULUTUS";
         })
       }
     }
@@ -315,6 +328,12 @@ export default class TyoskentelyjaksoForm extends Mixins(validationMixin) {
   @Prop({ required: false, default: false })
   editing!: boolean;
 
+  @Prop({ required: false, default: () => [] })
+  kunnat!: any[];
+
+  @Prop({ required: false, default: () => [] })
+  erikoisalat!: any[];
+
   @Prop({
     required: false,
     type: Object,
@@ -324,12 +343,12 @@ export default class TyoskentelyjaksoForm extends Mixins(validationMixin) {
       osaaikaprosentti: 100,
       tyoskentelypaikka: {
         nimi: null,
-        kunta: null,
+        kunta: {},
         tyyppi: null,
         muuTyyppi: null
       },
       kaytannonKoulutus: null,
-      reunakoulutuksenNimi: null,
+      omaaErikoisalaaTukeva: null,
       hyvaksyttyAiempaanErikoisalaan: null
     })
   })
@@ -341,12 +360,12 @@ export default class TyoskentelyjaksoForm extends Mixins(validationMixin) {
     osaaikaprosentti: 100,
     tyoskentelypaikka: {
       nimi: null,
-      kunta: null,
+      kunta: {},
       tyyppi: null,
       muuTyyppi: null
     },
     kaytannonKoulutus: null,
-    reunakoulutuksenNimi: null,
+    omaaErikoisalaaTukeva: null,
     hyvaksyttyAiempaanErikoisalaan: null
   } as any;
   tyypit = [
@@ -403,7 +422,18 @@ export default class TyoskentelyjaksoForm extends Mixins(validationMixin) {
     if (this.$v.form.$anyError) {
       return;
     }
-    this.$emit("submit", this.form, this.params);
+    this.$emit(
+      "submit",
+      {
+        ...this.form,
+        tyoskentelypaikka: {
+          ...this.form.tyoskentelypaikka,
+          kuntaId: this.form.tyoskentelypaikka.kunta?.id
+        },
+        omaaErikoisalaaTukevaId: this.form.omaaErikoisalaaTukeva?.id
+      },
+      this.params
+    );
   }
 
   async onTyoskentelyjaksoDelete() {
@@ -446,6 +476,15 @@ export default class TyoskentelyjaksoForm extends Mixins(validationMixin) {
       );
     }
     return undefined;
+  }
+
+  get erikoisalatFormatted() {
+    return [
+      ...this.erikoisalat,
+      {
+        nimi: this.$t("muu")
+      }
+    ];
   }
 }
 </script>

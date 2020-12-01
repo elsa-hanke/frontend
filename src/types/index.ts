@@ -1,5 +1,7 @@
 export interface ArviointipyyntoLomake {
   tyoskentelyjaksot: any[];
+  kunnat: any[];
+  erikoisalat: any[];
   epaOsaamisalueet: any[];
   kouluttajat: any[];
 }
@@ -7,4 +9,9 @@ export interface ArviointipyyntoLomake {
 export interface SuoritemerkintaLomake {
   tyoskentelyjaksot: any[];
   oppimistavoitteenKategoriat: any[];
+}
+
+export interface TyoskentelyjaksoLomake {
+  kunnat: any[];
+  erikoisalat: any[];
 }

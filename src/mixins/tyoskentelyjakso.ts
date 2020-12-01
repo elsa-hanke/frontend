@@ -6,7 +6,7 @@ import { dateBetween } from "@/utils/date";
 
 @Component({})
 export default class TyoskentelyjaksoMixin extends Vue {
-  @Prop({ required: false, default: [] })
+  @Prop({ required: false, default: () => [] })
   tyoskentelyjaksot!: any[];
 
   form = {

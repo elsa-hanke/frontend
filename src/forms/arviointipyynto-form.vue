@@ -13,7 +13,12 @@
       @submit="onTyoskentelyjaksoSubmit"
     >
       <template v-slot:modal-content="{ submit, cancel }">
-        <tyoskentelyjakso-form @submit="submit" @cancel="cancel" />
+        <tyoskentelyjakso-form
+          @submit="submit"
+          @cancel="cancel"
+          :kunnat="kunnat"
+          :erikoisalat="erikoisalat"
+        />
       </template>
       <template v-slot="{ uid }">
         <elsa-form-multiselect
@@ -195,13 +200,19 @@ export default class ArviointipyyntoForm extends Mixins(
   validationMixin,
   TyoskentelyjaksoMixin
 ) {
-  @Prop({ required: false, default: [] })
+  @Prop({ required: false, default: () => [] })
   tyoskentelyjaksot!: any[];
 
-  @Prop({ required: false, default: [] })
+  @Prop({ required: false, default: () => [] })
+  kunnat!: any[];
+
+  @Prop({ required: false, default: () => [] })
+  erikoisalat!: any[];
+
+  @Prop({ required: false, default: () => [] })
   epaOsaamisalueet!: any[];
 
-  @Prop({ required: false, default: [] })
+  @Prop({ required: false, default: () => [] })
   kouluttajat!: any[];
 
   @Prop({ required: false, default: false })
