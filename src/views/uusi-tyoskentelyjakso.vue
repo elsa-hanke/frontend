@@ -10,6 +10,8 @@
             v-if="!loading"
             @submit="onSubmit"
             @cancel="onCancel"
+            :kunnat="kunnat"
+            :erikoisalat="erikoisalat"
             :modal="false"
           />
           <div class="text-center" v-else>
@@ -26,6 +28,7 @@ import axios from "axios";
 import { Component, Mixins } from "vue-property-decorator";
 import ConfirmRouteExit from "@/mixins/confirm-route-exit";
 import TyoskentelyjaksoForm from "@/forms/tyoskentelyjakso-form.vue";
+import { TyoskentelyjaksoLomake } from "@/types";
 import { toastFail, toastSuccess } from "@/utils/toast";
 
 @Component({
@@ -48,10 +51,26 @@ export default class UusiTyoskentelyjakso extends Mixins(ConfirmRouteExit) {
       active: true
     }
   ];
+  tyoskentelyjaksoLomake: null | TyoskentelyjaksoLomake = null;
+  tyoskentelyjakso: any = null;
   loading = true;
 
   async mounted() {
+    await this.fetchLomake();
     this.loading = false;
+  }
+
+  async fetchLomake() {
+    try {
+      this.tyoskentelyjaksoLomake = (
+        await axios.get(`erikoistuva-laakari/tyoskentelyjakso-lomake`)
+      ).data;
+    } catch (err) {
+      toastFail(
+        this,
+        this.$t("tyoskentelyjakson-lomakkeen-hakeminen-epaonnistui")
+      );
+    }
   }
 
   async onSubmit(value: any, params: any) {
@@ -81,6 +100,22 @@ export default class UusiTyoskentelyjakso extends Mixins(ConfirmRouteExit) {
     this.$router.push({
       name: "tyoskentelyjaksot"
     });
+  }
+
+  get kunnat() {
+    if (this.tyoskentelyjaksoLomake) {
+      return this.tyoskentelyjaksoLomake.kunnat;
+    } else {
+      return [];
+    }
+  }
+
+  get erikoisalat() {
+    if (this.tyoskentelyjaksoLomake) {
+      return this.tyoskentelyjaksoLomake.erikoisalat;
+    } else {
+      return [];
+    }
   }
 }
 </script>

@@ -64,7 +64,8 @@ export const tyoskentelypaikkaTyypit = {
 
 export const tyoskentelyjaksoKaytannonKoulutusTyypit = {
   OMAN_ERIKOISALAN_KOULUTUS: "oman-erikoisalan-koulutus",
-  REUNAKOULUTUS: "omaa-erikoisalaa-tukeva-tai-taydentava-koulutus",
+  OMAA_ERIKOISALAA_TUKEVA_KOULUTUS:
+    "omaa-erikoisalaa-tukeva-tai-taydentava-koulutus",
   TUTKIMUSTYO: "tutkimustyo",
   TERVEYSKESKUSTYO: "terveyskeskustyo"
 } as any;

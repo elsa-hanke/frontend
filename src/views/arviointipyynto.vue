@@ -12,6 +12,8 @@
             @submit="onSubmit"
             @delete="onDelete"
             :tyoskentelyjaksot="tyoskentelyjaksot"
+            :kunnat="kunnat"
+            :erikoisalat="erikoisalat"
             :epa-osaamisalueet="epaOsaamisalueet"
             :kouluttajat="kouluttajat"
             :editing="editing"
@@ -164,6 +166,22 @@ export default class Arviointipyynto extends Mixins(ConfirmRouteExit) {
   get tyoskentelyjaksot() {
     if (this.arviointipyyntoLomake) {
       return this.arviointipyyntoLomake.tyoskentelyjaksot;
+    } else {
+      return [];
+    }
+  }
+
+  get kunnat() {
+    if (this.arviointipyyntoLomake) {
+      return this.arviointipyyntoLomake.kunnat;
+    } else {
+      return [];
+    }
+  }
+
+  get erikoisalat() {
+    if (this.arviointipyyntoLomake) {
+      return this.arviointipyyntoLomake.erikoisalat;
     } else {
       return [];
     }

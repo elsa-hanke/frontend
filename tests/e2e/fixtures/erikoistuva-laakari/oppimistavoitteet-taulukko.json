@@ -61,7 +61,7 @@
            "paattymispaiva": "2020-11-29",
            "osaaikaprosentti": 100,
            "kaytannonKoulutus": "OMAN_ERIKOISALAN_KOULUTUS",
-           "reunakoulutuksenNimi": null,
+           "omaaErikoisalaaTukevaId": null,
            "hyvaksyttyAiempaanErikoisalaan": false,
            "tyoskentelypaikka": {
               "id": 1201,
@@ -93,7 +93,7 @@
            "paattymispaiva": "2020-11-29",
            "osaaikaprosentti": 100,
            "kaytannonKoulutus": "OMAN_ERIKOISALAN_KOULUTUS",
-           "reunakoulutuksenNimi": null,
+           "omaaErikoisalaaTukevaId": null,
            "hyvaksyttyAiempaanErikoisalaan": false,
            "tyoskentelypaikka": {
               "id": 1201,
@@ -125,7 +125,7 @@
            "paattymispaiva": "2020-11-29",
            "osaaikaprosentti": 100,
            "kaytannonKoulutus": "OMAN_ERIKOISALAN_KOULUTUS",
-           "reunakoulutuksenNimi": null,
+           "omaaErikoisalaaTukevaId": null,
            "hyvaksyttyAiempaanErikoisalaan": false,
            "tyoskentelypaikka": {
               "id": 1201,
@@ -157,7 +157,7 @@
            "paattymispaiva": "2020-11-29",
            "osaaikaprosentti": 60,
            "kaytannonKoulutus": "OMAN_ERIKOISALAN_KOULUTUS",
-           "reunakoulutuksenNimi": null,
+           "omaaErikoisalaaTukevaId": null,
            "hyvaksyttyAiempaanErikoisalaan": false,
            "tyoskentelypaikka": {
               "id": 1201,

@@ -10,7 +10,7 @@
             <elsa-form-group :label="$t('kunta')">
               <template v-slot="{ uid }">
                 <span :id="uid">{{
-                  tyoskentelyjaksoWrapper.tyoskentelypaikka.kunta
+                  tyoskentelyjaksoWrapper.tyoskentelypaikka.kunta.abbreviation
                 }}</span>
               </template>
             </elsa-form-group>
@@ -72,8 +72,9 @@
                 <span :id="uid">{{
                   tyoskentelyjaksoWrapper.kaytannonKoulutusLabel
                 }}</span
-                ><span v-if="tyoskentelyjaksoWrapper.reunakoulutuksenNimi"
-                  >: {{ tyoskentelyjaksoWrapper.reunakoulutuksenNimi }}</span
+                ><span v-if="tyoskentelyjaksoWrapper.omaaErikoisalaaTukeva"
+                  >:
+                  {{ tyoskentelyjaksoWrapper.omaaErikoisalaaTukeva.nimi }}</span
                 >
               </template>
             </elsa-form-group>
