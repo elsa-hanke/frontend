@@ -6,7 +6,7 @@
           <elsa-form-multiselect
             :id="uid"
             v-model="form.tyoskentelypaikka.kunta"
-            :options="kunnat"
+            :options="kunnatFormatted"
             :state="validateState('tyoskentelypaikka.kunta')"
             label="abbreviation"
             track-by="id"
@@ -478,9 +478,24 @@ export default class TyoskentelyjaksoForm extends Mixins(validationMixin) {
     return undefined;
   }
 
+  get kunnatFormatted() {
+    return this.kunnat
+      .filter(k => !k.korvaavaKoodi) // Rajattu pois entiset kunnat
+      .filter(k => !["000", "198", "199"].includes(k.id)) // Rajattu pois muut kuin kunnat
+      .sort((a, b) => {
+        if (a.abbreviation < b.abbreviation) return -1;
+        if (a.abbreviation > b.abbreviation) return 1;
+        return 0;
+      });
+  }
+
   get erikoisalatFormatted() {
     return [
-      ...this.erikoisalat,
+      ...this.erikoisalat.sort((a, b) => {
+        if (a.nimi < b.nimi) return -1;
+        if (a.nimi > b.nimi) return 1;
+        return 0;
+      }),
       {
         nimi: this.$t("muu")
       }
