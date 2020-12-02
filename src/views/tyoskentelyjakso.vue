@@ -35,7 +35,9 @@
                 >
               </template>
             </elsa-form-group>
-            <elsa-form-group :label="$t('tyoaika-taydesta-tyopaivasta')">
+            <elsa-form-group
+              :label="$t('tyoaika-taydesta-tyopaivasta') + ' (50–100 %)'"
+            >
               <template v-slot="{ uid }">
                 <span :id="uid"
                   >{{ tyoskentelyjaksoWrapper.osaaikaprosentti }} %</span

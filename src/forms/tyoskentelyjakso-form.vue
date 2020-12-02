@@ -88,7 +88,7 @@
       </template>
     </elsa-form-group>
     <elsa-form-group
-      :label="$t('tyoaika-taydesta-tyopaivasta')"
+      :label="$t('tyoaika-taydesta-tyopaivasta') + ' (50–100 %)'"
       :required="!editing"
     >
       <template v-slot="{ uid }">
@@ -110,9 +110,8 @@
               display:
                 validateState('osaaikaprosentti') === false ? 'block' : 'none'
             }"
-            >{{
-              $t("osaaikaprosentti-validointivirhe")
-            }}</b-form-invalid-feedback
+            >{{ $t("osaaikaprosentti-validointivirhe") }} 50–100
+            %</b-form-invalid-feedback
           >
         </div>
         <div v-else>{{ form.osaaikaprosentti }} %</div>
@@ -298,7 +297,7 @@ import {
           required
         },
         muuTyyppi: {
-          required: requiredIf(function(value) {
+          required: requiredIf(value => {
             return value.tyyppi === "MUU";
           })
         }
@@ -314,7 +313,7 @@ import {
         required
       },
       omaaErikoisalaaTukeva: {
-        required: requiredIf(function(value) {
+        required: requiredIf(value => {
           return value.kaytannonKoulutus === "OMAA_ERIKOISALAA_TUKEVA_KOULUTUS";
         })
       }
@@ -440,8 +439,8 @@ export default class TyoskentelyjaksoForm extends Mixins(validationMixin) {
     this.$emit("delete", this.params);
   }
 
-  onOsaaikaprosenttiInput(value: number) {
-    this.form.osaaikaprosentti = value;
+  onOsaaikaprosenttiInput(value: string) {
+    this.form.osaaikaprosentti = parseInt(value);
     this.form.paattymispaiva = null;
   }
 

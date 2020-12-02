@@ -21,6 +21,7 @@ import Suoritemerkinnat from "../views/suoritemerkinnat.vue";
 import Suoritemerkinta from "../views/suoritemerkinta.vue";
 import Tyoskentelyjakso from "../views/tyoskentelyjakso.vue";
 import Tyoskentelyjaksot from "../views/tyoskentelyjaksot.vue";
+import UusiPoissaolo from "../views/uusi-poissaolo.vue";
 import UusiSuoritemerkinta from "../views/uusi-suoritemerkinta.vue";
 import UusiTyoskentelyjakso from "../views/uusi-tyoskentelyjakso.vue";
 import Viestit from "../views/viestit.vue";
@@ -122,6 +123,11 @@ const routes: Array<RouteConfig> = [
         path: "/tyoskentelyjaksot/:tyoskentelyjaksoId/muokkaus",
         name: "muokkaa-tyoskentelyjaksoa",
         component: MuokkaaTyoskentelyjaksoa
+      },
+      {
+        path: "/tyoskentelyjaksot/poissaolot/uusi",
+        name: "uusi-poissaolo",
+        component: UusiPoissaolo
       },
       {
         path: "/koulutukset",

@@ -15,3 +15,8 @@ export interface TyoskentelyjaksoLomake {
   kunnat: any[];
   erikoisalat: any[];
 }
+
+export interface PoissaoloLomake {
+  tyoskentelyjaksot: any[];
+  poissaoloSyyt: any[];
+}
