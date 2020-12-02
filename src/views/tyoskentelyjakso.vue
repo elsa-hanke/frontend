@@ -74,7 +74,16 @@
                 }}</span
                 ><span v-if="tyoskentelyjaksoWrapper.omaaErikoisalaaTukeva"
                   >:
-                  {{ tyoskentelyjaksoWrapper.omaaErikoisalaaTukeva.nimi }}</span
+                  {{
+                    tyoskentelyjaksoWrapper.omaaErikoisalaaTukeva.nimi
+                      | lowercase
+                  }}</span
+                ><span
+                  v-if="
+                    tyoskentelyjaksoWrapper.kaytannonKoulutus ===
+                      'OMAA_ERIKOISALAA_TUKEVA_KOULUTUS'
+                  "
+                  >: {{ $t("muu") | lowercase }}</span
                 >
               </template>
             </elsa-form-group>
