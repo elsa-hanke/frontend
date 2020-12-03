@@ -8,7 +8,12 @@
       @submit="onTyoskentelyjaksoSubmit"
     >
       <template v-slot:modal-content="{ submit, cancel }">
-        <tyoskentelyjakso-form @submit="submit" @cancel="cancel" />
+        <tyoskentelyjakso-form
+          @submit="submit"
+          @cancel="cancel"
+          :kunnat="kunnat"
+          :erikoisalat="erikoisalat"
+        />
       </template>
       <template v-slot="{ uid }">
         <elsa-form-multiselect
@@ -224,6 +229,12 @@ export default class SuoritemerkintaForm extends Mixins(
 ) {
   @Prop({ required: false, default: () => [] })
   oppimistavoitteenKategoriat!: any[];
+
+  @Prop({ required: false, default: () => [] })
+  kunnat!: any[];
+
+  @Prop({ required: false, default: () => [] })
+  erikoisalat!: any[];
 
   @Prop({
     required: false,
