@@ -10,6 +10,8 @@
             v-if="!loading"
             @submit="onSubmit"
             :tyoskentelyjaksot="tyoskentelyjaksot"
+            :kunnat="kunnat"
+            :erikoisalat="erikoisalat"
             :oppimistavoitteen-kategoriat="oppimistavoitteenKategoriat"
           />
           <div class="text-center" v-else>
@@ -94,6 +96,22 @@ export default class UusiSuoritemerkinta extends Mixins(ConfirmRouteExit) {
   get tyoskentelyjaksot() {
     if (this.suoritemerkintaLomake) {
       return this.suoritemerkintaLomake.tyoskentelyjaksot;
+    } else {
+      return [];
+    }
+  }
+
+  get kunnat() {
+    if (this.suoritemerkintaLomake) {
+      return this.suoritemerkintaLomake.kunnat;
+    } else {
+      return [];
+    }
+  }
+
+  get erikoisalat() {
+    if (this.suoritemerkintaLomake) {
+      return this.suoritemerkintaLomake.erikoisalat;
     } else {
       return [];
     }

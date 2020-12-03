@@ -47,7 +47,7 @@
             <b-form-row>
               <elsa-form-group
                 :label="$t('alkamispaiva')"
-                class="col-sm-12 col-md-6"
+                class="col-sm-12 col-md-6 pr-md-3"
               >
                 <template v-slot="{ uid }">
                   <span :id="uid">{{
@@ -58,12 +58,13 @@
               <elsa-form-group
                 v-if="tyoskentelyjaksoWrapper.paattymispaiva"
                 :label="$t('paattymispaiva')"
-                class="col-sm-12 col-md-6"
+                class="col-sm-12 col-md-6 pl-md-3"
               >
                 <template v-slot="{ uid }">
                   <span
                     :id="uid"
                     v-if="tyoskentelyjaksoWrapper.paattymispaiva"
+                    class="datepicker-range"
                     >{{ $date(tyoskentelyjaksoWrapper.paattymispaiva) }}</span
                   >
                 </template>
@@ -232,5 +233,15 @@ export default class Tyoskentelyjakso extends Vue {
 
 .tyoskentelyjakso {
   max-width: 768px;
+}
+
+.datepicker-range::before {
+  content: "–";
+  position: absolute;
+  left: -1rem;
+  padding: 0 0.75rem;
+  @include media-breakpoint-down(sm) {
+    display: none;
+  }
 }
 </style>

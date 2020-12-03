@@ -8,6 +8,8 @@ export interface ArviointipyyntoLomake {
 
 export interface SuoritemerkintaLomake {
   tyoskentelyjaksot: any[];
+  kunnat: any[];
+  erikoisalat: any[];
   oppimistavoitteenKategoriat: any[];
 }
 
