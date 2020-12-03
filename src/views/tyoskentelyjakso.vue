@@ -81,7 +81,8 @@
                 ><span
                   v-if="
                     tyoskentelyjaksoWrapper.kaytannonKoulutus ===
-                      'OMAA_ERIKOISALAA_TUKEVA_KOULUTUS'
+                      'OMAA_ERIKOISALAA_TUKEVA_KOULUTUS' &&
+                      !tyoskentelyjaksoWrapper.omaaErikoisalaaTukeva
                   "
                   >: {{ $t("muu") | lowercase }}</span
                 >
