@@ -65,7 +65,7 @@
             v-model="form.paattymispaiva"
             :state="validateState('paattymispaiva')"
             :min="minPaattymispaiva"
-            :max="maxAlkamispaiva"
+            :max="maxPaattymispaiva"
             class="datepicker-range"
           ></elsa-form-datepicker>
           <b-form-invalid-feedback :id="`${uid}-feedback`">{{
@@ -138,6 +138,7 @@ import ElsaFormMultiselect from "@/components/multiselect/multiselect.vue";
 import ElsaPopover from "@/components/popover/popover.vue";
 import ElsaFormDatepicker from "@/components/datepicker/datepicker.vue";
 import ElsaButton from "@/components/button/button.vue";
+import { dateBetween } from "@/utils/date";
 
 @Component({
   components: {
@@ -239,20 +240,43 @@ export default class PoissaoloForm extends Mixins(
     this.$emit("delete", this.params);
   }
 
+  onTyoskentelyjaksoSelect(value: any) {
+    if (
+      !dateBetween(
+        this.form.alkamispaiva,
+        value.alkamispaiva,
+        value.paattymispaiva
+      )
+    ) {
+      this.form.alkamispaiva = null;
+    }
+    if (
+      !dateBetween(
+        this.form.paattymispaiva,
+        value.alkamispaiva,
+        value.paattymispaiva
+      )
+    ) {
+      this.form.paattymispaiva = null;
+    }
+  }
+
   get minAlkamispaiva() {
-    return "2020-01-01";
+    return this.form.tyoskentelyjakso?.alkamispaiva;
   }
 
   get maxAlkamispaiva() {
-    return "2020-01-01";
+    return (
+      this.form.paattymispaiva || this.form.tyoskentelyjakso?.paattymispaiva
+    );
   }
 
   get minPaattymispaiva() {
-    return "2020-01-01";
+    return this.form.alkamispaiva || this.form.tyoskentelyjakso?.alkamispaiva;
   }
 
   get maxPaattymispaiva() {
-    return "2020-01-01";
+    return this.form.tyoskentelyjakso?.paattymispaiva;
   }
 }
 </script>
