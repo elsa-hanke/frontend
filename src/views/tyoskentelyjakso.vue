@@ -61,12 +61,9 @@
                 class="col-sm-12 col-md-6 pl-md-3"
               >
                 <template v-slot="{ uid }">
-                  <span
-                    :id="uid"
-                    v-if="tyoskentelyjaksoWrapper.paattymispaiva"
-                    class="datepicker-range"
-                    >{{ $date(tyoskentelyjaksoWrapper.paattymispaiva) }}</span
-                  >
+                  <span :id="uid" class="datepicker-range">{{
+                    $date(tyoskentelyjaksoWrapper.paattymispaiva)
+                  }}</span>
                 </template>
               </elsa-form-group>
             </b-form-row>

@@ -16,6 +16,7 @@ import Koulutussuunnitelma from "../views/koulutussuunnitelma.vue";
 import MuokkaaSuoritemerkintaa from "../views/muokkaa-suoritemerkintaa.vue";
 import MuokkaaTyoskentelyjaksoa from "../views/muokkaa-tyoskentelyjaksoa.vue";
 import PageNotFound from "../views/page-not-found.vue";
+import Poissaolo from "../views/poissaolo.vue";
 import Root from "../views/root.vue";
 import Suoritemerkinnat from "../views/suoritemerkinnat.vue";
 import Suoritemerkinta from "../views/suoritemerkinta.vue";
@@ -128,6 +129,11 @@ const routes: Array<RouteConfig> = [
         path: "/tyoskentelyjaksot/poissaolot/uusi",
         name: "uusi-poissaolo",
         component: UusiPoissaolo
+      },
+      {
+        path: "/tyoskentelyjaksot/poissaolot/:poissaoloId",
+        name: "poissaolo",
+        component: Poissaolo
       },
       {
         path: "/koulutukset",
