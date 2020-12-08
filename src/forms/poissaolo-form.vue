@@ -168,6 +168,9 @@ import { dateBetween } from "@/utils/date";
       },
       osaaikaprosentti: {
         required: requiredIf(value => {
+          if (value.osaaikaprosentti < 0 || value.osaaikaprosentti > 100) {
+            return false;
+          }
           return value.kokoTyoajanPoissaolo === false;
         })
       }
@@ -229,7 +232,7 @@ export default class PoissaoloForm extends Mixins(
         poissaolonSyyId: this.form.poissaolonSyy?.id,
         tyoskentelyjaksoId: this.form.tyoskentelyjakso?.id,
         osaaikaprosentti: this.form.kokoTyoajanPoissaolo
-          ? 100
+          ? 0
           : this.form.osaaikaprosentti
       },
       this.params
