@@ -242,7 +242,7 @@
         $t("peruuta")
       }}</elsa-button>
       <elsa-button
-        v-if="editing"
+        v-if="editing && !value.suoritusarvioinnit"
         @click="onTyoskentelyjaksoDelete"
         :loading="params.deleting"
         variant="outline-danger"
