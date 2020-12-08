@@ -10,6 +10,7 @@
     :selectedLabel="selectedLabelText"
     :deselectLabel="deselectLabelText"
     :deselectGroupLabel="deselectGroupLabelText"
+    :allow-empty="false"
     :max="max"
     :class="{ 'is-invalid': isInvalid, 'is-valid': isValid }"
   >
