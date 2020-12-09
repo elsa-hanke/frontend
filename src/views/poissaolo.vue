@@ -49,7 +49,6 @@
                 <span :id="uid">{{ poissaoloWrapper.osaaikaprosentti }} %</span>
               </template>
             </elsa-form-group>
-            <!--
             <div class="text-right">
               <elsa-button
                 @click="onPoissaoloDelete"
@@ -64,7 +63,6 @@
                 >{{ $t("muokkaa-poissaoloa") }}</elsa-button
               >
             </div>
-            -->
           </div>
           <div class="text-center" v-else>
             <b-spinner variant="primary" :label="$t('ladataan')" />
@@ -144,7 +142,7 @@ export default class Poissaolo extends Vue {
         );
         toastSuccess(this, this.$t("poissaolo-poistettu-onnistuneesti"));
         this.$router.push({
-          name: "suoritemerkinnat"
+          name: "tyoskentelyjaksot"
         });
       } catch (err) {
         toastFail(this, this.$t("poissaolon-poistaminen-epaonnistui"));
@@ -174,7 +172,7 @@ export default class Poissaolo extends Vue {
 @import "~bootstrap/scss/mixins/breakpoints";
 
 .poissaolo {
-  max-width: 970px;
+  max-width: 768px;
 }
 
 .datepicker-range::before {
