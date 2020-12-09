@@ -66,7 +66,7 @@
       </template>
     </elsa-form-group>
     <elsa-form-group
-      :label="$t('kouluttaja')"
+      :label="$t('kouluttaja-tai-lahikouluttaja')"
       label-cols-md="4"
       label-cols="12"
       class="align-items-center mb-md-0"

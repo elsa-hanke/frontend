@@ -64,9 +64,6 @@ export default class ElsaFormGroup extends Vue {
   label!: string;
 
   @Prop({ required: false, type: String })
-  labelFor!: string;
-
-  @Prop({ required: false, type: String })
   addNewLabel!: string;
 
   @Prop({ required: false, default: false })
