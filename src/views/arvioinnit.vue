@@ -19,7 +19,6 @@
                   <b-col md="4">
                     <elsa-form-group
                       :label="$t('tyoskentelyjakso')"
-                      label-for="arvioinnit-tyoskentelyjakso-filter"
                       class="mb-md-0"
                     >
                       <template v-slot="{ uid }">
@@ -57,8 +56,7 @@
                   </b-col>
                   <b-col md="4">
                     <elsa-form-group
-                      :label="$t('kouluttaja')"
-                      label-for="arvioinnit-kouluttaja-filter"
+                      :label="$t('kouluttaja-tai-lahikouluttaja')"
                       class="mb-0"
                     >
                       <template v-slot="{ uid }">
