@@ -221,3 +221,9 @@ h6 {
 .text-prewrap {
   white-space: pre-wrap;
 }
+
+table {
+  th {
+    font-weight: $font-weight-500;
+  }
+}

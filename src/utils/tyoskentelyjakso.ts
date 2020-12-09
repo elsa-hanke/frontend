@@ -4,14 +4,16 @@ import {
   tyoskentelyjaksoKaytannonKoulutusTyypit
 } from "@/utils/constants";
 
-export function tyoskentelyjaksoLabel(vue: Vue, value: any) {
-  return `${value.tyoskentelypaikka.nimi} (${(vue as any).$date(
-    value.alkamispaiva
-  )} – ${
+export function ajankohtaLabel(vue: Vue, value: any) {
+  return `${(vue as any).$date(value.alkamispaiva)}-${
     value.paattymispaiva
       ? (vue as any).$date(value.paattymispaiva)
       : (vue.$t("kesken") as string).toLowerCase()
-  })`;
+  }`;
+}
+
+export function tyoskentelyjaksoLabel(vue: Vue, value: any) {
+  return `${value.tyoskentelypaikka.nimi} (${ajankohtaLabel(vue, value)})`;
 }
 
 export function tyoskentelypaikkaTyyppiLabel(vue: Vue, value: string) {
