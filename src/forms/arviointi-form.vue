@@ -41,7 +41,7 @@
           {{ value.arvioitavaOsaalue.nimi }}
           <elsa-popover>
             <template>
-              <h2>{{ value.arvioitavaOsaalue.nimi }}</h2>
+              <h3>{{ value.arvioitavaOsaalue.nimi }}</h3>
               <p>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
                 eiusmod tempor incididunt ut labore et dolore magna aliqua.
@@ -113,9 +113,9 @@
               {{ $t("luottamuksen-taso") }}
               <elsa-popover>
                 <template>
-                  <h2>{{ $t("luottamuksen-taso") }}</h2>
+                  <h3>{{ $t("luottamuksen-taso") }}</h3>
                   <div v-for="(taso, index) in luottamuksenTasot" :key="index">
-                    <h3>{{ taso.arvo }} {{ $t(taso.nimi) }}</h3>
+                    <h4>{{ taso.arvo }} {{ $t(taso.nimi) }}</h4>
                     <p>{{ $t(taso.kuvaus) }}</p>
                   </div>
                 </template>
@@ -154,9 +154,9 @@
               {{ $t("vaativuustaso") }}
               <elsa-popover>
                 <template>
-                  <h2>{{ $t("vaativuustaso") }}</h2>
+                  <h3>{{ $t("vaativuustaso") }}</h3>
                   <div v-for="(taso, index) in vaativuustasot" :key="index">
-                    <h3>{{ taso.arvo }} {{ $t(taso.nimi) }}</h3>
+                    <h4>{{ taso.arvo }} {{ $t(taso.nimi) }}</h4>
                     <p>{{ $t(taso.kuvaus) }}</p>
                   </div>
                 </template>
@@ -220,9 +220,9 @@
           <template #label-help>
             <elsa-popover>
               <template>
-                <h2>{{ $t("luottamuksen-taso") }}</h2>
+                <h3>{{ $t("luottamuksen-taso") }}</h3>
                 <div v-for="(taso, index) in luottamuksenTasot" :key="index">
-                  <h3>{{ taso.arvo }} {{ $t(taso.nimi) }}</h3>
+                  <h4>{{ taso.arvo }} {{ $t(taso.nimi) }}</h4>
                   <p>{{ $t(taso.kuvaus) }}</p>
                 </div>
               </template>
@@ -261,9 +261,9 @@
           <template #label-help>
             <elsa-popover>
               <template>
-                <h2>{{ $t("vaativuustaso") }}</h2>
+                <h3>{{ $t("vaativuustaso") }}</h3>
                 <div v-for="(taso, index) in vaativuustasot" :key="index">
-                  <h3>{{ taso.arvo }} {{ $t(taso.nimi) }}</h3>
+                  <h4>{{ taso.arvo }} {{ $t(taso.nimi) }}</h4>
                   <p>{{ $t(taso.kuvaus) }}</p>
                 </div>
               </template>

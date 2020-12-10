@@ -186,14 +186,36 @@
                           {{ $t("poissaolon-syy") }}
                           <elsa-popover>
                             <template>
-                              <h2>{{ $t("luottamuksen-taso") }}</h2>
-                              <div
-                                v-for="(taso, index) in luottamuksenTasot"
-                                :key="index"
-                              >
-                                <h3>{{ taso.arvo }} {{ $t(taso.nimi) }}</h3>
-                                <p>{{ $t(taso.kuvaus) }}</p>
-                              </div>
+                              <h3>{{ $t("poissaolon-syy") }}</h3>
+                              <p>{{ $t("poissaolon-syy-kuvaus") }}</p>
+                              <h4>
+                                {{
+                                  $t("koulutuskertymaa-vahentavat-poissaolot")
+                                }}
+                              </h4>
+                              <p>
+                                {{ $t("koulutuskertymaa-vahentavat-kuvaus") }}
+                              </p>
+                              <ul>
+                                <li>{{ $t("lorem-ipsum") }}</li>
+                              </ul>
+                              <h4>
+                                {{
+                                  $t(
+                                    "koulutuskertymaa-vahentavat-poissaolot-yli-30-pv-poissaoloissa"
+                                  )
+                                }}
+                              </h4>
+                              <p>
+                                {{
+                                  $t(
+                                    "koulutuskertymaa-vahentavat-yli-30-pv-kuvaus"
+                                  )
+                                }}
+                              </p>
+                              <ul>
+                                <li>{{ $t("lorem-ipsum") }}</li>
+                              </ul>
                             </template>
                           </elsa-popover>
                         </b-th>
