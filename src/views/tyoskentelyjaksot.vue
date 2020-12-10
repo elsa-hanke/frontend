@@ -18,106 +18,227 @@
             class="mb-4"
             >{{ $t("lisaa-poissaolo") }}</elsa-button
           >
-          <div
-            class="d-flex justify-content-center border rounded py-5 mb-4 text-danger"
-          >
-            TODO: Työskentelypaikka erikoisalalla
-          </div>
-          <b-table
-            responsive
-            :items="tyoskentelyjaksotFormatted"
-            :fields="fields"
-          >
-            <template #table-colgroup="scope">
-              <col
-                v-for="field in scope.fields"
-                :key="field.key"
-                :style="{ width: field.width }"
-              />
-            </template>
-            <template #cell(tyoskentelypaikkaLabel)="row">
-              <elsa-button
-                :to="{
-                  name: 'tyoskentelyjakso',
-                  params: { tyoskentelyjaksoId: row.item.id }
-                }"
-                variant="link"
-                class="shadow-none px-0"
-                >{{ row.item.tyoskentelypaikka.nimi }}</elsa-button
-              >
-            </template>
-            <template #cell(ajankohtaDate)="row">
-              {{ row.item.ajankohta }}
-            </template>
-            <template #cell(keskeytyksetLength)="row">
-              <elsa-button
-                v-if="row.item.keskeytyksetLength > 0"
-                @click="row.toggleDetails"
-                variant="link"
-                class="shadow-none text-nowrap px-0"
-                >{{ row.item.keskeytyksetLength }}
-                {{
-                  (row.item.keskeytyksetLength == 1
-                    ? $t("poissaolo")
-                    : $t("poissaoloa")) | lowercase
-                }}<font-awesome-icon
-                  :icon="row.detailsShowing ? 'chevron-up' : 'chevron-down'"
-                  fixed-width
-                  size="lg"
-                  class="ml-2 text-dark"
-                />
-              </elsa-button>
-              <span v-else>
-                {{ $t("ei-poissaoloja") }}
-              </span>
-            </template>
-            <template #row-details="row">
-              <div class="px-3">
-                <b-table-simple responsive>
-                  <b-thead>
-                    <b-tr>
-                      <b-th>{{ $t("poissaolon-syy") }}</b-th>
-                      <b-th>{{ $t("ajankohta") }}</b-th>
-                      <b-th>{{ $t("tyoaika") }}</b-th>
-                    </b-tr>
-                  </b-thead>
-                  <b-tbody>
-                    <b-tr
-                      v-for="(keskeytysaika, index) in row.item.keskeytykset"
-                      :key="index"
+          <div class="d-flex justify-content-center border rounded pt-3 mb-4">
+            <div class="container-fluid">
+              <elsa-form-group :label="$t('tyoskentelyaika-erikoisalalla')">
+                <template v-slot="{ uid }">
+                  <div :id="uid" class="d-flex flex-wrap">
+                    <div class="d-flex flex-column mb-2 duration-card">
+                      <span class="duration-text">1 v 8 kk 11 pv</span>
+                      <span class="text-size-sm">{{
+                        $t("tyoskentelyaika-yhteensa")
+                      }}</span>
+                    </div>
+                    <div class="d-flex flex-column mb-2 duration-card">
+                      <span class="duration-text">9 kk 15 pv</span>
+                      <span class="text-size-sm">{{
+                        $t("arvio-erikoistumiseen-hyvaksyttavista")
+                      }}</span>
+                    </div>
+                    <div class="d-flex flex-column mb-2 duration-card">
+                      <span class="duration-text">4 v 2 kk 15pv</span>
+                      <span class="text-size-sm">{{
+                        $t("arvio-puuttuvista-koulutuksesta")
+                      }}</span>
+                    </div>
+                  </div>
+                </template>
+              </elsa-form-group>
+              <b-form-row>
+                <elsa-form-group :label="$t('koulutustyypit')" class="col-xl-6">
+                  <template v-slot="{ uid }">
+                    <div
+                      :id="uid"
+                      class="koulutustyypit bar-chart user-select-none"
                     >
-                      <b-td>
-                        <elsa-button
-                          :to="{
-                            name: 'poissaolo',
-                            params: { poissaoloId: keskeytysaika.id }
-                          }"
-                          variant="link"
-                          class="shadow-none px-0"
-                          >{{ keskeytysaika.poissaolonSyy.nimi }}</elsa-button
-                        >
-                      </b-td>
-                      <b-td>{{
-                        keskeytysaika.alkamispaiva !=
-                        keskeytysaika.paattymispaiva
-                          ? `${$date(keskeytysaika.alkamispaiva)}-${$date(
-                              keskeytysaika.paattymispaiva
-                            )}`
-                          : $date(keskeytysaika.alkamispaiva)
-                      }}</b-td>
-                      <b-td
-                        >{{ keskeytysaika.osaaikaprosentti }} %<span
-                          v-if="keskeytysaika.osaaikaprosentti === 0"
-                        >
-                          ({{ $t("koko-tyoajan-poissaolo") }})</span
-                        ></b-td
+                      <b-table-simple borderless class="text-size-sm mt-3">
+                        <b-tr>
+                          <b-td class="text-right text-nowrap">{{
+                            $t("terveyskeskus")
+                          }}</b-td>
+                          <b-td class="px-1" style="width: 100%;">
+                            <elsa-progress-bar
+                              :value="45"
+                              color="#ffb406"
+                              background-color="#ffe19b"
+                            />
+                          </b-td>
+                          <b-td class="text-nowrap">{{ $t("vah") }} 9 kk</b-td>
+                        </b-tr>
+                        <b-tr>
+                          <b-td class="text-right text-nowrap">{{
+                            $t("yliopistosairaala")
+                          }}</b-td>
+                          <b-td class="px-1">
+                            <elsa-progress-bar
+                              :value="35"
+                              color="#0f9bd9"
+                              background-color="#9fd7ef"
+                            />
+                          </b-td>
+                          <b-td class="text-nowrap">{{ $t("vah") }} 12 kk</b-td>
+                        </b-tr>
+                        <b-tr>
+                          <b-td class="text-right text-nowrap">{{
+                            $t("yo-sair-ulkopuolinen")
+                          }}</b-td>
+                          <b-td class="px-1">
+                            <elsa-progress-bar
+                              :value="10"
+                              color="#8a86fb"
+                              background-color="#cfcdfd"
+                              class="mb-2"
+                            />
+                          </b-td>
+                          <b-td class="text-nowrap">{{ $t("vah") }} 12 kk</b-td>
+                        </b-tr>
+                        <b-tr>
+                          <b-td
+                            class="text-right font-weight-500 text-nowrap"
+                            >{{ $t("yhteensa") }}</b-td
+                          >
+                          <b-td class="px-1">
+                            <elsa-progress-bar
+                              :value="25"
+                              color="#41b257"
+                              background-color="#b3e1bc"
+                            />
+                          </b-td>
+                          <b-td class="font-weight-500 text-nowrap"
+                            >{{ $t("vah") }} 5 v</b-td
+                          >
+                        </b-tr>
+                      </b-table-simple>
+                    </div>
+                  </template>
+                </elsa-form-group>
+                <elsa-form-group
+                  :label="$t('kaytannon-koulutus')"
+                  class="col-xl-6"
+                >
+                  <template v-slot="{ uid }">
+                    <div :id="uid" class="donut-chart">
+                      <apexchart
+                        :options="donutOptions"
+                        :series="donutSeries"
+                      ></apexchart>
+                    </div>
+                  </template>
+                </elsa-form-group>
+              </b-form-row>
+            </div>
+          </div>
+          <div class="tyoskentelyjaksot-table">
+            <b-table
+              responsive
+              :items="tyoskentelyjaksotFormatted"
+              :fields="fields"
+            >
+              <template #table-colgroup="scope">
+                <col
+                  v-for="field in scope.fields"
+                  :key="field.key"
+                  :style="{ width: field.width }"
+                />
+              </template>
+              <template #cell(tyoskentelypaikkaLabel)="row">
+                <elsa-button
+                  :to="{
+                    name: 'tyoskentelyjakso',
+                    params: { tyoskentelyjaksoId: row.item.id }
+                  }"
+                  variant="link"
+                  class="shadow-none px-0"
+                  >{{ row.item.tyoskentelypaikka.nimi }}</elsa-button
+                >
+              </template>
+              <template #cell(ajankohtaDate)="row">
+                {{ row.item.ajankohta }}
+              </template>
+              <template #cell(keskeytyksetLength)="row">
+                <elsa-button
+                  v-if="row.item.keskeytyksetLength > 0"
+                  @click="row.toggleDetails"
+                  variant="link"
+                  class="shadow-none text-nowrap px-0"
+                  >{{ row.item.keskeytyksetLength }}
+                  {{
+                    (row.item.keskeytyksetLength == 1
+                      ? $t("poissaolo")
+                      : $t("poissaoloa")) | lowercase
+                  }}<font-awesome-icon
+                    :icon="row.detailsShowing ? 'chevron-up' : 'chevron-down'"
+                    fixed-width
+                    size="lg"
+                    class="ml-2 text-dark"
+                  />
+                </elsa-button>
+                <span v-else>
+                  {{ $t("ei-poissaoloja") }}
+                </span>
+              </template>
+              <template #row-details="row">
+                <div class="px-3">
+                  <b-table-simple responsive>
+                    <b-thead>
+                      <b-tr>
+                        <b-th>
+                          {{ $t("poissaolon-syy") }}
+                          <elsa-popover>
+                            <template>
+                              <h2>{{ $t("luottamuksen-taso") }}</h2>
+                              <div
+                                v-for="(taso, index) in luottamuksenTasot"
+                                :key="index"
+                              >
+                                <h3>{{ taso.arvo }} {{ $t(taso.nimi) }}</h3>
+                                <p>{{ $t(taso.kuvaus) }}</p>
+                              </div>
+                            </template>
+                          </elsa-popover>
+                        </b-th>
+                        <b-th>{{ $t("ajankohta") }}</b-th>
+                        <b-th>{{ $t("tyoaika") }}</b-th>
+                      </b-tr>
+                    </b-thead>
+                    <b-tbody>
+                      <b-tr
+                        v-for="(keskeytysaika, index) in row.item.keskeytykset"
+                        :key="index"
                       >
-                    </b-tr>
-                  </b-tbody>
-                </b-table-simple>
-              </div>
-            </template>
-          </b-table>
+                        <b-td>
+                          <elsa-button
+                            :to="{
+                              name: 'poissaolo',
+                              params: { poissaoloId: keskeytysaika.id }
+                            }"
+                            variant="link"
+                            class="shadow-none px-0"
+                            >{{ keskeytysaika.poissaolonSyy.nimi }}</elsa-button
+                          >
+                        </b-td>
+                        <b-td>{{
+                          keskeytysaika.alkamispaiva !=
+                          keskeytysaika.paattymispaiva
+                            ? `${$date(keskeytysaika.alkamispaiva)}-${$date(
+                                keskeytysaika.paattymispaiva
+                              )}`
+                            : $date(keskeytysaika.alkamispaiva)
+                        }}</b-td>
+                        <b-td
+                          >{{ keskeytysaika.osaaikaprosentti }} %<span
+                            v-if="keskeytysaika.osaaikaprosentti === 0"
+                          >
+                            ({{ $t("koko-tyoajan-poissaolo") }})</span
+                          ></b-td
+                        >
+                      </b-tr>
+                    </b-tbody>
+                  </b-table-simple>
+                </div>
+              </template>
+            </b-table>
+          </div>
           <p class="text-size-sm">
             {{ $t("tyoskentelyjaksot-taulukko-kuvaus") }}
           </p>
@@ -132,12 +253,18 @@ import axios from "axios";
 import { Component, Vue } from "vue-property-decorator";
 import { parseISO } from "date-fns";
 import ElsaButton from "@/components/button/button.vue";
+import ElsaFormGroup from "@/components/form-group/form-group.vue";
+import ElsaPopover from "@/components/popover/popover.vue";
+import ElsaProgressBar from "@/components/progress-bar/progress-bar.vue";
 import { ajankohtaLabel } from "@/utils/tyoskentelyjakso";
 import { toastFail } from "@/utils/toast";
 
 @Component({
   components: {
-    ElsaButton
+    ElsaButton,
+    ElsaFormGroup,
+    ElsaPopover,
+    ElsaProgressBar
   }
 })
 export default class Tyoskentelyjaksot extends Vue {
@@ -185,6 +312,78 @@ export default class Tyoskentelyjaksot extends Vue {
     }
   ];
   loading = true;
+
+  donutSeries = [44, 55, 41, 17];
+  donutOptions = {
+    colors: ["#41b257", "#0f9bd9", "#8a86fb", "#ffb406"],
+    labels: [
+      `${this.$t("oma-erikoisala")}: 3 kk 2pv`,
+      `${this.$t("omaa-erikoisalaa-tukeva")}: 3 kk 2pv`,
+      `${this.$t("tutkimustyo")}: 3 kk 2pv`,
+      `${this.$t("terveyskeskustyo")}: 3 kk 2pv`
+    ],
+    legend: {
+      fontSize: "13px",
+      fontFamily: "Montserrat, Helvetica, Arial, sans-serif",
+      onItemClick: {
+        toggleDataSeries: false
+      },
+      onItemHover: {
+        highlightDataSeries: false
+      }
+    },
+    chart: {
+      type: "donut",
+      animations: {
+        enabled: false
+      }
+    },
+    dataLabels: {
+      formatter: function(val: number) {
+        return Math.round(val) + "%";
+      },
+      style: {
+        fontSize: "8px",
+        fontFamily: "Montserrat, Helvetica, Arial, sans-serif"
+      },
+      dropShadow: {
+        enabled: false
+      }
+    },
+    plotOptions: {
+      pie: {
+        expandOnClick: false
+      }
+    },
+    stroke: {
+      show: false
+    },
+    states: {
+      hover: {
+        filter: {
+          type: "normal"
+        }
+      },
+      active: {
+        filter: {
+          type: "normal"
+        }
+      }
+    },
+    tooltip: {
+      enabled: false
+    },
+    responsive: [
+      {
+        breakpoint: 768,
+        options: {
+          legend: {
+            position: "bottom"
+          }
+        }
+      }
+    ]
+  };
 
   async mounted() {
     await this.fetchTyoskentelyjaksot();
@@ -273,34 +472,86 @@ export default class Tyoskentelyjaksot extends Vue {
   padding: 200px;
 }
 
-::v-deep table {
-  thead th {
-    border-top: none;
-  }
-  td {
-    padding-top: 0;
-    padding-bottom: 0;
-    vertical-align: middle;
-    div {
-      min-height: $font-size-base * 2.5;
-    }
-  }
-  .b-table-details {
+.koulutustyypit {
+  ::v-deep table {
     td {
-      padding-left: 0;
-      padding-right: 0;
-      background: #f5f5f6;
+      padding: 0;
     }
-    table {
-      th {
-        padding-bottom: 0.3rem;
+  }
+}
+
+.tyoskentelyjaksot-table {
+  ::v-deep table {
+    thead th {
+      border-top: none;
+    }
+    td {
+      padding-top: 0;
+      padding-bottom: 0;
+      vertical-align: middle;
+      div {
+        min-height: $font-size-base * 2.5;
       }
-      th:first-child {
+    }
+    .b-table-details {
+      td {
         padding-left: 0;
-      }
-      th:last-child {
         padding-right: 0;
+        background: #f5f5f6;
       }
+      table {
+        th {
+          padding-bottom: 0.3rem;
+        }
+        th:first-child {
+          padding-left: 0;
+        }
+        th:last-child {
+          padding-right: 0;
+        }
+      }
+    }
+  }
+}
+
+.duration-card {
+  min-width: 300px;
+
+  .duration-text {
+    font-size: 1.25rem;
+  }
+}
+.donut-chart {
+  max-width: 450px;
+}
+.bar-chart {
+  max-width: 450px;
+
+  .progress-yellow {
+    background-color: #ffe19b;
+    .progress-bar {
+      background-color: #ffb406;
+    }
+  }
+
+  .progress-blue {
+    background-color: #9fd7ef;
+    .progress-bar {
+      background-color: #0f9bd9;
+    }
+  }
+
+  .progress-purple {
+    background-color: #cfcdfd;
+    .progress-bar {
+      background-color: #8a86fb;
+    }
+  }
+
+  .progress-green {
+    background-color: #b3e1bc;
+    .progress-bar {
+      background-color: #41b257;
     }
   }
 }
