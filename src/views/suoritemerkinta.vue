@@ -32,12 +32,12 @@
               <template #label-help>
                 <elsa-popover>
                   <template>
-                    <h2>{{ $t("luottamuksen-taso") }}</h2>
+                    <h3>{{ $t("luottamuksen-taso") }}</h3>
                     <div
                       v-for="(taso, index) in luottamuksenTasot"
                       :key="index"
                     >
-                      <h3>{{ taso.arvo }} {{ $t(taso.nimi) }}</h3>
+                      <h4>{{ taso.arvo }} {{ $t(taso.nimi) }}</h4>
                       <p>{{ $t(taso.kuvaus) }}</p>
                     </div>
                   </template>
