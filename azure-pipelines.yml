@@ -37,6 +37,9 @@ stages:
               yarn test:e2e:headless
             displayName: "E2E Test"
           - script: |
+              yarn generate-thirdparty
+            displayName: "Generate thirdparty"
+          - script: |
               yarn build
             displayName: "Build"
           - publish: $(System.DefaultWorkingDirectory)/dist

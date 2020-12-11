@@ -10,7 +10,8 @@
     "test:e2e:headless": "vue-cli-service test:e2e --headless",
     "lint": "vue-cli-service lint --no-fix --max-errors 0 --max-warnings 0",
     "lint:fix": "vue-cli-service lint",
-    "i18n:report": "vue-cli-service i18n:report --src './src/**/*.?(js|vue)' --locales './src/locales/**/*.json'"
+    "i18n:report": "vue-cli-service i18n:report --src './src/**/*.?(js|vue)' --locales './src/locales/**/*.json'",
+    "generate-thirdparty": "yarn licenses generate-disclaimer > public/thirdparty.txt"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.32",
