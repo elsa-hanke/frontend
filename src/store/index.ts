@@ -8,8 +8,8 @@ import { storeRouteAndRedirectToLogin } from "@/utils/local-storage";
 Vue.use(Vuex);
 export const ELSA_API_LOCATION =
   process.env.NODE_ENV === "production"
-    ? `${location.protocol}//api.${location.hostname}${
-        location.port ? ":" + location.port : ""
+    ? `${window.location.protocol}//api.${window.location.hostname}${
+        window.location.port ? ":" + window.location.port : ""
       }`
     : "";
 axios.defaults.baseURL = `${ELSA_API_LOCATION}/api/`;
@@ -21,7 +21,7 @@ axios.interceptors.response.use(
   error => {
     if (error.response.status === 401) {
       storeRouteAndRedirectToLogin();
-      location.href = `${ELSA_API_LOCATION}/oauth2/authorization/oidc`;
+      window.location.href = `${ELSA_API_LOCATION}/oauth2/authorization/oidc`;
     }
     return Promise.reject({ ...error });
   }

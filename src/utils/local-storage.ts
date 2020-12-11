@@ -15,7 +15,7 @@ export function restoreRoute(next: NavigationGuardNext) {
         });
       } catch (err) {
         // Ohjataan locationilla jos kyseessä href
-        location.href = to;
+        window.location.href = to;
       }
     } catch (err) {
       console.warn(err);
@@ -43,7 +43,7 @@ export function storeRoute(to?: Route) {
           })
         );
       } else {
-        localStorage.setItem("to", location.href);
+        localStorage.setItem("to", window.location.href);
       }
     } catch (err) {
       console.warn(err);
@@ -54,5 +54,5 @@ export function storeRoute(to?: Route) {
 // Tallentaa näkymän polun selaimen muistiin.
 export function storeRouteAndRedirectToLogin(to?: Route) {
   storeRoute(to);
-  location.href = `${ELSA_API_LOCATION}/oauth2/authorization/oidc`;
+  window.location.href = `${ELSA_API_LOCATION}/oauth2/authorization/oidc`;
 }
