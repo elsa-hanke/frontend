@@ -133,7 +133,7 @@ describe("Suoritemerkinnän esittäminen", () => {
     setupMocks();
     cy.contains("h1", "Suoritemerkintä");
     cy.visit("suoritemerkinnat/1451");
-    cy.contains("b (23.11.2020 – 29.11.2020)");
+    cy.contains("b (23.11.2020-29.11.2020)");
     cy.contains("Oppimistavoite 2");
     cy.contains(".badge", "1");
     cy.contains("5 Toiminta ohjaajana");
@@ -155,7 +155,7 @@ describe("Suoritemerkinnän muokkaaminen", () => {
 
   it("Muokkausnäkymä sisältää nykyiset tiedot", () => {
     setupMocks();
-    cy.contains("b (23.11.2020 – 29.11.2020)");
+    cy.contains("b (23.11.2020-29.11.2020)");
     cy.contains("Oppimistavoite 2");
     cy.contains("1 Aloittelija");
     cy.contains("5 Toiminta ohjaajana");
