@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { gitDescribeSync } = require("git-describe");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
+
 try {
   process.env.VUE_APP_COMMIT_HASH = gitDescribeSync().hash;
 } catch (err) {
@@ -14,7 +16,20 @@ module.exports = {
       alias: {
         vue$: "vue/dist/vue.esm.js"
       }
-    }
+    },
+    plugins: [
+      new CopyWebpackPlugin({
+        patterns: [
+          {
+            from: "./node_modules/swagger-ui-dist/*.{js,css,html,png}",
+            to: "swagger-ui",
+            flatten: true,
+            globOptions: { ignore: ["**/index.html"] }
+          },
+          { from: "./node_modules/axios/dist/axios.min.js", to: "swagger-ui" }
+        ]
+      })
+    ]
   },
 
   chainWebpack: config => {
