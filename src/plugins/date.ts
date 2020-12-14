@@ -29,6 +29,28 @@ export class DatePlugin {
     vue.prototype.$datetime = function(value: string) {
       return parseAndFormat(value, "Pp");
     };
+
+    vue.prototype.$duration = function(value: number) {
+      const years = value / 365;
+      const months = (years - Math.trunc(years)) * 12;
+      const days = (months - Math.trunc(months)) * 30.5;
+
+      const res = [];
+      if (Math.trunc(years) > 0) {
+        res.push(`${Math.trunc(years)} v`);
+      }
+      if (Math.trunc(months) > 0) {
+        res.push(`${Math.trunc(months)} kk`);
+      }
+      if (Math.round(days) > 0) {
+        res.push(`${Math.round(days)} vrk`);
+      }
+      if (res.length > 0) {
+        return res.join(" ");
+      } else {
+        return "0 vrk";
+      }
+    };
   }
 }
 
