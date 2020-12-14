@@ -6,7 +6,7 @@ import "@/plugins/bootstrap-vue";
 import "@/plugins/date";
 import "@/plugins/apexcharts";
 import i18n from "@/plugins/i18n";
-import "@/configs/fontawesome";
+import "@/plugins/fontawesome";
 import App from "@/app.vue";
 import router from "@/router";
 import store from "@/store";
