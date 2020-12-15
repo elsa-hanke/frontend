@@ -1,11 +1,18 @@
 <template>
   <b-form @submit.stop.prevent="onSubmit">
-    <elsa-form-group :label="$t('possaolon-syy')" :required="true">
+    <elsa-form-group :label="$t('poissaolon-syy')" :required="true">
+      <template #label-help>
+        <elsa-popover>
+          <template>
+            <elsa-poissaolon-syyt :value="poissaolonSyyt" :new-info="true" />
+          </template>
+        </elsa-popover>
+      </template>
       <template v-slot="{ uid }">
         <elsa-form-multiselect
           :id="uid"
           v-model="form.poissaolonSyy"
-          :options="poissaoloSyyt"
+          :options="poissaolonSyyt"
           :state="validateState('poissaolonSyy')"
           label="nimi"
           track-by="id"
@@ -138,6 +145,7 @@ import ElsaFormMultiselect from "@/components/multiselect/multiselect.vue";
 import ElsaPopover from "@/components/popover/popover.vue";
 import ElsaFormDatepicker from "@/components/datepicker/datepicker.vue";
 import ElsaButton from "@/components/button/button.vue";
+import ElsaPoissaolonSyyt from "@/components/poissaolon-syyt/poissaolon-syyt.vue";
 import { dateBetween } from "@/utils/date";
 
 @Component({
@@ -147,7 +155,8 @@ import { dateBetween } from "@/utils/date";
     ElsaFormMultiselect,
     ElsaPopover,
     ElsaFormDatepicker,
-    ElsaButton
+    ElsaButton,
+    ElsaPoissaolonSyyt
   },
   validations: {
     form: {
@@ -183,7 +192,7 @@ export default class PoissaoloForm extends Mixins(
   TyoskentelyjaksoMixin
 ) {
   @Prop({ required: false, default: () => [] })
-  poissaoloSyyt!: any[];
+  poissaolonSyyt!: any[];
 
   @Prop({
     required: false,

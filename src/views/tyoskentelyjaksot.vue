@@ -155,36 +155,9 @@
                             {{ $t("poissaolon-syy") }}
                             <elsa-popover>
                               <template>
-                                <h3>{{ $t("poissaolon-syy") }}</h3>
-                                <p>{{ $t("poissaolon-syy-kuvaus") }}</p>
-                                <h4>
-                                  {{
-                                    $t("koulutuskertymaa-vahentavat-poissaolot")
-                                  }}
-                                </h4>
-                                <p>
-                                  {{ $t("koulutuskertymaa-vahentavat-kuvaus") }}
-                                </p>
-                                <ul>
-                                  <li>{{ $t("lorem-ipsum") }}</li>
-                                </ul>
-                                <h4>
-                                  {{
-                                    $t(
-                                      "koulutuskertymaa-vahentavat-poissaolot-yli-30-pv-poissaoloissa"
-                                    )
-                                  }}
-                                </h4>
-                                <p>
-                                  {{
-                                    $t(
-                                      "koulutuskertymaa-vahentavat-yli-30-pv-kuvaus"
-                                    )
-                                  }}
-                                </p>
-                                <ul>
-                                  <li>{{ $t("lorem-ipsum") }}</li>
-                                </ul>
+                                <elsa-poissaolon-syyt
+                                  :value="tilastotPoissaolonSyyt"
+                                />
                               </template>
                             </elsa-popover>
                           </b-th>
@@ -254,6 +227,7 @@ import ElsaButton from "@/components/button/button.vue";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
 import ElsaPopover from "@/components/popover/popover.vue";
 import ElsaBarChart from "@/components/bar-chart/bar-chart.vue";
+import ElsaPoissaolonSyyt from "@/components/poissaolon-syyt/poissaolon-syyt.vue";
 import { ajankohtaLabel } from "@/utils/tyoskentelyjakso";
 import { toastFail } from "@/utils/toast";
 import { tyoskentelyjaksoKaytannonKoulutusLabel } from "@/utils/tyoskentelyjakso";
@@ -264,7 +238,8 @@ import { durationOptions } from "@/plugins/date";
     ElsaButton,
     ElsaFormGroup,
     ElsaPopover,
-    ElsaBarChart
+    ElsaBarChart,
+    ElsaPoissaolonSyyt
   }
 })
 export default class Tyoskentelyjaksot extends Vue {
@@ -416,6 +391,14 @@ export default class Tyoskentelyjaksot extends Vue {
   get tilastotTyoskentelyjaksot() {
     if (this.tilastot) {
       return this.tilastot.tyoskentelyjaksot;
+    } else {
+      return [];
+    }
+  }
+
+  get tilastotPoissaolonSyyt() {
+    if (this.tyoskentelyjaksotTaulukko) {
+      return this.tyoskentelyjaksotTaulukko.poissaolonSyyt;
     } else {
       return [];
     }

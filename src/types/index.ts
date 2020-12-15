@@ -20,5 +20,5 @@ export interface TyoskentelyjaksoLomake {
 
 export interface PoissaoloLomake {
   tyoskentelyjaksot: any[];
-  poissaoloSyyt: any[];
+  poissaolonSyyt: any[];
 }

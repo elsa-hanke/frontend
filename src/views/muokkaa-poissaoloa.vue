@@ -12,7 +12,7 @@
             @delete="onDelete"
             :value="poissaoloWrapper"
             :tyoskentelyjaksot="tyoskentelyjaksot"
-            :poissaolo-syyt="poissaoloSyyt"
+            :poissaolon-syyt="poissaolonSyyt"
           />
           <div class="text-center" v-else>
             <b-spinner variant="primary" :label="$t('ladataan')" />
@@ -144,9 +144,9 @@ export default class MuokkaaPoissaoloa extends Mixins(ConfirmRouteExit) {
     }
   }
 
-  get poissaoloSyyt() {
+  get poissaolonSyyt() {
     if (this.poissaoloLomake) {
-      return this.poissaoloLomake.poissaoloSyyt;
+      return this.poissaoloLomake.poissaolonSyyt;
     } else {
       return [];
     }
