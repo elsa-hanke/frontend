@@ -12,7 +12,7 @@
         <elsa-form-multiselect
           :id="uid"
           v-model="form.poissaolonSyy"
-          :options="poissaolonSyyt"
+          :options="poissaolonSyytSorted"
           :state="validateState('poissaolonSyy')"
           label="nimi"
           track-by="id"
@@ -290,6 +290,16 @@ export default class PoissaoloForm extends Mixins(
 
   get maxPaattymispaiva() {
     return this.form.tyoskentelyjakso?.paattymispaiva;
+  }
+
+  get poissaolonSyytSorted() {
+    return [
+      ...this.poissaolonSyyt.sort((a, b) => {
+        if (a.nimi < b.nimi) return -1;
+        if (a.nimi > b.nimi) return 1;
+        return 0;
+      })
+    ];
   }
 }
 </script>
