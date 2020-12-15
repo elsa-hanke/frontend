@@ -1,7 +1,12 @@
 import Vue from "vue";
+import { reactive } from "@vue/composition-api";
 import { parseISO, format } from "date-fns";
 import { fi, sv, enUS } from "date-fns/locale";
 import VueI18n from "@/plugins/i18n";
+
+export const durationOptions = reactive({
+  showInDays: false
+});
 
 export class DatePlugin {
   public install(vue: typeof Vue) {
@@ -31,6 +36,10 @@ export class DatePlugin {
     };
 
     vue.prototype.$duration = function(value: number) {
+      if (durationOptions.showInDays) {
+        return `${Math.round(value)} vrk`;
+      }
+
       const years = value / 365;
       const months = (years - Math.trunc(years)) * 12;
       const days = (months - Math.trunc(months)) * 30.5;
