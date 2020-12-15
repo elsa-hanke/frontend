@@ -89,7 +89,7 @@
             v-model.number="form.osaaikaprosentti"
             :state="validateState('osaaikaprosentti')"
             type="number"
-            :step="1"
+            step="any"
           />
           <span class="mx-3">%</span>
         </div>
@@ -130,7 +130,7 @@
 import Component from "vue-class-component";
 import { Mixins, Prop } from "vue-property-decorator";
 import { validationMixin } from "vuelidate";
-import { required, requiredIf } from "vuelidate/lib/validators";
+import { required, requiredIf, integer } from "vuelidate/lib/validators";
 import TyoskentelyjaksoMixin from "@/mixins/tyoskentelyjakso";
 import TyoskentelyjaksoForm from "@/forms/tyoskentelyjakso-form.vue";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
@@ -172,7 +172,8 @@ import { dateBetween } from "@/utils/date";
             return false;
           }
           return value.kokoTyoajanPoissaolo === false;
-        })
+        }),
+        integer
       }
     }
   }

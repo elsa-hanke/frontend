@@ -100,7 +100,7 @@
               @input="onOsaaikaprosenttiInput"
               :state="validateState('osaaikaprosentti')"
               type="number"
-              :step="1"
+              step="any"
             />
             <span class="mx-3">%</span>
           </div>
@@ -264,7 +264,12 @@
 import Component from "vue-class-component";
 import { Mixins, Prop } from "vue-property-decorator";
 import { validationMixin } from "vuelidate";
-import { required, between, requiredIf } from "vuelidate/lib/validators";
+import {
+  required,
+  between,
+  requiredIf,
+  integer
+} from "vuelidate/lib/validators";
 import { parseISO, addDays, subDays, formatISO } from "date-fns";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
 import ElsaFormMultiselect from "@/components/multiselect/multiselect.vue";
@@ -304,6 +309,7 @@ import {
       },
       osaaikaprosentti: {
         required,
+        integer,
         between: between(50, 100)
       },
       alkamispaiva: {
@@ -440,7 +446,11 @@ export default class TyoskentelyjaksoForm extends Mixins(validationMixin) {
   }
 
   onOsaaikaprosenttiInput(value: string) {
-    this.form.osaaikaprosentti = parseInt(value);
+    if (value === "") {
+      this.form.osaaikaprosentti = null;
+    } else {
+      this.form.osaaikaprosentti = parseFloat(value);
+    }
     this.form.paattymispaiva = null;
   }
 
