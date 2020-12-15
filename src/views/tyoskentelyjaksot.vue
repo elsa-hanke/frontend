@@ -53,7 +53,7 @@
                     </div>
                   </template>
                 </elsa-form-group>
-                <b-form-row>
+                <b-row>
                   <elsa-form-group
                     :label="$t('koulutustyypit')"
                     class="col-xl-6"
@@ -77,15 +77,14 @@
                       </div>
                     </template>
                   </elsa-form-group>
-                </b-form-row>
-                <!--<pre>{{ tilastot }}</pre>-->
+                </b-row>
               </div>
             </div>
             <div class="tyoskentelyjaksot-table">
               <b-table
-                responsive
                 :items="tyoskentelyjaksotFormatted"
                 :fields="fields"
+                responsive
               >
                 <template #table-colgroup="scope">
                   <col
@@ -240,6 +239,7 @@ import ElsaPopover from "@/components/popover/popover.vue";
 import ElsaBarChart from "@/components/bar-chart/bar-chart.vue";
 import { ajankohtaLabel } from "@/utils/tyoskentelyjakso";
 import { toastFail } from "@/utils/toast";
+import { tyoskentelyjaksoKaytannonKoulutusLabel } from "@/utils/tyoskentelyjakso";
 
 @Component({
   components: {
@@ -273,7 +273,7 @@ export default class Tyoskentelyjaksot extends Vue {
       sortable: true
     },
     {
-      key: this.$t("tyoskentelyaika"),
+      key: "tyoskentelyaikaLabel",
       label: this.$t("tyoskentelyaika"),
       sortable: true
     },
@@ -294,78 +294,6 @@ export default class Tyoskentelyjaksot extends Vue {
     }
   ];
   loading = true;
-
-  donutSeries = [0, 0, 0, 0];
-  donutOptions = {
-    colors: ["#41b257", "#0f9bd9", "#8a86fb", "#ffb406"],
-    labels: [
-      `${this.$t("oma-erikoisala")}: ${(this as any).$duration(0)}`,
-      `${this.$t("omaa-erikoisalaa-tukeva")}: ${(this as any).$duration(0)}`,
-      `${this.$t("tutkimustyo")}: ${(this as any).$duration(0)}`,
-      `${this.$t("terveyskeskustyo")}: ${(this as any).$duration(0)}`
-    ],
-    legend: {
-      fontSize: "13px",
-      fontFamily: "Montserrat, Helvetica, Arial, sans-serif",
-      onItemClick: {
-        toggleDataSeries: false
-      },
-      onItemHover: {
-        highlightDataSeries: false
-      }
-    },
-    chart: {
-      type: "donut",
-      animations: {
-        enabled: false
-      }
-    },
-    dataLabels: {
-      formatter: function(val: number) {
-        return Math.round(val) + "%";
-      },
-      style: {
-        fontSize: "8px",
-        fontFamily: "Montserrat, Helvetica, Arial, sans-serif"
-      },
-      dropShadow: {
-        enabled: false
-      }
-    },
-    plotOptions: {
-      pie: {
-        expandOnClick: false
-      }
-    },
-    stroke: {
-      show: false
-    },
-    states: {
-      hover: {
-        filter: {
-          type: "normal"
-        }
-      },
-      active: {
-        filter: {
-          type: "normal"
-        }
-      }
-    },
-    tooltip: {
-      enabled: false
-    },
-    responsive: [
-      {
-        breakpoint: 768,
-        options: {
-          legend: {
-            position: "bottom"
-          }
-        }
-      }
-    ]
-  };
 
   async mounted() {
     await this.fetchTyoskentelyjaksot();
@@ -441,7 +369,7 @@ export default class Tyoskentelyjaksot extends Vue {
           text: this.$t("yhteensa"),
           color: "#41b257",
           backgroundColor: "#b3e1bc",
-          value: this.tilastot.arvioErikoistumiseenHyvaksyttavista,
+          value: this.tilastot.koulutustyypit.yhteensaSuoritettu,
           minRequired: this.tilastot.koulutustyypit.yhteensaVaadittuVahintaan,
           highlight: true
         }
@@ -449,6 +377,132 @@ export default class Tyoskentelyjaksot extends Vue {
     } else {
       return [];
     }
+  }
+
+  get tilastotKaytannonKoulutus() {
+    if (this.tilastot) {
+      return this.tilastot.kaytannonKoulutus;
+    } else {
+      return [];
+    }
+  }
+
+  get tilastotTyoskentelyjaksot() {
+    if (this.tilastot) {
+      return this.tilastot.tyoskentelyjaksot;
+    } else {
+      return [];
+    }
+  }
+
+  get tilastotKaytannonKoulutusSorted() {
+    return [
+      this.tilastotKaytannonKoulutus.find(
+        (kk: any) => kk.kaytannonKoulutus === "OMAN_ERIKOISALAN_KOULUTUS"
+      ),
+      this.tilastotKaytannonKoulutus.find(
+        (kk: any) => kk.kaytannonKoulutus === "OMAA_ERIKOISALAA_TUKEVA_KOULUTUS"
+      ),
+      this.tilastotKaytannonKoulutus.find(
+        (kk: any) => kk.kaytannonKoulutus === "TUTKIMUSTYO"
+      ),
+      this.tilastotKaytannonKoulutus.find(
+        (kk: any) => kk.kaytannonKoulutus === "TERVEYSKESKUSTYO"
+      )
+    ].filter((kk: any) => kk !== null);
+  }
+
+  get donutSeries() {
+    return this.tilastotKaytannonKoulutusSorted.map((kk: any) => kk.suoritettu);
+  }
+
+  get donutOptions() {
+    this.tilastotKaytannonKoulutus.map(
+      (kk: any) =>
+        `${tyoskentelyjaksoKaytannonKoulutusLabel(
+          this,
+          kk.kaytannonKoulutus
+        )}: ${(this as any).$duration(kk.suoritettu)}`
+    );
+
+    return {
+      colors: ["#41b257", "#0f9bd9", "#8a86fb", "#ffb406"],
+      labels: [
+        `${this.$t("oma-erikoisala")}: ${(this as any).$duration(
+          this.tilastotKaytannonKoulutusSorted[0].suoritettu
+        )}`,
+        `${this.$t("omaa-erikoisalaa-tukeva")}: ${(this as any).$duration(
+          this.tilastotKaytannonKoulutusSorted[1].suoritettu
+        )}`,
+        `${this.$t("tutkimustyo")}: ${(this as any).$duration(
+          this.tilastotKaytannonKoulutusSorted[2].suoritettu
+        )}`,
+        `${this.$t("terveyskeskustyo")}: ${(this as any).$duration(
+          this.tilastotKaytannonKoulutusSorted[3].suoritettu
+        )}`
+      ],
+      legend: {
+        fontSize: "13px",
+        fontFamily: "Montserrat, Helvetica, Arial, sans-serif",
+        onItemClick: {
+          toggleDataSeries: false
+        },
+        onItemHover: {
+          highlightDataSeries: false
+        }
+      },
+      chart: {
+        type: "donut",
+        animations: {
+          enabled: false
+        }
+      },
+      dataLabels: {
+        formatter: function(val: number) {
+          return Math.round(val) + "%";
+        },
+        style: {
+          fontSize: "8px",
+          fontFamily: "Montserrat, Helvetica, Arial, sans-serif"
+        },
+        dropShadow: {
+          enabled: false
+        }
+      },
+      plotOptions: {
+        pie: {
+          expandOnClick: false
+        }
+      },
+      stroke: {
+        show: false
+      },
+      states: {
+        hover: {
+          filter: {
+            type: "normal"
+          }
+        },
+        active: {
+          filter: {
+            type: "normal"
+          }
+        }
+      },
+      tooltip: {
+        enabled: false
+      },
+      responsive: [
+        {
+          breakpoint: 768,
+          options: {
+            legend: {
+              position: "bottom"
+            }
+          }
+        }
+      ]
+    };
   }
 
   get tyoskentelyjaksotFormatted() {
@@ -479,11 +533,22 @@ export default class Tyoskentelyjaksot extends Vue {
       {}
     );
 
+    const tilastotTyoskentelyjaksotMap = this.tilastotTyoskentelyjaksot.reduce(
+      (result: any, tyoskentelyjakso: any) => {
+        result[tyoskentelyjakso.id] = tyoskentelyjakso.suoritettu;
+        return result;
+      },
+      {}
+    );
+
     return this.tyoskentelyjaksot.map((tj: any) => ({
       ...tj,
       tyoskentelypaikkaLabel: tj.tyoskentelypaikka.nimi,
       ajankohtaDate: parseISO(tj.alkamispaiva),
       ajankohta: ajankohtaLabel(this, tj),
+      tyoskentelyaikaLabel: (this as any).$duration(
+        tilastotTyoskentelyjaksotMap[tj.id]
+      ),
       osaaikaprosenttiLabel: `${tj.osaaikaprosentti} %`,
       hyvaksyttyAiempaanErikoisalaanLabel: tj.hyvaksyttyAiempaanErikoisalaan
         ? this.$t("kylla")
@@ -511,6 +576,11 @@ export default class Tyoskentelyjaksot extends Vue {
   ::v-deep table {
     thead th {
       border-top: none;
+
+      // Ilman tätä, rikkoo responsiivisuuden
+      .sr-only {
+        display: none;
+      }
     }
     td {
       padding-top: 0;
