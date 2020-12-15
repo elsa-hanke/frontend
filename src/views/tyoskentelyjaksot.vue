@@ -56,7 +56,7 @@
                 <b-row>
                   <elsa-form-group
                     :label="$t('koulutustyypit')"
-                    class="col-xl-6"
+                    class="col-xl-6 mb-0"
                   >
                     <template v-slot="{ uid }">
                       <div :id="uid" class="bar-chart">
@@ -66,7 +66,7 @@
                   </elsa-form-group>
                   <elsa-form-group
                     :label="$t('kaytannon-koulutus')"
-                    class="col-xl-6"
+                    class="col-xl-6 mb-0"
                   >
                     <template v-slot="{ uid }">
                       <div :id="uid" class="donut-chart">
@@ -77,6 +77,23 @@
                       </div>
                     </template>
                   </elsa-form-group>
+                </b-row>
+                <b-row>
+                  <b-col>
+                    <div class="d-flex flex-row-reverse">
+                      <elsa-button
+                        :disabled="false"
+                        variant="link"
+                        @click="toggleDays"
+                        class="shadow-none"
+                        >{{
+                          showInDays
+                            ? $t("nayta-likimaaraisina-sekayksikkoina")
+                            : $t("nayta-vuorokausina")
+                        }}</elsa-button
+                      >
+                    </div>
+                  </b-col>
                 </b-row>
               </div>
             </div>
@@ -240,6 +257,7 @@ import ElsaBarChart from "@/components/bar-chart/bar-chart.vue";
 import { ajankohtaLabel } from "@/utils/tyoskentelyjakso";
 import { toastFail } from "@/utils/toast";
 import { tyoskentelyjaksoKaytannonKoulutusLabel } from "@/utils/tyoskentelyjakso";
+import { durationOptions } from "@/plugins/date";
 
 @Component({
   components: {
@@ -308,6 +326,14 @@ export default class Tyoskentelyjaksot extends Vue {
     } catch (err) {
       toastFail(this, this.$t("tyoskentelyjaksojen-hakeminen-epaonnistui"));
     }
+  }
+
+  get showInDays() {
+    return durationOptions.showInDays;
+  }
+
+  toggleDays() {
+    durationOptions.showInDays = !durationOptions.showInDays;
   }
 
   get tyoskentelyjaksot() {

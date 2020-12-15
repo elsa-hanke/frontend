@@ -1,6 +1,7 @@
 import "@babel/polyfill";
 import "mutationobserver-shim";
 import Vue from "vue";
+import "@/plugins/composition-api";
 import "@/plugins/filters";
 import "@/plugins/bootstrap-vue";
 import "@/plugins/date";
