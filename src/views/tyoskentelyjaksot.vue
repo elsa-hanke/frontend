@@ -192,13 +192,19 @@
                                 )}`
                               : $date(keskeytysaika.alkamispaiva)
                           }}</b-td>
-                          <b-td
-                            >{{ keskeytysaika.osaaikaprosentti }} %<span
-                              v-if="keskeytysaika.osaaikaprosentti === 0"
+                          <b-td>
+                            <span
+                              v-if="
+                                keskeytysaika.osaaikaprosentti ===
+                                  row.item.osaaikaprosentti
+                              "
                             >
-                              ({{ $t("koko-tyoajan-poissaolo") }})</span
-                            ></b-td
-                          >
+                              {{ $t("koko-tyoajan-poissaolo") }}</span
+                            >
+                            <span v-else>
+                              {{ 100 - keskeytysaika.osaaikaprosentti }} %
+                            </span>
+                          </b-td>
                         </b-tr>
                       </b-tbody>
                     </b-table-simple>
@@ -608,11 +614,7 @@ export default class Tyoskentelyjaksot extends Vue {
       table {
         th {
           padding-bottom: 0.3rem;
-        }
-        th:first-child {
           padding-left: 0;
-        }
-        th:last-child {
           padding-right: 0;
         }
       }

@@ -17,7 +17,6 @@
           <div class="text-center" v-else>
             <b-spinner variant="primary" :label="$t('ladataan')" />
           </div>
-          <pre>{{ poissaoloWrapper }}</pre>
         </b-col>
       </b-row>
     </b-container>

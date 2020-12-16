@@ -86,7 +86,12 @@
     }}</b-form-checkbox>
     <elsa-form-group
       v-if="!form.kokoTyoajanPoissaolo"
-      :label="$t('tyoaika-taydesta-tyopaivasta') + ' (0-100 %)'"
+      :label="
+        $t('poissaolo-taydesta-tyopaivasta') +
+          ` (0-${
+            form.tyoskentelyjakso ? form.tyoskentelyjakso.osaaikaprosentti : 100
+          } %)`
+      "
       :required="true"
     >
       <template v-slot="{ uid }">
@@ -106,7 +111,9 @@
             display:
               validateState('osaaikaprosentti') === false ? 'block' : 'none'
           }"
-          >{{ $t("osaaikaprosentti-validointivirhe") }} 0–100
+          >{{ $t("osaaikaprosentti-validointivirhe") }} 0–{{
+            form.tyoskentelyjakso ? form.tyoskentelyjakso.osaaikaprosentti : 100
+          }}
           %</b-form-invalid-feedback
         >
       </template>
@@ -177,11 +184,16 @@ import { dateBetween } from "@/utils/date";
       },
       osaaikaprosentti: {
         required: requiredIf(value => {
-          if (value.osaaikaprosentti < 0 || value.osaaikaprosentti > 100) {
-            return false;
-          }
           return value.kokoTyoajanPoissaolo === false;
         }),
+        between: (value, form) =>
+          value < 0 ||
+          value >
+            (form.tyoskentelyjakso
+              ? form.tyoskentelyjakso.osaaikaprosentti
+              : 100)
+            ? false
+            : true,
         integer
       }
     }
@@ -223,6 +235,11 @@ export default class PoissaoloForm extends Mixins(
 
   mounted() {
     this.form = this.value;
+    this.form.kokoTyoajanPoissaolo =
+      this.value.osaaikaprosentti ===
+      this.value.tyoskentelyjakso.osaaikaprosentti
+        ? true
+        : false;
   }
 
   validateState(name: string) {
@@ -242,7 +259,7 @@ export default class PoissaoloForm extends Mixins(
         poissaolonSyyId: this.form.poissaolonSyy?.id,
         tyoskentelyjaksoId: this.form.tyoskentelyjakso?.id,
         osaaikaprosentti: this.form.kokoTyoajanPoissaolo
-          ? 0
+          ? this.form.tyoskentelyjakso.osaaikaprosentti
           : this.form.osaaikaprosentti
       },
       this.params
@@ -271,6 +288,9 @@ export default class PoissaoloForm extends Mixins(
       )
     ) {
       this.form.paattymispaiva = null;
+    }
+    if (this.form.osaaikaprosentti > value.osaaikaprosentti) {
+      this.form.osaaikaprosentti = null;
     }
   }
 
