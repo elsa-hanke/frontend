@@ -84,40 +84,47 @@
     <b-form-checkbox v-model="form.kokoTyoajanPoissaolo" class="mb-3">{{
       $t("koko-tyoajan-poissaolo")
     }}</b-form-checkbox>
-    <elsa-form-group
-      v-if="!form.kokoTyoajanPoissaolo"
-      :label="
-        $t('poissaolo-taydesta-tyopaivasta') +
-          ` (0-${
-            form.tyoskentelyjakso ? form.tyoskentelyjakso.osaaikaprosentti : 100
-          } %)`
-      "
-      :required="true"
-    >
-      <template v-slot="{ uid }">
-        <div class="d-flex align-items-center">
-          <b-form-input
-            :id="uid"
-            v-model.number="form.osaaikaprosentti"
-            :state="validateState('osaaikaprosentti')"
-            type="number"
-            step="any"
-          />
-          <span class="mx-3">%</span>
-        </div>
-        <b-form-invalid-feedback
-          :id="`${uid}-feedback`"
-          :style="{
-            display:
-              validateState('osaaikaprosentti') === false ? 'block' : 'none'
-          }"
-          >{{ $t("osaaikaprosentti-validointivirhe") }} 0–{{
-            form.tyoskentelyjakso ? form.tyoskentelyjakso.osaaikaprosentti : 100
-          }}
-          %</b-form-invalid-feedback
-        >
-      </template>
-    </elsa-form-group>
+    <b-form-row>
+      <elsa-form-group
+        v-if="!form.kokoTyoajanPoissaolo"
+        :label="
+          $t('poissaolo-taydesta-tyopaivasta') +
+            ` (0-${
+              form.tyoskentelyjakso
+                ? form.tyoskentelyjakso.osaaikaprosentti
+                : 100
+            } %)`
+        "
+        :required="true"
+        class="col-sm-3"
+      >
+        <template v-slot="{ uid }">
+          <div class="d-flex align-items-center">
+            <b-form-input
+              :id="uid"
+              v-model.number="form.osaaikaprosentti"
+              :state="validateState('osaaikaprosentti')"
+              type="number"
+              step="any"
+            />
+            <span class="mx-3">%</span>
+          </div>
+          <b-form-invalid-feedback
+            :id="`${uid}-feedback`"
+            :style="{
+              display:
+                validateState('osaaikaprosentti') === false ? 'block' : 'none'
+            }"
+            >{{ $t("osaaikaprosentti-validointivirhe") }} 0–{{
+              form.tyoskentelyjakso
+                ? form.tyoskentelyjakso.osaaikaprosentti
+                : 100
+            }}
+            %</b-form-invalid-feedback
+          >
+        </template>
+      </elsa-form-group>
+    </b-form-row>
     <div class="text-right">
       <elsa-button variant="back" :to="{ name: 'tyoskentelyjaksot' }">{{
         $t("peruuta")
@@ -236,8 +243,8 @@ export default class PoissaoloForm extends Mixins(
   mounted() {
     this.form = this.value;
     this.form.kokoTyoajanPoissaolo =
-      this.value.osaaikaprosentti ===
-      this.value.tyoskentelyjakso.osaaikaprosentti
+      this.value?.osaaikaprosentti ===
+      this.value?.tyoskentelyjakso?.osaaikaprosentti
         ? true
         : false;
   }
