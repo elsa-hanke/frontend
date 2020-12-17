@@ -1,43 +1,39 @@
-# elsa-frontend
+# ELSA-palvelun frontend
 
 [![Build Status](https://dev.azure.com/elsa-hanke/ELSA/_apis/build/status/elsa-hanke.elsa-frontend?branchName=main)](https://dev.azure.com/elsa-hanke/ELSA/_build/latest?definitionId=3&branchName=main)
 
-## Project setup
+## Projektin asennus
 
 ```
 yarn install
 ```
 
-### Compiles and hot-reloads for development
+### Käynnistä kehitysympäristö
 
 ```
 yarn serve
 ```
 
-### Compiles and minifies for production
+### Käännä tuotantoversio
 
 ```
 yarn build
 ```
 
-### Run your unit tests
+### Suorita yksikkötestit
 
 ```
 yarn test:unit
 ```
 
-### Run your end-to-end tests
+### Suorita E2E-testit
 
 ```
 yarn test:e2e
 ```
 
-### Lints and fixes files
+### Suorita tyylivirheiden tarkistus
 
 ```
 yarn lint
 ```
-
-### Customize configuration
-
-See [Configuration Reference](https://cli.vuejs.org/config/).
