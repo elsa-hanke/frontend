@@ -67,7 +67,7 @@ stages:
                     regionName: "eu-west-1"
                     awsCommand: "s3"
                     awsSubCommand: "rm"
-                    awsArguments: "s3://kehitys.elsapalvelu.fi/"
+                    awsArguments: "s3://kehitys.elsapalvelu.fi/  --recursive"
                 - task: S3Upload@1
                   inputs:
                     awsCredentials: "elsa-ci"
