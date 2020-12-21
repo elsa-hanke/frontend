@@ -40,11 +40,20 @@
         <elsa-form-multiselect
           :id="uid"
           v-model="form.epaOsaamisalue"
-          :options="epaOsaamisalueet"
+          :options="epaOsaamisalueenKategoriat"
           :state="validateState('epaOsaamisalue')"
+          group-values="epaOsaamisalueet"
+          group-label="nimi"
+          :group-select="false"
           label="nimi"
           track-by="id"
         >
+          <template slot="option" slot-scope="props">
+            <span v-if="props.option.$isLabel">{{
+              props.option.$groupLabel
+            }}</span>
+            <span v-else class="ml-3">{{ props.option.nimi }}</span>
+          </template>
         </elsa-form-multiselect>
         <b-form-invalid-feedback :id="`${uid}-feedback`">{{
           $t("pakollinen-tieto")
@@ -211,6 +220,9 @@ export default class ArviointipyyntoForm extends Mixins(
 
   @Prop({ required: false, default: () => [] })
   epaOsaamisalueet!: any[];
+
+  @Prop({ required: false, default: () => [] })
+  epaOsaamisalueenKategoriat!: any[];
 
   @Prop({ required: false, default: () => [] })
   kouluttajat!: any[];
