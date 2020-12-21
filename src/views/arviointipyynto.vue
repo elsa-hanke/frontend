@@ -14,7 +14,6 @@
             :tyoskentelyjaksot="tyoskentelyjaksot"
             :kunnat="kunnat"
             :erikoisalat="erikoisalat"
-            :epa-osaamisalueet="epaOsaamisalueet"
             :epa-osaamisalueen-kategoriat="epaOsaamisalueenKategoriat"
             :kouluttajat="kouluttajat"
             :editing="editing"
@@ -33,10 +32,12 @@ import axios from "axios";
 import { Component, Mixins } from "vue-property-decorator";
 import { confirmDelete } from "@/utils/confirm";
 import { ArviointipyyntoLomake } from "@/types";
+import { formatISO } from "date-fns";
 import ArviointipyyntoForm from "@/forms/arviointipyynto-form.vue";
 import ConfirmRouteExit from "@/mixins/confirm-route-exit";
 import { tyoskentelyjaksoLabel } from "@/utils/tyoskentelyjakso";
 import { toastFail, toastSuccess } from "@/utils/toast";
+import { dateBetween } from "@/utils/date";
 
 @Component({
   components: {
@@ -188,17 +189,27 @@ export default class Arviointipyynto extends Mixins(ConfirmRouteExit) {
     }
   }
 
-  get epaOsaamisalueet() {
-    if (this.arviointipyyntoLomake) {
-      return this.arviointipyyntoLomake.epaOsaamisalueet;
-    } else {
-      return [];
-    }
-  }
-
   get epaOsaamisalueenKategoriat() {
     if (this.arviointipyyntoLomake) {
-      return this.arviointipyyntoLomake.epaOsaamisalueenKategoriat;
+      return this.arviointipyyntoLomake.epaOsaamisalueenKategoriat
+        .map(kategoria => ({
+          ...kategoria,
+          epaOsaamisalueet: kategoria.epaOsaamisalueet.filter((oa: any) =>
+            dateBetween(
+              formatISO(new Date()),
+              oa.voimassaoloAlkaa,
+              oa.voimassaoloLoppuu
+            )
+          )
+        }))
+        .filter(kategoria => kategoria.epaOsaamisalueet.length > 0)
+        .filter(kategoria =>
+          dateBetween(
+            formatISO(new Date()),
+            kategoria.voimassaoloAlkaa,
+            kategoria.voimassaoloLoppuu
+          )
+        );
     } else {
       return [];
     }
