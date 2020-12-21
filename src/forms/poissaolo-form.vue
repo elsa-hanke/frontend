@@ -242,11 +242,13 @@ export default class PoissaoloForm extends Mixins(
 
   mounted() {
     this.form = this.value;
-    this.form.kokoTyoajanPoissaolo =
-      this.value?.osaaikaprosentti ===
-      this.value?.tyoskentelyjakso?.osaaikaprosentti
-        ? true
-        : false;
+    if (this.value?.osaaikaprosentti) {
+      this.form.kokoTyoajanPoissaolo =
+        this.value?.osaaikaprosentti ===
+        this.value?.tyoskentelyjakso?.osaaikaprosentti
+          ? true
+          : false;
+    }
   }
 
   validateState(name: string) {
