@@ -219,9 +219,6 @@ export default class ArviointipyyntoForm extends Mixins(
   erikoisalat!: any[];
 
   @Prop({ required: false, default: () => [] })
-  epaOsaamisalueet!: any[];
-
-  @Prop({ required: false, default: () => [] })
   epaOsaamisalueenKategoriat!: any[];
 
   @Prop({ required: false, default: () => [] })
