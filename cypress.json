@@ -2,5 +2,9 @@
   "pluginsFile": "tests/e2e/plugins/index.js",
   "viewportWidth": 1280,
   "viewportHeight": 720,
-  "video": false
+  "video": false,
+  "retries": {
+    "runMode": 3,
+    "openMode": 0
+  }
 }

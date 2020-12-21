@@ -131,8 +131,8 @@ describe("Uuden suoritemerkinnän lisäys", () => {
 describe("Suoritemerkinnän esittäminen", () => {
   it("Uuden tallennetun suoritemerkinnän tarkistelu", () => {
     setupMocks();
-    cy.contains("h1", "Suoritemerkintä");
     cy.visit("suoritemerkinnat/1451");
+    cy.contains("h1", "Suoritemerkintä");
     cy.contains("b (23.11.2020-29.11.2020)");
     cy.contains("Oppimistavoite 2");
     cy.contains(".badge", "1");
@@ -147,6 +147,8 @@ describe("Suoritemerkinnän esittäminen", () => {
 describe("Suoritemerkinnän muokkaaminen", () => {
   it("Navigoidaan muokkausnäkymään", () => {
     setupMocks();
+    cy.visit("suoritemerkinnat/1451");
+    cy.wait(1000);
     cy.get("a")
       .contains("Muokkaa merkintää")
       .click();
