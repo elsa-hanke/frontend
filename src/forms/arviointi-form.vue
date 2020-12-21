@@ -38,6 +38,7 @@
     >
       <template v-slot="{ uid }">
         <div :id="uid">
+          {{ value.arvioitavaOsaalue.kategoria.nimi }}:
           {{ value.arvioitavaOsaalue.nimi }}
           <elsa-popover>
             <template>

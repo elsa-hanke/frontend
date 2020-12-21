@@ -15,6 +15,7 @@
             :kunnat="kunnat"
             :erikoisalat="erikoisalat"
             :epa-osaamisalueet="epaOsaamisalueet"
+            :epa-osaamisalueen-kategoriat="epaOsaamisalueenKategoriat"
             :kouluttajat="kouluttajat"
             :editing="editing"
           />
@@ -190,6 +191,14 @@ export default class Arviointipyynto extends Mixins(ConfirmRouteExit) {
   get epaOsaamisalueet() {
     if (this.arviointipyyntoLomake) {
       return this.arviointipyyntoLomake.epaOsaamisalueet;
+    } else {
+      return [];
+    }
+  }
+
+  get epaOsaamisalueenKategoriat() {
+    if (this.arviointipyyntoLomake) {
+      return this.arviointipyyntoLomake.epaOsaamisalueenKategoriat;
     } else {
       return [];
     }

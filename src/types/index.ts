@@ -2,7 +2,7 @@ export interface ArviointipyyntoLomake {
   tyoskentelyjaksot: any[];
   kunnat: any[];
   erikoisalat: any[];
-  epaOsaamisalueet: any[];
+  epaOsaamisalueenKategoriat: any[];
   kouluttajat: any[];
 }
 
