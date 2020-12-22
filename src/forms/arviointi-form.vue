@@ -299,16 +299,28 @@
         :required="true"
         v-if="editing"
       >
+        <template #label-help>
+          <elsa-popover>
+            <template>
+              <h3>{{ $t("arvioinnin-osa-alueita") }}</h3>
+              <div class="d-flex flex-column canmeds-container">
+                <img src="@/assets/canmeds.svg" class="m-2" />
+                <a
+                  href="#"
+                  class="text-size-normal"
+                  rel="noreferrer noopener"
+                  target="_blank"
+                  >{{ $t("canmeds-linkki-teksti") }}</a
+                >
+              </div>
+            </template>
+          </elsa-popover>
+        </template>
         <template v-slot="{ uid }">
           <div v-if="itsearviointi">
             <p class="mb-2">
-              {{ $t("sanallinen-itsearviointi-osa-alueittan") }}
+              {{ $t("sanallinen-itsearviointi-ohjeteksti") }}
             </p>
-            <p class="mb-2">{{ $t("sanallinen-itsearviointi-suhteet") }}</p>
-            <p class="mb-2">
-              {{ $t("sanallinen-itsearviointi-muu-osaaminen") }}
-            </p>
-            <p class="mb-2">{{ $t("sanallinen-itsearviointi-tavoitteet") }}</p>
           </div>
           <b-form-textarea
             :id="uid"
@@ -487,5 +499,9 @@ export default class ArviointiForm extends Mixins(validationMixin) {
     padding-right: 0;
     border-right: none;
   }
+}
+
+.canmeds-container {
+  max-width: 450px;
 }
 </style>

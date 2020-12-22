@@ -1,22 +1,22 @@
 export const vaativuustasot = [
   {
     arvo: 1,
-    nimi: "aloittelija",
-    kuvaus: "lorem-ipsum"
-  },
-  {
-    arvo: 2,
     nimi: "helppo",
     kuvaus: "lorem-ipsum"
   },
   {
+    arvo: 2,
+    nimi: "tavallista-helpompi",
+    kuvaus: "lorem-ipsum"
+  },
+  {
     arvo: 3,
-    nimi: "kohtalainen",
+    nimi: "tavallinen",
     kuvaus: "lorem-ipsum"
   },
   {
     arvo: 4,
-    nimi: "vaativa",
+    nimi: "kohtalaisen-haastava",
     kuvaus: "lorem-ipsum"
   },
   {
