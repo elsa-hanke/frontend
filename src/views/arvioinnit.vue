@@ -29,7 +29,6 @@
                           label="label"
                           track-by="id"
                           @select="onTyoskentelyjaksoSelect"
-                          @remove="onTyoskentelyjaksoRemove"
                         >
                         </elsa-form-multiselect>
                       </template>
@@ -48,7 +47,6 @@
                           label="nimi"
                           track-by="id"
                           @select="onEpaOsaamisalueSelect"
-                          @remove="onEpaOsaamisalueRemove"
                         >
                         </elsa-form-multiselect>
                       </template>
@@ -67,7 +65,6 @@
                           label="nimi"
                           track-by="id"
                           @select="onKouluttajaSelect"
-                          @remove="onKouluttajaRemove"
                         >
                         </elsa-form-multiselect>
                       </template>
@@ -78,10 +75,14 @@
                   <b-col>
                     <div class="d-flex flex-row-reverse">
                       <elsa-button
-                        :disabled="false"
+                        v-if="
+                          selected.tyoskentelyjakso ||
+                            selected.epaOsaamisalue ||
+                            selected.kouluttaja
+                        "
                         variant="link"
                         @click="resetFilters"
-                        class="shadow-none"
+                        class="shadow-none text-size-sm font-weight-500"
                         >{{ $t("tyhjenna-valinnat") }}</elsa-button
                       >
                     </div>
@@ -89,43 +90,149 @@
                 </b-row>
               </b-container>
               <div class="arvioinnit">
-                <hr class="mt-0" />
-                <div v-if="arvioinnit">
-                  <div v-for="(arviointi, index) in arvioinnit" :key="index">
-                    <arviointi-card :value="arviointi" />
-                  </div>
-                  <b-alert v-if="arvioinnit.length === 0" variant="dark" show>
-                    <font-awesome-icon
-                      icon="info-circle"
-                      fixed-width
-                      class="text-muted"
-                    />
-                    {{ $t("arviointeja-ei-ole-viela-tehty") }}
-                  </b-alert>
-                  <b-pagination
-                    v-model="page"
-                    :total-rows="totalRows"
-                    :per-page="perPage"
-                    @input="fetch"
-                    pills
-                    align="center"
-                    :hide-goto-end-buttons="true"
+                <div v-if="kategoriat">
+                  <div
+                    v-for="(kategoria, index) in kategoriat"
+                    :key="index"
+                    class="mt-3"
                   >
-                    <template v-slot:prev-text
-                      ><font-awesome-icon
-                        icon="chevron-left"
-                        fixed-width
-                        size="lg"
-                      />{{ $t("edellinen") }}</template
+                    <elsa-button
+                      @click="kategoria.visible = !kategoria.visible"
+                      variant="link"
+                      class="text-decoration-none shadow-none border-0 text-dark p-0 w-100"
                     >
-                    <template v-slot:next-text
-                      >{{ $t("seuraava")
-                      }}<font-awesome-icon
-                        icon="chevron-right"
-                        fixed-width
-                        size="lg"
-                    /></template>
-                  </b-pagination>
+                      <div
+                        class="kategoria-collapse p-2 font-weight-500 d-flex"
+                      >
+                        <div>
+                          <font-awesome-icon
+                            :icon="
+                              kategoria.visible ? 'caret-up' : 'caret-down'
+                            "
+                            fixed-width
+                            size="lg"
+                            class="text-muted"
+                          />
+                          {{ kategoria.nimi }}
+                        </div>
+                      </div>
+                    </elsa-button>
+                    <div v-if="kategoria.visible">
+                      <div
+                        v-for="(oa, index) in kategoria.osaalueet"
+                        :key="index"
+                      >
+                        <p class="font-weight-500 p-2 mb-0">{{ oa.nimi }}</p>
+                        <div v-if="oa.arvioinnit.length > 0">
+                          <b-table-simple small responsive class="mb-0">
+                            <thead>
+                              <tr class="text-size-sm">
+                                <th>
+                                  {{ $t("tapahtuma") | uppercase }}
+                                </th>
+                                <th>
+                                  {{ $t("arviointi") | uppercase }}
+                                </th>
+                                <th>
+                                  {{ $t("itsearviointi") | uppercase }}
+                                </th>
+                                <th>
+                                  {{ $t("pvm") }}
+                                </th>
+                                <th>
+                                  {{ $t("tyoskentelypaikka") | uppercase }}
+                                </th>
+                                <th>
+                                  {{ $t("kouluttaja") | uppercase }}
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr
+                                v-for="(arviointi, index) in oa.visible
+                                  ? oa.arvioinnit
+                                  : oa.arvioinnit.slice(0, 1)"
+                                :key="`arviointi-${index}`"
+                              >
+                                <td>
+                                  <elsa-button
+                                    variant="link"
+                                    :to="{
+                                      name: 'arviointi',
+                                      params: { arviointiId: arviointi.id }
+                                    }"
+                                    class="shadow-none p-0"
+                                    >{{
+                                      arviointi.arvioitavaTapahtuma
+                                    }}</elsa-button
+                                  >
+                                </td>
+                                <td>
+                                  <elsa-badge
+                                    v-if="arviointi.luottamuksenTaso"
+                                    :value="arviointi.luottamuksenTaso"
+                                  />
+                                  <span
+                                    v-else
+                                    class="text-size-sm text-light-muted"
+                                    >{{ $t("ei-tehty-viela") }}</span
+                                  >
+                                </td>
+                                <td>
+                                  <elsa-badge
+                                    v-if="
+                                      arviointi.itsearviointiLuottamuksenTaso
+                                    "
+                                    :value="
+                                      arviointi.itsearviointiLuottamuksenTaso
+                                    "
+                                  />
+                                  <span
+                                    v-else
+                                    class="text-size-sm text-light-muted"
+                                    >{{ $t("ei-tehty") }}</span
+                                  >
+                                </td>
+                                <td>
+                                  {{ $date(arviointi.tapahtumanAjankohta) }}
+                                </td>
+                                <td>
+                                  {{
+                                    arviointi.tyoskentelyjakso.tyoskentelypaikka
+                                      .nimi
+                                  }}
+                                </td>
+                                <td>{{ arviointi.arvioinninAntaja.nimi }}</td>
+                              </tr>
+                            </tbody>
+                          </b-table-simple>
+                          <div class="text-right">
+                            <elsa-button
+                              v-if="oa.arvioinnit.length > 1"
+                              @click="oa.visible = !oa.visible"
+                              variant="link"
+                              class="shadow-none font-weight-500"
+                            >
+                              {{
+                                `${$t("kaikki-arvioinnit")} (${
+                                  oa.arvioinnit.length
+                                })`
+                              }}<font-awesome-icon
+                                :icon="
+                                  oa.visible ? 'chevron-up' : 'chevron-down'
+                                "
+                                fixed-width
+                                class="ml-1 text-dark"
+                              />
+                            </elsa-button>
+                          </div>
+                        </div>
+                        <p v-else class="text-light-muted p-2">
+                          {{ $t("arviointeja-ei-ole-viela-tehty") }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <div class="text-center" v-else>
                   <b-spinner variant="primary" :label="$t('ladataan')" />
@@ -145,31 +252,6 @@
                   />
                   {{ $t("kaikkiin-arviointipyyntoihisi-on-tehty-arviointi") }}
                 </b-alert>
-                <b-pagination
-                  v-model="page"
-                  :total-rows="totalRows"
-                  :per-page="perPage"
-                  @input="fetch"
-                  pills
-                  align="center"
-                  :hide-goto-end-buttons="true"
-                >
-                  <template v-slot:prev-text
-                    ><font-awesome-icon
-                      icon="chevron-left"
-                      fixed-width
-                      size="lg"
-                      cl
-                    />{{ $t("edellinen") }}</template
-                  >
-                  <template v-slot:next-text
-                    >{{ $t("seuraava")
-                    }}<font-awesome-icon
-                      icon="chevron-right"
-                      fixed-width
-                      size="lg"
-                  /></template>
-                </b-pagination>
               </div>
               <div class="text-center" v-else>
                 <b-spinner variant="primary" :label="$t('ladataan')" />
@@ -185,20 +267,20 @@
 <script lang="ts">
 import axios from "axios";
 import { Component, Vue } from "vue-property-decorator";
-import ArviointiCard from "@/components/arviointi-card/arviointi-card.vue";
 import ArviointipyyntoCard from "@/components/arviointipyynto-card/arviointipyynto-card.vue";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
 import ElsaFormMultiselect from "@/components/multiselect/multiselect.vue";
 import ElsaButton from "@/components/button/button.vue";
+import ElsaBadge from "@/components/badge/badge.vue";
 import { tyoskentelyjaksoLabel } from "@/utils/tyoskentelyjakso";
 
 @Component({
   components: {
-    ArviointiCard,
     ArviointipyyntoCard,
     ElsaFormGroup,
     ElsaFormMultiselect,
-    ElsaButton
+    ElsaButton,
+    ElsaBadge
   }
 })
 export default class Arvioinnit extends Vue {
@@ -213,9 +295,6 @@ export default class Arvioinnit extends Vue {
     kouluttajat: []
   } as any;
   omat: null | any[] = null;
-  page = 1;
-  totalRows = 0;
-  perPage = 5;
   items = [
     {
       text: this.$t("etusivu"),
@@ -226,19 +305,11 @@ export default class Arvioinnit extends Vue {
       active: true
     }
   ];
+  kategoriat: null | any[] = null;
 
-  mounted() {
-    this.fetchOptions();
-  }
-
-  resetFilters() {
-    this.selected = {
-      tyoskentelyjakso: null,
-      epaOsaamisalue: null,
-      kouluttaja: null
-    };
-    this.page = 1;
-    this.fetch();
+  async mounted() {
+    await this.fetchOptions();
+    await this.fetch();
   }
 
   onTabChange(value: any) {
@@ -248,8 +319,6 @@ export default class Arvioinnit extends Vue {
       kouluttaja: null
     };
     this.omat = null;
-    this.page = 1;
-    this.totalRows = 0;
     if (value === 0) {
       this.fetch();
     } else if (value === 1) {
@@ -260,40 +329,32 @@ export default class Arvioinnit extends Vue {
     }
   }
 
-  onTyoskentelyjaksoSelect(selected: any) {
+  async onTyoskentelyjaksoSelect(selected: any) {
     this.selected.tyoskentelyjakso = selected;
-    this.page = 1;
-    this.fetch();
+    await this.fetch();
+    this.solveKategoriat();
   }
 
-  onTyoskentelyjaksoRemove() {
-    this.selected.tyoskentelyjakso = null;
-    this.page = 1;
-    this.fetch();
-  }
-
-  onEpaOsaamisalueSelect(selected: any) {
+  async onEpaOsaamisalueSelect(selected: any) {
     this.selected.epaOsaamisalue = selected;
-    this.page = 1;
-    this.fetch();
+    await this.fetch();
+    this.solveKategoriat();
   }
 
-  onEpaOsaamisalueRemove() {
-    this.selected.epaOsaamisalue = null;
-    this.page = 1;
-    this.fetch();
-  }
-
-  onKouluttajaSelect(selected: any) {
+  async onKouluttajaSelect(selected: any) {
     this.selected.kouluttaja = selected;
-    this.page = 1;
-    this.fetch();
+    await this.fetch();
+    this.solveKategoriat();
   }
 
-  onKouluttajaRemove() {
-    this.selected.kouluttaja = null;
-    this.page = 1;
-    this.fetch();
+  async resetFilters() {
+    this.selected = {
+      tyoskentelyjakso: null,
+      epaOsaamisalue: null,
+      kouluttaja: null
+    };
+    await this.fetch();
+    this.solveKategoriat();
   }
 
   async fetchOptions() {
@@ -304,22 +365,65 @@ export default class Arvioinnit extends Vue {
 
   async fetch(options: any = {}) {
     try {
-      const omat = await axios.get("erikoistuva-laakari/suoritusarvioinnit", {
-        params: {
-          ...options,
-          page: this.page - 1,
-          size: this.perPage,
-          sort: "tapahtumanAjankohta,desc",
-          "tyoskentelyjaksoId.equals": this.selected.tyoskentelyjakso?.id,
-          "arvioitavaOsaalueId.equals": this.selected.epaOsaamisalue?.id,
-          "arvioinninAntajaId.equals": this.selected.kouluttaja?.id
-        }
-      });
-      this.totalRows = omat.headers["x-total-count"];
-      this.omat = omat.data.content;
+      this.omat = (
+        await axios.get("erikoistuva-laakari/suoritusarvioinnit", {
+          params: {
+            ...options,
+            sort: "tapahtumanAjankohta,desc",
+            "tyoskentelyjaksoId.equals": this.selected.tyoskentelyjakso?.id,
+            "arvioitavaOsaalueId.equals": this.selected.epaOsaamisalue?.id,
+            "arvioinninAntajaId.equals": this.selected.kouluttaja?.id
+          }
+        })
+      ).data;
+      this.kategoriat = this.solveKategoriat();
     } catch (err) {
       this.omat = [];
     }
+  }
+
+  solveKategoriat() {
+    // Muodostetaan osa-alueet lista
+    const osaalueet = this.options.epaOsaamisalueet.map((oa: any) => ({
+      ...oa,
+      arvioinnit: [],
+      visible: false
+    }));
+
+    // Muodostetaan kategoriat lista
+    let kategoriat: any[] = [];
+    osaalueet.forEach((oa: any) => {
+      kategoriat.push({
+        ...oa.kategoria,
+        osaalueet: [],
+        visible: true
+      });
+    });
+    kategoriat = [
+      ...new Map(kategoriat.map((item: any) => [item["id"], item])).values()
+    ];
+
+    // Laitetaan arvioinnin osa-alueihin
+    if (this.omat) {
+      this.omat.forEach(arviointi => {
+        const oa = osaalueet.find(
+          (oa: any) => oa.id === arviointi.arvioitavaOsaalueId
+        );
+        if (oa) {
+          oa.arvioinnit.push(arviointi);
+        }
+      });
+    }
+
+    // Laitetaan osa-aluuet kategorioihin
+    osaalueet.forEach((oa: any) => {
+      const kategoria = kategoriat.find((k: any) => k.id === oa.kategoria.id);
+      if (kategoria) {
+        kategoria.osaalueet.push(oa);
+      }
+    });
+
+    return kategoriat;
   }
 
   get arvioinnit() {
@@ -350,9 +454,35 @@ export default class Arvioinnit extends Vue {
   max-width: 1024px;
 }
 
+.kategoria-collapse {
+  background: #f5f5f6;
+}
+
 ::v-deep .multiselect {
   .multiselect__option::after {
     display: none;
   }
+}
+
+::v-deep table {
+  thead tr th {
+    border-top: none;
+    border-bottom: none;
+  }
+  tbody tr:first-child td {
+    border-top: none;
+  }
+  td {
+    vertical-align: middle;
+  }
+  td,
+  th {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+}
+
+.text-light-muted {
+  color: #b1b1b1;
 }
 </style>

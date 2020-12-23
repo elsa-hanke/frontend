@@ -3,6 +3,8 @@ import {
   faArrowsAlt,
   faArrowUp,
   faAward,
+  faCaretDown,
+  faCaretUp,
   faCheckCircle,
   faChevronDown,
   faChevronLeft,
@@ -31,6 +33,8 @@ import {
 library.add(faArrowsAlt);
 library.add(faArrowUp);
 library.add(faAward);
+library.add(faCaretDown);
+library.add(faCaretUp);
 library.add(faCheckCircle);
 library.add(faChevronDown);
 library.add(faChevronLeft);
