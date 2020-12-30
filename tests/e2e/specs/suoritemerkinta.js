@@ -159,7 +159,7 @@ describe("Suoritemerkinnän muokkaaminen", () => {
     setupMocks();
     cy.contains("b (23.11.2020-29.11.2020)");
     cy.contains("Oppimistavoite 2");
-    cy.contains("1 Aloittelija");
+    cy.contains("1 Helppo");
     cy.contains("5 Toiminta ohjaajana");
     cy.contains("24.11.2020");
     cy.get("a").contains("Peruuta");

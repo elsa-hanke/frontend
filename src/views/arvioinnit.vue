@@ -127,22 +127,22 @@
                           <b-table-simple small responsive class="mb-0">
                             <thead>
                               <tr class="text-size-sm">
-                                <th>
+                                <th scope="col">
                                   {{ $t("tapahtuma") | uppercase }}
                                 </th>
-                                <th>
+                                <th scope="col">
                                   {{ $t("arviointi") | uppercase }}
                                 </th>
-                                <th>
+                                <th scope="col">
                                   {{ $t("itsearviointi") | uppercase }}
                                 </th>
-                                <th>
+                                <th scope="col">
                                   {{ $t("pvm") }}
                                 </th>
-                                <th>
+                                <th scope="col">
                                   {{ $t("tyoskentelypaikka") | uppercase }}
                                 </th>
-                                <th>
+                                <th scope="col">
                                   {{ $t("kouluttaja") | uppercase }}
                                 </th>
                               </tr>
