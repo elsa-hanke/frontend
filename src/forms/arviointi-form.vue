@@ -304,7 +304,7 @@
             <template>
               <h3>{{ $t("arvioinnin-osa-alueita") }}</h3>
               <div class="d-flex flex-column canmeds-container">
-                <img src="@/assets/canmeds.svg" class="m-2" />
+                <img src="@/assets/canmeds.svg" class="m-2" alt="canmeds" />
                 <a
                   href="#"
                   class="text-size-normal"
