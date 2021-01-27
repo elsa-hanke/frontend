@@ -293,6 +293,7 @@ export default class ArviointipyyntoForm extends Mixins(
 
   async onKouluttajaSubmit(value: any, params: any, modal: any) {
     params.saving = true;
+    console.log("submitting...");
     try {
       const kouluttaja = (
         await axios.post("/erikoistuva-laakari/lahikouluttajat", value)
@@ -302,7 +303,13 @@ export default class ArviointipyyntoForm extends Mixins(
       modal.hide("confirm");
       toastSuccess(this, this.$t("uusi-kouluttaja-lisatty"));
     } catch (err) {
-      toastFail(this, this.$t("uuden-kouluttajan-lisaaminen-epaonnistui"));
+      console.log(err);
+      toastFail(
+        this,
+        this.$t("uuden-kouluttajan-lisaaminen-epaonnistui", {
+          virhe: err.response.data.title
+        })
+      );
     }
     params.saving = false;
   }
