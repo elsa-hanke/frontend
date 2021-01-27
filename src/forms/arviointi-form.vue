@@ -334,9 +334,15 @@
         </template>
       </elsa-form-group>
       <div class="text-right">
-        <elsa-button variant="back" :to="{ name: 'arvioinnit' }">{{
-          $t("peruuta")
-        }}</elsa-button>
+        <elsa-button
+          variant="back"
+          :to="{
+            name: 'arviointi',
+            params: { arviointiId: this.$route.params.arviointiId }
+          }"
+        >
+          {{ $t("peruuta") }}
+        </elsa-button>
         <elsa-button
           :loading="params.saving"
           type="submit"

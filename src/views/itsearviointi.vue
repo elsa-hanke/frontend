@@ -69,7 +69,8 @@ export default class Itsearviointi extends Mixins(ConfirmRouteExit) {
       toastSuccess(this, this.$t("itsearvioinnin-tallentaminen-onnistui"));
       this.skipRouteExitConfirm = true;
       this.$router.push({
-        name: "arvioinnit"
+        name: "arviointi",
+        params: { arviointiId: this.$route.params.arviointiId }
       });
     } catch (err) {
       toastFail(this, this.$t("itsearvioinnin-tallentaminen-epaonnistui"));

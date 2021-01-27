@@ -250,7 +250,7 @@
   "tyyppi": "Tyyppi",
   "uuden-arviointipyynnon-lisaaminen-epaonnistui": "Uuden arviointipyynnön lisääminen epäonnistui",
   "uuden-kommentin-lisaaminen-epaonnistui": "Uuden kommentin lisääminen epäonnistui",
-  "uuden-kouluttajan-lisaaminen-epaonnistui": "Uuden kouluttajan lisääminen epäonnistui",
+  "uuden-kouluttajan-lisaaminen-epaonnistui": "Uuden kouluttajan lisääminen epäonnistui: {virhe}",
   "uuden-poissaolon-lisaaminen-epaonnistui": "Uuden poissaolon lisääminen epäonnistui",
   "uuden-suoritemerkinnan-lisaaminen-epaonnistui": "Uuden suoritemerkinnän lisääminen epäonnistui",
   "uuden-tyoskentelyjakson-lisaaminen-epaonnistui": "Uuden työskentelyjakson lisääminen epäonnistui",

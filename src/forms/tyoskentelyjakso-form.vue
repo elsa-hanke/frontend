@@ -101,6 +101,7 @@
               :state="validateState('osaaikaprosentti')"
               type="number"
               step="any"
+              class="col-sm-3"
             />
             <span class="mx-3">%</span>
           </div>
@@ -345,7 +346,7 @@ export default class TyoskentelyjaksoForm extends Mixins(validationMixin) {
     default: () => ({
       alkamispaiva: null,
       paattymispaiva: null,
-      osaaikaprosentti: 100,
+      osaaikaprosentti: null,
       tyoskentelypaikka: {
         nimi: null,
         kunta: {},

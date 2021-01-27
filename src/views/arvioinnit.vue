@@ -187,6 +187,17 @@
                                       arviointi.itsearviointiLuottamuksenTaso
                                     "
                                   />
+                                  <elsa-button
+                                    v-else-if="!arviointi.lukittu"
+                                    variant="primary"
+                                    class="d-flex align-items-center text-decoration-none"
+                                    :to="{
+                                      name: 'itsearviointi',
+                                      params: { arviointiId: arviointi.id }
+                                    }"
+                                  >
+                                    {{ $t("tee-itsearviointi") }}
+                                  </elsa-button>
                                   <span
                                     v-else
                                     class="text-size-sm text-light-muted"
@@ -332,19 +343,16 @@ export default class Arvioinnit extends Vue {
   async onTyoskentelyjaksoSelect(selected: any) {
     this.selected.tyoskentelyjakso = selected;
     await this.fetch();
-    this.solveKategoriat();
   }
 
   async onEpaOsaamisalueSelect(selected: any) {
     this.selected.epaOsaamisalue = selected;
     await this.fetch();
-    this.solveKategoriat();
   }
 
   async onKouluttajaSelect(selected: any) {
     this.selected.kouluttaja = selected;
     await this.fetch();
-    this.solveKategoriat();
   }
 
   async resetFilters() {
@@ -384,7 +392,15 @@ export default class Arvioinnit extends Vue {
 
   solveKategoriat() {
     // Muodostetaan osa-alueet lista
-    const osaalueet = this.options.epaOsaamisalueet.map((oa: any) => ({
+    const osaalueet = (this.selected.tyoskentelyjakso ||
+    this.selected.kouluttaja
+      ? this.omat?.map((oma: any) => oma.arvioitavaOsaalue)
+      : this.options.epaOsaamisalueet.filter((oa: any) =>
+          this.selected.epaOsaamisalue
+            ? oa.id === this.selected.epaOsaamisalue?.id
+            : true
+        )
+    ).map((oa: any) => ({
       ...oa,
       arvioinnit: [],
       visible: false
