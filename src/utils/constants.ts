@@ -30,27 +30,27 @@ export const luottamuksenTasot = [
   {
     arvo: 1,
     nimi: "ohjaajan-toiminnan-seuraaminen",
-    kuvaus: "lorem-ipsum"
+    kuvaus: "ohjaajan-toiminnan-seuraaminen-ohje"
   },
   {
     arvo: 2,
     nimi: "toiminta-suoran-ohjauksen-alaisena",
-    kuvaus: "lorem-ipsum"
+    kuvaus: "toiminta-suoran-ohjauksen-alaisena-ohje"
   },
   {
     arvo: 3,
     nimi: "toiminta-epasuoran-ohjauksen-alaisena",
-    kuvaus: "lorem-ipsum"
+    kuvaus: "toiminta-epasuoran-ohjauksen-alaisena-ohje"
   },
   {
     arvo: 4,
     nimi: "toiminta-ilman-ohjausta",
-    kuvaus: "lorem-ipsum"
+    kuvaus: "toiminta-ilman-ohjausta-ohje"
   },
   {
     arvo: 5,
     nimi: "toiminta-ohjaajana",
-    kuvaus: "lorem-ipsum"
+    kuvaus: "toiminta-ohjaajana-ohje"
   }
 ];
 
