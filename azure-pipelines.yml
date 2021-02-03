@@ -85,12 +85,12 @@ stages:
                     awsArguments: '--distribution-id E12KDI5JPO05NG --paths "/*"'
  
   - stage: Deploy_testi
-    displayName: Deploy stage
+    displayName: Deploy testi
     dependsOn: Build
     condition: and(succeeded(), eq(variables.isMain, true))
     jobs:
       - deployment: Deploy
-        displayName: Deploy staging
+        displayName: Deploy testi
         environment: "testi"
         pool:
           vmImage: $(vmImageName)
@@ -111,7 +111,7 @@ stages:
                   inputs:
                     awsCredentials: "staging-elsa-ci"
                     regionName: "eu-west-1"
-                    bucketName: "kehitys.elsapalvelu.fi"
+                    bucketName: "testi.elsapalvelu.fi"
                     sourceFolder: "$(Pipeline.Workspace)/ElsaFrontendApp"
                     globExpressions: "**"
                   displayName: "Deploy to S3"
