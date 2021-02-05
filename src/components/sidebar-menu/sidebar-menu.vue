@@ -36,6 +36,11 @@
             <font-awesome-icon icon="award" fixed-width size="lg" />
             {{ $t("arvioinnit") }}
           </b-nav-item>
+          <b-nav-item class="border-bottom" :to="{ name: 'koejakso' }">
+            <font-awesome-icon icon="clipboard-check" fixed-width size="lg" />
+            {{ $t("koejakso") }}
+          </b-nav-item>
+
           <!--
           <b-nav-item class="border-bottom" :to="{ name: 'koulutukset' }">
             <font-awesome-icon icon="file-alt" fixed-width size="lg" />
@@ -96,9 +101,11 @@ $navbar-height: 64px;
 
   .nav-link {
     padding: 1rem;
+
     &:hover {
       background-color: rgba($primary, 0.1);
     }
+
     &.router-link-active {
       background-color: $primary;
       color: white;
