@@ -1,6 +1,14 @@
 <template>
-  <div>
-    Koejakso
+  <div class="koejakso">
+    <b-breadcrumb :items="items" class="mb-0 px-0"></b-breadcrumb>
+    <b-container fluid>
+      <b-row lg>
+        <b-col class="px-0">
+          <h1>{{ $t("koejakso") }}</h1>
+          <p>{{ $t("koejakso-kuvaus") }}</p>
+        </b-col>
+      </b-row>
+    </b-container>
   </div>
 </template>
 
@@ -25,7 +33,7 @@ export default class Koejakso extends Vue {
       to: { name: "etusivu" }
     },
     {
-      text: this.$t("suoritemerkinnat"),
+      text: this.$t("koejakso"),
       active: true
     }
   ];
