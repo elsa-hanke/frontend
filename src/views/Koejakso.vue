@@ -6,6 +6,22 @@
         <b-col class="px-0">
           <h1>{{ $t("koejakso") }}</h1>
           <p>{{ $t("koejakso-kuvaus") }}</p>
+          <div class="d-flex justify-content-center border rounded pt-3 mb-4">
+            <div class="container-fluid">
+              <elsa-form-group :label="$t('tyoskentelyaika-erikoisalalla')">
+                <h2>{{ $t("koejakson-suorituspaikka") }}</h2>
+                <p>{{ $t("koejakson-suorituspaikka-kuvaus") }}</p>
+              </elsa-form-group>
+            </div>
+          </div>
+          <div class="d-flex justify-content-center border rounded pt-3 mb-4">
+            <div class="container-fluid">
+              <elsa-form-group :label="$t('tyoskentelyaika-erikoisalalla')">
+                <h2>{{ $t("koulutussopimus") }}</h2>
+                <p>{{ $t("koulutussopimus-kuvaus") }}</p>
+              </elsa-form-group>
+            </div>
+          </div>
         </b-col>
       </b-row>
     </b-container>
