@@ -1,5 +1,5 @@
 <template>
-  <div class="koejakso">
+  <div class="koejakso-view">
     <b-breadcrumb :items="items" class="mb-0 px-0"></b-breadcrumb>
     <b-container fluid>
       <b-row lg>
@@ -19,6 +19,93 @@
               <elsa-form-group :label="$t('tyoskentelyaika-erikoisalalla')">
                 <h2>{{ $t("koulutussopimus") }}</h2>
                 <p>{{ $t("koulutussopimus-kuvaus") }}</p>
+                <elsa-button
+                  variant="primary"
+                  :to="{ name: 'arviointipyynto' }"
+                  class="mb-4"
+                >
+                  {{ $t("täytä-koulutussopimus") }}
+                </elsa-button>
+              </elsa-form-group>
+            </div>
+          </div>
+        </b-col>
+      </b-row>
+      <b-row lg>
+        <b-col class="px-0">
+          <h1>{{ $t("koejakson-arviointi") }}</h1>
+          <div class="d-flex justify-content-center border rounded pt-3 mb-4">
+            <div class="container-fluid">
+              <elsa-form-group :label="$t('tyoskentelyaika-erikoisalalla')">
+                <h2>{{ $t("aloituskeskustelu-otsikko") }}</h2>
+                <p>{{ $t("lomake-ei-täytetty") }}</p>
+                <elsa-button
+                  variant="primary"
+                  :to="{ name: 'arviointipyynto' }"
+                  class="mb-4"
+                >
+                  {{ $t("täytä-aloituskeskustelu") }}
+                </elsa-button>
+              </elsa-form-group>
+            </div>
+          </div>
+          <div class="d-flex justify-content-center border rounded pt-3 mb-4">
+            <div class="container-fluid">
+              <elsa-form-group :label="$t('tyoskentelyaika-erikoisalalla')">
+                <h2>{{ $t("väliarviointi-otsikko") }}</h2>
+                <p>{{ $t("lomake-ei-täytetty") }}</p>
+                <elsa-button
+                  variant="primary"
+                  :to="{ name: 'arviointipyynto' }"
+                  class="mb-4"
+                >
+                  {{ $t("pyyda-arviointia") }}
+                </elsa-button>
+              </elsa-form-group>
+            </div>
+          </div>
+          <div class="d-flex justify-content-center border rounded pt-3 mb-4">
+            <div class="container-fluid">
+              <elsa-form-group :label="$t('tyoskentelyaika-erikoisalalla')">
+                <h2>{{ $t("kehittämistoimenpiteet-otsikko") }}</h2>
+                <p>{{ $t("lomake-ei-täytetty") }}</p>
+                <elsa-button
+                  variant="primary"
+                  :to="{ name: 'arviointipyynto' }"
+                  class="mb-4"
+                >
+                  {{ $t("pyyda-arviointia") }}
+                </elsa-button>
+              </elsa-form-group>
+            </div>
+          </div>
+          <div class="d-flex justify-content-center border rounded pt-3 mb-4">
+            <div class="container-fluid">
+              <elsa-form-group :label="$t('tyoskentelyaika-erikoisalalla')">
+                <h2>{{ $t("loppukeskustelu-otsikko") }}</h2>
+                <p>{{ $t("lomake-ei-täytetty") }}</p>
+                <elsa-button
+                  variant="primary"
+                  :to="{ name: 'arviointipyynto' }"
+                  class="mb-4"
+                >
+                  {{ $t("pyyda-arviointia") }}
+                </elsa-button>
+              </elsa-form-group>
+            </div>
+          </div>
+          <div class="d-flex justify-content-center border rounded pt-3 mb-4">
+            <div class="container-fluid">
+              <elsa-form-group :label="$t('tyoskentelyaika-erikoisalalla')">
+                <h2>{{ $t("koejakson-arvio-otsikko") }}</h2>
+                <p>{{ $t("lomake-ei-täytetty") }}</p>
+                <elsa-button
+                  variant="primary"
+                  :to="{ name: 'arviointipyynto' }"
+                  class="mb-4"
+                >
+                  {{ $t("pyyda-arviointia") }}
+                </elsa-button>
               </elsa-form-group>
             </div>
           </div>
@@ -63,4 +150,9 @@ export default class Koejakso extends Vue {
 }
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped>
+@import "~@/styles/variables";
+.koejakso-view {
+  max-width: 1024px;
+}
+</style>
