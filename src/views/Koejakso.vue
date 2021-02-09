@@ -37,7 +37,10 @@
           <div class="d-flex justify-content-center border rounded pt-3 mb-4">
             <div class="container-fluid">
               <elsa-form-group :label="$t('tyoskentelyaika-erikoisalalla')">
-                <h2>{{ $t("aloituskeskustelu-otsikko") }}</h2>
+                <h2>
+                  <span class="form-order">A </span>
+                  {{ $t("aloituskeskustelu-otsikko") }}
+                </h2>
                 <p>{{ $t("lomake-ei-täytetty") }}</p>
                 <elsa-button
                   variant="primary"
@@ -52,7 +55,10 @@
           <div class="d-flex justify-content-center border rounded pt-3 mb-4">
             <div class="container-fluid">
               <elsa-form-group :label="$t('tyoskentelyaika-erikoisalalla')">
-                <h2>{{ $t("väliarviointi-otsikko") }}</h2>
+                <h2>
+                  <span class="form-order">B </span>
+                  {{ $t("väliarviointi-otsikko") }}
+                </h2>
                 <p>{{ $t("lomake-ei-täytetty") }}</p>
                 <elsa-button
                   variant="primary"
@@ -67,7 +73,10 @@
           <div class="d-flex justify-content-center border rounded pt-3 mb-4">
             <div class="container-fluid">
               <elsa-form-group :label="$t('tyoskentelyaika-erikoisalalla')">
-                <h2>{{ $t("kehittämistoimenpiteet-otsikko") }}</h2>
+                <h2>
+                  <span class="form-order">C </span>
+                  {{ $t("kehittämistoimenpiteet-otsikko") }}
+                </h2>
                 <p>{{ $t("lomake-ei-täytetty") }}</p>
                 <elsa-button
                   variant="primary"
@@ -82,7 +91,10 @@
           <div class="d-flex justify-content-center border rounded pt-3 mb-4">
             <div class="container-fluid">
               <elsa-form-group :label="$t('tyoskentelyaika-erikoisalalla')">
-                <h2>{{ $t("loppukeskustelu-otsikko") }}</h2>
+                <h2>
+                  <span class="form-order">D </span>
+                  {{ $t("loppukeskustelu-otsikko") }}
+                </h2>
                 <p>{{ $t("lomake-ei-täytetty") }}</p>
                 <elsa-button
                   variant="primary"
@@ -97,7 +109,10 @@
           <div class="d-flex justify-content-center border rounded pt-3 mb-4">
             <div class="container-fluid">
               <elsa-form-group :label="$t('tyoskentelyaika-erikoisalalla')">
-                <h2>{{ $t("koejakson-arvio-otsikko") }}</h2>
+                <h2>
+                  <span class="form-order">E </span>
+                  {{ $t("koejakson-arvio-otsikko") }}
+                </h2>
                 <p>{{ $t("lomake-ei-täytetty") }}</p>
                 <elsa-button
                   variant="primary"
@@ -152,7 +167,12 @@ export default class Koejakso extends Vue {
 
 <style lang="scss" scoped>
 @import "~@/styles/variables";
+
 .koejakso-view {
   max-width: 1024px;
+}
+
+.form-order {
+  font-weight: bold;
 }
 </style>
