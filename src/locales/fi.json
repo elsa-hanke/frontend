@@ -310,5 +310,7 @@
   "koejakson-arviointi": "Koejakson arviointi",
   "lomake-ei-täytetty": "Lomaketta ei ole vielä täytetty.",
   "täytä-koulutussopimus": "Täytä koulutussopimus",
-  "täytä-aloituskeskustelu": "Täytä aloituskeskustelu"
+  "täytä-aloituskeskustelu": "Täytä aloituskeskustelu",
+  "liita-koejaksoon": "Liitä koejaksoon",
+  "jos-et-loyda-alta": ", jos et löydä alta"
 }
