@@ -9,6 +9,10 @@
             {{ $t("koejakso-kuvaus") }}
             <b-link href=""> {{ $t("koejakso-tavoitteet-linkki") }}</b-link>
           </p>
+        </b-col>
+      </b-row>
+      <b-row lg>
+        <b-col class="px-0">
           <div class="d-flex justify-content-center border rounded pt-3 mb-4">
             <div class="container-fluid">
               <h2>{{ $t("koejakson-suorituspaikka") }}</h2>
@@ -39,6 +43,10 @@
               </elsa-button>
             </div>
           </div>
+        </b-col>
+      </b-row>
+      <b-row lg>
+        <b-col class="px-0">
           <div class="d-flex justify-content-center border rounded pt-3 mb-4">
             <div class="container-fluid">
               <h2>{{ $t("koulutussopimus") }}</h2>
