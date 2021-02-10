@@ -14,18 +14,10 @@
               <h2>{{ $t("koejakson-suorituspaikka") }}</h2>
               <p>{{ $t("koejakson-suorituspaikka-kuvaus") }}</p>
               <p>
-                <b-link>
-                  {{ $t("lisää-työskentelyjakso") }}
-                </b-link>
+                <b-link> {{ $t("lisaa-tyoskentelyjakso") }}</b-link>
+                {{ $t("jos-et-loyda-alta") }}
               </p>
               <elsa-form-group :label="$t('tyoskentelyjakso')">
-                <elsa-button
-                  variant="primary"
-                  :to="{ name: 'arviointipyynto' }"
-                  class="mb-4"
-                >
-                  {{ $t("liitä-koejaksoon") }}
-                </elsa-button>
                 <template v-slot="{ uid }">
                   <elsa-form-multiselect
                     :id="uid"
@@ -38,6 +30,13 @@
                   </elsa-form-multiselect>
                 </template>
               </elsa-form-group>
+              <elsa-button
+                variant="primary"
+                :to="{ name: 'liita-koejaksoon' }"
+                class="mb-4"
+              >
+                {{ $t("liita-koejaksoon") }}
+              </elsa-button>
             </div>
           </div>
           <div class="d-flex justify-content-center border rounded pt-3 mb-4">
