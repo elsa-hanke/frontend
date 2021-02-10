@@ -41,17 +41,15 @@
           </div>
           <div class="d-flex justify-content-center border rounded pt-3 mb-4">
             <div class="container-fluid">
-              <elsa-form-group :label="$t('tyoskentelyaika-erikoisalalla')">
-                <h2>{{ $t("koulutussopimus") }}</h2>
-                <p>{{ $t("koulutussopimus-kuvaus") }}</p>
-                <elsa-button
-                  variant="primary"
-                  :to="{ name: 'arviointipyynto' }"
-                  class="mb-4"
-                >
-                  {{ $t("täytä-koulutussopimus") }}
-                </elsa-button>
-              </elsa-form-group>
+              <h2>{{ $t("koulutussopimus") }}</h2>
+              <p>{{ $t("koulutussopimus-kuvaus") }}</p>
+              <elsa-button
+                variant="primary"
+                :to="{ name: 'arviointipyynto' }"
+                class="mb-4"
+              >
+                {{ $t("täytä-koulutussopimus") }}
+              </elsa-button>
             </div>
           </div>
         </b-col>
@@ -61,92 +59,82 @@
           <h1>{{ $t("koejakson-arviointi") }}</h1>
           <div class="d-flex justify-content-center border rounded pt-3 mb-4">
             <div class="container-fluid">
-              <elsa-form-group :label="$t('tyoskentelyaika-erikoisalalla')">
-                <h2>
-                  <span class="form-order">A </span>
-                  {{ $t("aloituskeskustelu-otsikko") }}
-                </h2>
-                <p>{{ $t("lomake-ei-täytetty") }}</p>
-                <elsa-button
-                  variant="primary"
-                  :to="{ name: 'arviointipyynto' }"
-                  class="mb-4"
-                >
-                  {{ $t("täytä-aloituskeskustelu") }}
-                </elsa-button>
-              </elsa-form-group>
+              <h2>
+                <span class="form-order">A </span>
+                {{ $t("aloituskeskustelu-otsikko") }}
+              </h2>
+              <p>{{ $t("lomake-ei-täytetty") }}</p>
+              <elsa-button
+                variant="primary"
+                :to="{ name: 'arviointipyynto' }"
+                class="mb-4"
+              >
+                {{ $t("täytä-aloituskeskustelu") }}
+              </elsa-button>
             </div>
           </div>
           <div class="d-flex justify-content-center border rounded pt-3 mb-4">
             <div class="container-fluid">
-              <elsa-form-group :label="$t('tyoskentelyaika-erikoisalalla')">
-                <h2>
-                  <span class="form-order">B </span>
-                  {{ $t("väliarviointi-otsikko") }}
-                </h2>
-                <p>{{ $t("lomake-ei-täytetty") }}</p>
-                <elsa-button
-                  variant="primary"
-                  :to="{ name: 'arviointipyynto' }"
-                  class="mb-4"
-                >
-                  {{ $t("pyyda-arviointia") }}
-                </elsa-button>
-              </elsa-form-group>
+              <h2>
+                <span class="form-order">B </span>
+                {{ $t("väliarviointi-otsikko") }}
+              </h2>
+              <p>{{ $t("lomake-ei-täytetty") }}</p>
+              <elsa-button
+                variant="primary"
+                :to="{ name: 'arviointipyynto' }"
+                class="mb-4"
+              >
+                {{ $t("pyyda-arviointia") }}
+              </elsa-button>
             </div>
           </div>
           <div class="d-flex justify-content-center border rounded pt-3 mb-4">
             <div class="container-fluid">
-              <elsa-form-group :label="$t('tyoskentelyaika-erikoisalalla')">
-                <h2>
-                  <span class="form-order">C </span>
-                  {{ $t("kehittämistoimenpiteet-otsikko") }}
-                </h2>
-                <p>{{ $t("lomake-ei-täytetty") }}</p>
-                <elsa-button
-                  variant="primary"
-                  :to="{ name: 'arviointipyynto' }"
-                  class="mb-4"
-                >
-                  {{ $t("pyyda-arviointia") }}
-                </elsa-button>
-              </elsa-form-group>
+              <h2>
+                <span class="form-order">C </span>
+                {{ $t("kehittämistoimenpiteet-otsikko") }}
+              </h2>
+              <p>{{ $t("lomake-ei-täytetty") }}</p>
+              <elsa-button
+                variant="primary"
+                :to="{ name: 'arviointipyynto' }"
+                class="mb-4"
+              >
+                {{ $t("pyyda-arviointia") }}
+              </elsa-button>
             </div>
           </div>
           <div class="d-flex justify-content-center border rounded pt-3 mb-4">
             <div class="container-fluid">
-              <elsa-form-group :label="$t('tyoskentelyaika-erikoisalalla')">
-                <h2>
-                  <span class="form-order">D </span>
-                  {{ $t("loppukeskustelu-otsikko") }}
-                </h2>
-                <p>{{ $t("lomake-ei-täytetty") }}</p>
-                <elsa-button
-                  variant="primary"
-                  :to="{ name: 'arviointipyynto' }"
-                  class="mb-4"
-                >
-                  {{ $t("pyyda-arviointia") }}
-                </elsa-button>
-              </elsa-form-group>
+              <h2>
+                <span class="form-order">D </span>
+                {{ $t("loppukeskustelu-otsikko") }}
+              </h2>
+              <p>{{ $t("lomake-ei-täytetty") }}</p>
+              <elsa-button
+                variant="primary"
+                :to="{ name: 'arviointipyynto' }"
+                class="mb-4"
+              >
+                {{ $t("pyyda-arviointia") }}
+              </elsa-button>
             </div>
           </div>
           <div class="d-flex justify-content-center border rounded pt-3 mb-4">
             <div class="container-fluid">
-              <elsa-form-group :label="$t('tyoskentelyaika-erikoisalalla')">
-                <h2>
-                  <span class="form-order">E </span>
-                  {{ $t("koejakson-arvio-otsikko") }}
-                </h2>
-                <p>{{ $t("lomake-ei-täytetty") }}</p>
-                <elsa-button
-                  variant="primary"
-                  :to="{ name: 'arviointipyynto' }"
-                  class="mb-4"
-                >
-                  {{ $t("pyyda-arviointia") }}
-                </elsa-button>
-              </elsa-form-group>
+              <h2>
+                <span class="form-order">E </span>
+                {{ $t("koejakson-arvio-otsikko") }}
+              </h2>
+              <p>{{ $t("lomake-ei-täytetty") }}</p>
+              <elsa-button
+                variant="primary"
+                :to="{ name: 'arviointipyynto' }"
+                class="mb-4"
+              >
+                {{ $t("pyyda-arviointia") }}
+              </elsa-button>
             </div>
           </div>
         </b-col>
