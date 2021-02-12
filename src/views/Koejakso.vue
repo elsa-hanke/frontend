@@ -22,6 +22,11 @@
                   <b-col>{{ $t("tyoskentelyjakso") }}</b-col>
                   <b-col align="end">
                     <p>
+                      <font-awesome-icon
+                        icon="info-circle"
+                        fixed-width
+                        class="text-muted"
+                      />
                       <b-link> {{ $t("lisaa-tyoskentelyjakso") }}</b-link>
                       {{ $t("jos-et-loyda-alta") }}
                     </p>
