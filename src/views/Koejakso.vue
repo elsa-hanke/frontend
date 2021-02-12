@@ -17,30 +17,39 @@
             <div class="container-fluid">
               <h2>{{ $t("koejakson-suorituspaikka") }}</h2>
               <p>{{ $t("koejakson-suorituspaikka-kuvaus") }}</p>
-              <p>
-                <b-link> {{ $t("lisaa-tyoskentelyjakso") }}</b-link>
-                {{ $t("jos-et-loyda-alta") }}
-              </p>
-              <elsa-form-group :label="$t('tyoskentelyjakso')">
-                <template v-slot="{ uid }">
-                  <elsa-form-multiselect
-                    :id="uid"
-                    v-model="selected.tyoskentelyjakso"
-                    :options="tyoskentelyjaksotFormatted"
-                    label="label"
-                    track-by="id"
-                    @select="onTyoskentelyjaksoSelect"
-                  >
-                  </elsa-form-multiselect>
-                </template>
-              </elsa-form-group>
-              <elsa-button
-                variant="primary"
-                :to="{ name: 'liita-koejaksoon' }"
-                class="mb-4"
-              >
-                {{ $t("liita-koejaksoon") }}
-              </elsa-button>
+              <b-container fluid>
+                <b-row>
+                  <b-col>{{ $t("tyoskentelyjakso") }}</b-col>
+                  <b-col align="end">
+                    <p>
+                      <b-link> {{ $t("lisaa-tyoskentelyjakso") }}</b-link>
+                      {{ $t("jos-et-loyda-alta") }}
+                    </p>
+                  </b-col>
+                </b-row>
+                <b-row>
+                  <b-col cols="10">
+                    <elsa-form-multiselect
+                      :id="uid"
+                      v-model="selected.tyoskentelyjakso"
+                      :options="tyoskentelyjaksotFormatted"
+                      label="label"
+                      track-by="id"
+                      @select="onTyoskentelyjaksoSelect"
+                    >
+                    </elsa-form-multiselect>
+                  </b-col>
+                  <b-col>
+                    <elsa-button
+                      variant="primary"
+                      :to="{ name: 'liita-koejaksoon' }"
+                      class="mb-4"
+                    >
+                      {{ $t("liita-koejaksoon") }}
+                    </elsa-button>
+                  </b-col>
+                </b-row>
+              </b-container>
             </div>
           </div>
         </b-col>
