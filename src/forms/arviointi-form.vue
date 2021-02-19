@@ -123,8 +123,19 @@
               </elsa-popover>
             </th>
             <td>
-              <div v-if="!value.arviointiAika" class="text-size-sm text-muted">
-                {{ $t("arviointia-ei-ole-viela-annettu") }}
+              <div v-if="!value.arviointiAika" class="d-inline-flex">
+                <elsa-button
+                  v-if="$isKouluttaja()"
+                  variant="primary"
+                  class="d-flex align-items-center text-decoration-none"
+                  :to="{
+                    name: 'muokkaa-arviointia',
+                    params: { arviointiId: value.id }
+                  }"
+                >
+                  {{ $t("tee-arviointi") }}
+                </elsa-button>
+                <span v-else> {{ $t("arviointia-ei-ole-viela-annettu") }}</span>
               </div>
               <elsa-luottamuksen-taso
                 v-if="value.arviointiAika"
@@ -134,6 +145,7 @@
             <td>
               <div v-if="!value.itsearviointiAika" class="d-inline-flex">
                 <elsa-button
+                  v-if="$isErikoistuva()"
                   variant="primary"
                   class="d-flex align-items-center text-decoration-none"
                   :to="{
@@ -143,6 +155,7 @@
                 >
                   {{ $t("tee-itsearviointi") }}
                 </elsa-button>
+                <span v-else> {{ $t("arviointia-ei-ole-viela-annettu") }}</span>
               </div>
               <elsa-luottamuksen-taso
                 v-if="value.itsearviointiAika"
@@ -186,6 +199,16 @@
           <p :id="uid" class="text-prewrap">{{ value.sanallinenArviointi }}</p>
         </template>
       </elsa-form-group>
+      <div v-if="value.arviointiAika" class="text-right">
+        <elsa-button
+          variant="primary"
+          :to="{
+            name: 'muokkaa-arviointia',
+            params: { arviointiId: value.id }
+          }"
+          >{{ $t("muokkaa-arviointia") }}</elsa-button
+        >
+      </div>
       <elsa-form-group
         v-if="value.itsearviointiAika"
         :label="$t('sanallinen-itsearviointi')"
