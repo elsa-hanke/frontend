@@ -6,8 +6,13 @@
         <b-col class="px-0">
           <h1>{{ $t("arvioinnit") }}</h1>
           <div class="arvioinnit">
-            <div class="tyoskentelyjaksot-table" v-if="arvioinnit">
-              <b-table :items="arvioinnit" :fields="fields" responsive>
+            <div class="arvioinnit-table" v-if="arvioinnit">
+              <b-table
+                :items="arvioinnit"
+                :fields="fields"
+                :sort-compare="sortCompare"
+                responsive
+              >
                 <template #table-colgroup="scope">
                   <col
                     v-for="field in scope.fields"
@@ -15,7 +20,7 @@
                     :style="{ width: field.width }"
                   />
                 </template>
-                <template #cell(tapahtumaLabel)="row">
+                <template #cell(arvioitavaTapahtuma)="row">
                   <elsa-button
                     :to="{
                       name: 'arviointi',
@@ -26,25 +31,25 @@
                     >{{ row.item.arvioitavaTapahtuma }}</elsa-button
                   >
                 </template>
-                <template #cell(pvmDate)="row">
+                <template #cell(tapahtumanAjankohta)="row">
                   {{ $date(row.item.tapahtumanAjankohta) }}
                 </template>
-                <template #cell(tilaLabel)="row">
-                  <span v-if="row.item.lukittu">
+                <template #cell(tila)="row">
+                  <span v-if="row.item.lukittu" class="text-nowrap">
                     <font-awesome-icon
                       :icon="['fas', 'check-circle']"
                       class="text-success"
                     />
                     {{ $t("hyvaksytty") }}
                   </span>
-                  <span v-else-if="row.item.arviointiAika">
+                  <span v-else-if="row.item.arviointiAika" class="text-nowrap">
                     <font-awesome-icon
                       :icon="['far', 'check-circle']"
                       class="text-success"
                     />
                     {{ $t("valmis") }}
                   </span>
-                  <span v-else>
+                  <span v-else class="text-nowrap">
                     <font-awesome-icon
                       :icon="['far', 'clock']"
                       class="text-warning"
@@ -52,113 +57,30 @@
                     {{ $t("avoin") }}
                   </span>
                 </template>
-                <template #cell(nimiLabel)="row">
+                <!-- eslint-disable-next-line -->
+                <template #cell(arvioinninSaaja.nimi)="row">
                   {{ row.item.arvioinninSaaja.nimi }}
                 </template>
-                <template #cell(epaosaamisalueLabel)="row">
+                <!-- eslint-disable-next-line -->
+                <template #cell(arvioitavaOsaalue.nimi)="row">
                   {{ row.item.arvioitavaOsaalue.nimi }}
                 </template>
-                <template #cell(tyoskentelypaikkaLabel)="row">
+                <!-- eslint-disable-next-line -->
+                <template #cell(tyoskentelyjakso.tyoskentelypaikka.nimi)="row">
                   {{ row.item.tyoskentelyjakso.tyoskentelypaikka.nimi }}
-                </template>
-                <template #cell(ajankohtaDate)="row">
-                  {{ row.item.ajankohta }}
                 </template>
                 <template #cell(teeArviointi)="row">
                   <elsa-button
                     v-if="!row.item.arviointiAika"
                     variant="primary"
-                    :to="{ name: 'arviointi' }"
-                    class="d-flex align-items-center text-decoration-none"
+                    :to="{
+                      name: 'muokkaa-arviointia',
+                      params: { arviointiId: row.item.id }
+                    }"
+                    class="d-flex align-items-center text-decoration-none text-nowrap"
                   >
                     {{ $t("tee-arviointi") }}
                   </elsa-button>
-                </template>
-                <template #cell(keskeytyksetLength)="row">
-                  <elsa-button
-                    v-if="row.item.keskeytyksetLength > 0"
-                    @click="row.toggleDetails"
-                    variant="link"
-                    class="shadow-none text-nowrap px-0"
-                    >{{ row.item.keskeytyksetLength }}
-                    {{
-                      (row.item.keskeytyksetLength == 1
-                        ? $t("poissaolo")
-                        : $t("poissaoloa")) | lowercase
-                    }}<font-awesome-icon
-                      :icon="row.detailsShowing ? 'chevron-up' : 'chevron-down'"
-                      fixed-width
-                      size="lg"
-                      class="ml-2 text-dark"
-                    />
-                  </elsa-button>
-                  <span v-else>
-                    {{ $t("ei-poissaoloja") }}
-                  </span>
-                </template>
-                <template #row-details="row">
-                  <div class="px-3">
-                    <b-table-simple responsive>
-                      <b-thead>
-                        <b-tr>
-                          <b-th>
-                            {{ $t("poissaolon-syy") }}
-                            <elsa-popover>
-                              <template>
-                                <elsa-poissaolon-syyt
-                                  :value="tilastotPoissaolonSyyt"
-                                />
-                              </template>
-                            </elsa-popover>
-                          </b-th>
-                          <b-th>{{ $t("ajankohta") }}</b-th>
-                          <b-th>{{ $t("tyoaika") }}</b-th>
-                        </b-tr>
-                      </b-thead>
-                      <b-tbody>
-                        <b-tr
-                          v-for="(keskeytysaika, index) in row.item
-                            .keskeytykset"
-                          :key="index"
-                        >
-                          <b-td>
-                            <elsa-button
-                              :to="{
-                                name: 'poissaolo',
-                                params: { poissaoloId: keskeytysaika.id }
-                              }"
-                              variant="link"
-                              class="shadow-none px-0"
-                              >{{
-                                keskeytysaika.poissaolonSyy.nimi
-                              }}</elsa-button
-                            >
-                          </b-td>
-                          <b-td>{{
-                            keskeytysaika.alkamispaiva !=
-                            keskeytysaika.paattymispaiva
-                              ? `${$date(keskeytysaika.alkamispaiva)}-${$date(
-                                  keskeytysaika.paattymispaiva
-                                )}`
-                              : $date(keskeytysaika.alkamispaiva)
-                          }}</b-td>
-                          <b-td>
-                            <span
-                              v-if="
-                                keskeytysaika.osaaikaprosentti ===
-                                  row.item.osaaikaprosentti
-                              "
-                            >
-                              {{ $t("koko-tyoajan-poissaolo") }}</span
-                            >
-                            <span v-else>
-                              {{ 100 - keskeytysaika.osaaikaprosentti }} %
-                            </span>
-                          </b-td>
-                        </b-tr>
-                      </b-tbody>
-                    </b-table-simple>
-                  </div>
                 </template>
               </b-table>
             </div>
@@ -175,34 +97,14 @@
 <script lang="ts">
 import axios from "axios";
 import { Component, Vue } from "vue-property-decorator";
-import ArviointipyyntoCard from "@/components/arviointipyynto-card/arviointipyynto-card.vue";
-import ElsaFormGroup from "@/components/form-group/form-group.vue";
-import ElsaFormMultiselect from "@/components/multiselect/multiselect.vue";
 import ElsaButton from "@/components/button/button.vue";
-import ElsaBadge from "@/components/badge/badge.vue";
-import { tyoskentelyjaksoLabel } from "@/utils/tyoskentelyjakso";
 
 @Component({
   components: {
-    ArviointipyyntoCard,
-    ElsaFormGroup,
-    ElsaFormMultiselect,
-    ElsaButton,
-    ElsaBadge
+    ElsaButton
   }
 })
 export default class Arvioinnit extends Vue {
-  selected = {
-    tyoskentelyjakso: null,
-    epaOsaamisalue: null,
-    kouluttaja: null
-  } as any;
-  options = {
-    tyoskentelyjaksot: [],
-    epaOsaamisalueet: [],
-    kouluttajat: []
-  } as any;
-  omat: null | any[] = null;
   items = [
     {
       text: this.$t("etusivu"),
@@ -215,32 +117,32 @@ export default class Arvioinnit extends Vue {
   ];
   fields = [
     {
-      key: "tapahtumaLabel",
+      key: "arvioitavaTapahtuma",
       label: this.$t("tapahtuma"),
       sortable: true
     },
     {
-      key: "pvmDate",
+      key: "tapahtumanAjankohta",
       label: this.$t("pvm"),
       sortable: true
     },
     {
-      key: "tilaLabel",
+      key: "tila",
       label: this.$t("tila"),
       sortable: true
     },
     {
-      key: "nimiLabel",
+      key: "arvioinninSaaja.nimi",
       label: this.$t("nimi"),
       sortable: true
     },
     {
-      key: "epaosaamisalueLabel",
+      key: "arvioitavaOsaalue.nimi",
       label: this.$t("epa-osaamisalue"),
       sortable: true
     },
     {
-      key: "tyoskentelypaikkaLabel",
+      key: "tyoskentelyjakso.tyoskentelypaikka.nimi",
       label: this.$t("tyoskentelypaikka"),
       sortable: true
     },
@@ -249,7 +151,6 @@ export default class Arvioinnit extends Vue {
       label: ""
     }
   ];
-  kategoriat: null | any[] = null;
   arvioinnit: null | any[] = null;
 
   async mounted() {
@@ -264,100 +165,61 @@ export default class Arvioinnit extends Vue {
     }
   }
 
-  solveKategoriat() {
-    // Muodostetaan osa-alueet lista
-    const osaalueet = (this.selected.tyoskentelyjakso ||
-    this.selected.kouluttaja
-      ? this.omat?.map((oma: any) => oma.arvioitavaOsaalue)
-      : this.options.epaOsaamisalueet.filter((oa: any) =>
-          this.selected.epaOsaamisalue
-            ? oa.id === this.selected.epaOsaamisalue?.id
-            : true
-        )
-    ).map((oa: any) => ({
-      ...oa,
-      arvioinnit: [],
-      visible: false
-    }));
-
-    // Muodostetaan kategoriat lista
-    let kategoriat: any[] = [];
-    osaalueet.forEach((oa: any) => {
-      kategoriat.push({
-        ...oa.kategoria,
-        osaalueet: [],
-        visible: true
-      });
-    });
-    kategoriat = [
-      ...new Map(kategoriat.map((item: any) => [item["id"], item])).values()
-    ];
-
-    // Laitetaan arvioinnin osa-alueihin
-    if (this.omat) {
-      this.omat.forEach(arviointi => {
-        const oa = osaalueet.find(
-          (oa: any) => oa.id === arviointi.arvioitavaOsaalueId
-        );
-        if (oa) {
-          oa.arvioinnit.push(arviointi);
-        }
-      });
-    }
-
-    // Laitetaan osa-aluuet kategorioihin
-    osaalueet.forEach((oa: any) => {
-      const kategoria = kategoriat.find((k: any) => k.id === oa.kategoria.id);
-      if (kategoria) {
-        kategoria.osaalueet.push(oa);
+  sortCompare(a: any, b: any, key: string): any {
+    if (key == "tila") {
+      if (a.lukittu) {
+        return 1;
       }
-    });
-
-    return kategoriat;
-  }
-
-  get pyynnot() {
-    if (this.omat) {
-      return this.omat;
+      if (b.lukittu) {
+        return -1;
+      }
+      if (a.arviointiAika) {
+        return 1;
+      }
+      if (b.arviointiAika) {
+        return -1;
+      }
+      return 0;
     }
-    return null;
-  }
-
-  get tyoskentelyjaksotFormatted() {
-    return this.options.tyoskentelyjaksot.map((tj: any) => ({
-      ...tj,
-      label: tyoskentelyjaksoLabel(this, tj)
-    }));
+    return false;
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.kategoria-collapse {
-  background: #f5f5f6;
-}
+@import "~@/styles/variables";
+.arvioinnit-table {
+  ::v-deep table {
+    thead th {
+      border-top: none;
 
-::v-deep .multiselect {
-  .multiselect__option::after {
-    display: none;
-  }
-}
-
-::v-deep table {
-  thead tr th {
-    border-top: none;
-    border-bottom: none;
-  }
-  tbody tr:first-child td {
-    border-top: none;
-  }
-  td {
-    vertical-align: middle;
-  }
-  td,
-  th {
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
+      // Ilman tätä, rikkoo responsiivisuuden
+      .sr-only {
+        display: none;
+      }
+    }
+    td {
+      padding-top: 0;
+      padding-bottom: 0;
+      vertical-align: middle;
+      div {
+        min-height: $font-size-base * 2.5;
+      }
+    }
+    .b-table-details {
+      td {
+        padding-left: 0;
+        padding-right: 0;
+        background: #f5f5f6;
+      }
+      table {
+        th {
+          padding-bottom: 0.3rem;
+          padding-left: 0;
+          padding-right: 0;
+        }
+      }
+    }
   }
 }
 
