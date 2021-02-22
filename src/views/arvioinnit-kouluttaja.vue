@@ -6,11 +6,27 @@
         <b-col class="px-0">
           <h1>{{ $t("arvioinnit") }}</h1>
           <div class="arvioinnit">
+            <div class="w-25 position-relative align-items-center">
+              <b-form-input
+                v-model="hakusana"
+                placeholder="Hae suoritusarviointeja..."
+                class="suoritusarviointi-haku"
+              >
+              </b-form-input>
+              <font-awesome-icon
+                :icon="['fas', 'search']"
+                class="text-primary position-absolute haku-ikoni"
+              />
+            </div>
             <div class="arvioinnit-table" v-if="arvioinnit">
               <b-table
-                :items="arvioinnit"
+                :items="tulokset"
                 :fields="fields"
                 :sort-compare="sortCompare"
+                :sort-by.sync="sortBy"
+                :sort-desc.sync="sortDesc"
+                :per-page="perPage"
+                :current-page="currentPage"
                 responsive
               >
                 <template #table-colgroup="scope">
@@ -83,6 +99,11 @@
                   </elsa-button>
                 </template>
               </b-table>
+              <b-pagination
+                v-model="currentPage"
+                :total-rows="rows"
+                :per-page="perPage"
+              ></b-pagination>
             </div>
             <div class="text-center" v-else>
               <b-spinner variant="primary" :label="$t('ladataan')" />
@@ -152,6 +173,11 @@ export default class Arvioinnit extends Vue {
     }
   ];
   arvioinnit: null | any[] = null;
+  hakusana = "";
+  sortBy = "tapahtumanAjankohta";
+  sortDesc = true;
+  perPage = 10;
+  currentPage = 1;
 
   async mounted() {
     await this.fetch();
@@ -163,6 +189,18 @@ export default class Arvioinnit extends Vue {
     } catch (err) {
       this.arvioinnit = [];
     }
+  }
+
+  get tulokset() {
+    return this.hakusana
+      ? this.arvioinnit?.filter(item =>
+          item.arvioitavaTapahtuma.includes(this.hakusana)
+        )
+      : this.arvioinnit;
+  }
+
+  get rows() {
+    return this.tulokset?.length;
   }
 
   sortCompare(a: any, b: any, key: string): any {
@@ -221,6 +259,15 @@ export default class Arvioinnit extends Vue {
       }
     }
   }
+}
+
+.suoritusarviointi-haku {
+  border-radius: 25px;
+}
+
+.haku-ikoni {
+  top: 11px;
+  right: 20px;
 }
 
 .text-light-muted {
