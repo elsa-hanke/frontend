@@ -10,7 +10,7 @@
     :selectedLabel="selectedLabelText"
     :deselectLabel="deselectLabelText"
     :deselectGroupLabel="deselectGroupLabelText"
-    :allow-empty="false"
+    :allow-empty="allowEmpty"
     :max="max"
     :class="{ 'is-invalid': isInvalid, 'is-valid': isValid }"
   >
@@ -66,6 +66,9 @@ export default class ElsaFormMultiselect extends Vue {
 
   @Prop({ required: false })
   state!: boolean | undefined;
+
+  @Prop({ required: false, type: Boolean, default: false })
+  allowEmpty!: boolean | undefined;
 
   get isValid() {
     return this.state;
@@ -157,6 +160,11 @@ export default class ElsaFormMultiselect extends Vue {
     .multiselect__single {
       margin: 0;
       padding: 0;
+      font-size: $font-size-base;
+    }
+    .multiselect__tag {
+      margin-left: -3px;
+      margin-bottom: -6px;
       font-size: $font-size-base;
     }
     .multiselect__option {

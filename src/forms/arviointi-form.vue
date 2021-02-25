@@ -67,16 +67,6 @@
       </template>
     </elsa-form-group>
     <elsa-form-group
-      :label="$t('kouluttaja-tai-lahikouluttaja')"
-      label-cols-md="4"
-      label-cols="12"
-      class="align-items-center mb-md-0"
-    >
-      <template v-slot="{ uid }">
-        <user-avatar :id="uid" :displayName="value.arvioinninAntaja.nimi" />
-      </template>
-    </elsa-form-group>
-    <elsa-form-group
       :label="$t('ajankohta')"
       label-cols-md="4"
       label-cols="12"
@@ -97,7 +87,53 @@
         <span :id="uid" class="text-prewrap">{{ value.lisatiedot }}</span>
       </template>
     </elsa-form-group>
+    <elsa-form-group
+      :label="$t('arvioija')"
+      label-cols-md="4"
+      label-cols="12"
+      class="align-items-center mb-md-0 kouluttaja-form-input"
+    >
+      <template v-slot="{ uid }">
+        <user-avatar :id="uid" :displayName="value.arvioinninAntaja.nimi" />
+      </template>
+    </elsa-form-group>
     <div v-if="!editing">
+      <elsa-form-group
+        :label="$t('arviointipaiva')"
+        label-cols-md="4"
+        label-cols="12"
+        class="align-items-center mb-md-0"
+      >
+        <template v-slot="{ uid }">
+          <span :id="uid" class="text-prewrap">{{
+            $date(value.arviointiAika)
+          }}</span>
+        </template>
+      </elsa-form-group>
+      <elsa-form-group
+        :label="$t('arviointityokalu')"
+        label-cols-md="4"
+        label-cols="12"
+        class="align-items-center mb-md-0"
+      >
+        <template v-slot="{ uid }">
+          <span :id="uid" class="text-prewrap">{{
+            value.arviointityokalut.map(el => el.nimi).join(", ")
+          }}</span>
+        </template>
+      </elsa-form-group>
+      <elsa-form-group
+        :label="$t('arviointi-perustuu')"
+        label-cols-md="4"
+        label-cols="12"
+        class="align-items-center mb-md-0"
+      >
+        <template v-slot="{ uid }">
+          <span :id="uid" class="text-prewrap">{{
+            muuValittu ? value.muuPeruste : $t(value.arviointiPerustuu)
+          }}</span>
+        </template>
+      </elsa-form-group>
       <b-table-simple responsive bordered>
         <thead>
           <tr>
@@ -199,7 +235,7 @@
           <p :id="uid" class="text-prewrap">{{ value.sanallinenArviointi }}</p>
         </template>
       </elsa-form-group>
-      <div v-if="value.arviointiAika" class="text-right">
+      <div v-if="value.arviointiAika && $isKouluttaja()" class="text-right">
         <elsa-button
           variant="primary"
           :to="{
@@ -317,6 +353,29 @@
           </template>
         </elsa-form-group>
       </b-form-row>
+      <b-form-row v-if="$isKouluttaja()">
+        <elsa-form-group
+          :label="$t('arviointityokalu')"
+          :required="false"
+          class="col-lg-6"
+        >
+          <template v-slot="{ uid }">
+            <elsa-form-multiselect
+              :id="uid"
+              v-model="form.arviointityokalut"
+              :options="arviointityokalut"
+              :custom-label="value => `${value.nimi}`"
+              :multiple="true"
+              :allow-empty="true"
+              track-by="nimi"
+            >
+              <template slot="option" slot-scope="{ option }">
+                {{ option.nimi }}
+              </template>
+            </elsa-form-multiselect>
+          </template>
+        </elsa-form-group>
+      </b-form-row>
       <elsa-form-group
         :label="$t('sanallinen-arviointi')"
         :required="true"
@@ -356,6 +415,39 @@
           }}</b-form-invalid-feedback>
         </template>
       </elsa-form-group>
+      <elsa-form-group
+        :label="$t('lisatiedot')"
+        v-if="editing && $isKouluttaja()"
+      >
+        <template v-slot="{ uid }">
+          <b-form-checkbox v-model="form.perustuuMuuhun">
+            {{ $t("arviointi-perustuu-lasna") }}
+          </b-form-checkbox>
+          <div v-if="form.perustuuMuuhun" class="arviointi-perustuu">
+            <b-form-radio-group
+              :id="uid"
+              v-model="form.arviointiPerustuu"
+              :options="arviointiperusteet"
+              :state="validateState('arviointiPerustuu')"
+              stacked
+            >
+            </b-form-radio-group>
+            <b-form-invalid-feedback
+              :id="`${uid}-feedback`"
+              :state="validateState('arviointiPerustuu')"
+              >{{ $t("pakollinen-tieto") }}</b-form-invalid-feedback
+            >
+            <b-form-input
+              v-if="muuValittu"
+              v-model="form.muuPeruste"
+              :state="validateState('muuPeruste')"
+            ></b-form-input>
+            <b-form-invalid-feedback>{{
+              $t("pakollinen-tieto")
+            }}</b-form-invalid-feedback>
+          </div>
+        </template>
+      </elsa-form-group>
       <div class="text-right">
         <elsa-button
           variant="back"
@@ -380,9 +472,9 @@
 
 <script lang="ts">
 import Component from "vue-class-component";
-import { Mixins, Prop } from "vue-property-decorator";
+import { Mixins, Prop, Vue } from "vue-property-decorator";
 import { validationMixin } from "vuelidate";
-import { required } from "vuelidate/lib/validators";
+import { required, requiredIf } from "vuelidate/lib/validators";
 import UserAvatar from "@/components/user-avatar/user-avatar.vue";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
 import ElsaFormMultiselect from "@/components/multiselect/multiselect.vue";
@@ -391,6 +483,14 @@ import ElsaBadge from "@/components/badge/badge.vue";
 import ElsaPopover from "@/components/popover/popover.vue";
 import ElsaButton from "@/components/button/button.vue";
 import { vaativuustasot, luottamuksenTasot } from "@/utils/constants";
+import axios from "axios";
+import { arvioinninPerustuminen } from "@/utils/constants";
+
+const muuPerusteValinnat = (value: string) =>
+  value === arvioinninPerustuminen.KirjallinenMateriaali ||
+  value === arvioinninPerustuminen.Etayhteys ||
+  value === arvioinninPerustuminen.Muu ||
+  Vue.prototype.$isErikoistuva();
 
 @Component({
   components: {
@@ -412,6 +512,17 @@ import { vaativuustasot, luottamuksenTasot } from "@/utils/constants";
       },
       sanallinenArviointi: {
         required
+      },
+      arviointiPerustuu: {
+        required: requiredIf(value => {
+          return value.perustuuMuuhun === true;
+        }),
+        muuPerusteValinnat
+      },
+      muuPeruste: {
+        required: requiredIf(value => {
+          return value.arviointiPerustuu === arvioinninPerustuminen.Muu;
+        })
       }
     }
   }
@@ -430,15 +541,34 @@ export default class ArviointiForm extends Mixins(validationMixin) {
   form: any = {
     vaativuustaso: null,
     luottamuksenTaso: null,
-    sanallinenArviointi: null
+    sanallinenArviointi: null,
+    arviointityokalut: [],
+    arviointiPerustuu: null,
+    muuPeruste: null,
+    perustuuMuuhun: false
   };
   vaativuustasot = vaativuustasot;
   luottamuksenTasot = luottamuksenTasot;
+  arviointityokalut = [];
   params = {
     saving: false
   };
+  arviointiperusteet = [
+    {
+      text: this.$t("arviointi-perustuu-kirjallinen"),
+      value: arvioinninPerustuminen.KirjallinenMateriaali
+    },
+    {
+      text: this.$t("arviointi-perustuu-etayhteys"),
+      value: arvioinninPerustuminen.Etayhteys
+    },
+    {
+      text: this.$t("arviointi-perustuu-muu"),
+      value: arvioinninPerustuminen.Muu
+    }
+  ];
 
-  mounted() {
+  async mounted() {
     if (this.itsearviointi) {
       this.form = {
         vaativuustaso: vaativuustasot.find(
@@ -457,9 +587,22 @@ export default class ArviointiForm extends Mixins(validationMixin) {
         luottamuksenTaso: luottamuksenTasot.find(
           taso => taso.arvo === this.value.luottamuksenTaso
         ),
-        sanallinenArviointi: this.value.sanallinenArviointi
+        sanallinenArviointi: this.value.sanallinenArviointi,
+        arviointityokalut: this.value.arviointityokalut,
+        arviointiPerustuu: this.value.arviointiPerustuu,
+        muuPeruste: this.value.muuPeruste,
+        perustuuMuuhun:
+          this.value.arviointiPerustuu !==
+          arvioinninPerustuminen.LasnaolevaHavainnointi
       };
+      this.arviointityokalut = (
+        await axios.get(`kouluttaja/suoritusarvioinnit/arviointityokalut`)
+      ).data;
     }
+  }
+
+  get muuValittu() {
+    return this.form.arviointiPerustuu === arvioinninPerustuminen.Muu;
   }
 
   validateState(name: string) {
@@ -490,7 +633,12 @@ export default class ArviointiForm extends Mixins(validationMixin) {
           ...this.value,
           vaativuustaso: this.form.vaativuustaso.arvo,
           luottamuksenTaso: this.form.luottamuksenTaso.arvo,
-          sanallinenArviointi: this.form.sanallinenArviointi
+          sanallinenArviointi: this.form.sanallinenArviointi,
+          arviointityokalut: this.form.arviointityokalut,
+          arviointiPerustuu: this.form.perustuuMuuhun
+            ? this.form.arviointiPerustuu
+            : arvioinninPerustuminen.LasnaolevaHavainnointi,
+          muuPeruste: this.muuValittu ? this.form.muuPeruste : null
         },
         this.params
       );
@@ -532,5 +680,13 @@ export default class ArviointiForm extends Mixins(validationMixin) {
 
 .canmeds-container {
   max-width: 450px;
+}
+
+.kouluttaja-form-input {
+  margin-top: 10px;
+}
+
+.arviointi-perustuu {
+  margin-left: 20px;
 }
 </style>
