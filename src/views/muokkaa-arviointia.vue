@@ -56,7 +56,7 @@ export default class MuokkaaArviointia extends Mixins(ConfirmRouteExit) {
     if (this.$route && this.$route.params && this.$route.params.arviointiId) {
       this.value = (
         await axios.get(
-          `erikoistuva-laakari/suoritusarvioinnit/${this.$route.params.arviointiId}`
+          `kouluttaja/suoritusarvioinnit/${this.$route.params.arviointiId}`
         )
       ).data;
     }

@@ -69,3 +69,10 @@ export const tyoskentelyjaksoKaytannonKoulutusTyypit = {
   TUTKIMUSTYO: "tutkimustyo",
   TERVEYSKESKUSTYO: "terveyskeskustyo"
 } as any;
+
+export const arvioinninPerustuminen = {
+  LasnaolevaHavainnointi: "LASNA",
+  KirjallinenMateriaali: "KIRJALLINEN",
+  Etayhteys: "ETA",
+  Muu: "MUU"
+} as any;
