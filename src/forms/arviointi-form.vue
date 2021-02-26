@@ -213,13 +213,13 @@
               </elsa-popover>
             </th>
             <td>
-              <elsa-badge
+              <elsa-vaativuustaso
                 v-if="value.vaativuustaso"
                 :value="value.vaativuustaso"
               />
             </td>
             <td>
-              <elsa-badge
+              <elsa-vaativuustaso
                 v-if="value.itsearviointiAika"
                 :value="value.itsearviointiVaativuustaso"
               />
@@ -472,7 +472,7 @@
 
 <script lang="ts">
 import Component from "vue-class-component";
-import { Mixins, Prop, Vue } from "vue-property-decorator";
+import { Mixins, Prop } from "vue-property-decorator";
 import { validationMixin } from "vuelidate";
 import { required, requiredIf } from "vuelidate/lib/validators";
 import UserAvatar from "@/components/user-avatar/user-avatar.vue";
@@ -482,15 +482,10 @@ import ElsaLuottamuksenTaso from "@/components/luottamuksen-taso/luottamuksen-ta
 import ElsaBadge from "@/components/badge/badge.vue";
 import ElsaPopover from "@/components/popover/popover.vue";
 import ElsaButton from "@/components/button/button.vue";
+import ElsaVaativuustaso from "@/components/vaativuustaso/vaativuustaso.vue";
 import { vaativuustasot, luottamuksenTasot } from "@/utils/constants";
 import axios from "axios";
 import { arvioinninPerustuminen } from "@/utils/constants";
-
-const muuPerusteValinnat = (value: string) =>
-  value === arvioinninPerustuminen.KirjallinenMateriaali ||
-  value === arvioinninPerustuminen.Etayhteys ||
-  value === arvioinninPerustuminen.Muu ||
-  Vue.prototype.$isErikoistuva();
 
 @Component({
   components: {
@@ -500,7 +495,8 @@ const muuPerusteValinnat = (value: string) =>
     ElsaLuottamuksenTaso,
     ElsaBadge,
     ElsaPopover,
-    ElsaButton
+    ElsaButton,
+    ElsaVaativuustaso
   },
   validations: {
     form: {
@@ -516,8 +512,7 @@ const muuPerusteValinnat = (value: string) =>
       arviointiPerustuu: {
         required: requiredIf(value => {
           return value.perustuuMuuhun === true;
-        }),
-        muuPerusteValinnat
+        })
       },
       muuPeruste: {
         required: requiredIf(value => {
@@ -589,11 +584,16 @@ export default class ArviointiForm extends Mixins(validationMixin) {
         ),
         sanallinenArviointi: this.value.sanallinenArviointi,
         arviointityokalut: this.value.arviointityokalut,
-        arviointiPerustuu: this.value.arviointiPerustuu,
+        arviointiPerustuu:
+          this.value.arviointiPerustuu ===
+          arvioinninPerustuminen.LasnaolevaHavainnointi
+            ? null
+            : this.value.arviointiPerustuu,
         muuPeruste: this.value.muuPeruste,
         perustuuMuuhun:
+          this.value.arviointiPerustuu !== null &&
           this.value.arviointiPerustuu !==
-          arvioinninPerustuminen.LasnaolevaHavainnointi
+            arvioinninPerustuminen.LasnaolevaHavainnointi
       };
       this.arviointityokalut = (
         await axios.get(`kouluttaja/suoritusarvioinnit/arviointityokalut`)
