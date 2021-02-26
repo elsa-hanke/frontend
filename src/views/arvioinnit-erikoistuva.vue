@@ -124,7 +124,7 @@
                       >
                         <p class="font-weight-500 p-2 mb-0">{{ oa.nimi }}</p>
                         <div v-if="oa.arvioinnit.length > 0">
-                          <b-table-simple small responsive class="mb-0">
+                          <b-table-simple small fixed class="mb-0">
                             <thead>
                               <tr class="text-size-sm">
                                 <th scope="col">
@@ -161,7 +161,7 @@
                                       name: 'arviointi',
                                       params: { arviointiId: arviointi.id }
                                     }"
-                                    class="shadow-none p-0"
+                                    class="shadow-none p-0 text-truncate w-100 text-left"
                                     >{{
                                       arviointi.arvioitavaTapahtuma
                                     }}</elsa-button
