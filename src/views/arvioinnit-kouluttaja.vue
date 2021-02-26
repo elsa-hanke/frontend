@@ -24,17 +24,20 @@
                 :fields="fields"
                 :sort-compare="sortCompare"
                 :sort-by.sync="sortBy"
-                :sort-desc.sync="sortDesc"
+                :sort-desc.sync="sortAsc"
                 :per-page="perPage"
                 :current-page="currentPage"
+                fixed
                 responsive
               >
-                <template #table-colgroup="scope">
-                  <col
-                    v-for="field in scope.fields"
-                    :key="field.key"
-                    :style="{ width: field.width }"
-                  />
+                <template #table-colgroup>
+                  <col span="1" style="width: 12%;" />
+                  <col span="1" style="width: 5%;" />
+                  <col span="1" style="width: 5%;" />
+                  <col span="1" style="width: 10%;" />
+                  <col span="1" style="width: 15%;" />
+                  <col span="1" style="width: 12%;" />
+                  <col span="1" style="width: 100px;" />
                 </template>
                 <template #cell(arvioitavaTapahtuma)="row">
                   <elsa-button
@@ -43,7 +46,7 @@
                       params: { arviointiId: row.item.id }
                     }"
                     variant="link"
-                    class="shadow-none px-0"
+                    class="shadow-none px-0 text-truncate text-left w-100"
                     >{{ row.item.arvioitavaTapahtuma }}</elsa-button
                   >
                 </template>
@@ -140,7 +143,8 @@ export default class Arvioinnit extends Vue {
     {
       key: "arvioitavaTapahtuma",
       label: this.$t("tapahtuma"),
-      sortable: true
+      sortable: true,
+      tdClass: "tapahtuma-field"
     },
     {
       key: "tapahtumanAjankohta",
@@ -174,7 +178,7 @@ export default class Arvioinnit extends Vue {
   ];
   arvioinnit: null | any[] = null;
   hakusana = "";
-  sortBy = "tapahtumanAjankohta";
+  sortBy = "tila";
   sortDesc = true;
   perPage = 10;
   currentPage = 1;
@@ -272,5 +276,9 @@ export default class Arvioinnit extends Vue {
 
 .text-light-muted {
   color: #b1b1b1;
+}
+
+.tapahtuma-field {
+  max-width: 1px;
 }
 </style>
