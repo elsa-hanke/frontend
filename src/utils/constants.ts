@@ -16,7 +16,7 @@ export const vaativuustasot = [
   },
   {
     arvo: 4,
-    nimi: "kohtalaisen-haastava",
+    nimi: "kohtalaisen-vaativa",
     kuvaus: "lorem-ipsum"
   },
   {
