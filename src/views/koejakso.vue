@@ -7,54 +7,58 @@
           <h1>{{ $t("koejakso") }}</h1>
           <p>
             {{ $t("koejakso-kuvaus") }}
-            <b-link href=""> {{ $t("koejakso-tavoitteet-linkki") }}</b-link>
+            <b-link :to="{ name: 'koejakso-yleiset-tavoitteet' }">{{
+              $t("koejakso-tavoitteet-linkki")
+            }}</b-link>
           </p>
         </b-col>
       </b-row>
       <b-row lg>
         <b-col class="px-0">
-          <div class="d-flex justify-content-center border rounded pt-3 mb-4">
+          <div
+            class="d-flex justify-content-center border rounded pt-3 pb-3 mb-4"
+          >
             <div class="container-fluid">
               <h2>{{ $t("koejakson-suorituspaikka") }}</h2>
               <p>{{ $t("koejakson-suorituspaikka-kuvaus") }}</p>
-              <b-container fluid>
-                <b-row>
-                  <b-col>{{ $t("tyoskentelyjakso") }}</b-col>
-                  <b-col align="end">
-                    <p>
-                      <font-awesome-icon
-                        icon="info-circle"
-                        fixed-width
-                        class="text-muted"
-                      />
-                      <b-link> {{ $t("lisaa-tyoskentelyjakso") }}</b-link>
-                      {{ $t("jos-et-loyda-alta") }}
-                    </p>
-                  </b-col>
-                </b-row>
-                <b-row>
-                  <b-col cols="10">
-                    <elsa-form-multiselect
-                      :id="uid"
-                      v-model="selected.tyoskentelyjakso"
-                      :options="tyoskentelyjaksotFormatted"
-                      label="label"
-                      track-by="id"
-                      @select="onTyoskentelyjaksoSelect"
-                    >
-                    </elsa-form-multiselect>
-                  </b-col>
-                  <b-col>
-                    <elsa-button
-                      variant="primary"
-                      :to="{ name: 'liita-koejaksoon' }"
-                      class="mb-4"
-                    >
-                      {{ $t("liita-koejaksoon") }}
-                    </elsa-button>
-                  </b-col>
-                </b-row>
-              </b-container>
+              <b-row>
+                <b-col cols="9">
+                  <b-row>
+                    <b-col>{{ $t("tyoskentelyjakso") }}</b-col>
+                    <b-col align="end">
+                      <p>
+                        <font-awesome-icon
+                          icon="info-circle"
+                          fixed-width
+                          class="text-muted"
+                        />
+                        <b-link> {{ $t("lisaa-tyoskentelyjakso") }}</b-link>
+                        {{ $t("jos-et-loyda-alta") }}
+                      </p>
+                    </b-col>
+                  </b-row>
+                </b-col>
+              </b-row>
+              <b-row>
+                <b-col cols="9">
+                  <elsa-form-multiselect
+                    v-model="selected.tyoskentelyjakso"
+                    :options="tyoskentelyjaksotFormatted"
+                    label="label"
+                    track-by="id"
+                    @select="onTyoskentelyjaksoSelect"
+                  />
+                </b-col>
+                <b-col>
+                  <elsa-button
+                    variant="primary"
+                    :to="{ name: 'liita-koejaksoon' }"
+                    class="align-self-end"
+                  >
+                    {{ $t("liita-koejaksoon") }}
+                  </elsa-button>
+                </b-col>
+              </b-row>
             </div>
           </div>
         </b-col>
@@ -65,11 +69,7 @@
             <div class="container-fluid">
               <h2>{{ $t("koulutussopimus") }}</h2>
               <p>{{ $t("koulutussopimus-kuvaus") }}</p>
-              <elsa-button
-                variant="primary"
-                :to="{ name: 'arviointipyynto' }"
-                class="mb-4"
-              >
+              <elsa-button variant="primary" class="mb-4">
                 {{ $t("täytä-koulutussopimus") }}
               </elsa-button>
             </div>
