@@ -104,6 +104,32 @@
   "koejakso-tavoitteet-linkki": "Tutustu koejakson yleisiin tavoitteisiin.",
   "koejakson-suorituspaikka": "Koejakson suorituspaikka",
   "koejakson-suorituspaikka-kuvaus": "Kerro missä koulutuspaikassa suoritat koejakson.",
+  "koejakso-tavoitteet": "Koejakson tavoitteet",
+  "koejakso-tavoitteet-sisalto": {
+   "kuvaus1": "Koejakson tarkoituksena on arvioida hakijan soveltuvuutta erikoisalalle. <b>Koejakson suorittaminen hyväksytysti on edellytys lopullisen opinto-oikeuden saamiselle.</b> Koejakson aikana seurataan hakijan osaamisen kehittymistä ja motivoituneisuutta strukturoidun arviointilomakkeen avulla.",
+    "lista1": {
+      "otsikko": "Koejakson myötä erikoistujalla on:",
+      "item1": "kattava kuva erikoisalan sisällöstä, työtehtävistä, tavallisimmista toimenpiteistä ja vaatimuksista.",
+      "item2": "käsitys omasta valmiudesta toimia alalla.",
+      "item3": "kiinnostus ja motivaatio kouluttautua alalle.",
+      "item4": "valmiuksia työskennellä erikoisalalle tyypillisissä tiimeissä ja työyhteisössä.",
+      "item5": "valmiuksia erikoisalalle tyypillisissä työtehtävissä ja toimenpiteissä.",
+      "item6": "suullisia ja kirjallisia vuorovaikutustaitoja niin potilaiden, omaisten kuin kollegojen sekä moniammatillisen tiimin kanssa kommunikoitaessa.",
+      "item7": "mahdollisesti erityisosaamista ja paineensietokykyä suhteessa erikoisalan vaatimuksiin.",
+      "item8": "valmiuksia tunnistaa omat kehittymistarpeensa ja kykenee muuttamaan toimintaansa saamansa palautteen perusteella."
+    },
+    "lista2": {
+      "otsikko": "Koejaksolla kouluttajat arvioivat erikoistujan:",
+      "item1": "kiinnostusta hakea tietoa ja kehittää osaamistaan;",
+      "item2": "valmiuksia työskennellä erikoisalalle tyypillisissä tiimeissä ja työyhteisössä;",
+      "item3": "valmiuksia erikoisalalle tyypillisissä työtehtävissä ja toimenpiteissä;",
+      "item4": "suullisia ja kirjallisia vuorovaikutustaitoja niin potilaiden, omaisten kuin kollegojen sekä moniammatillisen tiimin kanssa kommunikoitaessa;",
+      "item5": "mahdollisia erityisosaamista ja paineensietokykyä suhteessa erikoisalan vaatimuksiin."
+    },
+    "kuvaus2": "Koejakson suorittamisesta vastaavat erikoisalan vastuuhenkilö omasta yliopistosta sekä lähikouluttaja ja lähiesimies tai vastaava muu erikoisalan asiantuntija (esim. kyseisen erikoisalan erikoislääkäri) koejakson suorituspaikasta. Arvioijat täyttävät arviointilomakkeen, ja vastuuhenkilö tekee lopullisen päätöksen siitä, onko suoritus hyväksyttävä. Mikäli koejakso suoritetaan toisen yliopiston hyväksymässä koulutuspaikassa, tulee erikoistujan neuvotella järjestelyistä oman yliopiston vastuuhenkilön kanssa.",
+    "kuvaus3": "Yliopistojen hyväksymät koulutuspaikat löytyvät oman yliopiston lääketieteellisen tiedekunnan verkkosivuilta. Koulutuspaikassa on oltava kouluttaja erikoisalalta, jolle erikoistuvan opinto-oikeus on myönnetty.",
+    "kuvaus4": "Koejakson suorittamisesta kerrotaan tarkemmin opinto-oppaan kappaleessa 4.7.1. Koejakso."
+  },
   "kohtalainen": "Kohtalainen",
   "kohtalaisen-vaativa": "Kohtalaisen vaativa",
   "koko-tyoajan-poissaolo": "Koko työajan poissaolo",

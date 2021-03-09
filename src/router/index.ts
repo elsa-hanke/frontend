@@ -28,7 +28,8 @@ import UusiPoissaolo from "../views/uusi-poissaolo.vue";
 import UusiSuoritemerkinta from "../views/uusi-suoritemerkinta.vue";
 import UusiTyoskentelyjakso from "../views/uusi-tyoskentelyjakso.vue";
 import Viestit from "../views/viestit.vue";
-import Koejakso from "../views/Koejakso.vue";
+import Koejakso from "../views/koejakso.vue";
+import KoejaksoTavoitteet from "../views/koejakso-tavoitteet.vue";
 
 Vue.use(VueRouter);
 Vue.use(Meta);
@@ -169,6 +170,11 @@ const routes: Array<RouteConfig> = [
         path: "/koejakso",
         name: "koejakso",
         component: Koejakso
+      },
+      {
+        path: "/koejakso-yleiset-tavoitteet",
+        name: "koejakso-yleiset-tavoitteet",
+        component: KoejaksoTavoitteet
       }
     ]
   },
