@@ -40,7 +40,6 @@ export default class KoulutussopimusCard extends Vue {
   cardState = 0;
   changeState(a: number) {
     this.cardState = a < 4 ? a + 1 : 0;
-    console.log(this.cardState);
   }
 }
 </script>
