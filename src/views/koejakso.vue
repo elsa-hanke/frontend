@@ -25,8 +25,8 @@
                 <b-col cols="9">
                   <b-row>
                     <b-col>{{ $t("tyoskentelyjakso") }}</b-col>
-                    <b-col align="end">
-                      <p>
+                    <b-col align-self="end">
+                      <p class="text-right">
                         <font-awesome-icon
                           icon="info-circle"
                           fixed-width
@@ -50,11 +50,7 @@
                   />
                 </b-col>
                 <b-col>
-                  <elsa-button
-                    variant="primary"
-                    :to="{ name: 'liita-koejaksoon' }"
-                    class="align-self-end"
-                  >
+                  <elsa-button variant="primary" class="align-self-end">
                     {{ $t("liita-koejaksoon") }}
                   </elsa-button>
                 </b-col>
@@ -65,15 +61,8 @@
       </b-row>
       <b-row lg>
         <b-col class="px-0">
-          <div class="d-flex justify-content-center border rounded pt-3 mb-4">
-            <div class="container-fluid">
-              <h2>{{ $t("koulutussopimus") }}</h2>
-              <p>{{ $t("koulutussopimus-kuvaus") }}</p>
-              <elsa-button variant="primary" class="mb-4">
-                {{ $t("täytä-koulutussopimus") }}
-              </elsa-button>
-            </div>
-          </div>
+          <!-- TODO: for demo purposes change card on click, remove when unnecessary -->
+          <elsa-koulutussopimus-card :state="null"></elsa-koulutussopimus-card>
         </b-col>
       </b-row>
       <b-row lg>
@@ -167,13 +156,15 @@
 
 <script lang="ts">
 import axios from "axios";
-import { Component, Vue } from "vue-property-decorator";
+import Vue from "vue";
+import Component from "vue-class-component";
+import { tyoskentelyjaksoLabel } from "@/utils/tyoskentelyjakso";
 import ElsaButton from "@/components/button/button.vue";
 import ElsaPopover from "@/components/popover/popover.vue";
 import ElsaLuottamuksenTaso from "@/components/luottamuksen-taso/luottamuksen-taso.vue";
-import { tyoskentelyjaksoLabel } from "@/utils/tyoskentelyjakso";
 import ElsaFormGroup from "@/components/form-group/form-group.vue";
 import ElsaFormMultiselect from "@/components/multiselect/multiselect.vue";
+import ElsaKoulutussopimusCard from "@/components/koulutussopimus-card/koulutussopimus-card.vue";
 
 @Component({
   components: {
@@ -181,7 +172,8 @@ import ElsaFormMultiselect from "@/components/multiselect/multiselect.vue";
     ElsaPopover,
     ElsaLuottamuksenTaso,
     ElsaFormGroup,
-    ElsaFormMultiselect
+    ElsaFormMultiselect,
+    ElsaKoulutussopimusCard
   }
 })
 export default class Koejakso extends Vue {
