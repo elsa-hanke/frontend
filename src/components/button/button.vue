@@ -11,22 +11,22 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import Component from "vue-class-component";
-import { Prop } from "vue-property-decorator";
+  import Vue from 'vue'
+  import Component from 'vue-class-component'
+  import { Prop } from 'vue-property-decorator'
 
-@Component({})
-export default class ElsaButton extends Vue {
-  @Prop({ required: false, default: undefined })
-  loading!: boolean | undefined;
+  @Component({})
+  export default class ElsaButton extends Vue {
+    @Prop({ required: false, default: undefined })
+    loading!: boolean | undefined
 
-  @Prop({ required: false, default: undefined })
-  disabled!: boolean | undefined;
+    @Prop({ required: false, default: undefined })
+    disabled!: boolean | undefined
 
-  get loadingEnabled() {
-    return this.loading !== undefined;
+    get loadingEnabled() {
+      return this.loading !== undefined
+    }
   }
-}
 </script>
 
 <style lang="scss" scoped></style>

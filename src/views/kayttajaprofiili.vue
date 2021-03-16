@@ -4,11 +4,7 @@
     <b-container fluid>
       <b-row lg>
         <b-col class="px-0">
-          <b-card-skeleton
-            :loading="false"
-            class="mb-3 itsearviointi-card"
-            :header="$t('tee-itsearviointi')"
-          >
+          <b-card-skeleton :loading="false" class="mb-3 itsearviointi-card" :header="$t('tee-itsearviointi')">
             Käyttäjäprofiili - oma rooli - opiskeluoikeudet
           </b-card-skeleton>
         </b-col>
@@ -19,13 +15,13 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-import BCardSkeleton from "@/components/card/card.vue";
+  import { Component, Vue } from 'vue-property-decorator'
+  import BCardSkeleton from '@/components/card/card.vue'
 
-@Component({
-  components: {
-    BCardSkeleton
-  }
-})
-export default class Kayttajaprofiili extends Vue {}
+  @Component({
+    components: {
+      BCardSkeleton
+    }
+  })
+  export default class Kayttajaprofiili extends Vue {}
 </script>
