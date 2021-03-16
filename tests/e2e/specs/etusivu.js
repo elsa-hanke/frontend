@@ -8,6 +8,6 @@ describe('Etusivu', () => {
   it('Navigoidaan etusivulle', () => {
     setupMocks()
     cy.visit('/')
-    cy.contains('.navbar-brand', 'ELSA-palvelu')
+    cy.contains('.navbar-brand', 'ELSA')
   })
 })
