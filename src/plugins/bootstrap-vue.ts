@@ -1,5 +1,5 @@
-import Vue from "vue";
-import BootstrapVue from "bootstrap-vue";
-import "@/styles/bootstrap.scss";
+import Vue from 'vue'
+import BootstrapVue from 'bootstrap-vue'
+import '@/styles/bootstrap.scss'
 
-Vue.use(BootstrapVue);
+Vue.use(BootstrapVue)

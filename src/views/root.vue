@@ -13,29 +13,29 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import Component from "vue-class-component";
-import Navbar from "@/components/navbar/navbar.vue";
-import SidebarMenu from "@/components/sidebar-menu/sidebar-menu.vue";
+  import Vue from 'vue'
+  import Component from 'vue-class-component'
+  import Navbar from '@/components/navbar/navbar.vue'
+  import SidebarMenu from '@/components/sidebar-menu/sidebar-menu.vue'
 
-@Component({
-  components: {
-    Navbar,
-    SidebarMenu
+  @Component({
+    components: {
+      Navbar,
+      SidebarMenu
+    }
+  })
+  export default class Root extends Vue {
+    get hasGrayBackdrop() {
+      return this.$route.meta.grayBackdrop
+    }
   }
-})
-export default class Root extends Vue {
-  get hasGrayBackdrop() {
-    return this.$route.meta.grayBackdrop;
-  }
-}
 </script>
 
 <style lang="scss" scoped>
-@import "~@/styles/variables";
+  @import '~@/styles/variables';
 
-.gray-backdrop {
-  min-height: 100vh;
-  background-color: $backdrop-background-color;
-}
+  .gray-backdrop {
+    min-height: 100vh;
+    background-color: $backdrop-background-color;
+  }
 </style>

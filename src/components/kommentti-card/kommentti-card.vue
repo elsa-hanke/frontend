@@ -1,30 +1,18 @@
 <template>
-  <div
-    class="kommentti"
-    :class="{ 'ml-auto': value.self && !editing, 'mr-auto': !value.self }"
-  >
+  <div class="kommentti" :class="{ 'ml-auto': value.self && !editing, 'mr-auto': !value.self }">
     <div :class="selfClass">
       <div class="d-flex justify-content-between align-items-center mb-2">
         <user-avatar :display-name="value.kommentti.kommentoija.nimi">
           <template #display-name>
             {{ value.kommentti.kommentoija.nimi }} |
-            <span
-              class="text-size-sm"
-              v-if="value.kommentti.muokkausaika !== value.kommentti.luontiaika"
-              >{{ $t("muokattu") }}
+            <span class="text-size-sm" v-if="value.kommentti.muokkausaika !== value.kommentti.luontiaika">
+              {{ $t('muokattu') }}
               {{ $datetime(value.kommentti.muokkausaika) }}
             </span>
-            <span v-else class="text-size-sm"
-              >{{ $datetime(value.kommentti.luontiaika) }}
-            </span>
+            <span v-else class="text-size-sm">{{ $datetime(value.kommentti.luontiaika) }}</span>
           </template>
         </user-avatar>
-        <b-link
-          v-if="value.self && !editing"
-          @click="startEditing"
-          class="text-white ml-3"
-          >{{ $t("muokkaa") }}</b-link
-        >
+        <b-link v-if="value.self && !editing" @click="startEditing" class="text-white ml-3">{{ $t('muokkaa') }}</b-link>
       </div>
       <div v-if="!editing">
         <span class="text-prewrap">{{ value.kommentti.teksti }}</span>
@@ -33,26 +21,12 @@
         <b-form @submit.stop.prevent="onSubmit">
           <elsa-form-group :label="$t('muokkaa-kommenttia')">
             <template v-slot="{ uid }">
-              <b-form-textarea
-                :id="uid"
-                v-model="kommentti.teksti"
-                :placeholder="$t('kirjoita-kommenttisi-tahan')"
-                rows="5"
-              ></b-form-textarea>
+              <b-form-textarea :id="uid" v-model="kommentti.teksti" :placeholder="$t('kirjoita-kommenttisi-tahan')" rows="5"></b-form-textarea>
             </template>
           </elsa-form-group>
           <div class="text-right">
-            <elsa-button variant="back" @click="cancelEditing">{{
-              $t("peruuta")
-            }}</elsa-button>
-            <elsa-button
-              :disabled="!kommentti.teksti || saving"
-              :loading="saving"
-              type="submit"
-              variant="primary"
-              class="ml-2"
-              >{{ $t("tallenna") }}</elsa-button
-            >
+            <elsa-button variant="back" @click="cancelEditing">{{ $t('peruuta') }}</elsa-button>
+            <elsa-button :disabled="!kommentti.teksti || saving" :loading="saving" type="submit" variant="primary" class="ml-2">{{ $t('tallenna') }}</elsa-button>
           </div>
         </b-form>
       </div>
@@ -61,91 +35,88 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import Component from "vue-class-component";
-import axios from "axios";
-import { Prop } from "vue-property-decorator";
-import { toastFail } from "@/utils/toast";
-import UserAvatar from "@/components/user-avatar/user-avatar.vue";
-import ElsaFormGroup from "@/components/form-group/form-group.vue";
-import ElsaButton from "@/components/button/button.vue";
+  import Vue from 'vue'
+  import Component from 'vue-class-component'
+  import axios from 'axios'
+  import { Prop } from 'vue-property-decorator'
+  import { toastFail } from '@/utils/toast'
+  import UserAvatar from '@/components/user-avatar/user-avatar.vue'
+  import ElsaFormGroup from '@/components/form-group/form-group.vue'
+  import ElsaButton from '@/components/button/button.vue'
 
-@Component({
-  components: {
-    UserAvatar,
-    ElsaFormGroup,
-    ElsaButton
-  }
-})
-export default class KommenttiCard extends Vue {
-  @Prop({ required: true })
-  value!: any;
+  @Component({
+    components: {
+      UserAvatar,
+      ElsaFormGroup,
+      ElsaButton
+    }
+  })
+  export default class KommenttiCard extends Vue {
+    @Prop({ required: true })
+    value!: any
 
-  editing = false;
-  kommentti = {
-    teksti: null
-  } as any;
-  saving = false;
+    editing = false
+    kommentti = {
+      teksti: null
+    } as any
+    saving = false
 
-  startEditing() {
-    this.kommentti.teksti = this.value.kommentti.teksti;
-    this.editing = true;
-  }
+    startEditing() {
+      this.kommentti.teksti = this.value.kommentti.teksti
+      this.editing = true
+    }
 
-  cancelEditing() {
-    this.editing = false;
-  }
+    cancelEditing() {
+      this.editing = false
+    }
 
-  async onSubmit() {
-    this.saving = true;
-    try {
-      const kommentti = (
-        await axios.put(
-          `erikoistuva-laakari/suoritusarvioinnit/${this.value.kommentti.suoritusarviointiId}/kommentti`,
-          {
+    async onSubmit() {
+      this.saving = true
+      try {
+        const kommentti = (
+          await axios.put(`erikoistuva-laakari/suoritusarvioinnit/${this.value.kommentti.suoritusarviointiId}/kommentti`, {
             ...this.value.kommentti,
             teksti: this.kommentti.teksti
-          }
-        )
-      ).data;
-      this.value.kommentti = kommentti;
-      this.editing = false;
-      this.kommentti = {
-        teksti: null
-      };
-    } catch (err) {
-      toastFail(this, this.$t("kommentin-tallentaminen-epaonnistui"));
+          })
+        ).data
+        this.value.kommentti = kommentti
+        this.editing = false
+        this.kommentti = {
+          teksti: null
+        }
+      } catch (err) {
+        toastFail(this, this.$t('kommentin-tallentaminen-epaonnistui'))
+      }
+      this.saving = false
     }
-    this.saving = false;
-  }
 
-  get selfClass() {
-    if (this.value.self) {
-      return "bg-primary-dark kommentti-right px-3 py-2 mb-3 text-white ml-md-5";
-    } else {
-      return "bg-light kommentti-left px-3 py-2 mb-3 mr-md-5";
+    get selfClass() {
+      if (this.value.self) {
+        return 'bg-primary-dark kommentti-right px-3 py-2 mb-3 text-white ml-md-5'
+      } else {
+        return 'bg-light kommentti-left px-3 py-2 mb-3 mr-md-5'
+      }
     }
   }
-}
 </script>
 
 <style lang="scss" scoped>
-$kommentti-border-radius: 1.25rem;
+  $kommentti-border-radius: 1.25rem;
 
-.kommentti {
-  .bg-primary-dark {
-    background-color: #0f9bd9;
-  }
+  .kommentti {
+    .bg-primary-dark {
+      background-color: #0f9bd9;
+    }
 
-  .kommentti-left {
-    border-top-left-radius: $kommentti-border-radius;
-    border-top-right-radius: $kommentti-border-radius;
-    border-bottom-right-radius: $kommentti-border-radius;
+    .kommentti-left {
+      border-top-left-radius: $kommentti-border-radius;
+      border-top-right-radius: $kommentti-border-radius;
+      border-bottom-right-radius: $kommentti-border-radius;
+    }
+    .kommentti-right {
+      border-top-left-radius: $kommentti-border-radius;
+      border-top-right-radius: $kommentti-border-radius;
+      border-bottom-left-radius: $kommentti-border-radius;
+    }
   }
-  .kommentti-right {
-    border-top-left-radius: $kommentti-border-radius;
-    border-top-right-radius: $kommentti-border-radius;
-    border-bottom-left-radius: $kommentti-border-radius;
-  }
-}
 </style>

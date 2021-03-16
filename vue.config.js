@@ -1,42 +1,42 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { gitDescribeSync } = require("git-describe");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
+const { gitDescribeSync } = require('git-describe')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 try {
-  process.env.VUE_APP_COMMIT_HASH = gitDescribeSync().hash;
+  process.env.VUE_APP_COMMIT_HASH = gitDescribeSync().hash
 } catch (err) {
-  console.warn("Cannot get Git commit hash");
+  console.warn('Cannot get Git commit hash')
 }
 
 module.exports = {
-  lintOnSave: "default",
+  lintOnSave: 'default',
 
   configureWebpack: {
     resolve: {
       alias: {
-        vue$: "vue/dist/vue.esm.js"
+        vue$: 'vue/dist/vue.esm.js'
       }
     },
     plugins: [
       new CopyWebpackPlugin({
         patterns: [
           {
-            from: "./node_modules/swagger-ui-dist/*.{js,css,html,png}",
-            to: "swagger-ui",
+            from: './node_modules/swagger-ui-dist/*.{js,css,html,png}',
+            to: 'swagger-ui',
             flatten: true,
-            globOptions: { ignore: ["**/index.html"] }
+            globOptions: { ignore: ['**/index.html'] }
           },
-          { from: "./node_modules/axios/dist/axios.min.js", to: "swagger-ui" }
+          { from: './node_modules/axios/dist/axios.min.js', to: 'swagger-ui' }
         ]
       })
     ]
   },
 
   chainWebpack: config => {
-    config.plugin("html").tap(args => {
-      args[0].title = "ELSA-palvelu";
-      return args;
-    });
+    config.plugin('html').tap(args => {
+      args[0].title = 'ELSA-palvelu'
+      return args
+    })
   },
 
   devServer: {
@@ -46,32 +46,32 @@ module.exports = {
     },
     port: 9060,
     proxy: {
-      "/api": {
-        target: "http://localhost:8080",
+      '/api': {
+        target: 'http://localhost:8080',
         secure: false
       },
-      "/oauth2": {
-        target: "http://localhost:8080",
+      '/oauth2': {
+        target: 'http://localhost:8080',
         secure: false
       },
-      "/auth": {
-        target: "http://localhost:8080",
+      '/auth': {
+        target: 'http://localhost:8080',
         secure: false
       },
-      "/management": {
-        target: "http://localhost:8080",
+      '/management': {
+        target: 'http://localhost:8080',
         secure: false
       },
-      "/swagger-resources": {
-        target: "http://localhost:8080",
+      '/swagger-resources': {
+        target: 'http://localhost:8080',
         secure: false
       },
-      "/v2/api-docs": {
-        target: "http://localhost:8080",
+      '/v2/api-docs': {
+        target: 'http://localhost:8080',
         secure: false
       },
-      "h2-console": {
-        target: "http://localhost:8080",
+      'h2-console': {
+        target: 'http://localhost:8080',
         secure: false
       }
     }
@@ -79,10 +79,10 @@ module.exports = {
 
   pluginOptions: {
     i18n: {
-      locale: "fi",
-      fallbackLocale: "fi",
-      localeDir: "locales",
+      locale: 'fi',
+      fallbackLocale: 'fi',
+      localeDir: 'locales',
       enableInSFC: true
     }
   }
-};
+}

@@ -1,12 +1,12 @@
 <template>
-  <div>404 {{ $t("sivua-ei-loydy") }}</div>
+  <div>404 {{ $t('sivua-ei-loydy') }}</div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+  import { Component, Vue } from 'vue-property-decorator'
 
-@Component({
-  components: {}
-})
-export default class PageNotFound extends Vue {}
+  @Component({
+    components: {}
+  })
+  export default class PageNotFound extends Vue {}
 </script>

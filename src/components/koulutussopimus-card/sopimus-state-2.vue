@@ -8,7 +8,7 @@
     <b-row>
       <b-col>
         <ElsaButton variant="primary" class="mb-4">
-          {{ $t("näytä-koulutussopimus") }}
+          {{ $t('näytä-koulutussopimus') }}
         </ElsaButton>
       </b-col>
     </b-row>
@@ -16,14 +16,14 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import Component from "vue-class-component";
-import ElsaButton from "@/components/button/button.vue";
+  import Vue from 'vue'
+  import Component from 'vue-class-component'
+  import ElsaButton from '@/components/button/button.vue'
 
-@Component({
-  components: {
-    ElsaButton
-  }
-})
-export default class SopimusState2 extends Vue {}
+  @Component({
+    components: {
+      ElsaButton
+    }
+  })
+  export default class SopimusState2 extends Vue {}
 </script>

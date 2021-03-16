@@ -23,12 +23,8 @@
           <div class="flex-fill">
             <b-table-simple borderless responsive>
               <tr>
-                <th
-                  scope="row"
-                  class="py-0 pl-0 pr-1 font-weight-500"
-                  style="width: 33.33%"
-                >
-                  {{ $t("epa-osaamisalue") }}
+                <th scope="row" class="py-0 pl-0 pr-1 font-weight-500" style="width: 33.33%">
+                  {{ $t('epa-osaamisalue') }}
                 </th>
                 <td class="py-0 pr-0 pl-1">
                   {{ value.arvioitavaOsaalue.nimi }}
@@ -36,7 +32,7 @@
               </tr>
               <tr>
                 <th scope="row" class="py-0 pl-0 pr-1 font-weight-500">
-                  {{ $t("kouluttaja-tai-lahikouluttaja") }}
+                  {{ $t('kouluttaja-tai-lahikouluttaja') }}
                 </th>
                 <td class="py-0 pr-0 pl-1">
                   {{ value.arvioinninAntaja.nimi }}
@@ -44,7 +40,7 @@
               </tr>
               <tr v-if="value.lisatiedot">
                 <th scope="row" class="py-0 pl-0 pr-1 font-weight-500">
-                  {{ $t("lisatiedot") }}
+                  {{ $t('lisatiedot') }}
                 </th>
                 <td class="py-0 pr-0 pl-1">
                   <span class="text-prewrap">{{ value.lisatiedot }}</span>
@@ -60,8 +56,9 @@
               name: 'itsearviointi',
               params: { arviointiId: value.id }
             }"
-            >{{ $t("tee-itsearviointi") }}</elsa-button
           >
+            {{ $t('tee-itsearviointi') }}
+          </elsa-button>
           <elsa-button
             v-if="!value.arviointiAika"
             variant="primary"
@@ -69,8 +66,9 @@
               name: 'arviointipyynto-muokkaus',
               params: { arviointiId: value.id }
             }"
-            >{{ $t("muokkaa-arviointipyyntoa") }}</elsa-button
           >
+            {{ $t('muokkaa-arviointipyyntoa') }}
+          </elsa-button>
         </b-col>
       </b-row>
     </b-container>
@@ -79,59 +77,59 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import Component from "vue-class-component";
-import { Prop } from "vue-property-decorator";
-import ElsaButton from "@/components/button/button.vue";
+  import Vue from 'vue'
+  import Component from 'vue-class-component'
+  import { Prop } from 'vue-property-decorator'
+  import ElsaButton from '@/components/button/button.vue'
 
-@Component({
-  components: {
-    ElsaButton
+  @Component({
+    components: {
+      ElsaButton
+    }
+  })
+  export default class ArviointipyyntoCard extends Vue {
+    @Prop({})
+    value!: any
   }
-})
-export default class ArviointipyyntoCard extends Vue {
-  @Prop({})
-  value!: any;
-}
 </script>
 
 <style lang="scss" scoped>
-@import "~@/styles/variables";
-@import "~bootstrap/scss/mixins/breakpoints";
+  @import '~@/styles/variables';
+  @import '~bootstrap/scss/mixins/breakpoints';
 
-.separator {
-  &::after {
-    content: "|";
-    position: absolute;
-    right: -2px;
-    @include media-breakpoint-down(md) {
-      display: none;
+  .separator {
+    &::after {
+      content: '|';
+      position: absolute;
+      right: -2px;
+      @include media-breakpoint-down(md) {
+        display: none;
+      }
     }
   }
-}
 
-hr {
-  border-top-color: $hr-color;
-  border-top-width: 3px;
-}
-::v-deep table {
-  thead tr {
-    border-bottom: solid $gray-300 1px;
+  hr {
+    border-top-color: $hr-color;
+    border-top-width: 3px;
   }
-  th:first-child {
-    padding-left: 0;
+  ::v-deep table {
+    thead tr {
+      border-bottom: solid $gray-300 1px;
+    }
+    th:first-child {
+      padding-left: 0;
+    }
+    th:last-child {
+      padding-right: 0;
+    }
+    td {
+      vertical-align: middle;
+    }
+    td:first-child {
+      padding-left: 0;
+    }
+    td:last-child {
+      padding-right: 0;
+    }
   }
-  th:last-child {
-    padding-right: 0;
-  }
-  td {
-    vertical-align: middle;
-  }
-  td:first-child {
-    padding-left: 0;
-  }
-  td:last-child {
-    padding-right: 0;
-  }
-}
 </style>
