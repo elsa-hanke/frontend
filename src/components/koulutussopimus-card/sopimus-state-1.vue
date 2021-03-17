@@ -6,7 +6,7 @@
           <font-awesome-icon :icon="['far', 'clock']" class="text-warning mr-1" />
         </div>
         <div class="d-inline-flex">
-          <span v-html="$t('koulutussopimus-tila-1')" class="pr-5" />
+          <span class="pr-5" v-html="$t('koulutussopimus-tila-1')" />
         </div>
       </b-col>
     </b-row>

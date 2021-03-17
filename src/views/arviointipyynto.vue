@@ -10,16 +10,16 @@
           <arviointipyynto-form
             v-if="!loading"
             :value="arviointipyyntoWrapper"
-            @submit="onSubmit"
-            @delete="onDelete"
             :tyoskentelyjaksot="tyoskentelyjaksot"
             :kunnat="kunnat"
             :erikoisalat="erikoisalat"
             :epa-osaamisalueen-kategoriat="epaOsaamisalueenKategoriat"
             :kouluttajat="kouluttajat"
             :editing="editing"
+            @submit="onSubmit"
+            @delete="onDelete"
           />
-          <div class="text-center" v-else>
+          <div v-else class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />
           </div>
         </b-col>

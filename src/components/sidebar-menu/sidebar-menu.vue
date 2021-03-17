@@ -13,11 +13,11 @@
             {{ $t("koulutussuunnitelma") }}
           </b-nav-item>
           -->
-          <b-nav-item class="border-bottom" :to="{ name: 'tyoskentelyjaksot' }" v-if="$isErikoistuva()">
+          <b-nav-item v-if="$isErikoistuva()" class="border-bottom" :to="{ name: 'tyoskentelyjaksot' }">
             <font-awesome-icon :icon="['far', 'hospital']" fixed-width size="lg" />
             {{ $t('tyoskentelyjaksot') }}
           </b-nav-item>
-          <b-nav-item class="border-bottom" :to="{ name: 'suoritemerkinnat' }" v-if="$isErikoistuva()">
+          <b-nav-item v-if="$isErikoistuva()" class="border-bottom" :to="{ name: 'suoritemerkinnat' }">
             <font-awesome-icon icon="clipboard-check" fixed-width size="lg" />
             {{ $t('suoritemerkinnat') }}
           </b-nav-item>
@@ -25,7 +25,7 @@
             <font-awesome-icon icon="award" fixed-width size="lg" />
             {{ $t('arvioinnit') }}
           </b-nav-item>
-          <b-nav-item class="border-bottom" :to="{ name: 'koejakso' }" v-if="$isErikoistuva()">
+          <b-nav-item v-if="$isErikoistuva()" class="border-bottom" :to="{ name: 'koejakso' }">
             <font-awesome-icon icon="clipboard-check" fixed-width size="lg" />
             {{ $t('koejakso') }}
           </b-nav-item>

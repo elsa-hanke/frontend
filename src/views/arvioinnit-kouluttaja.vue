@@ -10,7 +10,7 @@
               <b-form-input v-model="hakusana" placeholder="Hae suoritusarviointeja..." class="suoritusarviointi-haku"></b-form-input>
               <font-awesome-icon :icon="['fas', 'search']" class="text-primary position-absolute haku-ikoni" />
             </div>
-            <div class="arvioinnit-table" v-if="arvioinnit">
+            <div v-if="arvioinnit" class="arvioinnit-table">
               <b-table :items="tulokset" :fields="fields" :sort-compare="sortCompare" :sort-by.sync="sortBy" :sort-desc.sync="sortAsc" :per-page="perPage" :current-page="currentPage" fixed responsive>
                 <template #table-colgroup>
                   <col span="1" style="width: 12%;" />
@@ -78,7 +78,7 @@
               </b-table>
               <b-pagination v-model="currentPage" :total-rows="rows" :per-page="perPage"></b-pagination>
             </div>
-            <div class="text-center" v-else>
+            <div v-else class="text-center">
               <b-spinner variant="primary" :label="$t('ladataan')" />
             </div>
           </div>

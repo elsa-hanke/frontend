@@ -11,10 +11,10 @@
       :class="{ 'my-2': title }"
     ></avatar>
     <div>
-      <span class="align-middle">
+      <span class="avatar-line-height">
         <slot name="display-name">{{ displayNameOrAccountName }}</slot>
       </span>
-      <div class="text-size-sm font-weight-400" v-if="title">{{ title }}</div>
+      <div v-if="title" class="title-text avatar-line-height">{{ title }}</div>
     </div>
   </div>
 </template>
@@ -75,5 +75,13 @@
 <style lang="scss" scoped>
   .avatar {
     min-width: 32px;
+  }
+
+  .avatar-line-height {
+    line-height: 1;
+  }
+
+  .title-text {
+    font-size: 0.625rem;
   }
 </style>

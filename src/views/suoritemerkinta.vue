@@ -53,11 +53,11 @@
               </template>
             </elsa-form-group>
             <div class="text-right">
-              <elsa-button @click="onSuoritemerkintaDelete" :loading="deleting" variant="outline-danger">{{ $t('poista-merkinta') }}</elsa-button>
+              <elsa-button :loading="deleting" variant="outline-danger" @click="onSuoritemerkintaDelete">{{ $t('poista-merkinta') }}</elsa-button>
               <elsa-button :to="{ name: 'muokkaa-suoritemerkintaa' }" variant="primary" class="ml-2">{{ $t('muokkaa-merkintaa') }}</elsa-button>
             </div>
           </div>
-          <div class="text-center" v-else>
+          <div v-else class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />
           </div>
         </b-col>

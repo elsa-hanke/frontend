@@ -8,13 +8,13 @@
           <hr />
           <suoritemerkinta-form
             v-if="!loading"
-            @submit="onSubmit"
             :tyoskentelyjaksot="tyoskentelyjaksot"
             :kunnat="kunnat"
             :erikoisalat="erikoisalat"
             :oppimistavoitteen-kategoriat="oppimistavoitteenKategoriat"
+            @submit="onSubmit"
           />
-          <div class="text-center" v-else>
+          <div v-else class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />
           </div>
         </b-col>

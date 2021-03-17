@@ -7,13 +7,13 @@
           <h1>{{ $t('arviointi') }}</h1>
           <hr />
           <div v-if="value">
-            <arviointi-form :value="value" @submit="onSubmit" :editing="false" />
+            <arviointi-form :value="value" :editing="false" @submit="onSubmit" />
             <hr />
             <h4>{{ $t('kommentit') }}</h4>
             <p>{{ $t('kommentit-kuvaus') }}</p>
             <div class="border-bottom mb-3">
               <div v-if="kommentit && kommentit.length > 0" class="d-flex flex-column">
-                <kommentti-card :value="kommentti" v-for="(kommentti, index) in kommentit" :key="index" />
+                <kommentti-card v-for="(kommentti, index) in kommentit" :key="index" :value="kommentti" />
               </div>
               <div v-else>
                 <b-alert variant="dark" show>
@@ -35,7 +35,7 @@
               </div>
             </b-form>
           </div>
-          <div class="text-center" v-else>
+          <div v-else class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />
           </div>
         </b-col>

@@ -6,8 +6,8 @@
         <b-col class="px-0">
           <h1>{{ $t('lisaa-poissaolo') }}</h1>
           <hr />
-          <poissaolo-form v-if="!loading" @submit="onSubmit" :tyoskentelyjaksot="tyoskentelyjaksot" :poissaolon-syyt="poissaolonSyyt" />
-          <div class="text-center" v-else>
+          <poissaolo-form v-if="!loading" :tyoskentelyjaksot="tyoskentelyjaksot" :poissaolon-syyt="poissaolonSyyt" @submit="onSubmit" />
+          <div v-else class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />
           </div>
         </b-col>

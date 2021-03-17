@@ -53,13 +53,13 @@
               </template>
             </elsa-form-group>
             <div class="text-right">
-              <elsa-button v-if="!tyoskentelyjaksoWrapper.suoritusarvioinnit" @click="onTyoskentelyjaksoDelete" :loading="deleting" variant="outline-danger">
+              <elsa-button v-if="!tyoskentelyjaksoWrapper.suoritusarvioinnit" :loading="deleting" variant="outline-danger" @click="onTyoskentelyjaksoDelete">
                 {{ $t('poista-tyoskentelyjakso') }}
               </elsa-button>
               <elsa-button :to="{ name: 'muokkaa-tyoskentelyjaksoa' }" variant="primary" class="ml-2">{{ $t('muokkaa-tyoskentelyjaksoa') }}</elsa-button>
             </div>
           </div>
-          <div class="text-center" v-else>
+          <div v-else class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />
           </div>
         </b-col>

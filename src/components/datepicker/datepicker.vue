@@ -1,8 +1,7 @@
 <template>
   <b-form-datepicker
-    v-bind="$attrs"
-    v-on="$listeners"
     :id="id"
+    v-bind="$attrs"
     :state="state"
     start-weekday="1"
     :locale="currentLocale"
@@ -16,6 +15,7 @@
     }"
     :label-help="$t('datepicker-label-help')"
     :label-no-date-selected="$t('datepicker-no-date-selected')"
+    v-on="$listeners"
   >
     <template v-slot:button-content><font-awesome-icon :icon="['far', 'calendar-alt']" class="text-primary" /></template>
   </b-form-datepicker>

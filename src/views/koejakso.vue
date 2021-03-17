@@ -20,9 +20,11 @@
               <b-row>
                 <b-col cols="9">
                   <b-row>
-                    <b-col>{{ $t('tyoskentelyjakso') }}</b-col>
-                    <b-col align-self="end">
-                      <p class="text-right">
+                    <b-col cols="lg" class="mb-2 mb-lg-0">
+                      {{ $t('tyoskentelyjakso') }}
+                    </b-col>
+                    <b-col cols="lg" align-self-lg="end">
+                      <p class="text-lg-right">
                         <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
                         <b-link>{{ $t('lisaa-tyoskentelyjakso') }}</b-link>
                         {{ $t('jos-et-loyda-alta') }}
@@ -32,7 +34,7 @@
                 </b-col>
               </b-row>
               <b-row>
-                <b-col cols="9">
+                <b-col cols="9" class="mb-2 mb-md-0">
                   <elsa-form-multiselect v-model="selected.tyoskentelyjakso" :options="tyoskentelyjaksotFormatted" label="label" track-by="id" @select="onTyoskentelyjaksoSelect" />
                 </b-col>
                 <b-col>

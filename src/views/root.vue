@@ -2,6 +2,7 @@
   <div id="root" :class="{ 'gray-backdrop': hasGrayBackdrop }">
     <navbar />
     <b-container fluid>
+      <mobile-nav class="d-lg-none" />
       <b-row>
         <sidebar-menu />
         <main role="main" class="offset-lg-2 col-lg-10 mb-5">
@@ -17,11 +18,13 @@
   import Component from 'vue-class-component'
   import Navbar from '@/components/navbar/navbar.vue'
   import SidebarMenu from '@/components/sidebar-menu/sidebar-menu.vue'
+  import MobileNav from '@/components/mobile-nav/mobile-nav.vue'
 
   @Component({
     components: {
       Navbar,
-      SidebarMenu
+      SidebarMenu,
+      MobileNav
     }
   })
   export default class Root extends Vue {

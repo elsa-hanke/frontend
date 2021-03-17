@@ -8,15 +8,15 @@
           <hr />
           <suoritemerkinta-form
             v-if="!loading"
-            @submit="onSubmit"
-            @delete="onDelete"
             :value="suoritemerkintaWrapper"
             :tyoskentelyjaksot="tyoskentelyjaksot"
             :kunnat="kunnat"
             :erikoisalat="erikoisalat"
             :oppimistavoitteen-kategoriat="oppimistavoitteenKategoriat"
+            @submit="onSubmit"
+            @delete="onDelete"
           />
-          <div class="text-center" v-else>
+          <div v-else class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />
           </div>
         </b-col>

@@ -1,13 +1,16 @@
 <template>
   <b-navbar id="navbar-top" toggleable="lg" type="dark" variant="primary" sticky class="px-0 py-lg-0">
-    <b-navbar-brand class="col-lg-2 mr-0 text-nowrap user-select-none">
-      <span class="font-weight-bold text-uppercase">{{ $t('elsa') }}</span>
-      -{{ $t('palvelu') | lowercase }}
+    <b-navbar-brand class="col mr-0 text-nowrap user-select-none">
+      <span class="brand-logo d-inline-block font-weight-bold text-uppercase">{{ $t('elsa') }}</span>
+      <span class="brand-text d-inline-block align-text-top">-{{ $t('palvelu') | lowercase }}</span>
     </b-navbar-brand>
 
-    <!--
-    <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-    -->
+    <b-navbar-toggle target="sidebar-right" class="border-0">
+      <template #default="{ expanded }">
+        <font-awesome-icon v-if="expanded" :icon="['fas', 'times']" size="lg" />
+        <font-awesome-icon v-else :icon="['fas', 'bars']" size="lg" />
+      </template>
+    </b-navbar-toggle>
 
     <!--
     <div class="d-flex justify-content-center w-100">
@@ -22,20 +25,30 @@
     </div>
     -->
 
-    <b-collapse id="nav-collapse" is-nav>
+    <b-collapse is-nav>
       <!-- Right aligned nav items -->
-      <b-navbar-nav class="ml-auto mr-lg-3 d-none d-lg-flex d-xl-flex font-weight-500">
-        <b-nav-item href="#" class="border-right text-nowrap align-self-center" :to="{ name: 'viestit' }">
+      <b-navbar-nav class="ml-auto pr-3 font-weight-500">
+        <b-nav-item href="#" class="border-right text-nowrap align-self-center px-3" :to="{ name: 'viestit' }">
           <font-awesome-icon :icon="['far', 'envelope']" fixed-width size="lg" />
           {{ $t('viestit') }}
         </b-nav-item>
 
-        <b-nav-item href="#" class="text-nowrap align-self-center" @click="logout()">
-          <user-avatar :title="title" />
-        </b-nav-item>
+        <b-nav-item-dropdown href="#" class="align-self-center px-3 user-dropdown" menu-class="user-dropdown-content py-0" right>
+          <template #button-content>
+            <user-avatar :title="title" />
+          </template>
+          <b-dropdown-item class="border-bottom" link-class="py-2">
+            <b-link :to="{}" class="text-dark text-decoration-none">{{ $t('oma-profiilini') }}</b-link>
+          </b-dropdown-item>
+          <b-dropdown-item link-class="py-2">
+            <b-link @click="logout()" class="text-dark text-decoration-none">{{ $t('kirjaudu-ulos') }}</b-link>
+          </b-dropdown-item>
+        </b-nav-item-dropdown>
 
-        <b-nav-item-dropdown :text="$t(currentLocale)" class="border-left align-self-center" right>
-          <b-dropdown-item @click="changeLocale(locale)" v-for="locale in locales" :key="locale" :disabled="currentLocale === locale">{{ $t(locale) }}</b-dropdown-item>
+        <b-nav-item-dropdown :text="$t(currentLocale)" class="border-left align-self-center px-3" right>
+          <b-dropdown-item v-for="locale in locales" :key="locale" :disabled="currentLocale === locale" @click="changeLocale(locale)">
+            {{ $t(locale) }}
+          </b-dropdown-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>
     </b-collapse>
@@ -97,3 +110,21 @@
     }
   }
 </script>
+
+<style lang="scss" scoped>
+  .brand-text {
+    font-size: 0.725rem;
+  }
+</style>
+
+<style lang="scss">
+  .user-dropdown {
+    .dropdown-toggle {
+      display: flex;
+      align-items: center;
+    }
+    &-content {
+      margin-top: -0.25rem !important;
+    }
+  }
+</style>

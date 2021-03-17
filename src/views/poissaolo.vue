@@ -35,11 +35,11 @@
               </template>
             </elsa-form-group>
             <div class="text-right">
-              <elsa-button @click="onPoissaoloDelete" :loading="deleting" variant="outline-danger">{{ $t('poista-poissaolo') }}</elsa-button>
+              <elsa-button :loading="deleting" variant="outline-danger" @click="onPoissaoloDelete">{{ $t('poista-poissaolo') }}</elsa-button>
               <elsa-button :to="{ name: 'muokkaa-poissaoloa' }" variant="primary" class="ml-2">{{ $t('muokkaa-poissaoloa') }}</elsa-button>
             </div>
           </div>
-          <div class="text-center" v-else>
+          <div v-else class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />
           </div>
         </b-col>

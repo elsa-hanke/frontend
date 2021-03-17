@@ -48,7 +48,7 @@
                 <b-row>
                   <b-col>
                     <div class="d-flex flex-row-reverse">
-                      <elsa-button :disabled="false" variant="link" @click="toggleDays" class="shadow-none">
+                      <elsa-button :disabled="false" variant="link" class="shadow-none" @click="toggleDays">
                         {{ showInDays ? $t('nayta-likimaaraisina-sekayksikkoina') : $t('nayta-vuorokausina') }}
                       </elsa-button>
                     </div>
@@ -77,7 +77,7 @@
                   {{ row.item.ajankohta }}
                 </template>
                 <template #cell(keskeytyksetLength)="row">
-                  <elsa-button v-if="row.item.keskeytyksetLength > 0" @click="row.toggleDetails" variant="link" class="shadow-none text-nowrap px-0">
+                  <elsa-button v-if="row.item.keskeytyksetLength > 0" variant="link" class="shadow-none text-nowrap px-0" @click="row.toggleDetails">
                     {{ row.item.keskeytyksetLength }} {{ (row.item.keskeytyksetLength == 1 ? $t('poissaolo') : $t('poissaoloa')) | lowercase }}
                     <font-awesome-icon :icon="row.detailsShowing ? 'chevron-up' : 'chevron-down'" fixed-width size="lg" class="ml-2 text-dark" />
                   </elsa-button>
@@ -138,7 +138,7 @@
               {{ $t('tyoskentelyjaksot-taulukko-kuvaus') }}
             </p>
           </div>
-          <div class="text-center" v-else>
+          <div v-else class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />
           </div>
         </b-col>

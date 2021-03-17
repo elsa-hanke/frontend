@@ -5,14 +5,14 @@
         <user-avatar :display-name="value.kommentti.kommentoija.nimi">
           <template #display-name>
             {{ value.kommentti.kommentoija.nimi }} |
-            <span class="text-size-sm" v-if="value.kommentti.muokkausaika !== value.kommentti.luontiaika">
+            <span v-if="value.kommentti.muokkausaika !== value.kommentti.luontiaika" class="text-size-sm">
               {{ $t('muokattu') }}
               {{ $datetime(value.kommentti.muokkausaika) }}
             </span>
             <span v-else class="text-size-sm">{{ $datetime(value.kommentti.luontiaika) }}</span>
           </template>
         </user-avatar>
-        <b-link v-if="value.self && !editing" @click="startEditing" class="text-white ml-3">{{ $t('muokkaa') }}</b-link>
+        <b-link v-if="value.self && !editing" class="text-white ml-3" @click="startEditing">{{ $t('muokkaa') }}</b-link>
       </div>
       <div v-if="!editing">
         <span class="text-prewrap">{{ value.kommentti.teksti }}</span>

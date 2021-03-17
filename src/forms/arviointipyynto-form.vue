@@ -7,7 +7,7 @@
     </elsa-form-group>
     <elsa-form-group :label="$t('tyoskentelyjakso')" :add-new-enabled="true" :add-new-label="$t('lisaa-tyoskentelyjakso')" :required="true" @submit="onTyoskentelyjaksoSubmit">
       <template v-slot:modal-content="{ submit, cancel }">
-        <tyoskentelyjakso-form @submit="submit" @cancel="cancel" :kunnat="kunnat" :erikoisalat="erikoisalat" />
+        <tyoskentelyjakso-form :kunnat="kunnat" :erikoisalat="erikoisalat" @submit="submit" @cancel="cancel" />
       </template>
       <template v-slot="{ uid }">
         <elsa-form-multiselect
@@ -15,9 +15,9 @@
           v-model="form.tyoskentelyjakso"
           :options="tyoskentelyjaksotFormatted"
           :state="validateState('tyoskentelyjakso')"
-          @select="onTyoskentelyjaksoSelect"
           label="label"
           track-by="id"
+          @select="onTyoskentelyjaksoSelect"
         />
         <b-form-invalid-feedback :id="`${uid}-feedback`">{{ $t('pakollinen-tieto') }}</b-form-invalid-feedback>
       </template>
@@ -50,7 +50,7 @@
       </template>
     </elsa-form-group>
     <b-form-row>
-      <elsa-form-group :label="$t('kouluttaja-tai-lahikouluttaja')" :add-new-enabled="!editing" :add-new-label="$t('lisaa-kouluttaja')" :required="true" @submit="onKouluttajaSubmit" class="col-md-8">
+      <elsa-form-group :label="$t('kouluttaja-tai-lahikouluttaja')" :add-new-enabled="!editing" :add-new-label="$t('lisaa-kouluttaja')" :required="true" class="col-md-8" @submit="onKouluttajaSubmit">
         <template v-slot:modal-content="{ submit, cancel }">
           <kouluttaja-form @submit="submit" @cancel="cancel" />
         </template>
@@ -83,7 +83,7 @@
     </elsa-form-group>
     <div class="text-right">
       <elsa-button variant="back" :to="{ name: 'arvioinnit' }">{{ $t('peruuta') }}</elsa-button>
-      <elsa-button v-if="editing" @click="onArviointipyyntoDelete" :loading="params.deleting" variant="outline-danger" class="ml-2">{{ $t('poista-arviointipyynto') }}</elsa-button>
+      <elsa-button v-if="editing" :loading="params.deleting" variant="outline-danger" class="ml-2" @click="onArviointipyyntoDelete">{{ $t('poista-arviointipyynto') }}</elsa-button>
       <elsa-button :loading="params.saving" type="submit" variant="primary" class="ml-2">{{ editing ? $t('tallenna') : $t('laheta') }}</elsa-button>
     </div>
   </b-form>

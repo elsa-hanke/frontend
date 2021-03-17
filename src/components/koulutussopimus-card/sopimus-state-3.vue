@@ -6,7 +6,7 @@
           <font-awesome-icon :icon="['fas', 'exclamation-circle']" class="text-danger mr-1" />
         </div>
         <div class="d-inline-flex">
-          <p v-html="$t('koulutussopimus-tila-3')" class="pr-5" />
+          <p class="pr-5" v-html="$t('koulutussopimus-tila-3')" />
         </div>
       </b-col>
     </b-row>

@@ -15,7 +15,7 @@
           </p>
           <div class="d-flex justify-content-center">
             <elsa-button variant="primary" class="mr-3" :to="{ name: 'arvioinnit' }">{{ $t('palaa-arviointeihin') }}</elsa-button>
-            <elsa-button variant="primary" v-if="itsearviointiLinkki" :to="itsearviointiLinkki">{{ $t('tee-tapahtumasta-itsearviointi') }}</elsa-button>
+            <elsa-button v-if="itsearviointiLinkki" variant="primary" :to="itsearviointiLinkki">{{ $t('tee-tapahtumasta-itsearviointi') }}</elsa-button>
           </div>
         </b-col>
       </b-row>
