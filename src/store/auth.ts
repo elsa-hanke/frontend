@@ -1,69 +1,67 @@
-import { Module } from "vuex";
-import axios from "axios";
+import { Module } from 'vuex'
+import axios from 'axios'
 
 const auth: Module<any, any> = {
   state: {
-    status: "",
+    status: '',
     account: null,
     loggedIn: false,
     unauthorized: true
   },
   mutations: {
     authRequest(state) {
-      state.status = "loading";
+      state.status = 'loading'
     },
     authSuccess(state, account) {
-      state.status = "success";
-      state.account = account;
-      state.loggedIn = true;
+      state.status = 'success'
+      state.account = account
+      state.loggedIn = true
     },
     authUnauthorized(state) {
-      state.status = "unauthorized";
-      state.loggedIn = false;
+      state.status = 'unauthorized'
+      state.loggedIn = false
     },
     authError(state) {
-      state.status = "error";
-      state.loggedIn = false;
+      state.status = 'error'
+      state.loggedIn = false
     },
     logoutRequest(state) {
-      state.status = "loading";
-      state.loggedIn = false;
+      state.status = 'loading'
+      state.loggedIn = false
     },
     logoutSuccess(state) {
-      state.status = "success";
+      state.status = 'success'
     },
     logoutError(state) {
-      state.status = "error";
+      state.status = 'error'
     }
   },
   actions: {
     async authorize({ commit }) {
-      commit("authRequest");
+      commit('authRequest')
       try {
-        const account = (await axios.get("kayttaja")).data;
-        if (account.authorities.includes("ROLE_ERIKOISTUVA_LAAKARI")) {
-          account.erikoistuvaLaakari = (
-            await axios.get("erikoistuva-laakari")
-          ).data;
+        const account = (await axios.get('kayttaja')).data
+        if (account.authorities.includes('ROLE_ERIKOISTUVA_LAAKARI')) {
+          account.erikoistuvaLaakari = (await axios.get('erikoistuva-laakari')).data
         }
-        commit("authSuccess", account);
+        commit('authSuccess', account)
       } catch (err) {
         if (err.response.status === 401) {
-          commit("authUnauthorized");
+          commit('authUnauthorized')
         } else {
-          commit("authError");
+          commit('authError')
         }
       }
     },
     async logout({ commit }) {
-      commit("logoutRequest");
+      commit('logoutRequest')
       try {
-        const logoutDetails = (await axios.post("logout", {})).data;
-        commit("logoutSuccess");
-        window.location.href = `${logoutDetails.logoutUrl}?redirect_uri=${window.location.origin}/`;
+        const logoutDetails = (await axios.post('logout', {})).data
+        commit('logoutSuccess')
+        window.location.href = `${logoutDetails.logoutUrl}?redirect_uri=${window.location.origin}/`
       } catch (err) {
-        commit("logoutError");
-        window.location.reload();
+        commit('logoutError')
+        window.location.reload()
       }
     }
   },
@@ -72,6 +70,6 @@ const auth: Module<any, any> = {
     account: state => state.account,
     isLoggedIn: state => state.loggedIn
   }
-};
+}
 
-export default auth;
+export default auth

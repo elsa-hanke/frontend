@@ -1,18 +1,11 @@
 <template>
   <div>
-    <nav
-      id="sidebar-menu"
-      class="col-lg-2 d-none d-lg-block d-xl-block bg-white sidebar"
-      :style="{ paddingTop: paddingTop + 'px' }"
-    >
+    <nav id="sidebar-menu" class="col-lg-2 d-none d-lg-block d-xl-block bg-white sidebar" :style="{ paddingTop: paddingTop + 'px' }">
       <div class="sidebar-sticky font-weight-500">
         <b-nav vertical>
-          <b-nav-item
-            class="border-top border-bottom"
-            :to="{ name: 'etusivu' }"
-          >
+          <b-nav-item class="border-top border-bottom" :to="{ name: 'etusivu' }">
             <font-awesome-icon icon="home" fixed-width size="lg" />
-            {{ $t("etusivu") }}
+            {{ $t('etusivu') }}
           </b-nav-item>
           <!--
           <b-nav-item class="border-bottom" :to="{ name: 'koulutussuunnitelma' }">
@@ -20,37 +13,21 @@
             {{ $t("koulutussuunnitelma") }}
           </b-nav-item>
           -->
-          <b-nav-item
-            class="border-bottom"
-            :to="{ name: 'tyoskentelyjaksot' }"
-            v-if="$isErikoistuva()"
-          >
-            <font-awesome-icon
-              :icon="['far', 'hospital']"
-              fixed-width
-              size="lg"
-            />
-            {{ $t("tyoskentelyjaksot") }}
+          <b-nav-item class="border-bottom" :to="{ name: 'tyoskentelyjaksot' }" v-if="$isErikoistuva()">
+            <font-awesome-icon :icon="['far', 'hospital']" fixed-width size="lg" />
+            {{ $t('tyoskentelyjaksot') }}
           </b-nav-item>
-          <b-nav-item
-            class="border-bottom"
-            :to="{ name: 'suoritemerkinnat' }"
-            v-if="$isErikoistuva()"
-          >
+          <b-nav-item class="border-bottom" :to="{ name: 'suoritemerkinnat' }" v-if="$isErikoistuva()">
             <font-awesome-icon icon="clipboard-check" fixed-width size="lg" />
-            {{ $t("suoritemerkinnat") }}
+            {{ $t('suoritemerkinnat') }}
           </b-nav-item>
           <b-nav-item class="border-bottom" :to="{ name: 'arvioinnit' }">
             <font-awesome-icon icon="award" fixed-width size="lg" />
-            {{ $t("arvioinnit") }}
+            {{ $t('arvioinnit') }}
           </b-nav-item>
-          <b-nav-item
-            class="border-bottom"
-            :to="{ name: 'koejakso' }"
-            v-if="$isErikoistuva()"
-          >
+          <b-nav-item class="border-bottom" :to="{ name: 'koejakso' }" v-if="$isErikoistuva()">
             <font-awesome-icon icon="clipboard-check" fixed-width size="lg" />
-            {{ $t("koejakso") }}
+            {{ $t('koejakso') }}
           </b-nav-item>
 
           <!--
@@ -70,74 +47,70 @@
         </b-nav>
       </div>
     </nav>
-    <b-toaster
-      class="toaster"
-      :style="{ top: paddingTop + 'px' }"
-      name="b-toaster-top-right"
-    />
+    <b-toaster class="toaster" :style="{ top: paddingTop + 'px' }" name="b-toaster-top-right" />
   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import Component from "vue-class-component";
+  import Vue from 'vue'
+  import Component from 'vue-class-component'
 
-@Component
-export default class SidebarMenu extends Vue {
-  paddingTop = 64;
+  @Component
+  export default class SidebarMenu extends Vue {
+    paddingTop = 64
 
-  // Tarkistetaan sivunavigaation paikka
-  mounted() {
-    const el = document.getElementById("navbar-top");
-    if (el) {
-      this.paddingTop = el.offsetHeight;
+    // Tarkistetaan sivunavigaation paikka
+    mounted() {
+      const el = document.getElementById('navbar-top')
+      if (el) {
+        this.paddingTop = el.offsetHeight
+      }
     }
   }
-}
 </script>
 
 <style lang="scss" scoped>
-@import "~@/styles/variables";
+  @import '~@/styles/variables';
 
-$navbar-height: 64px;
+  $navbar-height: 64px;
 
-.sidebar {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 100;
-  padding: 0;
-  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
-  padding-top: $navbar-height;
+  .sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    padding: 0;
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
+    padding-top: $navbar-height;
 
-  .nav-link {
-    padding: 1rem;
+    .nav-link {
+      padding: 1rem;
 
-    &:hover {
-      background-color: rgba($primary, 0.1);
+      &:hover {
+        background-color: rgba($primary, 0.1);
+      }
+
+      &.router-link-active {
+        background-color: $primary;
+        color: white;
+      }
     }
 
-    &.router-link-active {
-      background-color: $primary;
-      color: white;
+    .sidebar-sticky {
+      position: sticky;
+      // top: 0;
+      height: calc(100vh - 64px);
+      overflow-x: hidden;
+      overflow-y: auto;
     }
   }
 
-  .sidebar-sticky {
-    position: sticky;
-    // top: 0;
-    height: calc(100vh - 64px);
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
-}
+  .toaster {
+    top: $navbar-height;
 
-.toaster {
-  top: $navbar-height;
-
-  ::v-deep .b-toast {
-    z-index: 1100;
+    ::v-deep .b-toast {
+      z-index: 1100;
+    }
   }
-}
 </style>

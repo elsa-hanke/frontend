@@ -1,20 +1,20 @@
-import { Component, Vue } from "vue-property-decorator";
-import { confirmExit } from "@/utils/confirm";
+import { Component, Vue } from 'vue-property-decorator'
+import { confirmExit } from '@/utils/confirm'
 
-Component.registerHooks(["beforeRouteLeave"]);
+Component.registerHooks(['beforeRouteLeave'])
 
 @Component({})
 export default class ConfirmRouteExit extends Vue {
-  skipRouteExitConfirm = false;
+  skipRouteExitConfirm = false
   async beforeRouteLeave(to: any, from: any, next: any) {
     try {
       if (this.skipRouteExitConfirm || (await confirmExit(this))) {
-        next();
+        next()
       } else {
-        next(false);
+        next(false)
       }
     } catch (err) {
-      next(false);
+      next(false)
     }
   }
 }
