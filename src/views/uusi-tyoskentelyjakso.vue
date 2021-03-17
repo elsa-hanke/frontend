@@ -6,8 +6,8 @@
         <b-col class="px-0">
           <h1>{{ $t('lisaa-tyoskentelyjakso') }}</h1>
           <hr />
-          <tyoskentelyjakso-form v-if="!loading" @submit="onSubmit" @cancel="onCancel" :kunnat="kunnat" :erikoisalat="erikoisalat" :modal="false" />
-          <div class="text-center" v-else>
+          <tyoskentelyjakso-form v-if="!loading" :kunnat="kunnat" :erikoisalat="erikoisalat" :modal="false" @submit="onSubmit" @cancel="onCancel" />
+          <div v-else class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />
           </div>
         </b-col>

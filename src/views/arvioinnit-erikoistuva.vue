@@ -53,8 +53,8 @@
                       <elsa-button
                         v-if="selected.tyoskentelyjakso || selected.epaOsaamisalue || selected.kouluttaja"
                         variant="link"
-                        @click="resetFilters"
                         class="shadow-none text-size-sm font-weight-500"
+                        @click="resetFilters"
                       >
                         {{ $t('tyhjenna-valinnat') }}
                       </elsa-button>
@@ -65,7 +65,7 @@
               <div class="arvioinnit">
                 <div v-if="kategoriat">
                   <div v-for="(kategoria, index) in kategoriat" :key="index" class="mt-3">
-                    <elsa-button @click="kategoria.visible = !kategoria.visible" variant="link" class="text-decoration-none shadow-none border-0 text-dark p-0 w-100">
+                    <elsa-button variant="link" class="text-decoration-none shadow-none border-0 text-dark p-0 w-100" @click="kategoria.visible = !kategoria.visible">
                       <div class="kategoria-collapse p-2 font-weight-500 d-flex">
                         <div>
                           <font-awesome-icon :icon="kategoria.visible ? 'caret-up' : 'caret-down'" fixed-width size="lg" class="text-muted" />
@@ -144,7 +144,7 @@
                             </tbody>
                           </b-table-simple>
                           <div class="text-right">
-                            <elsa-button v-if="oa.arvioinnit.length > 1" @click="oa.visible = !oa.visible" variant="link" class="shadow-none font-weight-500">
+                            <elsa-button v-if="oa.arvioinnit.length > 1" variant="link" class="shadow-none font-weight-500" @click="oa.visible = !oa.visible">
                               {{ `${$t('kaikki-arvioinnit')} (${oa.arvioinnit.length})` }}
                               <font-awesome-icon :icon="oa.visible ? 'chevron-up' : 'chevron-down'" fixed-width class="ml-1 text-dark" />
                             </elsa-button>
@@ -157,7 +157,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="text-center" v-else>
+                <div v-else class="text-center">
                   <b-spinner variant="primary" :label="$t('ladataan')" />
                 </div>
               </div>
@@ -172,7 +172,7 @@
                   {{ $t('kaikkiin-arviointipyyntoihisi-on-tehty-arviointi') }}
                 </b-alert>
               </div>
-              <div class="text-center" v-else>
+              <div v-else class="text-center">
                 <b-spinner variant="primary" :label="$t('ladataan')" />
               </div>
             </b-tab>

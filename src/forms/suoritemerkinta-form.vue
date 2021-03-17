@@ -2,7 +2,7 @@
   <b-form @submit.stop.prevent="onSubmit">
     <elsa-form-group :label="$t('tyoskentelyjakso')" :add-new-enabled="true" :add-new-label="$t('lisaa-tyoskentelyjakso')" :required="true" @submit="onTyoskentelyjaksoSubmit">
       <template v-slot:modal-content="{ submit, cancel }">
-        <tyoskentelyjakso-form @submit="submit" @cancel="cancel" :kunnat="kunnat" :erikoisalat="erikoisalat" />
+        <tyoskentelyjakso-form :kunnat="kunnat" :erikoisalat="erikoisalat" @submit="submit" @cancel="cancel" />
       </template>
       <template v-slot="{ uid }">
         <elsa-form-multiselect
@@ -10,9 +10,9 @@
           v-model="form.tyoskentelyjakso"
           :options="tyoskentelyjaksotFormatted"
           :state="validateState('tyoskentelyjakso')"
-          @select="onTyoskentelyjaksoSelect"
           label="label"
           track-by="id"
+          @select="onTyoskentelyjaksoSelect"
         />
         <b-form-invalid-feedback :id="`${uid}-feedback`">{{ $t('pakollinen-tieto') }}</b-form-invalid-feedback>
       </template>
@@ -125,7 +125,7 @@
     </elsa-form-group>
     <div class="text-right">
       <elsa-button variant="back" :to="{ name: 'suoritemerkinnat' }">{{ $t('peruuta') }}</elsa-button>
-      <elsa-button v-if="value.id" @click="onSuoritemerkintaDelete" :loading="params.deleting" variant="outline-danger">{{ $t('poista-merkinta') }}</elsa-button>
+      <elsa-button v-if="value.id" :loading="params.deleting" variant="outline-danger" @click="onSuoritemerkintaDelete">{{ $t('poista-merkinta') }}</elsa-button>
       <elsa-button :loading="params.saving" type="submit" variant="primary" class="ml-2">{{ $t('tallenna') }}</elsa-button>
     </div>
   </b-form>

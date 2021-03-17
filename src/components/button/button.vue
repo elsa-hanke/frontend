@@ -1,5 +1,5 @@
 <template>
-  <b-button v-bind="$attrs" v-on="$listeners" :disabled="disabled || loading">
+  <b-button v-bind="$attrs" :disabled="disabled || loading" v-on="$listeners">
     <slot v-if="!loadingEnabled" />
     <span v-else>
       <slot />

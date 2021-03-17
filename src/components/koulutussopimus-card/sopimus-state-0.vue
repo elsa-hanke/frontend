@@ -2,7 +2,7 @@
   <div class="d-flex-column sopimus-card-container">
     <b-row class="mb-3">
       <b-col>
-        <span v-html="$t('koulutussopimus-tila-0')" class="pr-5" />
+        <span class="pr-5" v-html="$t('koulutussopimus-tila-0')" />
       </b-col>
     </b-row>
     <b-row>

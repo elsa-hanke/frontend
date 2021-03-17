@@ -16,7 +16,7 @@
         <hr />
         <kayttooikeus-form @submit="onSubmit" />
       </b-card-skeleton>
-      <div class="d-flex justify-content-center align-items-center mt-5 mb-3" v-else>
+      <div v-else class="d-flex justify-content-center align-items-center mt-5 mb-3">
         <b-spinner variant="primary" :label="$t('ladataan')" class="mr-3" />
         <span>{{ $t('lisataan-tiedot-kayttajalle') }}</span>
       </div>

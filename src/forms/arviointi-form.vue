@@ -276,7 +276,7 @@
           </template>
         </elsa-form-group>
       </b-form-row>
-      <elsa-form-group :label="$t('sanallinen-arviointi')" :required="true" v-if="editing">
+      <elsa-form-group v-if="editing" :label="$t('sanallinen-arviointi')" :required="true">
         <template #label-help>
           <elsa-popover>
             <template>
@@ -298,7 +298,7 @@
           <b-form-invalid-feedback :id="`${uid}-feedback`">{{ $t('pakollinen-tieto') }}</b-form-invalid-feedback>
         </template>
       </elsa-form-group>
-      <elsa-form-group :label="$t('lisatiedot')" v-if="editing && $isKouluttaja()">
+      <elsa-form-group v-if="editing && $isKouluttaja()" :label="$t('lisatiedot')">
         <template v-slot="{ uid }">
           <b-form-checkbox v-model="form.perustuuMuuhun">
             {{ $t('arviointi-perustuu-lasna') }}

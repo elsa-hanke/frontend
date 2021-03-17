@@ -20,9 +20,9 @@
           v-model="form.tyoskentelyjakso"
           :options="tyoskentelyjaksotFormatted"
           :state="validateState('tyoskentelyjakso')"
-          @select="onTyoskentelyjaksoSelect"
           label="label"
           track-by="id"
+          @select="onTyoskentelyjaksoSelect"
         />
         <b-form-invalid-feedback :id="`${uid}-feedback`">{{ $t('pakollinen-tieto') }}</b-form-invalid-feedback>
       </template>
@@ -74,7 +74,7 @@
     </b-form-row>
     <div class="text-right">
       <elsa-button variant="back" :to="{ name: 'tyoskentelyjaksot' }">{{ $t('peruuta') }}</elsa-button>
-      <elsa-button v-if="value.id" @click="onDelete" :loading="params.deleting" variant="outline-danger">{{ $t('poista-poissaolo') }}</elsa-button>
+      <elsa-button v-if="value.id" :loading="params.deleting" variant="outline-danger" @click="onDelete">{{ $t('poista-poissaolo') }}</elsa-button>
       <elsa-button :loading="params.saving" type="submit" variant="primary" class="ml-2">{{ $t('tallenna') }}</elsa-button>
     </div>
   </b-form>

@@ -2,7 +2,7 @@
   <div class="d-flex-column">
     <b-row>
       <b-col>
-        <p v-html="$t('koulutussopimus-tila-2')" class="pr-5" />
+        <p class="pr-5" v-html="$t('koulutussopimus-tila-2')" />
       </b-col>
     </b-row>
     <b-row>

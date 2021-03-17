@@ -60,7 +60,7 @@
                       </div>
                     </b-td>
                     <b-td>
-                      <elsa-button v-if="row.hasDetails && row.suoritemerkinta" @click="toggleDetails(row)" variant="link" class="shadow-none text-dark p-0">
+                      <elsa-button v-if="row.hasDetails && row.suoritemerkinta" variant="link" class="shadow-none text-dark p-0" @click="toggleDetails(row)">
                         <font-awesome-icon :icon="row.suoritemerkinta.showDetails ? 'chevron-up' : 'chevron-down'" fixed-width size="lg" />
                       </elsa-button>
                     </b-td>
@@ -69,7 +69,7 @@
               </b-table-simple>
             </div>
           </div>
-          <div class="text-center" v-else>
+          <div v-else class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />
           </div>
         </b-col>

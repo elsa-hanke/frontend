@@ -19,13 +19,7 @@ module.exports = {
         tabWidth: 2,
         semi: false,
         singleQuote: true,
-        indent: [
-          2,
-          2,
-          {
-            SwitchCase: 1
-          }
-        ],
+        indent: [2, 2, { SwitchCase: 1 }],
         vueIndentScriptAndStyle: true,
         htmlWhitespaceSensitivity: 'ignore'
       }

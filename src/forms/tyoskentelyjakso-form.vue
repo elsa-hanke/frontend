@@ -63,7 +63,7 @@
       <template v-slot="{ uid }">
         <div v-if="!editing">
           <div class="d-flex align-items-center">
-            <b-form-input :id="uid" :value="form.osaaikaprosentti" @input="onOsaaikaprosenttiInput" :state="validateState('osaaikaprosentti')" type="number" step="any" class="col-sm-3" />
+            <b-form-input :id="uid" :value="form.osaaikaprosentti" :state="validateState('osaaikaprosentti')" type="number" step="any" class="col-sm-3" @input="onOsaaikaprosenttiInput" />
             <span class="mx-3">%</span>
           </div>
           <b-form-invalid-feedback
@@ -86,7 +86,7 @@
             <b-form-invalid-feedback :id="`${uid}-feedback`">{{ $t('pakollinen-tieto') }}</b-form-invalid-feedback>
           </div>
           <div v-else>
-            <span :id="uid" v-if="form.alkamispaiva">{{ $date(form.alkamispaiva) }}</span>
+            <span v-if="form.alkamispaiva" :id="uid">{{ $date(form.alkamispaiva) }}</span>
           </div>
         </template>
       </elsa-form-group>
@@ -114,7 +114,9 @@
             <elsa-form-multiselect v-model="form.omaaErikoisalaaTukeva" :options="erikoisalatFormatted" :state="validateState('omaaErikoisalaaTukeva')" label="nimi" track-by="id" />
             <b-form-invalid-feedback>{{ $t('pakollinen-tieto') }}</b-form-invalid-feedback>
           </div>
-          <b-form-radio v-model="form.kaytannonKoulutus" :state="validateState('kaytannonKoulutus')" name="kaytannon-koulutus-tyyppi" value="TUTKIMUSTYO">{{ $t('tutkimustyo') }}</b-form-radio>
+          <b-form-radio v-model="form.kaytannonKoulutus" :state="validateState('kaytannonKoulutus')" name="kaytannon-koulutus-tyyppi" value="TUTKIMUSTYO">
+            {{ $t('tutkimustyo') }}
+          </b-form-radio>
           <b-form-radio v-model="form.kaytannonKoulutus" :state="validateState('kaytannonKoulutus')" name="kaytannon-koulutus-tyyppi" value="TERVEYSKESKUSTYO">
             {{ $t('terveyskeskustyo') }}
           </b-form-radio>
@@ -133,7 +135,7 @@
     </elsa-form-group>
     <div class="text-right">
       <elsa-button variant="back" @click.stop.prevent="onCancel">{{ $t('peruuta') }}</elsa-button>
-      <elsa-button v-if="editing && !value.suoritusarvioinnit" @click="onTyoskentelyjaksoDelete" :loading="params.deleting" variant="outline-danger" class="ml-2">
+      <elsa-button v-if="editing && !value.suoritusarvioinnit" :loading="params.deleting" variant="outline-danger" class="ml-2" @click="onTyoskentelyjaksoDelete">
         {{ $t('poista-tyoskentelyjakso') }}
       </elsa-button>
       <elsa-button :loading="params.saving" type="submit" variant="primary" class="ml-2">{{ editing ? $t('tallenna') : $t('lisaa') }}</elsa-button>

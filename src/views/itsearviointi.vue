@@ -6,8 +6,8 @@
         <b-col class="px-0">
           <h1>{{ $t('tee-itsearviointi') }}</h1>
           <hr />
-          <arviointi-form v-if="value" :value="value" @submit="onSubmit" :editing="true" :itsearviointi="true" />
-          <div class="text-center" v-else>
+          <arviointi-form v-if="value" :value="value" :editing="true" :itsearviointi="true" @submit="onSubmit" />
+          <div v-else class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />
           </div>
         </b-col>

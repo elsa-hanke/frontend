@@ -1,8 +1,7 @@
 <template>
   <multiselect
-    v-bind="$attrs"
-    v-on="$listeners"
     :id="id"
+    v-bind="$attrs"
     :placeholder="placeholderText"
     :tag-placeholder="tagPlaceholderText"
     :select-label="selectLabelText"
@@ -12,6 +11,7 @@
     :deselect-group-label="deselectGroupLabelText"
     :allow-empty="allowEmpty"
     :max="max"
+    v-on="$listeners"
     :class="{ 'is-invalid': isInvalid, 'is-valid': isValid }"
   >
     <template slot="maxElements">{{ $t('valittuna-enimmäismaara', { max }) }}</template>
