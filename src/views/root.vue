@@ -1,8 +1,8 @@
 <template>
   <div id="root" :class="{ 'gray-backdrop': hasGrayBackdrop }">
-    <navbar />
+    <navbar :isMobile="isMobile"/>
     <b-container fluid>
-      <mobile-nav class="d-lg-none" />
+      <mobile-nav v-if="isMobile" />
       <b-row>
         <sidebar-menu />
         <main role="main" class="offset-lg-2 col-lg-10 mb-5">
@@ -28,8 +28,32 @@
     }
   })
   export default class Root extends Vue {
+    viewportWidth = 0
+
+    setViewportWidth() {
+      this.viewportWidth = window.innerWidth || document.documentElement.clientWidth
+    }
+
+    setViewportOnResize() {
+      (window as any).addEventListener(
+        'resize',
+        () => {
+          this.setViewportWidth()
+        },
+        false
+      )
+    }
+
+    get isMobile() {
+      return window.innerWidth < 992
+    }
     get hasGrayBackdrop() {
       return this.$route.meta.grayBackdrop
+    }
+
+    mounted(): void {
+      this.setViewportWidth()
+      this.setViewportOnResize()
     }
   }
 </script>
