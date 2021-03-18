@@ -3,7 +3,13 @@ module.exports = {
   env: {
     node: true
   },
-  extends: ['plugin:vue/essential', 'eslint:recommended', '@vue/typescript/recommended', '@vue/prettier', '@vue/prettier/@typescript-eslint'],
+  extends: [
+    'plugin:vue/essential',
+    'eslint:recommended',
+    '@vue/typescript/recommended',
+    '@vue/prettier',
+    '@vue/prettier/@typescript-eslint'
+  ],
   parserOptions: {
     ecmaVersion: 2020
   },
@@ -16,10 +22,9 @@ module.exports = {
       {
         printWidth: 200,
         trailingComma: 'none',
-        tabWidth: 2,
         semi: false,
         singleQuote: true,
-        indent: [2, 2, { SwitchCase: 1 }],
+        indent: [2, 2, {SwitchCase: 1}],
         vueIndentScriptAndStyle: true,
         htmlWhitespaceSensitivity: 'ignore'
       }

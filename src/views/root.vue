@@ -1,6 +1,6 @@
 <template>
   <div id="root" :class="{ 'gray-backdrop': hasGrayBackdrop }">
-    <navbar :isMobile="isMobile"/>
+    <navbar :isMobile="isMobile" />
     <b-container fluid>
       <mobile-nav v-if="isMobile" />
       <b-row>
@@ -35,7 +35,7 @@
     }
 
     setViewportOnResize() {
-      (window as any).addEventListener(
+      ;(window as any).addEventListener(
         'resize',
         () => {
           this.setViewportWidth()
