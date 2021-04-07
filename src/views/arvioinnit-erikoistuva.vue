@@ -1,12 +1,14 @@
 <template>
   <div class="arvioinnit">
-    <b-breadcrumb :items="items" class="mb-0 px-0"></b-breadcrumb>
+    <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid>
       <b-row lg>
-        <b-col class="px-0">
+        <b-col>
           <h1>{{ $t('arvioinnit') }}</h1>
           <p>{{ $t('arvioinnit-kuvaus') }}</p>
-          <elsa-button variant="primary" :to="{ name: 'arviointipyynto' }" class="mb-4">{{ $t('pyyda-arviointia') }}</elsa-button>
+          <elsa-button variant="primary" :to="{ name: 'arviointipyynto' }" class="mb-4">
+            {{ $t('pyyda-arviointia') }}
+          </elsa-button>
           <b-tabs content-class="mt-3" :no-fade="true" @input="onTabChange">
             <b-tab :title="$t('arvioinnit-ja-itsearvioinnit')" active>
               <b-container fluid class="px-0">
@@ -42,7 +44,14 @@
                   <b-col md="4">
                     <elsa-form-group :label="$t('kouluttaja-tai-lahikouluttaja')" class="mb-0">
                       <template v-slot="{ uid }">
-                        <elsa-form-multiselect :id="uid" v-model="selected.kouluttaja" :options="options.kouluttajat" label="nimi" track-by="id" @select="onKouluttajaSelect"></elsa-form-multiselect>
+                        <elsa-form-multiselect
+                          :id="uid"
+                          v-model="selected.kouluttaja"
+                          :options="options.kouluttajat"
+                          label="nimi"
+                          track-by="id"
+                          @select="onKouluttajaSelect"
+                        ></elsa-form-multiselect>
                       </template>
                     </elsa-form-group>
                   </b-col>
@@ -51,7 +60,11 @@
                   <b-col>
                     <div class="d-flex flex-row-reverse">
                       <elsa-button
-                        v-if="selected.tyoskentelyjakso || selected.epaOsaamisalue || selected.kouluttaja"
+                        v-if="
+                          selected.tyoskentelyjakso ||
+                          selected.epaOsaamisalue ||
+                          selected.kouluttaja
+                        "
                         variant="link"
                         class="shadow-none text-size-sm font-weight-500"
                         @click="resetFilters"
@@ -65,10 +78,19 @@
               <div class="arvioinnit">
                 <div v-if="kategoriat">
                   <div v-for="(kategoria, index) in kategoriat" :key="index" class="mt-3">
-                    <elsa-button variant="link" class="text-decoration-none shadow-none border-0 text-dark p-0 w-100" @click="kategoria.visible = !kategoria.visible">
+                    <elsa-button
+                      variant="link"
+                      class="text-decoration-none shadow-none border-0 text-dark p-0 w-100"
+                      @click="kategoria.visible = !kategoria.visible"
+                    >
                       <div class="kategoria-collapse p-2 font-weight-500 d-flex">
                         <div>
-                          <font-awesome-icon :icon="kategoria.visible ? 'caret-up' : 'caret-down'" fixed-width size="lg" class="text-muted" />
+                          <font-awesome-icon
+                            :icon="kategoria.visible ? 'caret-up' : 'caret-down'"
+                            fixed-width
+                            size="lg"
+                            class="text-muted"
+                          />
                           {{ kategoria.nimi }}
                         </div>
                       </div>
@@ -101,7 +123,12 @@
                               </tr>
                             </thead>
                             <tbody>
-                              <tr v-for="(arviointi, index) in oa.visible ? oa.arvioinnit : oa.arvioinnit.slice(0, 1)" :key="`arviointi-${index}`">
+                              <tr
+                                v-for="(arviointi, index) in oa.visible
+                                  ? oa.arvioinnit
+                                  : oa.arvioinnit.slice(0, 1)"
+                                :key="`arviointi-${index}`"
+                              >
                                 <td>
                                   <elsa-button
                                     variant="link"
@@ -115,11 +142,19 @@
                                   </elsa-button>
                                 </td>
                                 <td>
-                                  <elsa-badge v-if="arviointi.luottamuksenTaso" :value="arviointi.luottamuksenTaso" />
-                                  <span v-else class="text-size-sm text-light-muted">{{ $t('ei-tehty-viela') }}</span>
+                                  <elsa-badge
+                                    v-if="arviointi.luottamuksenTaso"
+                                    :value="arviointi.luottamuksenTaso"
+                                  />
+                                  <span v-else class="text-size-sm text-light-muted">
+                                    {{ $t('ei-tehty-viela') }}
+                                  </span>
                                 </td>
                                 <td>
-                                  <elsa-badge v-if="arviointi.itsearviointiLuottamuksenTaso" :value="arviointi.itsearviointiLuottamuksenTaso" />
+                                  <elsa-badge
+                                    v-if="arviointi.itsearviointiLuottamuksenTaso"
+                                    :value="arviointi.itsearviointiLuottamuksenTaso"
+                                  />
                                   <elsa-button
                                     v-else-if="!arviointi.lukittu"
                                     variant="primary"
@@ -131,7 +166,9 @@
                                   >
                                     {{ $t('tee-itsearviointi') }}
                                   </elsa-button>
-                                  <span v-else class="text-size-sm text-light-muted">{{ $t('ei-tehty') }}</span>
+                                  <span v-else class="text-size-sm text-light-muted">
+                                    {{ $t('ei-tehty') }}
+                                  </span>
                                 </td>
                                 <td>
                                   {{ $date(arviointi.tapahtumanAjankohta) }}
@@ -144,9 +181,18 @@
                             </tbody>
                           </b-table-simple>
                           <div class="text-right">
-                            <elsa-button v-if="oa.arvioinnit.length > 1" variant="link" class="shadow-none font-weight-500" @click="oa.visible = !oa.visible">
+                            <elsa-button
+                              v-if="oa.arvioinnit.length > 1"
+                              variant="link"
+                              class="shadow-none font-weight-500"
+                              @click="oa.visible = !oa.visible"
+                            >
                               {{ `${$t('kaikki-arvioinnit')} (${oa.arvioinnit.length})` }}
-                              <font-awesome-icon :icon="oa.visible ? 'chevron-up' : 'chevron-down'" fixed-width class="ml-1 text-dark" />
+                              <font-awesome-icon
+                                :icon="oa.visible ? 'chevron-up' : 'chevron-down'"
+                                fixed-width
+                                class="ml-1 text-dark"
+                              />
                             </elsa-button>
                           </div>
                         </div>
@@ -300,7 +346,9 @@
       // Muodostetaan osa-alueet lista
       const osaalueet = (this.selected.tyoskentelyjakso || this.selected.kouluttaja
         ? this.omat?.map((oma: any) => oma.arvioitavaOsaalue)
-        : this.options.epaOsaamisalueet.filter((oa: any) => (this.selected.epaOsaamisalue ? oa.id === this.selected.epaOsaamisalue?.id : true))
+        : this.options.epaOsaamisalueet.filter((oa: any) =>
+            this.selected.epaOsaamisalue ? oa.id === this.selected.epaOsaamisalue?.id : true
+          )
       ).map((oa: any) => ({
         ...oa,
         arvioinnit: [],
@@ -320,7 +368,7 @@
 
       // Laitetaan arvioinnin osa-alueihin
       if (this.omat) {
-        this.omat.forEach(arviointi => {
+        this.omat.forEach((arviointi) => {
           const oa = osaalueet.find((oa: any) => oa.id === arviointi.arvioitavaOsaalueId)
           if (oa) {
             oa.arvioinnit.push(arviointi)

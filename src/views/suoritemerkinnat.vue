@@ -6,10 +6,16 @@
         <b-col class="px-0">
           <h1>{{ $t('suoritemerkinnat') }}</h1>
           <p>{{ $t('suoritemerkinnat-kuvaus') }}</p>
-          <elsa-button variant="primary" :to="{ name: 'uusi-suoritemerkinta' }" class="mb-4">{{ $t('lisaa-suoritemerkinta') }}</elsa-button>
+          <elsa-button variant="primary" :to="{ name: 'uusi-suoritemerkinta' }" class="mb-4">
+            {{ $t('lisaa-suoritemerkinta') }}
+          </elsa-button>
           <h2>{{ $t('oppimistavoitteet') }}</h2>
           <div v-if="osaamistavoitteet">
-            <div v-for="(kategoria, index) in oppimistavoitteenKategoriat" :key="index" class="mb-2">
+            <div
+              v-for="(kategoria, index) in oppimistavoitteenKategoriat"
+              :key="index"
+              class="mb-2"
+            >
               <b-table-simple responsive>
                 <b-thead>
                   <b-tr>
@@ -31,18 +37,25 @@
                   </b-tr>
                 </b-thead>
                 <b-tbody>
-                  <b-tr v-for="(row, index) in kategoria.rows" :key="index" :class="{ 'row-details': row.details }">
-                    <b-td style="width: 45%;">
+                  <b-tr
+                    v-for="(row, index) in kategoria.rows"
+                    :key="index"
+                    :class="{ 'row-details': row.details }"
+                  >
+                    <b-td style="width: 45%">
                       <div v-if="!row.details" class="d-flex align-items-center">
                         {{ row.nimi }}
                       </div>
                     </b-td>
-                    <b-td style="width: 40%;">
+                    <b-td style="width: 40%">
                       <div class="d-flex align-items-center">
-                        <elsa-luottamuksen-taso v-if="row.suoritemerkinta" :value="row.suoritemerkinta.luottamuksenTaso" />
+                        <elsa-luottamuksen-taso
+                          v-if="row.suoritemerkinta"
+                          :value="row.suoritemerkinta.luottamuksenTaso"
+                        />
                       </div>
                     </b-td>
-                    <b-td style="width: 15%;">
+                    <b-td style="width: 15%">
                       <div v-if="row.suoritemerkinta" class="d-flex align-items-center">
                         <elsa-button
                           :to="{
@@ -60,8 +73,17 @@
                       </div>
                     </b-td>
                     <b-td>
-                      <elsa-button v-if="row.hasDetails && row.suoritemerkinta" variant="link" class="shadow-none text-dark p-0" @click="toggleDetails(row)">
-                        <font-awesome-icon :icon="row.suoritemerkinta.showDetails ? 'chevron-up' : 'chevron-down'" fixed-width size="lg" />
+                      <elsa-button
+                        v-if="row.hasDetails && row.suoritemerkinta"
+                        variant="link"
+                        class="shadow-none text-dark p-0"
+                        @click="toggleDetails(row)"
+                      >
+                        <font-awesome-icon
+                          :icon="row.suoritemerkinta.showDetails ? 'chevron-up' : 'chevron-down'"
+                          fixed-width
+                          size="lg"
+                        />
                       </elsa-button>
                     </b-td>
                   </b-tr>
@@ -110,7 +132,8 @@
     luottamuksenTasot = luottamuksenTasot
 
     async mounted() {
-      const oppimistavoitteet = (await axios.get('erikoistuva-laakari/oppimistavoitteet-taulukko')).data
+      const oppimistavoitteet = (await axios.get('erikoistuva-laakari/oppimistavoitteet-taulukko'))
+        .data
       this.osaamistavoitteet = {
         oppimistavoitteenKategoriat: oppimistavoitteet.oppimistavoitteenKategoriat,
         suoritemerkinnat: oppimistavoitteet.suoritemerkinnat.map((suoritemerkinta: any) => ({
@@ -126,29 +149,37 @@
 
     get oppimistavoitteenKategoriat() {
       if (this.osaamistavoitteet) {
-        const suoritemerkinnatGroupByOppimistavoite = this.osaamistavoitteet.suoritemerkinnat.reduce((result: any, suoritemerkinta: any) => {
-          const oppimistavoiteId = suoritemerkinta.oppimistavoite.id
-          if (oppimistavoiteId in result) {
-            result[oppimistavoiteId].push({
-              suoritemerkinta,
-              details: true
-            })
-          } else {
-            result[oppimistavoiteId] = [
-              {
+        const suoritemerkinnatGroupByOppimistavoite = this.osaamistavoitteet.suoritemerkinnat.reduce(
+          (result: any, suoritemerkinta: any) => {
+            const oppimistavoiteId = suoritemerkinta.oppimistavoite.id
+            if (oppimistavoiteId in result) {
+              result[oppimistavoiteId].push({
                 suoritemerkinta,
                 details: true
-              }
-            ]
-          }
-          return result
-        }, {})
+              })
+            } else {
+              result[oppimistavoiteId] = [
+                {
+                  suoritemerkinta,
+                  details: true
+                }
+              ]
+            }
+            return result
+          },
+          {}
+        )
 
         return this.osaamistavoitteet.oppimistavoitteenKategoriat.map((kategoria: any) => {
           const rows = kategoria.oppimistavoitteet.reduce((result: any, oppimistavoite: any) => {
             // Kerätään oppimistavoitteen suoritemerkinnät ja järjestetään ne aikajärjestykseen
-            const suoritemerkinnat = (suoritemerkinnatGroupByOppimistavoite[oppimistavoite.id] || []).sort((a: any, b: any) =>
-              compareDesc(parseISO(a.suoritemerkinta.suorituspaiva as string), parseISO(b.suoritemerkinta.suorituspaiva as string))
+            const suoritemerkinnat = (
+              suoritemerkinnatGroupByOppimistavoite[oppimistavoite.id] || []
+            ).sort((a: any, b: any) =>
+              compareDesc(
+                parseISO(a.suoritemerkinta.suorituspaiva as string),
+                parseISO(b.suoritemerkinta.suorituspaiva as string)
+              )
             )
 
             // Ensimmäinen suoritemerkintä esitetään oppimistavoitteen rivillä

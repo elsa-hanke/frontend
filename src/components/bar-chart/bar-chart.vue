@@ -12,8 +12,17 @@
         >
           {{ row.text }}
         </b-td>
-        <b-td class="px-2" style="width: 100%;" :class="{ 'pt-2': row.highlight, 'pt-1': !row.highlight }">
-          <elsa-progress-bar :value="row.value" :min-required="row.minRequired" :color="row.color" :background-color="row.backgroundColor" />
+        <b-td
+          class="px-2"
+          style="width: 100%"
+          :class="{ 'pt-2': row.highlight, 'pt-1': !row.highlight }"
+        >
+          <elsa-progress-bar
+            :value="row.value"
+            :min-required="row.minRequired"
+            :color="row.color"
+            :background-color="row.backgroundColor"
+          />
         </b-td>
         <b-td
           class="text-nowrap"

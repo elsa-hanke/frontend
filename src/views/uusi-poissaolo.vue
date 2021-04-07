@@ -1,12 +1,17 @@
 <template>
   <div class="uusi-poissaolo">
-    <b-breadcrumb :items="items" class="mb-0 px-0"></b-breadcrumb>
+    <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid>
       <b-row lg>
-        <b-col class="px-0">
+        <b-col>
           <h1>{{ $t('lisaa-poissaolo') }}</h1>
           <hr />
-          <poissaolo-form v-if="!loading" :tyoskentelyjaksot="tyoskentelyjaksot" :poissaolon-syyt="poissaolonSyyt" @submit="onSubmit" />
+          <poissaolo-form
+            v-if="!loading"
+            :tyoskentelyjaksot="tyoskentelyjaksot"
+            :poissaolon-syyt="poissaolonSyyt"
+            @submit="onSubmit"
+          />
           <div v-else class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />
           </div>
@@ -64,7 +69,9 @@
     async onSubmit(value: any, params: any) {
       params.saving = true
       try {
-        this.poissaolo = (await axios.post('erikoistuva-laakari/tyoskentelyjaksot/poissaolot', value)).data
+        this.poissaolo = (
+          await axios.post('erikoistuva-laakari/tyoskentelyjaksot/poissaolot', value)
+        ).data
         toastSuccess(this, this.$t('poissaolo-lisatty-onnistuneesti'))
         this.skipRouteExitConfirm = true
         this.$router.push({

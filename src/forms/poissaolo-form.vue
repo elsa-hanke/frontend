@@ -9,11 +9,24 @@
         </elsa-popover>
       </template>
       <template v-slot="{ uid }">
-        <elsa-form-multiselect :id="uid" v-model="form.poissaolonSyy" :options="poissaolonSyytSorted" :state="validateState('poissaolonSyy')" label="nimi" track-by="id" />
-        <b-form-invalid-feedback :id="`${uid}-feedback`">{{ $t('pakollinen-tieto') }}</b-form-invalid-feedback>
+        <elsa-form-multiselect
+          :id="uid"
+          v-model="form.poissaolonSyy"
+          :options="poissaolonSyytSorted"
+          :state="validateState('poissaolonSyy')"
+          label="nimi"
+          track-by="id"
+        />
+        <b-form-invalid-feedback :id="`${uid}-feedback`">
+          {{ $t('pakollinen-tieto') }}
+        </b-form-invalid-feedback>
       </template>
     </elsa-form-group>
-    <elsa-form-group :label="$t('tyoskentelyjakso')" :required="true" @submit="onTyoskentelyjaksoSubmit">
+    <elsa-form-group
+      :label="$t('tyoskentelyjakso')"
+      :required="true"
+      @submit="onTyoskentelyjaksoSubmit"
+    >
       <template v-slot="{ uid }">
         <elsa-form-multiselect
           :id="uid"
@@ -24,17 +37,35 @@
           track-by="id"
           @select="onTyoskentelyjaksoSelect"
         />
-        <b-form-invalid-feedback :id="`${uid}-feedback`">{{ $t('pakollinen-tieto') }}</b-form-invalid-feedback>
+        <b-form-invalid-feedback :id="`${uid}-feedback`">
+          {{ $t('pakollinen-tieto') }}
+        </b-form-invalid-feedback>
       </template>
     </elsa-form-group>
     <b-form-row>
-      <elsa-form-group :label="$t('alkamispaiva')" class="col-sm-12 col-md-6 pr-md-3" :required="true">
+      <elsa-form-group
+        :label="$t('alkamispaiva')"
+        class="col-sm-12 col-md-6 pr-md-3"
+        :required="true"
+      >
         <template v-slot="{ uid }">
-          <elsa-form-datepicker :id="uid" v-model="form.alkamispaiva" :state="validateState('alkamispaiva')" :min="minAlkamispaiva" :max="maxAlkamispaiva"></elsa-form-datepicker>
-          <b-form-invalid-feedback :id="`${uid}-feedback`">{{ $t('pakollinen-tieto') }}</b-form-invalid-feedback>
+          <elsa-form-datepicker
+            :id="uid"
+            v-model="form.alkamispaiva"
+            :state="validateState('alkamispaiva')"
+            :min="minAlkamispaiva"
+            :max="maxAlkamispaiva"
+          ></elsa-form-datepicker>
+          <b-form-invalid-feedback :id="`${uid}-feedback`">
+            {{ $t('pakollinen-tieto') }}
+          </b-form-invalid-feedback>
         </template>
       </elsa-form-group>
-      <elsa-form-group :label="$t('paattymispaiva')" class="col-sm-12 col-md-6 pl-md-3" :required="true">
+      <elsa-form-group
+        :label="$t('paattymispaiva')"
+        class="col-sm-12 col-md-6 pl-md-3"
+        :required="true"
+      >
         <template v-slot="{ uid }">
           <elsa-form-datepicker
             :id="uid"
@@ -44,21 +75,34 @@
             :max="maxPaattymispaiva"
             class="datepicker-range"
           ></elsa-form-datepicker>
-          <b-form-invalid-feedback :id="`${uid}-feedback`">{{ $t('pakollinen-tieto') }}</b-form-invalid-feedback>
+          <b-form-invalid-feedback :id="`${uid}-feedback`">
+            {{ $t('pakollinen-tieto') }}
+          </b-form-invalid-feedback>
         </template>
       </elsa-form-group>
     </b-form-row>
-    <b-form-checkbox v-model="form.kokoTyoajanPoissaolo" class="mb-3">{{ $t('koko-tyoajan-poissaolo') }}</b-form-checkbox>
+    <b-form-checkbox v-model="form.kokoTyoajanPoissaolo" class="mb-3">
+      {{ $t('koko-tyoajan-poissaolo') }}
+    </b-form-checkbox>
     <b-form-row>
       <elsa-form-group
         v-if="!form.kokoTyoajanPoissaolo"
-        :label="$t('poissaolo-taydesta-tyopaivasta') + ` (0-${form.tyoskentelyjakso ? form.tyoskentelyjakso.osaaikaprosentti : 100} %)`"
+        :label="
+          $t('poissaolo-taydesta-tyopaivasta') +
+          ` (0-${form.tyoskentelyjakso ? form.tyoskentelyjakso.osaaikaprosentti : 100} %)`
+        "
         :required="true"
         class="col-sm-3"
       >
         <template v-slot="{ uid }">
           <div class="d-flex align-items-center">
-            <b-form-input :id="uid" v-model.number="form.osaaikaprosentti" :state="validateState('osaaikaprosentti')" type="number" step="any" />
+            <b-form-input
+              :id="uid"
+              v-model.number="form.osaaikaprosentti"
+              :state="validateState('osaaikaprosentti')"
+              type="number"
+              step="any"
+            />
             <span class="mx-3">%</span>
           </div>
           <b-form-invalid-feedback
@@ -67,15 +111,29 @@
               display: validateState('osaaikaprosentti') === false ? 'block' : 'none'
             }"
           >
-            {{ $t('osaaikaprosentti-validointivirhe') }} 0–{{ form.tyoskentelyjakso ? form.tyoskentelyjakso.osaaikaprosentti : 100 }} %
+            {{ $t('osaaikaprosentti-validointivirhe') }} 0–{{
+              form.tyoskentelyjakso ? form.tyoskentelyjakso.osaaikaprosentti : 100
+            }}
+            %
           </b-form-invalid-feedback>
         </template>
       </elsa-form-group>
     </b-form-row>
     <div class="text-right">
-      <elsa-button variant="back" :to="{ name: 'tyoskentelyjaksot' }">{{ $t('peruuta') }}</elsa-button>
-      <elsa-button v-if="value.id" :loading="params.deleting" variant="outline-danger" @click="onDelete">{{ $t('poista-poissaolo') }}</elsa-button>
-      <elsa-button :loading="params.saving" type="submit" variant="primary" class="ml-2">{{ $t('tallenna') }}</elsa-button>
+      <elsa-button variant="back" :to="{ name: 'tyoskentelyjaksot' }">
+        {{ $t('peruuta') }}
+      </elsa-button>
+      <elsa-button
+        v-if="value.id"
+        :loading="params.deleting"
+        variant="outline-danger"
+        @click="onDelete"
+      >
+        {{ $t('poista-poissaolo') }}
+      </elsa-button>
+      <elsa-button :loading="params.saving" type="submit" variant="primary" class="ml-2">
+        {{ $t('tallenna') }}
+      </elsa-button>
     </div>
   </b-form>
 </template>
@@ -123,10 +181,14 @@
           required
         },
         osaaikaprosentti: {
-          required: requiredIf(value => {
+          required: requiredIf((value) => {
             return value.kokoTyoajanPoissaolo === false
           }),
-          between: (value, form) => (value < 0 || value > (form.tyoskentelyjakso ? form.tyoskentelyjakso.osaaikaprosentti : 100) ? false : true),
+          between: (value, form) =>
+            value < 0 ||
+            value > (form.tyoskentelyjakso ? form.tyoskentelyjakso.osaaikaprosentti : 100)
+              ? false
+              : true,
           integer
         }
       }
@@ -166,7 +228,10 @@
     mounted() {
       this.form = this.value
       if (this.value?.osaaikaprosentti) {
-        this.form.kokoTyoajanPoissaolo = this.value?.osaaikaprosentti === this.value?.tyoskentelyjakso?.osaaikaprosentti ? true : false
+        this.form.kokoTyoajanPoissaolo =
+          this.value?.osaaikaprosentti === this.value?.tyoskentelyjakso?.osaaikaprosentti
+            ? true
+            : false
       }
     }
 
@@ -186,7 +251,9 @@
           ...this.form,
           poissaolonSyyId: this.form.poissaolonSyy?.id,
           tyoskentelyjaksoId: this.form.tyoskentelyjakso?.id,
-          osaaikaprosentti: this.form.kokoTyoajanPoissaolo ? this.form.tyoskentelyjakso.osaaikaprosentti : this.form.osaaikaprosentti
+          osaaikaprosentti: this.form.kokoTyoajanPoissaolo
+            ? this.form.tyoskentelyjakso.osaaikaprosentti
+            : this.form.osaaikaprosentti
         },
         this.params
       )

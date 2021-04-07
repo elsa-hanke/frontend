@@ -17,7 +17,7 @@
         </b-col>
       </b-row>
     </b-container>
-    <b-container fluid class="px-0">
+    <b-container fluid>
       <b-row>
         <b-col lg="8">
           <div class="flex-fill">

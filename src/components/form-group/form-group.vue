@@ -6,7 +6,12 @@
           {{ label }}
           <span class="text-primary">
             {{ required ? '*' : '' }}
-            <font-awesome-icon v-if="help" v-b-popover.hover.top="help" icon="info-circle" fixed-width />
+            <font-awesome-icon
+              v-if="help"
+              v-b-popover.hover.top="help"
+              icon="info-circle"
+              fixed-width
+            />
           </span>
           <slot name="label-help" />
         </div>

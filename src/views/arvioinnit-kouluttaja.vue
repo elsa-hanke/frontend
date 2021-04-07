@@ -1,25 +1,42 @@
 <template>
   <div class="arvioinnit">
-    <b-breadcrumb :items="items" class="mb-0 px-0"></b-breadcrumb>
+    <b-breadcrumb :items="items" class="mb-0"></b-breadcrumb>
     <b-container fluid>
       <b-row lg>
-        <b-col class="px-0">
+        <b-col>
           <h1>{{ $t('arvioinnit') }}</h1>
           <div class="arvioinnit">
             <div class="w-25 position-relative align-items-center">
-              <b-form-input v-model="hakusana" placeholder="Hae suoritusarviointeja..." class="suoritusarviointi-haku"></b-form-input>
-              <font-awesome-icon :icon="['fas', 'search']" class="text-primary position-absolute haku-ikoni" />
+              <b-form-input
+                v-model="hakusana"
+                placeholder="Hae suoritusarviointeja..."
+                class="suoritusarviointi-haku"
+              ></b-form-input>
+              <font-awesome-icon
+                :icon="['fas', 'search']"
+                class="text-primary position-absolute haku-ikoni"
+              />
             </div>
             <div v-if="arvioinnit" class="arvioinnit-table">
-              <b-table :items="tulokset" :fields="fields" :sort-compare="sortCompare" :sort-by.sync="sortBy" :sort-desc.sync="sortAsc" :per-page="perPage" :current-page="currentPage" fixed responsive>
+              <b-table
+                :items="tulokset"
+                :fields="fields"
+                :sort-compare="sortCompare"
+                :sort-by.sync="sortBy"
+                :sort-desc.sync="sortAsc"
+                :per-page="perPage"
+                :current-page="currentPage"
+                fixed
+                responsive
+              >
                 <template #table-colgroup>
-                  <col span="1" style="width: 12%;" />
-                  <col span="1" style="width: 5%;" />
-                  <col span="1" style="width: 5%;" />
-                  <col span="1" style="width: 10%;" />
-                  <col span="1" style="width: 15%;" />
-                  <col span="1" style="width: 12%;" />
-                  <col span="1" style="width: 100px;" />
+                  <col span="1" style="width: 12%" />
+                  <col span="1" style="width: 5%" />
+                  <col span="1" style="width: 5%" />
+                  <col span="1" style="width: 10%" />
+                  <col span="1" style="width: 15%" />
+                  <col span="1" style="width: 12%" />
+                  <col span="1" style="width: 100px" />
                 </template>
                 <template #cell(arvioitavaTapahtuma)="row">
                   <elsa-button
@@ -76,7 +93,11 @@
                   </elsa-button>
                 </template>
               </b-table>
-              <b-pagination v-model="currentPage" :total-rows="rows" :per-page="perPage"></b-pagination>
+              <b-pagination
+                v-model="currentPage"
+                :total-rows="rows"
+                :per-page="perPage"
+              ></b-pagination>
             </div>
             <div v-else class="text-center">
               <b-spinner variant="primary" :label="$t('ladataan')" />
@@ -166,7 +187,9 @@
     }
 
     get tulokset() {
-      return this.hakusana ? this.arvioinnit?.filter(item => item.arvioitavaTapahtuma.includes(this.hakusana)) : this.arvioinnit
+      return this.hakusana
+        ? this.arvioinnit?.filter((item) => item.arvioitavaTapahtuma.includes(this.hakusana))
+        : this.arvioinnit
     }
 
     get rows() {

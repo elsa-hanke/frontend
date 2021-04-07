@@ -1,12 +1,18 @@
 <template>
   <div class="arviointi">
-    <b-breadcrumb :items="items" class="mb-0 px-0"></b-breadcrumb>
+    <b-breadcrumb :items="items" class="mb-0"></b-breadcrumb>
     <b-container fluid>
       <b-row lg>
-        <b-col class="px-0">
+        <b-col>
           <h1>{{ $t('tee-arviointi') }}</h1>
           <hr />
-          <arviointi-form v-if="value" :value="value" :editing="true" :itsearviointi="false" @submit="onSubmit" />
+          <arviointi-form
+            v-if="value"
+            :value="value"
+            :editing="true"
+            :itsearviointi="false"
+            @submit="onSubmit"
+          />
           <div v-else class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />
           </div>
@@ -48,7 +54,9 @@
 
     async mounted() {
       if (this.$route && this.$route.params && this.$route.params.arviointiId) {
-        this.value = (await axios.get(`kouluttaja/suoritusarvioinnit/${this.$route.params.arviointiId}`)).data
+        this.value = (
+          await axios.get(`kouluttaja/suoritusarvioinnit/${this.$route.params.arviointiId}`)
+        ).data
       }
     }
 

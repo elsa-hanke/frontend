@@ -32,8 +32,8 @@ module.exports = {
     ]
   },
 
-  chainWebpack: config => {
-    config.plugin('html').tap(args => {
+  chainWebpack: (config) => {
+    config.plugin('html').tap((args) => {
       args[0].title = 'ELSA-palvelu'
       return args
     })

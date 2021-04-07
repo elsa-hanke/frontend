@@ -66,9 +66,9 @@ const auth: Module<any, any> = {
     }
   },
   getters: {
-    status: state => state.status,
-    account: state => state.account,
-    isLoggedIn: state => state.loggedIn
+    status: (state) => state.status,
+    account: (state) => state.account,
+    isLoggedIn: (state) => state.loggedIn
   }
 }
 

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-container fluid class="px-0">
+    <b-container fluid>
       <b-row>
         <b-col>
           <div class="d-flex justify-content-between align-items-center">
@@ -8,14 +8,15 @@
               {{ value.arvioitavaTapahtuma }}
             </div>
             <div>
-              {{ $date(value.tapahtumanAjankohta) }} | {{ value.tyoskentelyjakso.tyoskentelypaikka.nimi }} |
+              {{ $date(value.tapahtumanAjankohta) }} |
+              {{ value.tyoskentelyjakso.tyoskentelypaikka.nimi }} |
               {{ value.arvioinninAntaja.nimi }}
             </div>
           </div>
         </b-col>
       </b-row>
     </b-container>
-    <b-container fluid class="px-0">
+    <b-container fluid>
       <b-row>
         <b-col lg="12">
           <b-table-simple borderless small responsive>
@@ -41,10 +42,16 @@
                   <div v-if="!value.arviointiAika" class="text-size-sm text-muted">
                     {{ $t('arviointia-ei-ole-viela-annettu') }}
                   </div>
-                  <elsa-luottamuksen-taso v-if="value.luottamuksenTaso" :value="value.luottamuksenTaso" />
+                  <elsa-luottamuksen-taso
+                    v-if="value.luottamuksenTaso"
+                    :value="value.luottamuksenTaso"
+                  />
                 </td>
                 <td>
-                  <elsa-luottamuksen-taso v-if="value.itsearviointiLuottamuksenTaso" :value="value.itsearviointiLuottamuksenTaso" />
+                  <elsa-luottamuksen-taso
+                    v-if="value.itsearviointiLuottamuksenTaso"
+                    :value="value.itsearviointiLuottamuksenTaso"
+                  />
                   <div v-else class="d-inline-flex">
                     <elsa-button
                       variant="primary"
@@ -62,7 +69,12 @@
             </tbody>
           </b-table-simple>
 
-          <elsa-button variant="primary" :to="{ name: 'arviointi', params: { arviointiId: value.id } }">{{ $t('avaa-arviointi') }}</elsa-button>
+          <elsa-button
+            variant="primary"
+            :to="{ name: 'arviointi', params: { arviointiId: value.id } }"
+          >
+            {{ $t('avaa-arviointi') }}
+          </elsa-button>
         </b-col>
       </b-row>
     </b-container>

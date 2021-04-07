@@ -1,9 +1,9 @@
 <template>
   <div class="arviointi">
-    <b-breadcrumb :items="items" class="mb-0 px-0"></b-breadcrumb>
+    <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid>
       <b-row lg>
-        <b-col class="px-0">
+        <b-col>
           <h1>{{ $t('arviointi') }}</h1>
           <hr />
           <div v-if="value">
@@ -13,7 +13,11 @@
             <p>{{ $t('kommentit-kuvaus') }}</p>
             <div class="border-bottom mb-3">
               <div v-if="kommentit && kommentit.length > 0" class="d-flex flex-column">
-                <kommentti-card v-for="(kommentti, index) in kommentit" :key="index" :value="kommentti" />
+                <kommentti-card
+                  v-for="(kommentti, index) in kommentit"
+                  :key="index"
+                  :value="kommentti"
+                />
               </div>
               <div v-else>
                 <b-alert variant="dark" show>
@@ -26,11 +30,23 @@
               <div class="uusi-kommentti mb-3">
                 <elsa-form-group :label="$t('uusi-kommentti')">
                   <template v-slot="{ uid }">
-                    <b-form-textarea :id="uid" v-model="kommentti.teksti" :placeholder="$t('kirjoita-kommenttisi-tahan')" rows="5"></b-form-textarea>
+                    <b-form-textarea
+                      :id="uid"
+                      v-model="kommentti.teksti"
+                      :placeholder="$t('kirjoita-kommenttisi-tahan')"
+                      rows="5"
+                    ></b-form-textarea>
                   </template>
                 </elsa-form-group>
                 <div class="text-right">
-                  <elsa-button :disabled="!kommentti.teksti || saving" :loading="saving" type="submit" variant="primary">{{ $t('lisaa-kommentti') }}</elsa-button>
+                  <elsa-button
+                    :disabled="!kommentti.teksti || saving"
+                    :loading="saving"
+                    type="submit"
+                    variant="primary"
+                  >
+                    {{ $t('lisaa-kommentti') }}
+                  </elsa-button>
                 </div>
               </div>
             </b-form>
@@ -109,7 +125,12 @@
     async onKommenttiSubmit() {
       this.saving = true
       try {
-        const kommentti = (await axios.post(`erikoistuva-laakari/suoritusarvioinnit/${this.value.id}/kommentti`, this.kommentti)).data
+        const kommentti = (
+          await axios.post(
+            `erikoistuva-laakari/suoritusarvioinnit/${this.value.id}/kommentti`,
+            this.kommentti
+          )
+        ).data
         this.value.kommentit.push(kommentti)
         this.kommentti = {
           teksti: null
@@ -123,7 +144,9 @@
     get kommentit() {
       if (this.value) {
         return this.value.kommentit
-          .sort((a: any, b: any) => compareAsc(parseISO(a.luontiaika as string), parseISO(b.luontiaika as string)))
+          .sort((a: any, b: any) =>
+            compareAsc(parseISO(a.luontiaika as string), parseISO(b.luontiaika as string))
+          )
           .map((k: any) => {
             return {
               kommentti: k,

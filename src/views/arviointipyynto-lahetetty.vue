@@ -1,9 +1,9 @@
 <template>
   <div class="arviointipyynto-lahetetty">
-    <b-breadcrumb :items="items" class="mb-0 px-0"></b-breadcrumb>
+    <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid>
       <b-row lg>
-        <b-col class="px-0">
+        <b-col>
           <h1 class="text-center mb-4">
             {{ $t('arviointipyynto-lahetetty') }}
           </h1>
@@ -14,8 +14,12 @@
             {{ $t('arviointipyynto-lahetetty-itsearviointi-muistutus') }}
           </p>
           <div class="d-flex justify-content-center">
-            <elsa-button variant="primary" class="mr-3" :to="{ name: 'arvioinnit' }">{{ $t('palaa-arviointeihin') }}</elsa-button>
-            <elsa-button v-if="itsearviointiLinkki" variant="primary" :to="itsearviointiLinkki">{{ $t('tee-tapahtumasta-itsearviointi') }}</elsa-button>
+            <elsa-button variant="primary" class="mr-3" :to="{ name: 'arvioinnit' }">
+              {{ $t('palaa-arviointeihin') }}
+            </elsa-button>
+            <elsa-button v-if="itsearviointiLinkki" variant="primary" :to="itsearviointiLinkki">
+              {{ $t('tee-tapahtumasta-itsearviointi') }}
+            </elsa-button>
           </div>
         </b-col>
       </b-row>

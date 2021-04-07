@@ -5,9 +5,20 @@
         <user-avatar :id="uid" />
       </template>
     </elsa-form-group>
-    <elsa-form-group :label="$t('tyoskentelyjakso')" :add-new-enabled="true" :add-new-label="$t('lisaa-tyoskentelyjakso')" :required="true" @submit="onTyoskentelyjaksoSubmit">
+    <elsa-form-group
+      :label="$t('tyoskentelyjakso')"
+      :add-new-enabled="true"
+      :add-new-label="$t('lisaa-tyoskentelyjakso')"
+      :required="true"
+      @submit="onTyoskentelyjaksoSubmit"
+    >
       <template v-slot:modal-content="{ submit, cancel }">
-        <tyoskentelyjakso-form :kunnat="kunnat" :erikoisalat="erikoisalat" @submit="submit" @cancel="cancel" />
+        <tyoskentelyjakso-form
+          :kunnat="kunnat"
+          :erikoisalat="erikoisalat"
+          @submit="submit"
+          @cancel="cancel"
+        />
       </template>
       <template v-slot="{ uid }">
         <elsa-form-multiselect
@@ -19,7 +30,9 @@
           track-by="id"
           @select="onTyoskentelyjaksoSelect"
         />
-        <b-form-invalid-feedback :id="`${uid}-feedback`">{{ $t('pakollinen-tieto') }}</b-form-invalid-feedback>
+        <b-form-invalid-feedback :id="`${uid}-feedback`">
+          {{ $t('pakollinen-tieto') }}
+        </b-form-invalid-feedback>
       </template>
     </elsa-form-group>
     <elsa-form-group :label="$t('epa-osaamisalue')" :required="true">
@@ -40,27 +53,57 @@
             <span v-else class="ml-3">{{ props.option.nimi }}</span>
           </template>
         </elsa-form-multiselect>
-        <b-form-invalid-feedback :id="`${uid}-feedback`">{{ $t('pakollinen-tieto') }}</b-form-invalid-feedback>
+        <b-form-invalid-feedback :id="`${uid}-feedback`">
+          {{ $t('pakollinen-tieto') }}
+        </b-form-invalid-feedback>
       </template>
     </elsa-form-group>
     <elsa-form-group :label="$t('arvioitava-tapahtuma')" :required="true">
       <template v-slot="{ uid }">
-        <b-form-input :id="uid" v-model="form.arvioitavaTapahtuma" :state="validateState('arvioitavaTapahtuma')" :aria-describedby="`${uid}-feedback`"></b-form-input>
-        <b-form-invalid-feedback :id="`${uid}-feedback`">{{ $t('pakollinen-tieto') }}</b-form-invalid-feedback>
+        <b-form-input
+          :id="uid"
+          v-model="form.arvioitavaTapahtuma"
+          :state="validateState('arvioitavaTapahtuma')"
+          :aria-describedby="`${uid}-feedback`"
+        ></b-form-input>
+        <b-form-invalid-feedback :id="`${uid}-feedback`">
+          {{ $t('pakollinen-tieto') }}
+        </b-form-invalid-feedback>
       </template>
     </elsa-form-group>
     <b-form-row>
-      <elsa-form-group :label="$t('kouluttaja-tai-lahikouluttaja')" :add-new-enabled="!editing" :add-new-label="$t('lisaa-kouluttaja')" :required="true" class="col-md-8" @submit="onKouluttajaSubmit">
+      <elsa-form-group
+        :label="$t('kouluttaja-tai-lahikouluttaja')"
+        :add-new-enabled="!editing"
+        :add-new-label="$t('lisaa-kouluttaja')"
+        :required="true"
+        class="col-md-8"
+        @submit="onKouluttajaSubmit"
+      >
         <template v-slot:modal-content="{ submit, cancel }">
           <kouluttaja-form @submit="submit" @cancel="cancel" />
         </template>
         <template v-slot="{ uid }">
-          <elsa-form-multiselect :id="uid" v-model="form.kouluttaja" :options="kouluttajat" :state="validateState('kouluttaja')" :disabled="editing" label="nimi" track-by="nimi">
+          <elsa-form-multiselect
+            :id="uid"
+            v-model="form.kouluttaja"
+            :options="kouluttajat"
+            :state="validateState('kouluttaja')"
+            :disabled="editing"
+            label="nimi"
+            track-by="nimi"
+          >
             <template v-slot:option="{ option }">
-              <user-avatar :display-name="option.nimi" :src-content-type="option.profiilikuvaContentType" :src-base64="option.profiilikuva" />
+              <user-avatar
+                :display-name="option.nimi"
+                :src-content-type="option.profiilikuvaContentType"
+                :src-base64="option.profiilikuva"
+              />
             </template>
           </elsa-form-multiselect>
-          <b-form-invalid-feedback :id="`${uid}-feedback`">{{ $t('pakollinen-tieto') }}</b-form-invalid-feedback>
+          <b-form-invalid-feedback :id="`${uid}-feedback`">
+            {{ $t('pakollinen-tieto') }}
+          </b-form-invalid-feedback>
         </template>
       </elsa-form-group>
       <elsa-form-group :label="$t('ajankohta')" class="col-md-4" :required="true">
@@ -72,7 +115,9 @@
             :min="tyoskentelyjaksonAlkamispaiva"
             :max="tyoskentelyjaksonPaattymispaiva"
           ></elsa-form-datepicker>
-          <b-form-invalid-feedback :id="`${uid}-feedback`">{{ $t('pakollinen-tieto') }}</b-form-invalid-feedback>
+          <b-form-invalid-feedback :id="`${uid}-feedback`">
+            {{ $t('pakollinen-tieto') }}
+          </b-form-invalid-feedback>
         </template>
       </elsa-form-group>
     </b-form-row>
@@ -83,8 +128,18 @@
     </elsa-form-group>
     <div class="text-right">
       <elsa-button variant="back" :to="{ name: 'arvioinnit' }">{{ $t('peruuta') }}</elsa-button>
-      <elsa-button v-if="editing" :loading="params.deleting" variant="outline-danger" class="ml-2" @click="onArviointipyyntoDelete">{{ $t('poista-arviointipyynto') }}</elsa-button>
-      <elsa-button :loading="params.saving" type="submit" variant="primary" class="ml-2">{{ editing ? $t('tallenna') : $t('laheta') }}</elsa-button>
+      <elsa-button
+        v-if="editing"
+        :loading="params.deleting"
+        variant="outline-danger"
+        class="ml-2"
+        @click="onArviointipyyntoDelete"
+      >
+        {{ $t('poista-arviointipyynto') }}
+      </elsa-button>
+      <elsa-button :loading="params.saving" type="submit" variant="primary" class="ml-2">
+        {{ editing ? $t('tallenna') : $t('laheta') }}
+      </elsa-button>
     </div>
   </b-form>
 </template>

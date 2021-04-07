@@ -3,18 +3,24 @@
     <elsa-form-group :label="$t('kouluttajan-nimi')" :required="true">
       <template v-slot="{ uid }">
         <b-form-input :id="uid" v-model="value.nimi" :state="validateState('nimi')"></b-form-input>
-        <b-form-invalid-feedback :id="`${uid}-feedback`">{{ $t('pakollinen-tieto') }}</b-form-invalid-feedback>
+        <b-form-invalid-feedback :id="`${uid}-feedback`">
+          {{ $t('pakollinen-tieto') }}
+        </b-form-invalid-feedback>
       </template>
     </elsa-form-group>
     <elsa-form-group :label="$t('kouluttajan-sahkoposti')" :required="true">
       <template v-slot="{ uid }">
         <b-form-input :id="uid" v-model="value.sahkoposti" :state="validateState('sahkoposti')" />
-        <b-form-invalid-feedback :id="`${uid}-feedback`">{{ $t('pakollinen-tieto') }}</b-form-invalid-feedback>
+        <b-form-invalid-feedback :id="`${uid}-feedback`">
+          {{ $t('pakollinen-tieto') }}
+        </b-form-invalid-feedback>
       </template>
     </elsa-form-group>
     <div class="text-right">
       <elsa-button variant="back" @click.stop.prevent="onCancel">{{ $t('peruuta') }}</elsa-button>
-      <elsa-button :loading="params.saving" type="submit" variant="primary" class="ml-2">{{ $t('lisaa') }}</elsa-button>
+      <elsa-button :loading="params.saving" type="submit" variant="primary" class="ml-2">
+        {{ $t('lisaa') }}
+      </elsa-button>
     </div>
   </b-form>
 </template>

@@ -1,8 +1,19 @@
 <template>
   <b-form @submit.stop.prevent="onSubmit">
-    <elsa-form-group :label="$t('tyoskentelyjakso')" :add-new-enabled="true" :add-new-label="$t('lisaa-tyoskentelyjakso')" :required="true" @submit="onTyoskentelyjaksoSubmit">
+    <elsa-form-group
+      :label="$t('tyoskentelyjakso')"
+      :add-new-enabled="true"
+      :add-new-label="$t('lisaa-tyoskentelyjakso')"
+      :required="true"
+      @submit="onTyoskentelyjaksoSubmit"
+    >
       <template v-slot:modal-content="{ submit, cancel }">
-        <tyoskentelyjakso-form :kunnat="kunnat" :erikoisalat="erikoisalat" @submit="submit" @cancel="cancel" />
+        <tyoskentelyjakso-form
+          :kunnat="kunnat"
+          :erikoisalat="erikoisalat"
+          @submit="submit"
+          @cancel="cancel"
+        />
       </template>
       <template v-slot="{ uid }">
         <elsa-form-multiselect
@@ -14,7 +25,9 @@
           track-by="id"
           @select="onTyoskentelyjaksoSelect"
         />
-        <b-form-invalid-feedback :id="`${uid}-feedback`">{{ $t('pakollinen-tieto') }}</b-form-invalid-feedback>
+        <b-form-invalid-feedback :id="`${uid}-feedback`">
+          {{ $t('pakollinen-tieto') }}
+        </b-form-invalid-feedback>
       </template>
     </elsa-form-group>
     <elsa-form-group :label="$t('oppimistavoite')" :required="true">
@@ -35,7 +48,9 @@
             <span v-else class="ml-3">{{ props.option.nimi }}</span>
           </template>
         </elsa-form-multiselect>
-        <b-form-invalid-feedback :id="`${uid}-feedback`">{{ $t('pakollinen-tieto') }}</b-form-invalid-feedback>
+        <b-form-invalid-feedback :id="`${uid}-feedback`">
+          {{ $t('pakollinen-tieto') }}
+        </b-form-invalid-feedback>
       </template>
     </elsa-form-group>
     <elsa-form-group :label="$t('vaativuustaso')" :required="true">
@@ -56,7 +71,7 @@
           v-model="form.vaativuustaso"
           :options="vaativuustasot"
           :state="validateState('vaativuustaso')"
-          :custom-label="value => `${value.arvo} ${value.nimi}`"
+          :custom-label="(value) => `${value.arvo} ${value.nimi}`"
           track-by="arvo"
         >
           <template slot="singleLabel" slot-scope="{ option }">
@@ -68,7 +83,9 @@
             {{ $t(option.nimi) }}
           </template>
         </elsa-form-multiselect>
-        <b-form-invalid-feedback :id="`${uid}-feedback`">{{ $t('pakollinen-tieto') }}</b-form-invalid-feedback>
+        <b-form-invalid-feedback :id="`${uid}-feedback`">
+          {{ $t('pakollinen-tieto') }}
+        </b-form-invalid-feedback>
       </template>
     </elsa-form-group>
     <b-form-row>
@@ -90,7 +107,7 @@
             v-model="form.luottamuksenTaso"
             :options="luottamuksenTasot"
             :state="validateState('luottamuksenTaso')"
-            :custom-label="value => `${value.arvo} ${value.nimi}`"
+            :custom-label="(value) => `${value.arvo} ${value.nimi}`"
             track-by="arvo"
           >
             <template slot="singleLabel" slot-scope="{ option }">
@@ -102,7 +119,9 @@
               {{ $t(option.nimi) }}
             </template>
           </elsa-form-multiselect>
-          <b-form-invalid-feedback :id="`${uid}-feedback`">{{ $t('pakollinen-tieto') }}</b-form-invalid-feedback>
+          <b-form-invalid-feedback :id="`${uid}-feedback`">
+            {{ $t('pakollinen-tieto') }}
+          </b-form-invalid-feedback>
         </template>
       </elsa-form-group>
       <elsa-form-group :label="$t('suorituspaiva')" class="col-md-4" :required="true">
@@ -114,7 +133,9 @@
             :min="tyoskentelyjaksonAlkamispaiva"
             :max="tyoskentelyjaksonPaattymispaiva"
           ></elsa-form-datepicker>
-          <b-form-invalid-feedback :id="`${uid}-feedback`">{{ $t('pakollinen-tieto') }}</b-form-invalid-feedback>
+          <b-form-invalid-feedback :id="`${uid}-feedback`">
+            {{ $t('pakollinen-tieto') }}
+          </b-form-invalid-feedback>
         </template>
       </elsa-form-group>
     </b-form-row>
@@ -124,9 +145,20 @@
       </template>
     </elsa-form-group>
     <div class="text-right">
-      <elsa-button variant="back" :to="{ name: 'suoritemerkinnat' }">{{ $t('peruuta') }}</elsa-button>
-      <elsa-button v-if="value.id" :loading="params.deleting" variant="outline-danger" @click="onSuoritemerkintaDelete">{{ $t('poista-merkinta') }}</elsa-button>
-      <elsa-button :loading="params.saving" type="submit" variant="primary" class="ml-2">{{ $t('tallenna') }}</elsa-button>
+      <elsa-button variant="back" :to="{ name: 'suoritemerkinnat' }">
+        {{ $t('peruuta') }}
+      </elsa-button>
+      <elsa-button
+        v-if="value.id"
+        :loading="params.deleting"
+        variant="outline-danger"
+        @click="onSuoritemerkintaDelete"
+      >
+        {{ $t('poista-merkinta') }}
+      </elsa-button>
+      <elsa-button :loading="params.saving" type="submit" variant="primary" class="ml-2">
+        {{ $t('tallenna') }}
+      </elsa-button>
     </div>
   </b-form>
 </template>
@@ -217,8 +249,10 @@
       this.form = {
         tyoskentelyjakso: this.value.tyoskentelyjakso,
         oppimistavoite: this.value.oppimistavoite,
-        vaativuustaso: vaativuustasot.find(taso => taso.arvo === this.value.vaativuustaso),
-        luottamuksenTaso: luottamuksenTasot.find(taso => taso.arvo === this.value.luottamuksenTaso),
+        vaativuustaso: vaativuustasot.find((taso) => taso.arvo === this.value.vaativuustaso),
+        luottamuksenTaso: luottamuksenTasot.find(
+          (taso) => taso.arvo === this.value.luottamuksenTaso
+        ),
         tapahtumanAjankohta: this.value.suorituspaiva,
         lisatiedot: this.value.lisatiedot
       }

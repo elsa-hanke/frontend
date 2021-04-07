@@ -2,7 +2,7 @@
   <div class="asiakirjat">
     <b-container fluid>
       <b-row class="mt-3" lg>
-        <b-col class="px-0">
+        <b-col>
           <b-card-skeleton :header="$t('asiakirjat')" :loading="false" class="mb-3">
             <b-table striped borderless hover :items="items"></b-table>
           </b-card-skeleton>

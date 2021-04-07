@@ -18,11 +18,10 @@
           title: this.$t(this.$route.name),
           titleTemplate: `%s - ${this.$t('elsa-palvelu')}`
         }
-      } else {
-        return {
-          title: this.$t('elsa-palvelu'),
-          titleTemplate: null
-        }
+      }
+      return {
+        title: this.$t('elsa-palvelu'),
+        titleTemplate: null
       }
     }
   }

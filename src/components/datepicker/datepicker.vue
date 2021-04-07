@@ -15,9 +15,12 @@
     }"
     :label-help="$t('datepicker-label-help')"
     :label-no-date-selected="$t('datepicker-no-date-selected')"
+    :disabled="disabled"
     v-on="$listeners"
   >
-    <template v-slot:button-content><font-awesome-icon :icon="['far', 'calendar-alt']" class="text-primary" /></template>
+    <template v-slot:button-content>
+      <font-awesome-icon :icon="['far', 'calendar-alt']" class="text-primary" />
+    </template>
   </b-form-datepicker>
 </template>
 
@@ -39,6 +42,9 @@
 
     @Prop({ required: false, type: String })
     max!: string | undefined
+
+    @Prop({ required: false, type: Boolean, default: undefined })
+    disabled!: boolean | undefined
 
     get currentLocale() {
       if (this.$i18n) {

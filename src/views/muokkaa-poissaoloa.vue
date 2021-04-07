@@ -1,12 +1,19 @@
 <template>
   <div class="muokkaa-poissaoloa">
-    <b-breadcrumb :items="items" class="mb-0 px-0"></b-breadcrumb>
+    <b-breadcrumb :items="items" class="mb-0"></b-breadcrumb>
     <b-container fluid>
       <b-row lg>
-        <b-col class="px-0">
+        <b-col>
           <h1>{{ $t('muokkaa-poissaoloa') }}</h1>
           <hr />
-          <poissaolo-form v-if="!loading" :value="poissaoloWrapper" :tyoskentelyjaksot="tyoskentelyjaksot" :poissaolon-syyt="poissaolonSyyt" @submit="onSubmit" @delete="onDelete" />
+          <poissaolo-form
+            v-if="!loading"
+            :value="poissaoloWrapper"
+            :tyoskentelyjaksot="tyoskentelyjaksot"
+            :poissaolon-syyt="poissaolonSyyt"
+            @submit="onSubmit"
+            @delete="onDelete"
+          />
           <div v-else class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />
           </div>
@@ -59,7 +66,9 @@
       const poissaoloId = this.$route?.params?.poissaoloId
       if (poissaoloId) {
         try {
-          this.poissaolo = (await axios.get(`erikoistuva-laakari/tyoskentelyjaksot/poissaolot/${poissaoloId}`)).data
+          this.poissaolo = (
+            await axios.get(`erikoistuva-laakari/tyoskentelyjaksot/poissaolot/${poissaoloId}`)
+          ).data
         } catch (err) {
           this.$router.replace({ name: 'tyoskentelyjaksot' })
         }
@@ -77,7 +86,9 @@
     async onSubmit(value: any, params: any) {
       params.saving = true
       try {
-        this.poissaolo = (await axios.put('erikoistuva-laakari/tyoskentelyjaksot/poissaolot', value)).data
+        this.poissaolo = (
+          await axios.put('erikoistuva-laakari/tyoskentelyjaksot/poissaolot', value)
+        ).data
         toastSuccess(this, this.$t('poissaolon-tallentaminen-onnistui'))
         this.skipRouteExitConfirm = true
         this.$router.push({
@@ -93,10 +104,18 @@
     }
 
     async onDelete(params: any) {
-      if (await confirmDelete(this, this.$t('poista-poissaolo') as string, (this.$t('poissaolon') as string).toLowerCase())) {
+      if (
+        await confirmDelete(
+          this,
+          this.$t('poista-poissaolo') as string,
+          (this.$t('poissaolon') as string).toLowerCase()
+        )
+      ) {
         params.deleting = true
         try {
-          await axios.delete(`erikoistuva-laakari/tyoskentelyjaksot/poissaolot/${this.poissaolo.id}`)
+          await axios.delete(
+            `erikoistuva-laakari/tyoskentelyjaksot/poissaolot/${this.poissaolo.id}`
+          )
           toastSuccess(this, this.$t('poissaolo-poistettu-onnistuneesti'))
           this.skipRouteExitConfirm = true
           this.$router.push({

@@ -5,14 +5,19 @@
         <user-avatar :display-name="value.kommentti.kommentoija.nimi">
           <template #display-name>
             {{ value.kommentti.kommentoija.nimi }} |
-            <span v-if="value.kommentti.muokkausaika !== value.kommentti.luontiaika" class="text-size-sm">
+            <span
+              v-if="value.kommentti.muokkausaika !== value.kommentti.luontiaika"
+              class="text-size-sm"
+            >
               {{ $t('muokattu') }}
               {{ $datetime(value.kommentti.muokkausaika) }}
             </span>
             <span v-else class="text-size-sm">{{ $datetime(value.kommentti.luontiaika) }}</span>
           </template>
         </user-avatar>
-        <b-link v-if="value.self && !editing" class="text-white ml-3" @click="startEditing">{{ $t('muokkaa') }}</b-link>
+        <b-link v-if="value.self && !editing" class="text-white ml-3" @click="startEditing">
+          {{ $t('muokkaa') }}
+        </b-link>
       </div>
       <div v-if="!editing">
         <span class="text-prewrap">{{ value.kommentti.teksti }}</span>
@@ -21,12 +26,25 @@
         <b-form @submit.stop.prevent="onSubmit">
           <elsa-form-group :label="$t('muokkaa-kommenttia')">
             <template v-slot="{ uid }">
-              <b-form-textarea :id="uid" v-model="kommentti.teksti" :placeholder="$t('kirjoita-kommenttisi-tahan')" rows="5"></b-form-textarea>
+              <b-form-textarea
+                :id="uid"
+                v-model="kommentti.teksti"
+                :placeholder="$t('kirjoita-kommenttisi-tahan')"
+                rows="5"
+              ></b-form-textarea>
             </template>
           </elsa-form-group>
           <div class="text-right">
             <elsa-button variant="back" @click="cancelEditing">{{ $t('peruuta') }}</elsa-button>
-            <elsa-button :disabled="!kommentti.teksti || saving" :loading="saving" type="submit" variant="primary" class="ml-2">{{ $t('tallenna') }}</elsa-button>
+            <elsa-button
+              :disabled="!kommentti.teksti || saving"
+              :loading="saving"
+              type="submit"
+              variant="primary"
+              class="ml-2"
+            >
+              {{ $t('tallenna') }}
+            </elsa-button>
           </div>
         </b-form>
       </div>
@@ -74,10 +92,13 @@
       this.saving = true
       try {
         const kommentti = (
-          await axios.put(`erikoistuva-laakari/suoritusarvioinnit/${this.value.kommentti.suoritusarviointiId}/kommentti`, {
-            ...this.value.kommentti,
-            teksti: this.kommentti.teksti
-          })
+          await axios.put(
+            `erikoistuva-laakari/suoritusarvioinnit/${this.value.kommentti.suoritusarviointiId}/kommentti`,
+            {
+              ...this.value.kommentti,
+              teksti: this.kommentti.teksti
+            }
+          )
         ).data
         this.value.kommentti = kommentti
         this.editing = false

@@ -1,12 +1,19 @@
 <template>
   <div class="lisaa-tyoskentelyjakso">
-    <b-breadcrumb :items="items" class="mb-0 px-0"></b-breadcrumb>
+    <b-breadcrumb :items="items" class="mb-0"></b-breadcrumb>
     <b-container fluid>
       <b-row lg>
-        <b-col class="px-0">
+        <b-col>
           <h1>{{ $t('lisaa-tyoskentelyjakso') }}</h1>
           <hr />
-          <tyoskentelyjakso-form v-if="!loading" :kunnat="kunnat" :erikoisalat="erikoisalat" :modal="false" @submit="onSubmit" @cancel="onCancel" />
+          <tyoskentelyjakso-form
+            v-if="!loading"
+            :kunnat="kunnat"
+            :erikoisalat="erikoisalat"
+            :modal="false"
+            @submit="onSubmit"
+            @cancel="onCancel"
+          />
           <div v-else class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />
           </div>
@@ -55,7 +62,9 @@
 
     async fetchLomake() {
       try {
-        this.tyoskentelyjaksoLomake = (await axios.get(`erikoistuva-laakari/tyoskentelyjakso-lomake`)).data
+        this.tyoskentelyjaksoLomake = (
+          await axios.get(`erikoistuva-laakari/tyoskentelyjakso-lomake`)
+        ).data
       } catch (err) {
         toastFail(this, this.$t('tyoskentelyjakson-lomakkeen-hakeminen-epaonnistui'))
       }
@@ -64,7 +73,8 @@
     async onSubmit(value: any, params: any) {
       params.saving = true
       try {
-        const tyoskentelyjakso = (await axios.post('/erikoistuva-laakari/tyoskentelyjaksot', value)).data
+        const tyoskentelyjakso = (await axios.post('/erikoistuva-laakari/tyoskentelyjaksot', value))
+          .data
         toastSuccess(this, this.$t('uusi-tyoskentelyjakso-lisatty'))
         this.skipRouteExitConfirm = true
         this.$router.push({

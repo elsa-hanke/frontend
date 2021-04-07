@@ -27,15 +27,15 @@ export class DatePlugin {
       return format(date, pattern, { locale })
     }
 
-    vue.prototype.$date = function(value: string) {
+    vue.prototype.$date = function (value: string) {
       return parseAndFormat(value, 'P')
     }
 
-    vue.prototype.$datetime = function(value: string) {
+    vue.prototype.$datetime = function (value: string) {
       return parseAndFormat(value, 'Pp')
     }
 
-    vue.prototype.$duration = function(value: number) {
+    vue.prototype.$duration = function (value: number) {
       if (durationOptions.showInDays) {
         return `${Math.round(value)} vrk`
       }

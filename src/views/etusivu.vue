@@ -7,7 +7,11 @@
             <div class="fa-2x mr-2">
               <font-awesome-layers>
                 <font-awesome-icon icon="circle" />
-                <font-awesome-icon icon="arrows-alt" transform="shrink-6" :style="{ color: 'white' }" />
+                <font-awesome-icon
+                  icon="arrows-alt"
+                  transform="shrink-6"
+                  :style="{ color: 'white' }"
+                />
               </font-awesome-layers>
             </div>
             <span class="text-left">{{ $t('lisaa-ja-muokkaa-osioita') }}</span>
@@ -17,7 +21,12 @@
           <b-card-skeleton :header="$t('henkilotiedot')" :loading="!account" class="mb-3">
             <div class="d-flex align-items-center">
               <div class="d-none d-lg-block d-xl-block mr-3">
-                <avatar :username="displayName" background-color="gray" color="white" :size="96"></avatar>
+                <avatar
+                  :username="displayName"
+                  background-color="gray"
+                  color="white"
+                  :size="96"
+                ></avatar>
               </div>
               <div class="flex-fill">
                 <table class="table table-borderless text-size-sm" :summary="$t('henkilotiedot')">
@@ -51,16 +60,42 @@
                   </tr>
                 </table>
               </div>
-              <elsa-button size="sm" variant="primary" class="rounded-pill d-none d-lg-block d-xl-block ml-3">{{ $t('muokkaa-tietoja') }}</elsa-button>
+              <elsa-button
+                size="sm"
+                variant="primary"
+                class="rounded-pill d-none d-lg-block d-xl-block ml-3"
+              >
+                {{ $t('muokkaa-tietoja') }}
+              </elsa-button>
             </div>
           </b-card-skeleton>
-          <b-card-skeleton :header="$t('suorittanut-erikoistumiseen-vaadittavista-opinnoista')" :loading="true" class="mb-3"></b-card-skeleton>
-          <b-card-skeleton :header="$t('tyoskentelyjaksot')" :loading="true" class="mb-3"></b-card-skeleton>
+          <b-card-skeleton
+            :header="$t('suorittanut-erikoistumiseen-vaadittavista-opinnoista')"
+            :loading="true"
+            class="mb-3"
+          ></b-card-skeleton>
+          <b-card-skeleton
+            :header="$t('tyoskentelyjaksot')"
+            :loading="true"
+            class="mb-3"
+          ></b-card-skeleton>
         </b-col>
         <b-col class="pl-0 pl-lg-2 pr-0" lg>
-          <b-card-skeleton :header="$t('koulutussuunnitelma')" :loading="true" class="mb-3"></b-card-skeleton>
-          <b-card-skeleton :header="$t('teoriakoulutukset')" :loading="true" class="mb-3"></b-card-skeleton>
-          <b-card-skeleton :header="$t('johtamiskoulutukset')" :loading="true" class="mb-3"></b-card-skeleton>
+          <b-card-skeleton
+            :header="$t('koulutussuunnitelma')"
+            :loading="true"
+            class="mb-3"
+          ></b-card-skeleton>
+          <b-card-skeleton
+            :header="$t('teoriakoulutukset')"
+            :loading="true"
+            class="mb-3"
+          ></b-card-skeleton>
+          <b-card-skeleton
+            :header="$t('johtamiskoulutukset')"
+            :loading="true"
+            class="mb-3"
+          ></b-card-skeleton>
         </b-col>
       </b-row>
     </b-container>

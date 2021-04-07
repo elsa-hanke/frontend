@@ -1,9 +1,9 @@
 <template>
   <div class="poissaolo">
-    <b-breadcrumb :items="items" class="mb-0 px-0"></b-breadcrumb>
+    <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid>
       <b-row lg>
-        <b-col class="px-0">
+        <b-col>
           <h1>{{ $t('poissaolo') }}</h1>
           <hr />
           <div v-if="poissaoloWrapper">
@@ -23,9 +23,15 @@
                   <span :id="uid">{{ $date(poissaoloWrapper.alkamispaiva) }}</span>
                 </template>
               </elsa-form-group>
-              <elsa-form-group v-if="poissaoloWrapper.paattymispaiva" :label="$t('paattymispaiva')" class="col-sm-12 col-md-6 pl-md-3">
+              <elsa-form-group
+                v-if="poissaoloWrapper.paattymispaiva"
+                :label="$t('paattymispaiva')"
+                class="col-sm-12 col-md-6 pl-md-3"
+              >
                 <template v-slot="{ uid }">
-                  <span :id="uid" class="datepicker-range">{{ $date(poissaoloWrapper.paattymispaiva) }}</span>
+                  <span :id="uid" class="datepicker-range">
+                    {{ $date(poissaoloWrapper.paattymispaiva) }}
+                  </span>
                 </template>
               </elsa-form-group>
             </b-form-row>
@@ -35,8 +41,12 @@
               </template>
             </elsa-form-group>
             <div class="text-right">
-              <elsa-button :loading="deleting" variant="outline-danger" @click="onPoissaoloDelete">{{ $t('poista-poissaolo') }}</elsa-button>
-              <elsa-button :to="{ name: 'muokkaa-poissaoloa' }" variant="primary" class="ml-2">{{ $t('muokkaa-poissaoloa') }}</elsa-button>
+              <elsa-button :loading="deleting" variant="outline-danger" @click="onPoissaoloDelete">
+                {{ $t('poista-poissaolo') }}
+              </elsa-button>
+              <elsa-button :to="{ name: 'muokkaa-poissaoloa' }" variant="primary" class="ml-2">
+                {{ $t('muokkaa-poissaoloa') }}
+              </elsa-button>
             </div>
           </div>
           <div v-else class="text-center">
@@ -91,7 +101,9 @@
       const poissaoloId = this.$route?.params?.poissaoloId
       if (poissaoloId) {
         try {
-          this.poissaolo = (await axios.get(`erikoistuva-laakari/tyoskentelyjaksot/poissaolot/${poissaoloId}`)).data
+          this.poissaolo = (
+            await axios.get(`erikoistuva-laakari/tyoskentelyjaksot/poissaolot/${poissaoloId}`)
+          ).data
         } catch (err) {
           this.$router.replace({ name: 'tyoskentelyjaksot' })
         }
@@ -99,10 +111,18 @@
     }
 
     async onPoissaoloDelete() {
-      if (await confirmDelete(this, this.$t('poista-poissaolo') as string, (this.$t('poissaolon') as string).toLowerCase())) {
+      if (
+        await confirmDelete(
+          this,
+          this.$t('poista-poissaolo') as string,
+          (this.$t('poissaolon') as string).toLowerCase()
+        )
+      ) {
         this.deleting = true
         try {
-          await axios.delete(`erikoistuva-laakari/tyoskentelyjaksot/poissaolot/${this.poissaolo.id}`)
+          await axios.delete(
+            `erikoistuva-laakari/tyoskentelyjaksot/poissaolot/${this.poissaolo.id}`
+          )
           toastSuccess(this, this.$t('poissaolo-poistettu-onnistuneesti'))
           this.$router.push({
             name: 'tyoskentelyjaksot'

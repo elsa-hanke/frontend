@@ -1,13 +1,17 @@
 <template>
   <div class="tyoskentelyjaksot">
-    <b-breadcrumb :items="items" class="mb-0 px-0"></b-breadcrumb>
+    <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid>
       <b-row lg>
-        <b-col class="px-0">
+        <b-col>
           <h1>{{ $t('tyoskentelyjaksot') }}</h1>
           <p>{{ $t('tyoskentelyjaksot-kuvaus') }}</p>
-          <elsa-button variant="primary" :to="{ name: 'uusi-tyoskentelyjakso' }" class="mb-4 mr-2">{{ $t('lisaa-tyoskentelyjakso') }}</elsa-button>
-          <elsa-button variant="outline-primary" :to="{ name: 'uusi-poissaolo' }" class="mb-4">{{ $t('lisaa-poissaolo') }}</elsa-button>
+          <elsa-button variant="primary" :to="{ name: 'uusi-tyoskentelyjakso' }" class="mb-4 mr-2">
+            {{ $t('lisaa-tyoskentelyjakso') }}
+          </elsa-button>
+          <elsa-button variant="outline-primary" :to="{ name: 'uusi-poissaolo' }" class="mb-4">
+            {{ $t('lisaa-poissaolo') }}
+          </elsa-button>
           <div v-if="!loading">
             <div class="d-flex justify-content-center border rounded pt-3 mb-4">
               <div class="container-fluid">
@@ -15,16 +19,26 @@
                   <template v-slot="{ uid }">
                     <div :id="uid" class="d-flex flex-wrap">
                       <div class="d-flex flex-column mb-2 duration-card">
-                        <span class="duration-text">{{ $duration(tilastot.tyoskentelyaikaYhteensa) }}</span>
+                        <span class="duration-text">
+                          {{ $duration(tilastot.tyoskentelyaikaYhteensa) }}
+                        </span>
                         <span class="text-size-sm">{{ $t('tyoskentelyaika-yhteensa') }}</span>
                       </div>
                       <div class="d-flex flex-column mb-2 duration-card">
-                        <span class="duration-text">{{ $duration(tilastot.arvioErikoistumiseenHyvaksyttavista) }}</span>
-                        <span class="text-size-sm">{{ $t('arvio-erikoistumiseen-hyvaksyttavista') }}</span>
+                        <span class="duration-text">
+                          {{ $duration(tilastot.arvioErikoistumiseenHyvaksyttavista) }}
+                        </span>
+                        <span class="text-size-sm">
+                          {{ $t('arvio-erikoistumiseen-hyvaksyttavista') }}
+                        </span>
                       </div>
                       <div class="d-flex flex-column mb-2 duration-card">
-                        <span class="duration-text">{{ $duration(tilastot.arvioPuuttuvastaKoulutuksesta) }}</span>
-                        <span class="text-size-sm">{{ $t('arvio-puuttuvasta-koulutuksesta') }}</span>
+                        <span class="duration-text">
+                          {{ $duration(tilastot.arvioPuuttuvastaKoulutuksesta) }}
+                        </span>
+                        <span class="text-size-sm">
+                          {{ $t('arvio-puuttuvasta-koulutuksesta') }}
+                        </span>
                       </div>
                     </div>
                   </template>
@@ -48,8 +62,17 @@
                 <b-row>
                   <b-col>
                     <div class="d-flex flex-row-reverse">
-                      <elsa-button :disabled="false" variant="link" class="shadow-none" @click="toggleDays">
-                        {{ showInDays ? $t('nayta-likimaaraisina-sekayksikkoina') : $t('nayta-vuorokausina') }}
+                      <elsa-button
+                        :disabled="false"
+                        variant="link"
+                        class="shadow-none"
+                        @click="toggleDays"
+                      >
+                        {{
+                          showInDays
+                            ? $t('nayta-likimaaraisina-sekayksikkoina')
+                            : $t('nayta-vuorokausina')
+                        }}
                       </elsa-button>
                     </div>
                   </b-col>
@@ -59,7 +82,11 @@
             <div class="tyoskentelyjaksot-table">
               <b-table :items="tyoskentelyjaksotFormatted" :fields="fields" responsive>
                 <template #table-colgroup="scope">
-                  <col v-for="field in scope.fields" :key="field.key" :style="{ width: field.width }" />
+                  <col
+                    v-for="field in scope.fields"
+                    :key="field.key"
+                    :style="{ width: field.width }"
+                  />
                 </template>
                 <template #cell(tyoskentelypaikkaLabel)="row">
                   <elsa-button
@@ -77,9 +104,23 @@
                   {{ row.item.ajankohta }}
                 </template>
                 <template #cell(keskeytyksetLength)="row">
-                  <elsa-button v-if="row.item.keskeytyksetLength > 0" variant="link" class="shadow-none text-nowrap px-0" @click="row.toggleDetails">
-                    {{ row.item.keskeytyksetLength }} {{ (row.item.keskeytyksetLength == 1 ? $t('poissaolo') : $t('poissaoloa')) | lowercase }}
-                    <font-awesome-icon :icon="row.detailsShowing ? 'chevron-up' : 'chevron-down'" fixed-width size="lg" class="ml-2 text-dark" />
+                  <elsa-button
+                    v-if="row.item.keskeytyksetLength > 0"
+                    variant="link"
+                    class="shadow-none text-nowrap px-0"
+                    @click="row.toggleDetails"
+                  >
+                    {{ row.item.keskeytyksetLength }}
+                    {{
+                      (row.item.keskeytyksetLength == 1 ? $t('poissaolo') : $t('poissaoloa'))
+                        | lowercase
+                    }}
+                    <font-awesome-icon
+                      :icon="row.detailsShowing ? 'chevron-up' : 'chevron-down'"
+                      fixed-width
+                      size="lg"
+                      class="ml-2 text-dark"
+                    />
                   </elsa-button>
                   <span v-else>
                     {{ $t('ei-poissaoloja') }}
@@ -119,12 +160,18 @@
                           <b-td>
                             {{
                               keskeytysaika.alkamispaiva != keskeytysaika.paattymispaiva
-                                ? `${$date(keskeytysaika.alkamispaiva)}-${$date(keskeytysaika.paattymispaiva)}`
+                                ? `${$date(keskeytysaika.alkamispaiva)}-${$date(
+                                    keskeytysaika.paattymispaiva
+                                  )}`
                                 : $date(keskeytysaika.alkamispaiva)
                             }}
                           </b-td>
                           <b-td>
-                            <span v-if="keskeytysaika.osaaikaprosentti === row.item.osaaikaprosentti">{{ $t('koko-tyoajan-poissaolo') }}</span>
+                            <span
+                              v-if="keskeytysaika.osaaikaprosentti === row.item.osaaikaprosentti"
+                            >
+                              {{ $t('koko-tyoajan-poissaolo') }}
+                            </span>
                             <span v-else>{{ 100 - keskeytysaika.osaaikaprosentti }} %</span>
                           </b-td>
                         </b-tr>
@@ -223,7 +270,9 @@
 
     async fetchTyoskentelyjaksot() {
       try {
-        this.tyoskentelyjaksotTaulukko = (await axios.get(`erikoistuva-laakari/tyoskentelyjaksot-taulukko`)).data
+        this.tyoskentelyjaksotTaulukko = (
+          await axios.get(`erikoistuva-laakari/tyoskentelyjaksot-taulukko`)
+        ).data
       } catch (err) {
         toastFail(this, this.$t('tyoskentelyjaksojen-hakeminen-epaonnistui'))
       }
@@ -285,7 +334,8 @@
             color: '#8a86fb',
             backgroundColor: '#cfcdfd',
             value: this.tilastot.koulutustyypit.yliopistosairaaloidenUlkopuolinenSuoritettu,
-            minRequired: this.tilastot.koulutustyypit.yliopistosairaaloidenUlkopuolinenVaadittuVahintaan,
+            minRequired: this.tilastot.koulutustyypit
+              .yliopistosairaaloidenUlkopuolinenVaadittuVahintaan,
             highlight: false
           },
           {
@@ -328,10 +378,16 @@
 
     get tilastotKaytannonKoulutusSorted() {
       return [
-        this.tilastotKaytannonKoulutus.find((kk: any) => kk.kaytannonKoulutus === 'OMAN_ERIKOISALAN_KOULUTUS'),
-        this.tilastotKaytannonKoulutus.find((kk: any) => kk.kaytannonKoulutus === 'OMAA_ERIKOISALAA_TUKEVA_KOULUTUS'),
+        this.tilastotKaytannonKoulutus.find(
+          (kk: any) => kk.kaytannonKoulutus === 'OMAN_ERIKOISALAN_KOULUTUS'
+        ),
+        this.tilastotKaytannonKoulutus.find(
+          (kk: any) => kk.kaytannonKoulutus === 'OMAA_ERIKOISALAA_TUKEVA_KOULUTUS'
+        ),
         this.tilastotKaytannonKoulutus.find((kk: any) => kk.kaytannonKoulutus === 'TUTKIMUSTYO'),
-        this.tilastotKaytannonKoulutus.find((kk: any) => kk.kaytannonKoulutus === 'TERVEYSKESKUSTYO')
+        this.tilastotKaytannonKoulutus.find(
+          (kk: any) => kk.kaytannonKoulutus === 'TERVEYSKESKUSTYO'
+        )
       ].filter((kk: any) => kk !== null)
     }
 
@@ -340,15 +396,29 @@
     }
 
     get donutOptions() {
-      this.tilastotKaytannonKoulutus.map((kk: any) => `${tyoskentelyjaksoKaytannonKoulutusLabel(this, kk.kaytannonKoulutus)}: ${(this as any).$duration(kk.suoritettu)}`)
+      this.tilastotKaytannonKoulutus.map(
+        (kk: any) =>
+          `${tyoskentelyjaksoKaytannonKoulutusLabel(
+            this,
+            kk.kaytannonKoulutus
+          )}: ${(this as any).$duration(kk.suoritettu)}`
+      )
 
       return {
         colors: ['#41b257', '#0f9bd9', '#8a86fb', '#ffb406'],
         labels: [
-          `${this.$t('oma-erikoisala')}: ${(this as any).$duration(this.tilastotKaytannonKoulutusSorted[0].suoritettu)}`,
-          `${this.$t('omaa-erikoisalaa-tukeva')}: ${(this as any).$duration(this.tilastotKaytannonKoulutusSorted[1].suoritettu)}`,
-          `${this.$t('tutkimustyo')}: ${(this as any).$duration(this.tilastotKaytannonKoulutusSorted[2].suoritettu)}`,
-          `${this.$t('terveyskeskustyo')}: ${(this as any).$duration(this.tilastotKaytannonKoulutusSorted[3].suoritettu)}`
+          `${this.$t('oma-erikoisala')}: ${(this as any).$duration(
+            this.tilastotKaytannonKoulutusSorted[0].suoritettu
+          )}`,
+          `${this.$t('omaa-erikoisalaa-tukeva')}: ${(this as any).$duration(
+            this.tilastotKaytannonKoulutusSorted[1].suoritettu
+          )}`,
+          `${this.$t('tutkimustyo')}: ${(this as any).$duration(
+            this.tilastotKaytannonKoulutusSorted[2].suoritettu
+          )}`,
+          `${this.$t('terveyskeskustyo')}: ${(this as any).$duration(
+            this.tilastotKaytannonKoulutusSorted[3].suoritettu
+          )}`
         ],
         legend: {
           fontSize: '13px',
@@ -367,7 +437,7 @@
           }
         },
         dataLabels: {
-          formatter: function(val: number) {
+          formatter: function (val: number) {
             return Math.round(val) + '%'
           },
           style: {
@@ -415,34 +485,40 @@
     }
 
     get tyoskentelyjaksotFormatted() {
-      const keskeytyksetGroupByTyoskentelyjakso = this.keskeytykset.reduce((result: any, keskeytysaika: any) => {
-        const tyoskentelyjaksoId = keskeytysaika.tyoskentelyjakso.id
-        if (tyoskentelyjaksoId in result) {
-          result[tyoskentelyjaksoId].push({
-            id: keskeytysaika.id,
-            alkamispaiva: keskeytysaika.alkamispaiva,
-            paattymispaiva: keskeytysaika.paattymispaiva,
-            osaaikaprosentti: keskeytysaika.osaaikaprosentti,
-            poissaolonSyy: keskeytysaika.poissaolonSyy
-          })
-        } else {
-          result[tyoskentelyjaksoId] = [
-            {
+      const keskeytyksetGroupByTyoskentelyjakso = this.keskeytykset.reduce(
+        (result: any, keskeytysaika: any) => {
+          const tyoskentelyjaksoId = keskeytysaika.tyoskentelyjakso.id
+          if (tyoskentelyjaksoId in result) {
+            result[tyoskentelyjaksoId].push({
               id: keskeytysaika.id,
               alkamispaiva: keskeytysaika.alkamispaiva,
               paattymispaiva: keskeytysaika.paattymispaiva,
               osaaikaprosentti: keskeytysaika.osaaikaprosentti,
               poissaolonSyy: keskeytysaika.poissaolonSyy
-            }
-          ]
-        }
-        return result
-      }, {})
+            })
+          } else {
+            result[tyoskentelyjaksoId] = [
+              {
+                id: keskeytysaika.id,
+                alkamispaiva: keskeytysaika.alkamispaiva,
+                paattymispaiva: keskeytysaika.paattymispaiva,
+                osaaikaprosentti: keskeytysaika.osaaikaprosentti,
+                poissaolonSyy: keskeytysaika.poissaolonSyy
+              }
+            ]
+          }
+          return result
+        },
+        {}
+      )
 
-      const tilastotTyoskentelyjaksotMap = this.tilastotTyoskentelyjaksot.reduce((result: any, tyoskentelyjakso: any) => {
-        result[tyoskentelyjakso.id] = tyoskentelyjakso.suoritettu
-        return result
-      }, {})
+      const tilastotTyoskentelyjaksotMap = this.tilastotTyoskentelyjaksot.reduce(
+        (result: any, tyoskentelyjakso: any) => {
+          result[tyoskentelyjakso.id] = tyoskentelyjakso.suoritettu
+          return result
+        },
+        {}
+      )
 
       return this.tyoskentelyjaksot.map((tj: any) => ({
         ...tj,
@@ -451,7 +527,9 @@
         ajankohta: ajankohtaLabel(this, tj),
         tyoskentelyaikaLabel: (this as any).$duration(tilastotTyoskentelyjaksotMap[tj.id]),
         osaaikaprosenttiLabel: `${tj.osaaikaprosentti} %`,
-        hyvaksyttyAiempaanErikoisalaanLabel: tj.hyvaksyttyAiempaanErikoisalaan ? this.$t('kylla') : this.$t('ei'),
+        hyvaksyttyAiempaanErikoisalaanLabel: tj.hyvaksyttyAiempaanErikoisalaan
+          ? this.$t('kylla')
+          : this.$t('ei'),
         keskeytykset: keskeytyksetGroupByTyoskentelyjakso[tj.id] || [],
         keskeytyksetLength: (keskeytyksetGroupByTyoskentelyjakso[tj.id] || []).length
       }))
