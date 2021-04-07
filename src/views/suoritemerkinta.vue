@@ -1,9 +1,9 @@
 <template>
   <div class="suoritemerkinta">
-    <b-breadcrumb :items="items" class="mb-0 px-0"></b-breadcrumb>
+    <b-breadcrumb :items="items" class="mb-0"></b-breadcrumb>
     <b-container fluid>
       <b-row lg>
-        <b-col class="px-0">
+        <b-col>
           <h1>{{ $t('suoritemerkinta') }}</h1>
           <hr />
           <div v-if="suoritemerkintaWrapper">
@@ -53,8 +53,20 @@
               </template>
             </elsa-form-group>
             <div class="text-right">
-              <elsa-button :loading="deleting" variant="outline-danger" @click="onSuoritemerkintaDelete">{{ $t('poista-merkinta') }}</elsa-button>
-              <elsa-button :to="{ name: 'muokkaa-suoritemerkintaa' }" variant="primary" class="ml-2">{{ $t('muokkaa-merkintaa') }}</elsa-button>
+              <elsa-button
+                :loading="deleting"
+                variant="outline-danger"
+                @click="onSuoritemerkintaDelete"
+              >
+                {{ $t('poista-merkinta') }}
+              </elsa-button>
+              <elsa-button
+                :to="{ name: 'muokkaa-suoritemerkintaa' }"
+                variant="primary"
+                class="ml-2"
+              >
+                {{ $t('muokkaa-merkintaa') }}
+              </elsa-button>
             </div>
           </div>
           <div v-else class="text-center">
@@ -67,8 +79,9 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue'
   import axios from 'axios'
-  import { Vue, Component } from 'vue-property-decorator'
+  import { Component } from 'vue-property-decorator'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
   import ElsaBadge from '@/components/badge/badge.vue'
@@ -112,7 +125,9 @@
       const suoritemerkintaId = this.$route?.params?.suoritemerkintaId
       if (suoritemerkintaId) {
         try {
-          this.suoritemerkinta = (await axios.get(`erikoistuva-laakari/suoritemerkinnat/${suoritemerkintaId}`)).data
+          this.suoritemerkinta = (
+            await axios.get(`erikoistuva-laakari/suoritemerkinnat/${suoritemerkintaId}`)
+          ).data
         } catch (err) {
           this.$router.replace({ name: 'suoritemerkinnat' })
         }
@@ -120,7 +135,13 @@
     }
 
     async onSuoritemerkintaDelete() {
-      if (await confirmDelete(this, this.$t('poista-suoritemerkinta') as string, (this.$t('suoritemerkinnan') as string).toLowerCase())) {
+      if (
+        await confirmDelete(
+          this,
+          this.$t('poista-suoritemerkinta') as string,
+          (this.$t('suoritemerkinnan') as string).toLowerCase()
+        )
+      ) {
         this.deleting = true
         try {
           await axios.delete(`erikoistuva-laakari/suoritemerkinnat/${this.suoritemerkinta.id}`)

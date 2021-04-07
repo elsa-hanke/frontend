@@ -1,12 +1,19 @@
 <template>
   <div class="muokkaa-tyoskentelyjaksoa">
-    <b-breadcrumb :items="items" class="mb-0 px-0"></b-breadcrumb>
+    <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid>
       <b-row lg>
-        <b-col class="px-0">
+        <b-col>
           <h1>{{ $t('muokkaa-tyoskentelyjaksoa') }}</h1>
           <hr />
-          <tyoskentelyjakso-form v-if="tyoskentelyjakso" :value="tyoskentelyjakso" :editing="true" @submit="onSubmit" @delete="onDelete" @cancel="onCancel" />
+          <tyoskentelyjakso-form
+            v-if="tyoskentelyjakso"
+            :value="tyoskentelyjakso"
+            :editing="true"
+            @submit="onSubmit"
+            @delete="onDelete"
+            @cancel="onCancel"
+          />
           <div v-else class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />
           </div>
@@ -54,7 +61,9 @@
       const tyoskentelyjaksoId = this.$route?.params?.tyoskentelyjaksoId
       if (tyoskentelyjaksoId) {
         try {
-          this.tyoskentelyjakso = (await axios.get(`erikoistuva-laakari/tyoskentelyjaksot/${tyoskentelyjaksoId}`)).data
+          this.tyoskentelyjakso = (
+            await axios.get(`erikoistuva-laakari/tyoskentelyjaksot/${tyoskentelyjaksoId}`)
+          ).data
         } catch (err) {
           this.$router.replace({ name: 'tyoskentelyjaksot' })
         }
@@ -64,7 +73,9 @@
     async onSubmit(value: any, params: any) {
       params.saving = true
       try {
-        this.tyoskentelyjakso = (await axios.put('erikoistuva-laakari/tyoskentelyjaksot', value)).data
+        this.tyoskentelyjakso = (
+          await axios.put('erikoistuva-laakari/tyoskentelyjaksot', value)
+        ).data
         toastSuccess(this, this.$t('tyoskentelyjakson-tallentaminen-onnistui'))
         this.skipRouteExitConfirm = true
         this.$router.push({
@@ -80,7 +91,13 @@
     }
 
     async onDelete(params: any) {
-      if (await confirmDelete(this, this.$t('poista-tyoskentelyjakso') as string, (this.$t('tyoskentelyjakson') as string).toLowerCase())) {
+      if (
+        await confirmDelete(
+          this,
+          this.$t('poista-tyoskentelyjakso') as string,
+          (this.$t('tyoskentelyjakson') as string).toLowerCase()
+        )
+      ) {
         params.deleting = true
         try {
           await axios.delete(`erikoistuva-laakari/tyoskentelyjaksot/${this.tyoskentelyjakso.id}`)

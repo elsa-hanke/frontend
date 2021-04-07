@@ -1,15 +1,15 @@
 <template>
   <div class="itsearviointi-valmis">
-    <b-breadcrumb :items="items" class="mb-0 px-0"></b-breadcrumb>
+    <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid>
       <b-row lg>
-        <b-col class="px-0">
+        <b-col>
           <h1 class="text-center">{{ $t('itsearviointi-valmis') }}</h1>
-          <p class="text-center">
-            Lorem ipsum dolor sit amet...
-          </p>
+          <p class="text-center">Lorem ipsum dolor sit amet...</p>
           <div class="d-flex justify-content-center">
-            <elsa-button variant="primary" class="mr-3" :to="{ name: 'arvioinnit' }">{{ $t('palaa-arviointeihin') }}</elsa-button>
+            <elsa-button variant="primary" class="mr-3" :to="{ name: 'arvioinnit' }">
+              {{ $t('palaa-arviointeihin') }}
+            </elsa-button>
           </div>
         </b-col>
       </b-row>

@@ -45,7 +45,7 @@
     }
 
     get isMobile() {
-      return window.innerWidth < 992
+      return this.viewportWidth < 992
     }
     get hasGrayBackdrop() {
       return this.$route.meta.grayBackdrop

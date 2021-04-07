@@ -23,7 +23,8 @@ export default class TyoskentelyjaksoMixin extends Vue {
   async onTyoskentelyjaksoSubmit(value: any, params: any, modal: any) {
     params.saving = true
     try {
-      const tyoskentelyjakso = (await axios.post('/erikoistuva-laakari/tyoskentelyjaksot', value)).data
+      const tyoskentelyjakso = (await axios.post('/erikoistuva-laakari/tyoskentelyjaksot', value))
+        .data
       this.tyoskentelyjaksot.push(tyoskentelyjakso)
       tyoskentelyjakso.label = tyoskentelyjaksoLabel(this, tyoskentelyjakso)
       this.form.tyoskentelyjakso = tyoskentelyjakso
@@ -38,8 +39,8 @@ export default class TyoskentelyjaksoMixin extends Vue {
 
   get tyoskentelyjaksotFormatted() {
     return this.tyoskentelyjaksot
-      .filter(tj => !tj.hyvaksyttyAiempaanErikoisalaan)
-      .map(tj => ({
+      .filter((tj) => !tj.hyvaksyttyAiempaanErikoisalaan)
+      .map((tj) => ({
         ...tj,
         label: tyoskentelyjaksoLabel(this, tj)
       }))

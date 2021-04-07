@@ -1,11 +1,13 @@
 <template>
   <div class="arviointipyynto">
-    <b-breadcrumb :items="items" class="mb-0 px-0"></b-breadcrumb>
+    <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid>
       <b-row lg>
-        <b-col class="px-0">
+        <b-col>
           <h1>{{ $t('pyyda-arviointia') }}</h1>
-          <b-link :to="{ name: 'koejakso-yleiset-tavoitteet' }">{{ $t('koejakso-tavoitteet-linkki') }}</b-link>
+          <b-link :to="{ name: 'koejakso-yleiset-tavoitteet' }">
+            {{ $t('koejakso-tavoitteet-linkki') }}
+          </b-link>
           <hr />
           <arviointipyynto-form
             v-if="!loading"
@@ -71,7 +73,9 @@
 
     async fetchLomake() {
       try {
-        this.arviointipyyntoLomake = (await axios.get(`erikoistuva-laakari/arviointipyynto-lomake`)).data
+        this.arviointipyyntoLomake = (
+          await axios.get(`erikoistuva-laakari/arviointipyynto-lomake`)
+        ).data
       } catch (err) {
         toastFail(this, this.$t('arviointipyynnon-lomakkeen-hakeminen-epaonnistui'))
       }
@@ -81,7 +85,9 @@
       const arviointiId = this.$route?.params?.arviointiId
       if (arviointiId) {
         try {
-          this.arviointipyynto = (await axios.get(`erikoistuva-laakari/suoritusarvioinnit/${arviointiId}`)).data
+          this.arviointipyynto = (
+            await axios.get(`erikoistuva-laakari/suoritusarvioinnit/${arviointiId}`)
+          ).data
         } catch (err) {
           this.$router.replace({ name: 'arvioinnit' })
         }
@@ -111,7 +117,9 @@
         }
       } else {
         try {
-          const arviointipyynto = (await axios.post('erikoistuva-laakari/suoritusarvioinnit/arviointipyynto', value)).data
+          const arviointipyynto = (
+            await axios.post('erikoistuva-laakari/suoritusarvioinnit/arviointipyynto', value)
+          ).data
           this.skipRouteExitConfirm = true
           this.$router.push({
             name: 'arviointipyynto-lahetetty',
@@ -125,7 +133,13 @@
     }
 
     async onDelete(params: any) {
-      if (await confirmDelete(this, this.$t('poista-arviointipyynto') as string, (this.$t('arviointipyynnon') as string).toLowerCase())) {
+      if (
+        await confirmDelete(
+          this,
+          this.$t('poista-arviointipyynto') as string,
+          (this.$t('arviointipyynnon') as string).toLowerCase()
+        )
+      ) {
         params.deleting = true
         try {
           await axios.delete(`erikoistuva-laakari/suoritusarvioinnit/${this.arviointipyynto.id}`)
@@ -168,12 +182,20 @@
     get epaOsaamisalueenKategoriat() {
       if (this.arviointipyyntoLomake) {
         return this.arviointipyyntoLomake.epaOsaamisalueenKategoriat
-          .map(kategoria => ({
+          .map((kategoria) => ({
             ...kategoria,
-            epaOsaamisalueet: kategoria.epaOsaamisalueet.filter((oa: any) => dateBetween(formatISO(new Date()), oa.voimassaoloAlkaa, oa.voimassaoloLoppuu))
+            epaOsaamisalueet: kategoria.epaOsaamisalueet.filter((oa: any) =>
+              dateBetween(formatISO(new Date()), oa.voimassaoloAlkaa, oa.voimassaoloLoppuu)
+            )
           }))
-          .filter(kategoria => kategoria.epaOsaamisalueet.length > 0)
-          .filter(kategoria => dateBetween(formatISO(new Date()), kategoria.voimassaoloAlkaa, kategoria.voimassaoloLoppuu))
+          .filter((kategoria) => kategoria.epaOsaamisalueet.length > 0)
+          .filter((kategoria) =>
+            dateBetween(
+              formatISO(new Date()),
+              kategoria.voimassaoloAlkaa,
+              kategoria.voimassaoloLoppuu
+            )
+          )
       } else {
         return []
       }

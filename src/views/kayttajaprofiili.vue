@@ -1,10 +1,14 @@
 <template>
   <div class="itsearviointi">
-    <b-breadcrumb :items="items" class="mb-0 px-0"></b-breadcrumb>
+    <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid>
       <b-row lg>
-        <b-col class="px-0">
-          <b-card-skeleton :loading="false" class="mb-3 itsearviointi-card" :header="$t('tee-itsearviointi')">
+        <b-col>
+          <b-card-skeleton
+            :loading="false"
+            class="mb-3 itsearviointi-card"
+            :header="$t('tee-itsearviointi')"
+          >
             Käyttäjäprofiili - oma rooli - opiskeluoikeudet
           </b-card-skeleton>
         </b-col>

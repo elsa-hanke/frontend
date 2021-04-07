@@ -1,9 +1,9 @@
 <template>
-  <div class="koejakso-view">
-    <b-breadcrumb :items="items" class="mb-0 px-0" />
+  <div class="koejakso-tavoitteet">
+    <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid>
       <b-row lg>
-        <b-col lg="8" class="px-0">
+        <b-col lg="8">
           <h1>{{ $t('koejakso-tavoitteet') }}</h1>
           <p v-html="$t('koejakso-tavoitteet-sisalto.kuvaus1')" />
           <h3>{{ $t('koejakso-tavoitteet-sisalto.lista1.otsikko') }}</h3>

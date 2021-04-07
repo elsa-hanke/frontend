@@ -1,9 +1,9 @@
 <template>
   <div class="lisaa-suoritemerkinta">
-    <b-breadcrumb :items="items" class="mb-0 px-0"></b-breadcrumb>
+    <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid>
       <b-row lg>
-        <b-col class="px-0">
+        <b-col>
           <h1>{{ $t('lisaa-suoritemerkinta') }}</h1>
           <hr />
           <suoritemerkinta-form
@@ -62,7 +62,9 @@
 
     async fetchLomake() {
       try {
-        this.suoritemerkintaLomake = (await axios.get(`erikoistuva-laakari/suoritemerkinta-lomake`)).data
+        this.suoritemerkintaLomake = (
+          await axios.get(`erikoistuva-laakari/suoritemerkinta-lomake`)
+        ).data
       } catch (err) {
         toastFail(this, this.$t('suoritemerkinnan-lomakkeen-hakeminen-epaonnistui'))
       }
@@ -71,7 +73,9 @@
     async onSubmit(value: any, params: any) {
       params.saving = true
       try {
-        this.suoritemerkinta = (await axios.post('erikoistuva-laakari/suoritemerkinnat', value)).data
+        this.suoritemerkinta = (
+          await axios.post('erikoistuva-laakari/suoritemerkinnat', value)
+        ).data
         toastSuccess(this, this.$t('suoritusmerkinta-lisatty-onnistuneesti'))
         this.skipRouteExitConfirm = true
         this.$router.push({
@@ -112,7 +116,7 @@
 
     get oppimistavoitteenKategoriat() {
       if (this.suoritemerkintaLomake) {
-        return this.suoritemerkintaLomake.oppimistavoitteenKategoriat.map(kategoria => ({
+        return this.suoritemerkintaLomake.oppimistavoitteenKategoriat.map((kategoria) => ({
           ...kategoria,
           nimi: `${kategoria.nimi} / ${(this.$t('toimenpiteet') as string).toLowerCase()}`
         }))

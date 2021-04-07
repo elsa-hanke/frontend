@@ -2,13 +2,22 @@
   <div class="kayttoikeus">
     <b-container>
       <div class="d-flex justify-content-center align-items-center pt-5 user-select-none">
-        <img :src="`${publicPath}img/icons/favicon.svg`" style="height: 100px;" class="mr-3" :alt="$t('elsa-palvelu')" />
+        <img
+          :src="`${publicPath}img/icons/favicon.svg`"
+          style="height: 100px"
+          class="mr-3"
+          :alt="$t('elsa-palvelu')"
+        />
         <h1 class="text-primary m-0">
           <span class="font-weight-bold text-uppercase">{{ $t('elsa') }}</span>
           -{{ $t('palvelu') | lowercase }}
         </h1>
       </div>
-      <b-card-skeleton v-if="!loading" :header="$t('opintooikeuden-tarkistaminen')" class="mt-5 mb-3 kayttoikeus-card">
+      <b-card-skeleton
+        v-if="!loading"
+        :header="$t('opintooikeuden-tarkistaminen')"
+        class="mt-5 mb-3 kayttoikeus-card"
+      >
         <section>
           <p>{{ $t('kayttooikeus-kuvaus') }}</p>
           <p>{{ $t('kayttooikeus-kuvaus-ohje') }}</p>

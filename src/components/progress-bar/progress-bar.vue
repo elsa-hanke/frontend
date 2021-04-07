@@ -1,7 +1,9 @@
 <template>
   <div class="progress" :style="`height: 1.5rem; background-color: ${backgroundColor}`">
     <div class="progress-bar" :style="`width: ${ratio}%; background-color: ${color}`">
-      <span class="position-absolute font-weight-500 text-size-sm px-2">{{ $duration(value) }}</span>
+      <span class="position-absolute font-weight-500 text-size-sm px-2">
+        {{ $duration(value) }}
+      </span>
     </div>
   </div>
 </template>

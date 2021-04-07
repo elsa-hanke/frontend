@@ -21,7 +21,7 @@
     tasot = vaativuustasot
 
     get tasonNimi() {
-      const taso = this.tasot.find(taso => taso.arvo === this.value)
+      const taso = this.tasot.find((taso) => taso.arvo === this.value)
       if (taso) {
         return this.$t(taso.nimi)
       }

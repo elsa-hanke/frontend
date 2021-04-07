@@ -1,9 +1,9 @@
 <template>
   <div class="muokkaa-suoritemerkintaa">
-    <b-breadcrumb :items="items" class="mb-0 px-0"></b-breadcrumb>
+    <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid>
       <b-row lg>
-        <b-col class="px-0">
+        <b-col>
           <h1>{{ $t('muokkaa-suoritemerkintaa') }}</h1>
           <hr />
           <suoritemerkinta-form
@@ -68,7 +68,9 @@
       const suoritemerkintaId = this.$route?.params?.suoritemerkintaId
       if (suoritemerkintaId) {
         try {
-          this.suoritemerkinta = (await axios.get(`erikoistuva-laakari/suoritemerkinnat/${suoritemerkintaId}`)).data
+          this.suoritemerkinta = (
+            await axios.get(`erikoistuva-laakari/suoritemerkinnat/${suoritemerkintaId}`)
+          ).data
         } catch (err) {
           this.$router.replace({ name: 'suoritemerkinnat' })
         }
@@ -77,7 +79,9 @@
 
     async fetchLomake() {
       try {
-        this.suoritemerkintaLomake = (await axios.get(`erikoistuva-laakari/suoritemerkinta-lomake`)).data
+        this.suoritemerkintaLomake = (
+          await axios.get(`erikoistuva-laakari/suoritemerkinta-lomake`)
+        ).data
       } catch (err) {
         toastFail(this, this.$t('suoritemerkinnan-lomakkeen-hakeminen-epaonnistui'))
       }
@@ -112,7 +116,13 @@
     }
 
     async onDelete(params: any) {
-      if (await confirmDelete(this, this.$t('poista-suoritemerkinta') as string, (this.$t('suoritemerkinnan') as string).toLowerCase())) {
+      if (
+        await confirmDelete(
+          this,
+          this.$t('poista-suoritemerkinta') as string,
+          (this.$t('suoritemerkinnan') as string).toLowerCase()
+        )
+      ) {
         params.deleting = true
         try {
           await axios.delete(`erikoistuva-laakari/suoritemerkinnat/${this.suoritemerkinta.id}`)
@@ -154,7 +164,7 @@
 
     get oppimistavoitteenKategoriat() {
       if (this.suoritemerkintaLomake) {
-        return this.suoritemerkintaLomake.oppimistavoitteenKategoriat.map(kategoria => ({
+        return this.suoritemerkintaLomake.oppimistavoitteenKategoriat.map((kategoria) => ({
           ...kategoria,
           nimi: `${kategoria.nimi} / ${(this.$t('toimenpiteet') as string).toLowerCase()}`
         }))

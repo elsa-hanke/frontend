@@ -1,6 +1,10 @@
 <template>
   <div>
-    <nav id="sidebar-menu" class="col-lg-2 d-none d-lg-block d-xl-block bg-white sidebar" :style="{ paddingTop: paddingTop + 'px' }">
+    <nav
+      id="sidebar-menu"
+      class="col-lg-2 d-none d-lg-block d-xl-block bg-white sidebar"
+      :style="{ paddingTop: paddingTop + 'px' }"
+    >
       <div class="sidebar-sticky font-weight-500">
         <b-nav vertical>
           <b-nav-item class="border-top border-bottom" :to="{ name: 'etusivu' }">
@@ -13,11 +17,19 @@
             {{ $t("koulutussuunnitelma") }}
           </b-nav-item>
           -->
-          <b-nav-item v-if="$isErikoistuva()" class="border-bottom" :to="{ name: 'tyoskentelyjaksot' }">
+          <b-nav-item
+            v-if="$isErikoistuva()"
+            class="border-bottom"
+            :to="{ name: 'tyoskentelyjaksot' }"
+          >
             <font-awesome-icon :icon="['far', 'hospital']" fixed-width size="lg" />
             {{ $t('tyoskentelyjaksot') }}
           </b-nav-item>
-          <b-nav-item v-if="$isErikoistuva()" class="border-bottom" :to="{ name: 'suoritemerkinnat' }">
+          <b-nav-item
+            v-if="$isErikoistuva()"
+            class="border-bottom"
+            :to="{ name: 'suoritemerkinnat' }"
+          >
             <font-awesome-icon icon="clipboard-check" fixed-width size="lg" />
             {{ $t('suoritemerkinnat') }}
           </b-nav-item>

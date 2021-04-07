@@ -6,14 +6,19 @@ import auth from './auth'
 import { storeRouteAndRedirectToLogin } from '@/utils/local-storage'
 
 Vue.use(Vuex)
-export const ELSA_API_LOCATION = process.env.NODE_ENV === 'production' ? `${window.location.protocol}//api.${window.location.hostname}${window.location.port ? ':' + window.location.port : ''}` : ''
+export const ELSA_API_LOCATION =
+  process.env.NODE_ENV === 'production'
+    ? `${window.location.protocol}//api.${window.location.hostname}${
+        window.location.port ? ':' + window.location.port : ''
+      }`
+    : ''
 axios.defaults.baseURL = `${ELSA_API_LOCATION}/api/`
 axios.defaults.withCredentials = true
 axios.interceptors.response.use(
-  response => {
+  (response) => {
     return response
   },
-  error => {
+  (error) => {
     if (error.response.status === 401) {
       storeRouteAndRedirectToLogin()
       window.location.href = `${ELSA_API_LOCATION}/oauth2/authorization/oidc`
