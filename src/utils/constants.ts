@@ -1,3 +1,5 @@
+import { Kouluttaja, Koulutuspaikka, Vastuuhenkilo } from '@/types'
+
 export const vaativuustasot = [
   {
     arvo: 1,
@@ -75,3 +77,73 @@ export const arvioinninPerustuminen = {
   Etayhteys: 'ETA',
   Muu: 'MUU'
 } as any
+
+export enum KoulutussopimusTilat {
+  UUSI = 'UUSI',
+  HYVAKSYTTY = 'HYVAKSYTTY',
+  PALAUTETTU_KORJATTAVAKSI = 'PALAUTETTU_KORJATTAVAKSI',
+  TALLENNETTU_KESKENERAISENA = 'TALLENNETTU_KESKENERAISENA',
+  ODOTTAA_HYVAKSYNTAA = 'ODOTTAA_HYVAKSYNTAA'
+}
+
+export const defaultKoulutuspaikka: Koulutuspaikka = {
+  id: null,
+  erikoisala: '',
+  nimi: '',
+  yliopisto: ''
+}
+
+export const defaultKouluttaja: Kouluttaja = {
+  kayttajaId: null,
+  kuittausaika: '',
+  lahiosoite: '',
+  nimi: 'Testi Kouluttaja',
+  nimike: 'professori',
+  postitoimipaikka: '',
+  puhelin: '',
+  sahkoposti: '',
+  sopimusHyvaksytty: false,
+  toimipaikka: ''
+}
+
+// TODO remove dummy
+export const yliopistot = [
+  {
+    name: 'Yliopisto 1',
+    value: 1
+  },
+  {
+    name: 'Yliopisto 2',
+    value: 2
+  },
+  {
+    name: 'Yliopisto 3',
+    value: 3
+  },
+  {
+    name: 'Yliopisto 4',
+    value: 4
+  },
+  {
+    name: 'Yliopisto 5',
+    value: 5
+  }
+]
+
+// TODO remove dummy
+export const vastuuhenkilot: Vastuuhenkilo[] = [
+  {
+    nimi: 'Ville Vastaava',
+    nimike: 'dosentti',
+    id: 1,
+    kuittausaika: '',
+    sopimusHyvaksytty: false
+  },
+  {
+    nimi: 'Erkki Erikoinen',
+    nimike: 'professori',
+    id: 2,
+    kuittausaika: '',
+    sopimusHyvaksytty: false
+  }
+]

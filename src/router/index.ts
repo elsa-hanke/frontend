@@ -30,6 +30,7 @@ import UusiTyoskentelyjakso from '../views/uusi-tyoskentelyjakso.vue'
 import Viestit from '../views/viestit.vue'
 import Koejakso from '../views/koejakso.vue'
 import KoejaksoTavoitteet from '../views/koejakso-tavoitteet.vue'
+import Koulutussopimus from '../views/koulutussopimus/koulutussopimus.vue'
 
 Vue.use(VueRouter)
 Vue.use(Meta)
@@ -175,6 +176,11 @@ const routes: Array<RouteConfig> = [
         path: '/koejakso-yleiset-tavoitteet',
         name: 'koejakso-yleiset-tavoitteet',
         component: KoejaksoTavoitteet
+      },
+      {
+        path: '/koejakso/koulutussopimus',
+        name: 'koulutussopimus',
+        component: Koulutussopimus
       }
     ]
   },

@@ -1,0 +1,344 @@
+<template>
+  <b-form @submit.stop.prevent="onSubmit">
+    <b-row>
+      <b-col lg="4">
+        <elsa-form-group
+          :label="$t('koulutusopimus-form.opinto-oikeuden-alkamispäivä')"
+          :required="true"
+        >
+          <template v-slot="{ uid }">
+            <elsa-form-datepicker
+              :id="uid"
+              v-model="form.opintooikeudenMyontamispaiva"
+              :state="validateState('opintooikeudenMyontamispaiva')"
+              :min="opintooikeudenMyontamispaiva"
+              :max="opintooikeudenPaattymispaiva"
+            ></elsa-form-datepicker>
+            <b-form-invalid-feedback :id="`${uid}-feedback`">
+              {{ $t('pakollinen-tieto') }}
+            </b-form-invalid-feedback>
+          </template>
+        </elsa-form-group>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col lg="4">
+        <elsa-form-group :label="$t('koulutusopimus-form.koejakson-alkamispäivä')" :required="true">
+          <template #label-help>
+            <elsa-popover>
+              <template>
+                <h3>{{ $t('koulutusopimus-form.koejakson-alkamispäivä') }}</h3>
+                <p>{{ $t('koulutusopimus-form.koejakson-alkamis-tooltip') }}</p>
+              </template>
+            </elsa-popover>
+          </template>
+          <template v-slot="{ uid }">
+            <elsa-form-datepicker
+              :id="uid"
+              v-model="form.koejaksonAlkamispaiva"
+              :state="validateState('koejaksonAlkamispaiva')"
+              :min="koejaksonAlkamispaiva"
+              :max="koejaksonPaattymispaiva"
+              :disabled="!form.opintooikeudenMyontamispaiva"
+            ></elsa-form-datepicker>
+            <b-form-invalid-feedback :id="`${uid}-feedback`">
+              {{ $t('pakollinen-tieto') }}
+            </b-form-invalid-feedback>
+          </template>
+        </elsa-form-group>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col lg="5">
+        <elsa-form-group :label="$t('sähköpostiosoite')" :required="true">
+          <template v-slot="{ uid }">
+            <b-form-input
+              :id="uid"
+              v-model="form.erikoistuvanSahkoposti"
+              :state="validateState('erikoistuvanSahkoposti')"
+            />
+            <b-form-invalid-feedback :id="`${uid}-feedback`">
+              {{ $t('pakollinen-tieto') }}
+            </b-form-invalid-feedback>
+          </template>
+        </elsa-form-group>
+      </b-col>
+      <b-col lg="3">
+        <elsa-form-group :label="$t('puhelin-virka-aikaan')" :required="true">
+          <template v-slot="{ uid }">
+            <b-form-input
+              :id="uid"
+              v-model="form.erikoistuvanPuhelinnumero"
+              :state="validateState('erikoistuvanPuhelinnumero')"
+            />
+            <b-form-invalid-feedback :id="`${uid}-feedback`">
+              {{ $t('pakollinen-tieto') }}
+            </b-form-invalid-feedback>
+          </template>
+        </elsa-form-group>
+      </b-col>
+    </b-row>
+    <hr />
+    <b-row>
+      <b-col>
+        <h3>{{ $t('koulutuspaikan-tiedot') }}</h3>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col lg="8">
+        <koulutuspaikka-details
+          v-for="(koulutuspaikka, index) in form.koulutuspaikat"
+          :key="index"
+          :koulutuspaikka="koulutuspaikka"
+          v-model="form.koulutuspaikat"
+        ></koulutuspaikka-details>
+        <elsa-button
+          v-if="form.koulutuspaikat.length >= 2"
+          @click="deleteKoulutuspaikka"
+          variant="outline-primary"
+          class="border-0 p-0"
+        >
+          <font-awesome-icon :icon="['far', 'trash-alt']" fixed-width size="lg" />
+          {{ $t('poista-toimipaikka') }}
+        </elsa-button>
+        <elsa-button
+          v-else
+          @click="addKoulutuspaikka"
+          variant="outline-primary"
+          class="border-0 p-0"
+        >
+          + {{ $t('toinen-toimipaikka') }}
+        </elsa-button>
+      </b-col>
+    </b-row>
+    <hr />
+    <b-row>
+      <b-col lg="8">
+        <h3>{{ $t('koulutuspaikan-lahikouluttaja') }}</h3>
+        <div v-if="form.kouluttajat.length >= 1">
+          <kouluttaja-details
+            v-for="(k, index) in form.kouluttajat"
+            :key="index"
+            :kouluttaja="k"
+            :kouluttajat="kouluttajat"
+            :options="kouluttajat"
+            @kouluttajaSelected="onKouluttajaSelected(params, index)"
+          ></kouluttaja-details>
+        </div>
+
+        <div v-else>
+          <kouluttaja-details
+            v-model="form.kouluttajat"
+            :options="kouluttajat"
+          ></kouluttaja-details>
+        </div>
+        <elsa-button
+          v-if="form.kouluttajat.length >= 2"
+          @click="deleteKouluttaja"
+          variant="outline-primary"
+          class="border-0 p-0"
+        >
+          <font-awesome-icon :icon="['far', 'trash-alt']" fixed-width size="lg" />
+          {{ $t('lahikouluttaja-poista') }}
+        </elsa-button>
+        <elsa-button v-else @click="addKouluttaja" variant="outline-primary" class="border-0 p-0">
+          + {{ $t('lahikouluttaja-toinen') }}
+        </elsa-button>
+      </b-col>
+    </b-row>
+    <hr />
+    <b-row>
+      <b-col lg="8">
+        <h3>{{ $t('erikoisala-vastuuhenkilö') }}</h3>
+        <elsa-form-group :label="$t('erikoisala-vastuuhenkilö-label')" :required="true">
+          <template v-slot="{ uid }">
+            <b-form-radio-group
+              :id="uid"
+              v-model="selected.vastuuhenkilo"
+              :state="validateState('vastuuhenkilo')"
+              name="erikoisalan-vastuuhenkilo"
+              stacked
+              @change="updateVastuuhenkilo"
+            >
+              <b-form-radio v-for="(v, index) in vastuuhenkilot" :value="v.id" :key="index">
+                {{ v.nimi }}, {{ v.nimike }}
+              </b-form-radio>
+            </b-form-radio-group>
+            <b-form-invalid-feedback :id="`${uid}-feedback`">
+              {{ $t('pakollinen-tieto') }}
+            </b-form-invalid-feedback>
+          </template>
+        </elsa-form-group>
+      </b-col>
+    </b-row>
+    <hr />
+    <b-row>
+      <b-col>
+        <elsa-button v-if="editable" variant="outline-primary" @click="saveAndExit">
+          {{ $t('tallenna-keskeneräisenä') }}
+        </elsa-button>
+      </b-col>
+      <b-col class="text-right">
+        <elsa-button variant="back" :to="{ name: 'koejakso' }">{{ $t('peruuta') }}</elsa-button>
+        <elsa-button :loading="params.saving" type="submit" variant="primary" class="ml-4 px-5">
+          {{ $t('allekirjoita-lähetä') }}
+        </elsa-button>
+      </b-col>
+    </b-row>
+  </b-form>
+</template>
+
+<script lang="ts">
+  import Component from 'vue-class-component'
+  import { Prop, Mixins } from 'vue-property-decorator'
+  import { validationMixin } from 'vuelidate'
+  import { required, email } from 'vuelidate/lib/validators'
+  import { Kouluttaja, KoulutussopimusLomake, UserAccount } from '@/types'
+  import { defaultKouluttaja, defaultKoulutuspaikka, vastuuhenkilot } from '@/utils/constants'
+  import ElsaFormGroup from '@/components/form-group/form-group.vue'
+  import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
+  import ElsaButton from '@/components/button/button.vue'
+  import ElsaPopover from '@/components/popover/popover.vue'
+  import KoulutuspaikkaDetails from '@/views/koulutussopimus/koulutuspaikka-details.vue'
+  import KouluttajaDetails from '@/views/koulutussopimus/kouluttaja-details.vue'
+
+  @Component({
+    components: {
+      KoulutuspaikkaDetails,
+      KouluttajaDetails,
+      ElsaFormGroup,
+      ElsaFormDatepicker,
+      ElsaButton,
+      ElsaPopover
+    },
+    validations: {
+      form: {
+        opintooikeudenMyontamispaiva: {
+          required
+        },
+        koejaksonAlkamispaiva: {
+          required
+        },
+        erikoistuvanSahkoposti: {
+          required,
+          email
+        },
+        erikoistuvanPuhelinnumero: {
+          required
+        },
+        vastuuhenkilo: {
+          required
+        }
+      }
+    }
+  })
+  export default class KoulutussopimusForm extends Mixins(validationMixin) {
+    @Prop({ required: true, default: {} })
+    data!: KoulutussopimusLomake
+
+    @Prop({ required: true, default: {} })
+    account!: UserAccount
+
+    @Prop({ required: false, default: () => [] })
+    kouluttajat!: Kouluttaja[]
+
+    @Prop({ required: true })
+    editable!: boolean
+
+    form: KoulutussopimusLomake = {
+      erikoistuvanNimi: '',
+      erikoistuvanOpiskelijatunnus: '',
+      erikoistuvanPuhelinnumero: '',
+      erikoistuvanSahkoposti: '',
+      erikoistuvanSyntymaaika: '2021-03-31',
+      erikoistuvanYliopisto: '',
+      koejaksonAlkamispaiva: '',
+      korjausehdotus: '',
+      kouluttajat: [],
+      koulutuspaikat: [defaultKoulutuspaikka],
+      lahetetty: null,
+      muokkauspaiva: '',
+      opintooikeudenMyontamispaiva: '',
+      vastuuhenkilo: null
+    } as any
+    selected: any = {
+      vastuuhenkilo: null
+    }
+    params = {
+      saving: false,
+      deleting: false
+    }
+
+    validateState(name: string) {
+      const { $dirty, $error } = this.$v.form[name] as any
+      return $dirty ? ($error ? false : null) : null
+    }
+
+    get opintooikeudenMyontamispaiva() {
+      return this.form?.opintooikeudenMyontamispaiva
+    }
+
+    get opintooikeudenPaattymispaiva() {
+      return ''
+    }
+
+    get koejaksonAlkamispaiva() {
+      return this.opintooikeudenMyontamispaiva
+    }
+
+    get koejaksonPaattymispaiva() {
+      return ''
+    }
+
+    get vastuuhenkilot() {
+      return vastuuhenkilot
+    }
+
+    addKoulutuspaikka() {
+      this.form.koulutuspaikat.push(defaultKoulutuspaikka)
+    }
+
+    deleteKoulutuspaikka() {
+      this.form.koulutuspaikat.pop()
+    }
+
+    onKouluttajaSelected(value: any, index: any) {
+      console.log('TEST', value, index)
+    }
+
+    addKouluttaja() {
+      this.form.kouluttajat.push(defaultKouluttaja)
+    }
+
+    deleteKouluttaja() {
+      this.form.kouluttajat.pop()
+    }
+
+    updateVastuuhenkilo(id: number) {
+      const hloId = this.vastuuhenkilot.find((a) => (a.id = id))
+      if (hloId) this.form.vastuuhenkilo = hloId
+    }
+
+    saveAndExit() {
+      this.$emit('saveAndExit', this.form, this.params)
+    }
+
+    onSubmit() {
+      // this.$v.form.$touch()
+      // if (this.$v.form.$anyError) {
+      //   return
+      // }
+      this.$emit('submit', this.form, this.params)
+    }
+
+    mounted(): void {
+      if (this.data !== null) {
+        this.form = this.data
+        this.selected.vastuuhenkilo = this.data.vastuuhenkilo.id
+      }
+      if (!this.form.erikoistuvanSahkoposti) {
+        this.form.erikoistuvanSahkoposti = this.account.email
+      }
+    }
+  }
+</script>
