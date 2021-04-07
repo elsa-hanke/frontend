@@ -1,18 +1,20 @@
 <template>
   <div class="koejakso-view">
-    <b-breadcrumb :items="items" class="mb-0 px-0"></b-breadcrumb>
+    <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid>
       <b-row lg>
-        <b-col class="px-0">
+        <b-col>
           <h1>{{ $t('koejakso') }}</h1>
           <p>
             {{ $t('koejakso-kuvaus') }}
-            <b-link :to="{ name: 'koejakso-yleiset-tavoitteet' }">{{ $t('koejakso-tavoitteet-linkki') }}</b-link>
+            <b-link :to="{ name: 'koejakso-yleiset-tavoitteet' }">
+              {{ $t('koejakso-tavoitteet-linkki') }}
+            </b-link>
           </p>
         </b-col>
       </b-row>
       <b-row lg>
-        <b-col class="px-0">
+        <b-col>
           <div class="d-flex justify-content-center border rounded pt-3 pb-3 mb-4">
             <div class="container-fluid">
               <h2>{{ $t('koejakson-suorituspaikka') }}</h2>
@@ -35,7 +37,13 @@
               </b-row>
               <b-row>
                 <b-col cols="9" class="mb-2 mb-md-0">
-                  <elsa-form-multiselect v-model="selected.tyoskentelyjakso" :options="tyoskentelyjaksotFormatted" label="label" track-by="id" @select="onTyoskentelyjaksoSelect" />
+                  <elsa-form-multiselect
+                    v-model="selected.tyoskentelyjakso"
+                    :options="tyoskentelyjaksotFormatted"
+                    label="label"
+                    track-by="id"
+                    @select="onTyoskentelyjaksoSelect"
+                  />
                 </b-col>
                 <b-col>
                   <elsa-button variant="primary" class="align-self-end">
@@ -48,13 +56,14 @@
         </b-col>
       </b-row>
       <b-row lg>
-        <b-col class="px-0">
-          <!-- TODO: for demo purposes change card on click, remove when unnecessary -->
-          <elsa-koulutussopimus-card :state="null"></elsa-koulutussopimus-card>
+        <b-col>
+          <elsa-koulutussopimus-card
+            :state="koejakso.koulutusSopimuksenTila"
+          ></elsa-koulutussopimus-card>
         </b-col>
       </b-row>
       <b-row lg>
-        <b-col class="px-0">
+        <b-col>
           <h1>{{ $t('koejakson-arviointi') }}</h1>
           <div class="d-flex justify-content-center border rounded pt-3 mb-4">
             <div class="container-fluid">
@@ -133,6 +142,7 @@
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaKoulutussopimusCard from '@/components/koulutussopimus-card/koulutussopimus-card.vue'
+  import { toastFail } from '@/utils/toast'
 
   @Component({
     components: {
@@ -165,12 +175,7 @@
         active: true
       }
     ]
-
-    async mounted() {
-      console.log('mounted()...')
-      const oppimistavoitteet = (await axios.get('erikoistuva-laakari/oppimistavoitteet-taulukko')).data
-      console.log(oppimistavoitteet.toString())
-    }
+    koejakso: any = {}
 
     get tyoskentelyjaksotFormatted() {
       console.log('tyoskentelyjaksotFormatted()...')
@@ -184,6 +189,14 @@
       console.log('onTyoskentelyjaksoSelect()...')
       this.selected.tyoskentelyjakso = selected
       await this.fetch()
+    }
+
+    async fetchKoejakso() {
+      try {
+        this.koejakso = (await axios.get(`erikoistuva-laakari/koejakso`)).data
+      } catch (err) {
+        toastFail(this, this.$t('suoritemerkinnan-lomakkeen-hakeminen-epaonnistui'))
+      }
     }
 
     async fetch(options: any = {}) {
@@ -204,6 +217,13 @@
       } catch (err) {
         //this.omat = [];
       }
+    }
+
+    mounted() {
+      // const oppimistavoitteet = (await axios.get('erikoistuva-laakari/oppimistavoitteet-taulukko')).data
+      // console.log(oppimistavoitteet.toString())
+
+      this.fetchKoejakso()
     }
   }
 </script>
