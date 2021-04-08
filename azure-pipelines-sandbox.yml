@@ -1,0 +1,83 @@
+variables:
+  vmImageName: "Ubuntu 16.04"
+
+stages:
+  - stage: Build
+    displayName: Build stage
+    jobs:
+      - job: Build
+        pool:
+          vmImage: $(vmImageName)
+        variables:
+          YARN_CACHE_FOLDER: $(Pipeline.Workspace)/.yarn
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: "10.x"
+            displayName: "Install Node.js"
+          - task: Cache@2
+            inputs:
+              key: 'yarn | "$(Agent.OS)" | yarn.lock'
+              restoreKeys: |
+                yarn | "$(Agent.OS)"
+                yarn
+              path: $(YARN_CACHE_FOLDER)
+            displayName: Cache Yarn packages
+          - script: |
+              yarn --frozen-lockfile
+            displayName: "Install"
+          - script: |
+              yarn lint
+            displayName: "Lint"
+          - script: |
+              yarn test:unit
+            displayName: "Test"
+          - script: |
+              yarn test:e2e:headless
+            displayName: "E2E Test"
+          - script: |
+              yarn generate-thirdparty
+            displayName: "Generate thirdparty"
+          - script: |
+              yarn build
+            displayName: "Build"
+          - publish: $(System.DefaultWorkingDirectory)/dist
+            artifact: ElsaFrontendApp
+
+  - stage: Deploy
+    displayName: Deploy stage
+    dependsOn: Build
+    jobs:
+      - deployment: Deploy
+        displayName: Deploy
+        environment: "sandbox"
+        pool:
+          vmImage: $(vmImageName)
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - download: current
+                  artifact: ElsaFrontendApp
+                - task: AWSCLI@1
+                  inputs:
+                    awsCredentials: "sandbox-elsa-ci"
+                    regionName: "eu-west-1"
+                    awsCommand: "s3"
+                    awsSubCommand: "rm"
+                    awsArguments: "s3://sandbox.elsapalvelu.fi/  --recursive"
+                - task: S3Upload@1
+                  inputs:
+                    awsCredentials: "sandbox-elsa-ci"
+                    regionName: "eu-west-1"
+                    bucketName: "sandbox.elsapalvelu.fi"
+                    sourceFolder: "$(Pipeline.Workspace)/ElsaFrontendApp"
+                    globExpressions: "**"
+                  displayName: "Deploy to S3"
+                - task: AWSCLI@1
+                  inputs:
+                    awsCredentials: "sandbox-elsa-ci"
+                    regionName: "eu-west-1"
+                    awsCommand: "cloudfront"
+                    awsSubCommand: "create-invalidation"
+                    awsArguments: '--distribution-id EHJY1V5AOBIP --paths "/*"'
