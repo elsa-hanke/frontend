@@ -2,11 +2,28 @@ function setupMocks() {
   cy.server()
   cy.route('/api/kayttaja', 'fixture:kayttaja.json')
   cy.route('/api/erikoistuva-laakari', 'fixture:erikoistuva-laakari.json')
-  cy.route('/api/erikoistuva-laakari/oppimistavoitteet-taulukko', 'fixture:erikoistuva-laakari/oppimistavoitteet-taulukko.json')
-  cy.route('/api/erikoistuva-laakari/suoritemerkinta-lomake', 'fixture:erikoistuva-laakari/suoritemerkinta-lomake.json')
-  cy.route('POST', '/api/erikoistuva-laakari/suoritemerkinnat', 'fixture:erikoistuva-laakari/suoritemerkinnat.json')
-  cy.route('/api/erikoistuva-laakari/suoritemerkinnat/1451', 'fixture:erikoistuva-laakari/suoritemerkinnat/1451.json')
-  cy.route('PUT', '/api/erikoistuva-laakari/suoritemerkinnat', 'fixture:erikoistuva-laakari/suoritemerkinnat/1451.json')
+  cy.route(
+    '/api/erikoistuva-laakari/oppimistavoitteet-taulukko',
+    'fixture:erikoistuva-laakari/oppimistavoitteet-taulukko.json'
+  )
+  cy.route(
+    '/api/erikoistuva-laakari/suoritemerkinta-lomake',
+    'fixture:erikoistuva-laakari/suoritemerkinta-lomake.json'
+  )
+  cy.route(
+    'POST',
+    '/api/erikoistuva-laakari/suoritemerkinnat',
+    'fixture:erikoistuva-laakari/suoritemerkinnat.json'
+  )
+  cy.route(
+    '/api/erikoistuva-laakari/suoritemerkinnat/1451',
+    'fixture:erikoistuva-laakari/suoritemerkinnat/1451.json'
+  )
+  cy.route(
+    'PUT',
+    '/api/erikoistuva-laakari/suoritemerkinnat',
+    'fixture:erikoistuva-laakari/suoritemerkinnat/1451.json'
+  )
   cy.route('DELETE', '/api/erikoistuva-laakari/suoritemerkinnat/1451', {})
 }
 
@@ -14,9 +31,7 @@ describe('Suoritemerkinnät', () => {
   it('Navigoidaan suoritusmerkinnät näkymään', () => {
     setupMocks()
     cy.visit('/')
-    cy.get('.nav > :nth-child(3) > .nav-link')
-      .contains('Suoritemerkinnät')
-      .click()
+    cy.get('.nav > :nth-child(3) > .nav-link').contains('Suoritemerkinnät').click()
   })
 
   it('Näkymästä löytyvät oleelliset elementit', () => {
@@ -43,9 +58,7 @@ describe('Suoritemerkinnät', () => {
 
   it('Navigoidaan uuden suoritemerkinnän lisäämiseen', () => {
     setupMocks()
-    cy.get('a')
-      .contains('Lisää suoritemerkintä')
-      .click()
+    cy.get('a').contains('Lisää suoritemerkintä').click()
     cy.contains('h1', 'Lisää suoritemerkintä')
   })
 })
