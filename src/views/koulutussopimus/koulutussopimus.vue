@@ -31,12 +31,13 @@
         <b-col>
           <koulutussopimus-form
             v-if="editable"
+            :editable="editable"
             :data="koulutusopimusData"
             :account="account"
             :kouluttajat="kouluttajat"
+            @refreshKouluttajat="onKouluttajatRefresh"
             @saveAndExit="onSaveDraftAndExit"
             @submit="onSubmit"
-            :editable="editable"
           ></koulutussopimus-form>
 
           <koulutussopimus-readonly
@@ -99,10 +100,15 @@
     }
 
     get editable() {
-      return (
-        this.koejakso.koulutusSopimuksenTila === 'PALAUTETTU_KORJATTAVAKSI' ||
-        this.koejakso.koulutusSopimuksenTila === 'UUSI'
-      )
+      switch (this.koejakso.koulutusSopimuksenTila) {
+        case KoulutussopimusTilat.PALAUTETTU_KORJATTAVAKSI:
+          return true
+        case KoulutussopimusTilat.UUSI:
+          return true
+        case KoulutussopimusTilat.TALLENNETTU_KESKENERAISENA:
+          return true
+      }
+      return false
     }
 
     get odottaaHyvaksyntaa() {
@@ -116,13 +122,17 @@
       ).data.kouluttajat
     }
 
+    onKouluttajatRefresh() {
+      this.fetchKouluttajat()
+    }
+
     async fetchKoejakso() {
       try {
         const { data } = await axios.get(`erikoistuva-laakari/koejakso`)
         if (data.koulutussopimus) {
           this.koejakso = data
           this.koulutussopimusLomake = data.koulutussopimus
-          if (this.koulutussopimusLomake) {
+          if (this.koulutussopimusLomake?.erikoistuvanNimi) {
             this.koulutussopimusLomake.erikoistuvanNimi = this.account.firstName.concat(
               ' ',
               this.account.lastName
@@ -137,13 +147,11 @@
     }
 
     async saveNewForm() {
-      console.log('NEW', this.koulutussopimusLomake)
       try {
         await axios.post('erikoistuva-laakari/koejakso/koulutussopimus', this.koulutussopimusLomake)
+        checkCurrentRouteAndRedirect(this.$router, '/koejakso/koulutussopimus')
         toastSuccess(this, this.$t('koulutussopimus-lisatty-onnistuneesti'))
-        this.$router.push({
-          name: 'koulutussopimus'
-        })
+        this.fetchKoejakso()
       } catch (err) {
         toastFail(this, this.$t('koulutussopimuksen-lisaaminen-epaonnistui'))
       }
@@ -152,10 +160,9 @@
     async updateSentForm() {
       try {
         await axios.put('erikoistuva-laakari/koejakso/koulutussopimus', this.koulutussopimusLomake)
+        checkCurrentRouteAndRedirect(this.$router, '/koejakso/koulutussopimus')
         toastSuccess(this, this.$t('koulutussopimus-lisatty-onnistuneesti'))
-        this.$router.push({
-          name: 'koulutussopimus'
-        })
+        this.fetchKoejakso()
       } catch (err) {
         toastFail(this, this.$t('koulutussopimuksen-lisaaminen-epaonnistui'))
       }
@@ -193,10 +200,13 @@
     onSubmit(form: KoulutussopimusLomake, params: any) {
       params.saving = true
       this.koulutussopimusLomake = form
-      if (this.koejakso.koulutusSopimuksenTila === KoulutussopimusTilat.PALAUTETTU_KORJATTAVAKSI) {
+      this.koulutussopimusLomake.lahetetty = true
+      if (
+        this.koejakso.koulutusSopimuksenTila === KoulutussopimusTilat.PALAUTETTU_KORJATTAVAKSI ||
+        KoulutussopimusTilat.TALLENNETTU_KESKENERAISENA
+      ) {
         this.updateSentForm()
       } else {
-        this.koulutussopimusLomake.lahetetty = true
         this.saveNewForm()
       }
       params.saving = false

@@ -58,7 +58,7 @@
 
     onSubmit() {
       this.$emit('submit', {
-        yliopisto: this.value.yliopisto?.arvo
+        yliopisto: this.value.yliopisto?.value
       })
     }
   }
