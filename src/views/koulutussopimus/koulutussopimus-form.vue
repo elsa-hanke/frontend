@@ -122,7 +122,7 @@
             :kouluttaja="k"
             :kouluttajat="kouluttajat"
             :options="kouluttajat"
-            @kouluttajaSelected="onKouluttajaSelected(params, index)"
+            @kouluttajaAdded="onKouluttajaAdded"
           ></kouluttaja-details>
         </div>
 
@@ -130,6 +130,7 @@
           <kouluttaja-details
             v-model="form.kouluttajat"
             :options="kouluttajat"
+            @kouluttajaAdded="onKouluttajaAdded"
           ></kouluttaja-details>
         </div>
         <elsa-button
@@ -256,7 +257,7 @@
       korjausehdotus: '',
       kouluttajat: [],
       koulutuspaikat: [defaultKoulutuspaikka],
-      lahetetty: null,
+      lahetetty: false,
       muokkauspaiva: '',
       opintooikeudenMyontamispaiva: '',
       vastuuhenkilo: null
@@ -302,8 +303,8 @@
       this.form.koulutuspaikat.pop()
     }
 
-    onKouluttajaSelected(value: any, index: any) {
-      console.log('TEST', value, index)
+    onKouluttajaAdded() {
+      this.$emit('refreshKouluttajat')
     }
 
     addKouluttaja() {

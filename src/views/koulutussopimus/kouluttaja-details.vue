@@ -17,7 +17,7 @@
         :state="validateState('kouluttaja')"
         label="nimi"
         track-by="nimi"
-        @select="onKouluttataSelect"
+        @select="onKouluttajaSelect"
       >
         <template v-slot:option="{ option }">
           <div v-if="option.nimi">{{ optionDisplayName(option) }}</div>
@@ -77,11 +77,10 @@
     async onKouluttajaSubmit(value: any, params: any, modal: any) {
       params.saving = true
       try {
-        const { data } = await axios.post('/erikoistuva-laakari/lahikouluttajat', value)
-        this.kouluttajat.push(data)
-        this.$emit
+        await axios.post('/erikoistuva-laakari/lahikouluttajat', value)
         modal.hide('confirm')
         toastSuccess(this, this.$t('uusi-kouluttaja-lisatty'))
+        this.$emit('kouluttajaAdded')
       } catch (err) {
         toastFail(
           this,
@@ -93,9 +92,8 @@
       params.saving = false
     }
 
-    onKouluttataSelect(selected: any) {
+    onKouluttajaSelect(selected: any) {
       this.form.kouluttaja = selected
-      this.$emit('kouluttajaSelected', this.form.kouluttaja)
     }
 
     optionDisplayName(option: any) {
