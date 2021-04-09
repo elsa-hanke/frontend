@@ -11,8 +11,8 @@
     </template>
     <template v-slot="{ uid }">
       <elsa-form-multiselect
-        :id="uid"
         v-model="form.kouluttaja"
+        :id="uid"
         :options="multiselectOptions"
         :state="validateState('kouluttaja')"
         label="nimi"
@@ -67,11 +67,11 @@
     @Prop({ required: false, default: () => [] })
     kouluttajat!: Kouluttaja[]
 
-    @Prop({ required: false, default: () => [] })
-    options!: Kouluttaja[]
+    @Prop({ required: false, default: null })
+    index!: number
 
     form = {
-      kouluttaja: null
+      kouluttaja: {}
     }
 
     async onKouluttajaSubmit(value: any, params: any, modal: any) {
@@ -92,8 +92,8 @@
       params.saving = false
     }
 
-    onKouluttajaSelect(selected: any) {
-      this.form.kouluttaja = selected
+    onKouluttajaSelect(kouluttaja: Kouluttaja) {
+      this.$emit('kouluttajaSelected', kouluttaja, this.kouluttajaIndex)
     }
 
     optionDisplayName(option: any) {
@@ -106,7 +106,15 @@
     }
 
     get multiselectOptions() {
-      return this.options
+      return this.kouluttajat
+    }
+
+    get kouluttajaIndex() {
+      return this.index
+    }
+
+    mounted(): void {
+      this.form.kouluttaja = this.kouluttaja
     }
   }
 </script>

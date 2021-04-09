@@ -115,24 +115,15 @@
     <b-row>
       <b-col lg="8">
         <h3>{{ $t('koulutuspaikan-lahikouluttaja') }}</h3>
-        <div v-if="form.kouluttajat.length >= 1">
-          <kouluttaja-details
-            v-for="(k, index) in form.kouluttajat"
-            :key="index"
-            :kouluttaja="k"
-            :kouluttajat="kouluttajat"
-            :options="kouluttajat"
-            @kouluttajaAdded="onKouluttajaAdded"
-          ></kouluttaja-details>
-        </div>
+        <kouluttaja-details
+          v-for="(k, index) in form.kouluttajat"
+          :key="index"
+          :index="index"
+          :kouluttaja="k"
+          :kouluttajat="kouluttajat"
+          @kouluttajaAdded="onKouluttajaAdded"
+        ></kouluttaja-details>
 
-        <div v-else>
-          <kouluttaja-details
-            v-model="form.kouluttajat"
-            :options="kouluttajat"
-            @kouluttajaAdded="onKouluttajaAdded"
-          ></kouluttaja-details>
-        </div>
         <elsa-button
           v-if="form.kouluttajat.length >= 2"
           @click="deleteKouluttaja"
@@ -255,7 +246,7 @@
       erikoistuvanYliopisto: '',
       koejaksonAlkamispaiva: '',
       korjausehdotus: '',
-      kouluttajat: [],
+      kouluttajat: [], // add defaultKouluttaja to Arr
       koulutuspaikat: [defaultKoulutuspaikka],
       lahetetty: false,
       muokkauspaiva: '',
@@ -306,6 +297,11 @@
     onKouluttajaAdded() {
       this.$emit('refreshKouluttajat')
     }
+
+    // TODO ENABLE WITH KOULUTTAJAT API
+    // selectKouluttaja(kouluttaja: Kouluttaja, index: number) {
+    //   this.form.kouluttajat[index] = kouluttaja
+    // }
 
     addKouluttaja() {
       this.form.kouluttajat.push(defaultKouluttaja)

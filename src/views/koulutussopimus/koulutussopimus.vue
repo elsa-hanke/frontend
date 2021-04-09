@@ -141,6 +141,9 @@
         } else {
           this.koejakso = data
         }
+        if (!this.editable) {
+          this.skipRouteExitConfirm = true
+        }
       } catch (err) {
         toastFail(this, this.$t('suoritemerkinnan-lomakkeen-hakeminen-epaonnistui'))
       }
@@ -202,8 +205,11 @@
       this.koulutussopimusLomake = form
       this.koulutussopimusLomake.lahetetty = true
       if (
-        this.koejakso.koulutusSopimuksenTila === KoulutussopimusTilat.PALAUTETTU_KORJATTAVAKSI ||
-        KoulutussopimusTilat.TALLENNETTU_KESKENERAISENA
+        this.koejakso.koulutusSopimuksenTila === KoulutussopimusTilat.TALLENNETTU_KESKENERAISENA
+      ) {
+        this.updateSentForm()
+      } else if (
+        this.koejakso.koulutusSopimuksenTila === KoulutussopimusTilat.PALAUTETTU_KORJATTAVAKSI
       ) {
         this.updateSentForm()
       } else {
