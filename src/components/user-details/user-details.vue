@@ -30,7 +30,7 @@
         </th>
         <td class="pl-5">{{ userDetails.opiskelijatunnus }}</td>
       </tr>
-      <tr>
+      <tr v-if="showBirthdate">
         <th scope="row" class="font-weight-500">
           {{ $t('syntymaaika') }}
         </th>
@@ -59,9 +59,12 @@
       Avatar
     }
   })
-  export default class UserDetailsTable extends Vue {
+  export default class UserDetails extends Vue {
     @Prop({ required: true, default: {} })
     account!: UserAccount
+
+    @Prop({ required: false, default: true })
+    showBirthdate!: boolean
 
     get authorities() {
       if (this.account) {

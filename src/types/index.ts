@@ -94,6 +94,41 @@ export interface KoulutussopimusLomake {
   vastuuhenkilo: Vastuuhenkilo
 }
 
+export type Lahikouluttaja = {
+  id: number
+  kuittausaika: string
+  nimi: string
+  sopimusHyvaksytty: boolean
+}
+
+export type Lahiesimies = {
+  id: number
+  kuittausaika: string
+  nimi: string
+  sopimusHyvaksytty: boolean
+}
+
+export interface AloituskeskusteluLomake {
+  erikoistuvanErikoisala: string
+  erikoistuvanNimi: string
+  erikoistuvanOpiskelijatunnus: string
+  erikoistuvanSahkoposti: string
+  erikoistuvanYliopisto: string
+  id: number
+  koejaksonAlkamispaiva: string
+  koejaksonOsaamistavoitteet: string
+  koejaksonPaattymispaiva: string
+  koejaksonSuorituspaikka: string
+  koejaksonToinenSuorituspaikka: string
+  korjausehdotus: string
+  lahetetty: boolean
+  lahiesimies: Lahiesimies
+  lahikouluttaja: Lahikouluttaja
+  muokkauspaiva: string
+  suoritettuKokoaikatyossa: boolean
+  tyotunnitViikossa: number
+}
+
 export interface PoissaoloLomake {
   tyoskentelyjaksot: any[]
   poissaolonSyyt: any[]

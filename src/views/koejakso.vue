@@ -72,7 +72,11 @@
                 {{ $t('aloituskeskustelu-otsikko') }}
               </h2>
               <p>{{ $t('lomake-ei-täytetty') }}</p>
-              <elsa-button variant="primary" :to="{ name: 'arviointipyynto' }" class="mb-4">
+              <elsa-button
+                variant="primary"
+                :to="{ name: 'koejakson-aloituskeskustelu' }"
+                class="mb-4"
+              >
                 {{ $t('täytä-aloituskeskustelu') }}
               </elsa-button>
             </div>
@@ -178,7 +182,7 @@
     koejakso: any = {}
 
     get tyoskentelyjaksotFormatted() {
-      console.log('tyoskentelyjaksotFormatted()...')
+      // console.log('tyoskentelyjaksotFormatted()...')
       return this.options.tyoskentelyjaksot.map((tj: any) => ({
         ...tj,
         label: tyoskentelyjaksoLabel(this, tj)
@@ -186,7 +190,7 @@
     }
 
     async onTyoskentelyjaksoSelect(selected: any) {
-      console.log('onTyoskentelyjaksoSelect()...')
+      // console.log('onTyoskentelyjaksoSelect()...')
       this.selected.tyoskentelyjakso = selected
       await this.fetch()
     }
