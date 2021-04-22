@@ -2,10 +2,7 @@
   <b-form @submit.stop.prevent="onSubmit">
     <b-row>
       <b-col lg="4">
-        <elsa-form-group
-          :label="$t('koulutusopimus-form.opinto-oikeuden-alkamispäivä')"
-          :required="true"
-        >
+        <elsa-form-group :label="$t('opinto-oikeuden-alkamispäivä')" :required="true">
           <template v-slot="{ uid }">
             <elsa-form-datepicker
               :id="uid"
@@ -23,12 +20,12 @@
     </b-row>
     <b-row>
       <b-col lg="4">
-        <elsa-form-group :label="$t('koulutusopimus-form.koejakson-alkamispäivä')" :required="true">
+        <elsa-form-group :label="$t('koejakson-alkamispäivä')" :required="true">
           <template #label-help>
             <elsa-popover>
               <template>
-                <h3>{{ $t('koulutusopimus-form.koejakson-alkamispäivä') }}</h3>
-                <p>{{ $t('koulutusopimus-form.koejakson-alkamis-tooltip') }}</p>
+                <h3>{{ $t('koejakson-alkamispäivä') }}</h3>
+                <p>{{ $t('koejakson-alkamis-tooltip') }}</p>
               </template>
             </elsa-popover>
           </template>
@@ -186,13 +183,14 @@
   import { validationMixin } from 'vuelidate'
   import { required, email } from 'vuelidate/lib/validators'
   import { Kouluttaja, KoulutussopimusLomake, UserAccount } from '@/types'
+  import _get from 'lodash/get'
   import { defaultKouluttaja, defaultKoulutuspaikka, vastuuhenkilot } from '@/utils/constants'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
-  import KoulutuspaikkaDetails from '@/views/koulutussopimus/koulutuspaikka-details.vue'
-  import KouluttajaDetails from '@/views/koulutussopimus/kouluttaja-details.vue'
+  import KoulutuspaikkaDetails from '@/views/koejakso/koulutussopimus/koulutuspaikka-details.vue'
+  import KouluttajaDetails from '@/views/koejakso/koulutussopimus/kouluttaja-details.vue'
 
   @Component({
     components: {
@@ -261,8 +259,9 @@
       deleting: false
     }
 
-    validateState(name: string) {
-      const { $dirty, $error } = this.$v.form[name] as any
+    validateState(value: string) {
+      const form = this.$v.form
+      const { $dirty, $error } = _get(form, value) as any
       return $dirty ? ($error ? false : null) : null
     }
 
@@ -321,10 +320,10 @@
     }
 
     onSubmit() {
-      // this.$v.form.$touch()
-      // if (this.$v.form.$anyError) {
-      //   return
-      // }
+      this.$v.form.$touch()
+      if (this.$v.form.$anyError) {
+        return
+      }
       this.$emit('submit', this.form, this.params)
     }
 

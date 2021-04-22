@@ -1,6 +1,8 @@
 import '@babel/polyfill'
 import 'mutationobserver-shim'
+import '@/plugins/registerComponentHooks'
 import Vue from 'vue'
+import Vuelidate from 'vuelidate'
 import '@/plugins/composition-api'
 import '@/plugins/filters'
 import '@/plugins/bootstrap-vue'
@@ -16,6 +18,7 @@ import { storeRouteAndRedirectToLogin, restoreRoute } from '@/utils/local-storag
 
 import '@/styles/app.scss'
 
+Vue.use(Vuelidate)
 Vue.config.productionTip = false
 
 router.beforeEach(async (to, from, next) => {

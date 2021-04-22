@@ -78,7 +78,7 @@ export const arvioinninPerustuminen = {
   Muu: 'MUU'
 } as any
 
-export enum KoulutussopimusTilat {
+export enum LomakeTilat {
   UUSI = 'UUSI',
   HYVAKSYTTY = 'HYVAKSYTTY',
   PALAUTETTU_KORJATTAVAKSI = 'PALAUTETTU_KORJATTAVAKSI',

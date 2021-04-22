@@ -23,7 +23,7 @@
       <hr />
       <b-row>
         <b-col>
-          <user-details-table :account="account"></user-details-table>
+          <user-details :account="account"></user-details>
         </b-col>
       </b-row>
       <hr />
@@ -58,15 +58,15 @@
   import { toastFail, toastSuccess } from '@/utils/toast'
   import store from '@/store'
   import ConfirmRouteExit from '@/mixins/confirm-route-exit'
-  import UserDetailsTable from '@/views/koulutussopimus/user-details-table.vue'
-  import KoulutussopimusForm from '@/views/koulutussopimus/koulutussopimus-form.vue'
-  import KoulutussopimusReadonly from '@/views/koulutussopimus/koulutussopimus-readonly.vue'
+  import UserDetails from '@/components/user-details/user-details.vue'
+  import KoulutussopimusForm from '@/views/koejakso/koulutussopimus/koulutussopimus-form.vue'
+  import KoulutussopimusReadonly from '@/views/koejakso/koulutussopimus/koulutussopimus-readonly.vue'
   import { checkCurrentRouteAndRedirect } from '@/utils/functions'
-  import { KoulutussopimusTilat } from '@/utils/constants'
+  import { LomakeTilat } from '@/utils/constants'
 
   @Component({
     components: {
-      UserDetailsTable,
+      UserDetails,
       KoulutussopimusForm,
       KoulutussopimusReadonly
     }
@@ -101,18 +101,18 @@
 
     get editable() {
       switch (this.koejakso.koulutusSopimuksenTila) {
-        case KoulutussopimusTilat.PALAUTETTU_KORJATTAVAKSI:
+        case LomakeTilat.PALAUTETTU_KORJATTAVAKSI:
           return true
-        case KoulutussopimusTilat.UUSI:
+        case LomakeTilat.UUSI:
           return true
-        case KoulutussopimusTilat.TALLENNETTU_KESKENERAISENA:
+        case LomakeTilat.TALLENNETTU_KESKENERAISENA:
           return true
       }
       return false
     }
 
     get odottaaHyvaksyntaa() {
-      return this.koejakso.koulutusSopimuksenTila === KoulutussopimusTilat.ODOTTAA_HYVAKSYNTAA
+      return this.koejakso.koulutusSopimuksenTila === LomakeTilat.ODOTTAA_HYVAKSYNTAA
     }
 
     // TODO REPLACE WITH KOULUTTUJAT API
@@ -129,8 +129,8 @@
     async fetchKoejakso() {
       try {
         const { data } = await axios.get(`erikoistuva-laakari/koejakso`)
+        this.koejakso = data
         if (data.koulutussopimus) {
-          this.koejakso = data
           this.koulutussopimusLomake = data.koulutussopimus
           if (this.koulutussopimusLomake?.erikoistuvanNimi) {
             this.koulutussopimusLomake.erikoistuvanNimi = this.account.firstName.concat(
@@ -138,15 +138,42 @@
               this.account.lastName
             )
           }
-        } else {
-          this.koejakso = data
         }
         if (!this.editable) {
           this.skipRouteExitConfirm = true
         }
       } catch (err) {
-        toastFail(this, this.$t('suoritemerkinnan-lomakkeen-hakeminen-epaonnistui'))
+        toastFail(this, this.$t('koulutussopimuksen-hakeminen-epaonnistui'))
       }
+    }
+
+    async onSaveDraftAndExit(form: KoulutussopimusLomake, params: any) {
+      params.saving = true
+      this.koulutussopimusLomake = form
+      try {
+        if (this.koejakso.koulutusSopimuksenTila === LomakeTilat.UUSI) {
+          await axios.post(
+            'erikoistuva-laakari/koejakso/koulutussopimus',
+            this.koulutussopimusLomake
+          )
+        } else if (
+          this.koejakso.koulutusSopimuksenTila === LomakeTilat.TALLENNETTU_KESKENERAISENA
+        ) {
+          await axios.put(
+            'erikoistuva-laakari/koejakso/koulutussopimus',
+            this.koulutussopimusLomake
+          )
+        } else {
+          toastFail(this, this.$t('koulutussopimuksen-tallennus-epaonnistui'))
+        }
+
+        toastSuccess(this, this.$t('koulutussopimus-tallennettu-onnistuneesti'))
+        this.skipRouteExitConfirm = true
+        checkCurrentRouteAndRedirect(this.$router, '/koejakso')
+      } catch (err) {
+        toastFail(this, this.$t('koulutussopimuksen-tallennus-epaonnistui'))
+      }
+      params.saving = false
     }
 
     async saveNewForm() {
@@ -171,46 +198,13 @@
       }
     }
 
-    async onSaveDraftAndExit(form: KoulutussopimusLomake, params: any) {
-      params.saving = true
-      this.koulutussopimusLomake = form
-      try {
-        if (this.koejakso.koulutusSopimuksenTila === KoulutussopimusTilat.UUSI) {
-          await axios.post(
-            'erikoistuva-laakari/koejakso/koulutussopimus',
-            this.koulutussopimusLomake
-          )
-        } else if (
-          this.koejakso.koulutusSopimuksenTila === KoulutussopimusTilat.TALLENNETTU_KESKENERAISENA
-        ) {
-          await axios.put(
-            'erikoistuva-laakari/koejakso/koulutussopimus',
-            this.koulutussopimusLomake
-          )
-        } else {
-          toastFail(this, this.$t('koulutussopimuksen-tallennus-epaonnistui'))
-        }
-
-        toastSuccess(this, this.$t('koulutussopimus-tallennettu-onnistuneesti'))
-        this.skipRouteExitConfirm = true
-        checkCurrentRouteAndRedirect(this.$router, '/koejakso')
-      } catch (err) {
-        toastFail(this, this.$t('koulutussopimuksen-tallennus-epaonnistui'))
-      }
-      params.saving = false
-    }
-
     onSubmit(form: KoulutussopimusLomake, params: any) {
       params.saving = true
       this.koulutussopimusLomake = form
       this.koulutussopimusLomake.lahetetty = true
-      if (
-        this.koejakso.koulutusSopimuksenTila === KoulutussopimusTilat.TALLENNETTU_KESKENERAISENA
-      ) {
+      if (this.koejakso.koulutusSopimuksenTila === LomakeTilat.TALLENNETTU_KESKENERAISENA) {
         this.updateSentForm()
-      } else if (
-        this.koejakso.koulutusSopimuksenTila === KoulutussopimusTilat.PALAUTETTU_KORJATTAVAKSI
-      ) {
+      } else if (this.koejakso.koulutusSopimuksenTila === LomakeTilat.PALAUTETTU_KORJATTAVAKSI) {
         this.updateSentForm()
       } else {
         this.saveNewForm()

@@ -29,8 +29,9 @@ import UusiSuoritemerkinta from '../views/uusi-suoritemerkinta.vue'
 import UusiTyoskentelyjakso from '../views/uusi-tyoskentelyjakso.vue'
 import Viestit from '../views/viestit.vue'
 import Koejakso from '../views/koejakso.vue'
-import KoejaksoTavoitteet from '../views/koejakso-tavoitteet.vue'
-import Koulutussopimus from '../views/koulutussopimus/koulutussopimus.vue'
+import KoejaksoTavoitteet from '../views/koejakso/koejakso-tavoitteet.vue'
+import Koulutussopimus from '../views/koejakso/koulutussopimus.vue'
+import arviointilomakeAloituskeskustelu from '@/views/koejakso/arviointilomake-aloituskeskustelu.vue'
 
 Vue.use(VueRouter)
 Vue.use(Meta)
@@ -181,6 +182,11 @@ const routes: Array<RouteConfig> = [
         path: '/koejakso/koulutussopimus',
         name: 'koulutussopimus',
         component: Koulutussopimus
+      },
+      {
+        path: '/koejakso/aloituskeskustelu',
+        name: 'koejakson-aloituskeskustelu',
+        component: arviointilomakeAloituskeskustelu
       }
     ]
   },

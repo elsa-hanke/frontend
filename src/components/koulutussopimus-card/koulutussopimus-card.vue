@@ -83,7 +83,7 @@
   import { Prop } from 'vue-property-decorator'
   import KoulutussopimusCardContent from './koulutussopimus-card-content.vue'
   import ElsaButton from '@/components/button/button.vue'
-  import { KoulutussopimusTilat } from '@/utils/constants'
+  import { LomakeTilat } from '@/utils/constants'
 
   @Component({
     components: {
@@ -96,7 +96,7 @@
     state!: string | undefined
 
     get KoulutussopimusTilat() {
-      return KoulutussopimusTilat
+      return LomakeTilat
     }
   }
 </script>
