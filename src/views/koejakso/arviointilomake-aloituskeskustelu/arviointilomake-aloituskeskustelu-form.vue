@@ -131,7 +131,6 @@
               :state="validateState('suoritettuKokoaikatyossa')"
               name="suoritettu-kokoaikatyossa"
               stacked
-              @change="setSuoritettuKokoaikatyossa()"
             ></b-form-radio-group>
             <b-form-invalid-feedback :id="`${uid}-feedback`">
               {{ $t('pakollinen-tieto') }}
@@ -140,7 +139,7 @@
         </elsa-form-group>
       </b-col>
     </b-row>
-    <b-row v-if="!form.suoritettuKokoaikatyossa" class="mb-3">
+    <b-row v-if="form.suoritettuKokoaikatyossa === false" class="mb-3">
       <b-col lg="3">
         <elsa-form-group :label="$t('suoritettu-osa-aikatyossa')" :required="true" class="ml-4">
           <template v-slot="{ uid }">
@@ -207,7 +206,7 @@
           :add-new-enabled="true"
           :add-new-label="$t('lisaa-henkilo')"
           :required="true"
-          @submit="onHenkiloSubmit"
+          @submit="onKouluttajaSubmit"
         >
           <template v-slot:modal-content="{ submit, cancel }">
             <kouluttaja-form @submit="submit" @cancel="cancel" />
@@ -216,7 +215,7 @@
             <elsa-form-multiselect
               v-model="form.lahiesimies"
               :id="uid"
-              :options="henkilot"
+              :options="kouluttajat"
               :state="validateState('lahiesimies.nimi')"
               label="nimi"
               track-by="nimi"
@@ -312,9 +311,6 @@
 
     @Prop({ required: false, default: () => [] })
     kouluttajat!: Kouluttaja[]
-
-    @Prop({ required: false, default: () => [] })
-    henkilot!: []
 
     @Prop({ required: true })
     editable!: boolean
@@ -445,11 +441,6 @@
         )
       }
       params.saving = false
-    }
-
-    onHenkiloSubmit() {
-      // TODO
-      return
     }
 
     saveAndExit() {
