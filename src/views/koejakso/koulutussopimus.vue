@@ -115,11 +115,8 @@
       return this.koejakso.koulutusSopimuksenTila === LomakeTilat.ODOTTAA_HYVAKSYNTAA
     }
 
-    // TODO REPLACE WITH KOULUTTUJAT API
     async fetchKouluttajat() {
-      this.kouluttajat = (
-        await axios.get('erikoistuva-laakari/suoritusarvioinnit-rajaimet')
-      ).data.kouluttajat
+      this.kouluttajat = (await axios.get('/kouluttajat')).data
     }
 
     onKouluttajatRefresh() {

@@ -117,8 +117,9 @@
           :key="index"
           :index="index"
           :kouluttaja="k"
-          :kouluttajat="kouluttajat"
+          :kouluttajat="kouluttajatList"
           @kouluttajaAdded="onKouluttajaAdded"
+          @kouluttajaSelected="selectKouluttaja"
         ></kouluttaja-details>
 
         <elsa-button
@@ -184,6 +185,7 @@
   import { required, email } from 'vuelidate/lib/validators'
   import { Kouluttaja, KoulutussopimusLomake, UserAccount } from '@/types'
   import _get from 'lodash/get'
+  import _includes from 'lodash/includes'
   import { defaultKouluttaja, defaultKoulutuspaikka, vastuuhenkilot } from '@/utils/constants'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
@@ -244,7 +246,7 @@
       erikoistuvanYliopisto: '',
       koejaksonAlkamispaiva: '',
       korjausehdotus: '',
-      kouluttajat: [], // add defaultKouluttaja to Arr
+      kouluttajat: [defaultKouluttaja],
       koulutuspaikat: [defaultKoulutuspaikka],
       lahetetty: false,
       muokkauspaiva: '',
@@ -292,15 +294,13 @@
     deleteKoulutuspaikka() {
       this.form.koulutuspaikat.pop()
     }
-
     onKouluttajaAdded() {
       this.$emit('refreshKouluttajat')
     }
 
-    // TODO ENABLE WITH KOULUTTAJAT API
-    // selectKouluttaja(kouluttaja: Kouluttaja, index: number) {
-    //   this.form.kouluttajat[index] = kouluttaja
-    // }
+    selectKouluttaja(kouluttaja: Kouluttaja, index: number) {
+      this.form.kouluttajat[index] = kouluttaja
+    }
 
     addKouluttaja() {
       this.form.kouluttajat.push(defaultKouluttaja)
@@ -308,6 +308,18 @@
 
     deleteKouluttaja() {
       this.form.kouluttajat.pop()
+    }
+
+    get kouluttajatList() {
+      return this.kouluttajat.map((k) => {
+        if (_includes(this.form.kouluttajat, k)) {
+          return {
+            ...k,
+            $isDisabled: true
+          }
+        }
+        return k
+      })
     }
 
     updateVastuuhenkilo(id: number) {

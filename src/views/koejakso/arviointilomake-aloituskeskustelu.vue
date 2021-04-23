@@ -25,6 +25,7 @@
       <hr />
       <arviointilomake-aloituskeskustelu-form
         v-if="editable"
+        :editable="editable"
         :account="account"
         :data="aloituskeskusteluData"
         :kouluttajat="kouluttajat"
@@ -131,11 +132,8 @@
       }
     }
 
-    // TODO REPLACE WITH KOULUTTUJAT API
     async fetchKouluttajat() {
-      this.kouluttajat = (
-        await axios.get('erikoistuva-laakari/suoritusarvioinnit-rajaimet')
-      ).data.kouluttajat
+      this.kouluttajat = (await axios.get('/kouluttajat')).data
     }
 
     onKouluttajatAdded() {
@@ -167,6 +165,7 @@
         )
         checkCurrentRouteAndRedirect(this.$router, '/koejakso/aloituskeskustelu')
         toastSuccess(this, this.$t('aloituskeskustelu-lisatty-onnistuneesti'))
+        this.fetchKoejakso()
       } catch (err) {
         toastFail(this, this.$t('aloituskeskustelu-lisaaminen-epaonnistui'))
       }
@@ -205,6 +204,9 @@
       await this.fetchKoejakso()
       await this.fetchKouluttajat()
       this.loading = false
+      if (!this.editable) {
+        this.skipRouteExitConfirm = true
+      }
     }
   }
 </script>
