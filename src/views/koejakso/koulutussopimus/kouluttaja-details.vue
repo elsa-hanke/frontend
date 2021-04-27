@@ -43,6 +43,7 @@
   import KouluttajaForm from '@/forms/kouluttaja-form.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import { Kouluttaja } from '@/types'
+  import { defaultKouluttaja } from '@/utils/constants'
 
   @Component({
     components: {
@@ -92,8 +93,13 @@
       params.saving = false
     }
 
-    onKouluttajaSelect(kouluttaja: Kouluttaja) {
-      this.$emit('kouluttajaSelected', kouluttaja, this.kouluttajaIndex)
+    onKouluttajaSelect(kouluttaja: any) {
+      const value = {
+        ...defaultKouluttaja,
+        kayttajaId: kouluttaja.id,
+        nimi: kouluttaja.nimi
+      }
+      this.$emit('kouluttajaSelected', value, this.kouluttajaIndex)
     }
 
     optionDisplayName(option: any) {

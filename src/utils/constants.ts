@@ -94,6 +94,7 @@ export const defaultKoulutuspaikka: Koulutuspaikka = {
 }
 
 export const defaultKouluttaja: Kouluttaja = {
+  id: null,
   kayttajaId: null,
   kuittausaika: '',
   lahiosoite: '',

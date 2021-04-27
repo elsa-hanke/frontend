@@ -55,7 +55,7 @@ export type Koulutuspaikka = {
 }
 
 export type Kouluttaja = {
-  id?: number | null
+  id: number | null
   kayttajaId: number | null
   kuittausaika: string
   lahiosoite: string
