@@ -98,6 +98,7 @@
             <elsa-form-datepicker
               :id="uid"
               v-model="form.koejaksonPaattymispaiva"
+              :min="form.koejaksonAlkamispaiva"
               :state="validateState('koejaksonPaattymispaiva')"
             ></elsa-form-datepicker>
             <b-form-invalid-feedback :id="`${uid}-feedback`">
