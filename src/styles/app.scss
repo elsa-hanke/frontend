@@ -1,8 +1,8 @@
-@import "~@/styles/variables";
-@import "~bootstrap/scss/mixins/breakpoints";
-@import "~vue-multiselect/dist/vue-multiselect.min.css";
+@import '~@/styles/variables';
+@import '~bootstrap/scss/mixins/breakpoints';
+@import '~vue-multiselect/dist/vue-multiselect.min.css';
 
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap');
 
 .font-weight-400 {
   font-weight: $font-weight-400;
@@ -94,6 +94,13 @@ hr {
   color: $black;
 }
 
+.alert {
+  ul {
+    padding-left: 1.25rem;
+    margin-bottom: 0;
+  }
+}
+
 textarea::placeholder {
   color: $gray-600 !important;
 }
@@ -123,10 +130,15 @@ textarea::placeholder {
 }
 .b-toast-danger {
   &.b-toast-solid {
-    .toast{
+    .toast {
       background-color: $danger;
     }
   }
+}
+
+.alert-danger {
+  color: $white;
+  background-color: $danger;
 }
 
 // Piilotetaan validoinnin ikonit
@@ -219,6 +231,13 @@ h6 {
   }
 }
 
+// Remove blue outline when button is clicked
+.btn:focus,
+.btn:active {
+  outline: none !important;
+  box-shadow: none;
+}
+
 .popover {
   @include media-breakpoint-down(sm) {
     max-width: 276px;
@@ -254,6 +273,17 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type="number"] {
+input[type='number'] {
   -moz-appearance: textfield;
+}
+
+.search-icon {
+  top: 0.6875rem;
+  right: 0.875rem;
+}
+
+button.close {
+  color: $white;
+  opacity: 1;
+  text-shadow: 0 0 0;
 }

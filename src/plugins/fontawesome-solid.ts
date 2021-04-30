@@ -29,7 +29,8 @@ import {
   faSearch,
   faShare,
   faBars,
-  faTimes
+  faTimes,
+  faFileDownload
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(faArrowsAlt)
@@ -62,3 +63,4 @@ library.add(faSearch)
 library.add(faShare)
 library.add(faBars)
 library.add(faTimes)
+library.add(faFileDownload)
