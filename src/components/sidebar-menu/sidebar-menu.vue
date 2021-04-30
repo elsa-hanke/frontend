@@ -55,11 +55,11 @@
             <font-awesome-icon :icon="['far', 'envelope']" fixed-width size="lg" />
             {{ $t("viestit") }}
           </b-nav-item>
-          <b-nav-item class="border-bottom" :to="{ name: 'asiakirjat' }">
-            <font-awesome-icon icon="file" fixed-width size="lg" />
-            {{ $t("asiakirjat") }}
-          </b-nav-item>
           -->
+          <b-nav-item v-if="$isErikoistuva()" class="border-bottom" :to="{ name: 'asiakirjat' }">
+            <font-awesome-icon icon="file" fixed-width size="lg" />
+            {{ $t('asiakirjat') }}
+          </b-nav-item>
         </b-nav>
       </div>
     </nav>

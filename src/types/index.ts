@@ -108,6 +108,12 @@ export type Lahiesimies = {
   sopimusHyvaksytty: boolean
 }
 
+export type BlobFileResult = {
+  anchorElement: any
+  error: boolean
+  msSaveOrOpenBlob: boolean
+}
+
 export interface AloituskeskusteluLomake {
   erikoistuvanErikoisala: string
   erikoistuvanNimi: string
@@ -139,4 +145,10 @@ export interface Koejakso {
   aloituskeskustelunTila: string | null
   koulutusSopimuksenTila: string | null
   koulutussopimus: KoulutussopimusLomake
+}
+
+export interface Asiakirja {
+  id: number
+  nimi: string
+  lisattypvm: string
 }

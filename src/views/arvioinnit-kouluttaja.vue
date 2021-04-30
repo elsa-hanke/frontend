@@ -14,7 +14,7 @@
               ></b-form-input>
               <font-awesome-icon
                 :icon="['fas', 'search']"
-                class="text-primary position-absolute haku-ikoni"
+                class="text-primary position-absolute search-icon"
               />
             </div>
             <div v-if="arvioinnit" class="arvioinnit-table">
@@ -256,11 +256,6 @@
 
   .suoritusarviointi-haku {
     border-radius: 25px;
-  }
-
-  .haku-ikoni {
-    top: 11px;
-    right: 20px;
   }
 
   .text-light-muted {
