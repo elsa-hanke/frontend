@@ -2,6 +2,7 @@ import { Module } from 'vuex'
 import axios from 'axios'
 
 const auth: Module<any, any> = {
+  namespaced: true,
   state: {
     status: '',
     account: null,
