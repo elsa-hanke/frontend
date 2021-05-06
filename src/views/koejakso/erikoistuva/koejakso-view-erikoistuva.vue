@@ -1,5 +1,5 @@
 <template>
-  <div class="koejakso-view">
+  <div>
     <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid>
       <b-row lg>
@@ -13,6 +13,7 @@
           </p>
         </b-col>
       </b-row>
+
       <b-row lg>
         <b-col>
           <div class="d-flex justify-content-center border rounded pt-3 pb-3 mb-4">
@@ -35,6 +36,7 @@
                   </b-row>
                 </b-col>
               </b-row>
+
               <b-row>
                 <b-col cols="9" class="mb-2 mb-md-0">
                   <elsa-form-multiselect
@@ -55,13 +57,13 @@
           </div>
         </b-col>
       </b-row>
+
       <b-row lg>
         <b-col>
-          <elsa-koulutussopimus-card
-            :state="koejakso.koulutusSopimuksenTila"
-          ></elsa-koulutussopimus-card>
+          <elsa-koulutussopimus-card></elsa-koulutussopimus-card>
         </b-col>
       </b-row>
+
       <b-row lg>
         <b-col>
           <h1>{{ $t('koejakson-arviointi') }}</h1>
@@ -139,6 +141,7 @@
   import axios from 'axios'
   import Vue from 'vue'
   import Component from 'vue-class-component'
+  import store from '@/store'
   import { tyoskentelyjaksoLabel } from '@/utils/tyoskentelyjakso'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
@@ -146,7 +149,6 @@
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaKoulutussopimusCard from '@/components/koulutussopimus-card/koulutussopimus-card.vue'
-  import { toastFail } from '@/utils/toast'
 
   @Component({
     components: {
@@ -158,7 +160,7 @@
       ElsaKoulutussopimusCard
     }
   })
-  export default class Koejakso extends Vue {
+  export default class KoejaksoViewErikoistuva extends Vue {
     selected = {
       tyoskentelyjakso: null,
       epaOsaamisalue: null,
@@ -179,8 +181,8 @@
         active: true
       }
     ]
-    koejakso: any = {}
 
+    // TODO REFACTOR AND/OR REMOVE
     get tyoskentelyjaksotFormatted() {
       // console.log('tyoskentelyjaksotFormatted()...')
       return this.options.tyoskentelyjaksot.map((tj: any) => ({
@@ -189,20 +191,14 @@
       }))
     }
 
+    // TODO REFACTOR AND/OR REMOVE
     async onTyoskentelyjaksoSelect(selected: any) {
       // console.log('onTyoskentelyjaksoSelect()...')
       this.selected.tyoskentelyjakso = selected
       await this.fetch()
     }
 
-    async fetchKoejakso() {
-      try {
-        this.koejakso = (await axios.get(`erikoistuva-laakari/koejakso`)).data
-      } catch (err) {
-        toastFail(this, this.$t('suoritemerkinnan-lomakkeen-hakeminen-epaonnistui'))
-      }
-    }
-
+    // TODO REFACTOR AND/OR REMOVE
     async fetch(options: any = {}) {
       try {
         const res = (
@@ -223,21 +219,20 @@
       }
     }
 
-    mounted() {
-      // const oppimistavoitteet = (await axios.get('erikoistuva-laakari/oppimistavoitteet-taulukko')).data
-      // console.log(oppimistavoitteet.toString())
+    // mounted() {
+    //   // const oppimistavoitteet = (await axios.get('erikoistuva-laakari/oppimistavoitteet-taulukko')).data
+    //   // console.log(oppimistavoitteet.toString())
+    // }
 
-      this.fetchKoejakso()
+    async mounted() {
+      await store.dispatch('erikoistuva/getKoejakso')
+      await store.dispatch('erikoistuva/getKouluttajat')
     }
   }
 </script>
 
 <style lang="scss" scoped>
   @import '~@/styles/variables';
-
-  .koejakso-view {
-    max-width: 1024px;
-  }
 
   .form-order {
     font-weight: bold;

@@ -47,7 +47,7 @@
     </b-row>
     <b-row>
       <b-col lg="5">
-        <elsa-form-group :label="$t('sähköpostiosoite')" :required="true">
+        <elsa-form-group :label="$t('sahkopostiosoite')" :required="true">
           <template v-slot="{ uid }">
             <b-form-input
               :id="uid"
@@ -118,7 +118,6 @@
           :index="index"
           :kouluttaja="k"
           :kouluttajat="kouluttajatList"
-          @kouluttajaAdded="onKouluttajaAdded"
           @kouluttajaSelected="selectKouluttaja"
         ></kouluttaja-details>
 
@@ -165,7 +164,7 @@
     <b-row>
       <b-col>
         <elsa-button v-if="editable" variant="outline-primary" @click="saveAndExit">
-          {{ $t('tallenna-keskeneräisenä') }}
+          {{ $t('tallenna-keskeneraisena') }}
         </elsa-button>
       </b-col>
       <b-col class="text-right">
@@ -191,8 +190,8 @@
   import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
-  import KoulutuspaikkaDetails from '@/views/koejakso/koulutussopimus/koulutuspaikka-details.vue'
-  import KouluttajaDetails from '@/views/koejakso/koulutussopimus/kouluttaja-details.vue'
+  import KoulutuspaikkaDetails from '@/views/koejakso/erikoistuva/koulutussopimus/koulutuspaikka-details.vue'
+  import KouluttajaDetails from '@/views/koejakso/erikoistuva/koulutussopimus/kouluttaja-details.vue'
 
   @Component({
     components: {
@@ -293,9 +292,6 @@
 
     deleteKoulutuspaikka() {
       this.form.koulutuspaikat.pop()
-    }
-    onKouluttajaAdded() {
-      this.$emit('refreshKouluttajat')
     }
 
     selectKouluttaja(kouluttaja: Kouluttaja, index: number) {

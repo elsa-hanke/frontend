@@ -159,7 +159,7 @@
     }
 
     get account() {
-      return store.getters.account
+      return store.getters['auth/account']
     }
   }
 </script>

@@ -22,10 +22,10 @@ Vue.use(Vuelidate)
 Vue.config.productionTip = false
 
 router.beforeEach(async (to, from, next) => {
-  await store.dispatch('authorize')
-  if (store.getters.isLoggedIn) {
+  await store.dispatch('auth/authorize')
+  if (store.getters['auth/isLoggedIn']) {
     // Ohjataan rooliton käyttäjä roolien lisäämisen näkymään kirjautumisen jälkeen
-    if (store.getters.account.authorities.length === 0 && to.name !== 'kayttooikeus') {
+    if (store.getters['auth/account'].authorities.length === 0 && to.name !== 'kayttooikeus') {
       next({
         name: 'kayttooikeus',
         replace: true
@@ -34,7 +34,7 @@ router.beforeEach(async (to, from, next) => {
 
     restoreRoute(next)
   } else {
-    if (store.getters.status === 'error') {
+    if (store.getters['auth/status'] === 'error') {
       // TODO: virhesivu
     } else {
       storeRouteAndRedirectToLogin(to)

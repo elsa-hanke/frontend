@@ -1,5 +1,5 @@
 import { Route, NavigationGuardNext } from 'vue-router'
-import { ELSA_API_LOCATION } from '@/store'
+import { ELSA_API_LOCATION } from '@/api'
 
 // Palauttaa tallennetun näkymän polun selaimen muistista.
 export function restoreRoute(next: NavigationGuardNext) {

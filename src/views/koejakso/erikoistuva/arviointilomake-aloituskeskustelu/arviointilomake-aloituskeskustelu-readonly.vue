@@ -2,7 +2,7 @@
   <div>
     <b-row>
       <b-col>
-        <h5>{{ $t('sähköpostiosoite') }}</h5>
+        <h5>{{ $t('sahkopostiosoite') }}</h5>
         <p>{{ data.erikoistuvanSahkoposti }}</p>
       </b-col>
     </b-row>

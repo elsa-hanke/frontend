@@ -133,3 +133,10 @@ export interface PoissaoloLomake {
   tyoskentelyjaksot: any[]
   poissaolonSyyt: any[]
 }
+
+export interface Koejakso {
+  aloituskeskustelu: AloituskeskusteluLomake
+  aloituskeskustelunTila: string | null
+  koulutusSopimuksenTila: string | null
+  koulutussopimus: KoulutussopimusLomake
+}

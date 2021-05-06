@@ -53,7 +53,7 @@
     }
 
     async logout() {
-      await store.dispatch('logout')
+      await store.dispatch('auth/logout')
     }
 
     onSubmit() {

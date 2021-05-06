@@ -80,7 +80,7 @@
   })
   export default class MobileNav extends Vue {
     get account() {
-      return store.getters.account
+      return store.getters['auth/account']
     }
 
     get authorities() {
@@ -111,7 +111,7 @@
     }
 
     async logout() {
-      await store.dispatch('logout')
+      await store.dispatch('auth/logout')
     }
 
     changeLocale(lang: string) {

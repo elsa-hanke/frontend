@@ -14,7 +14,6 @@ export function toastSuccess(vue: Vue, message: any) {
     variant: 'success',
     solid: true,
     // noAutoHide: true,
-    noCloseButton: true,
     bodyClass: 'shadow rounded p-3'
   })
 }
@@ -34,7 +33,6 @@ export function toastFail(vue: Vue, message: any) {
     variant: 'danger',
     solid: true,
     // noAutoHide: true,
-    noCloseButton: true,
     bodyClass: 'shadow rounded p-3'
   })
 }
