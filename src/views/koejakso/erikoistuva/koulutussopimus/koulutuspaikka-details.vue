@@ -46,8 +46,8 @@
   import { Prop, Mixins } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
   import { required } from 'vuelidate/lib/validators'
-  import ElsaButton from '../../../components/button/button.vue'
-  import ElsaFormGroup from '../../../components/form-group/form-group.vue'
+  import ElsaButton from '@/components/button/button.vue'
+  import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import { yliopistot } from '@/utils/constants'
   import { Koulutuspaikka } from '@/types'
 

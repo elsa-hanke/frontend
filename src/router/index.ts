@@ -28,10 +28,12 @@ import UusiPoissaolo from '../views/uusi-poissaolo.vue'
 import UusiSuoritemerkinta from '../views/uusi-suoritemerkinta.vue'
 import UusiTyoskentelyjakso from '../views/uusi-tyoskentelyjakso.vue'
 import Viestit from '../views/viestit.vue'
-import Koejakso from '../views/koejakso.vue'
-import KoejaksoTavoitteet from '../views/koejakso/koejakso-tavoitteet.vue'
-import Koulutussopimus from '../views/koejakso/koulutussopimus.vue'
-import arviointilomakeAloituskeskustelu from '@/views/koejakso/arviointilomake-aloituskeskustelu.vue'
+import Koejakso from '../views/koejakso/index.vue'
+import KoejaksoContainer from '@/views/koejakso/koejakso-container.vue'
+import KoejaksoTavoitteet from '../views/koejakso/erikoistuva/koejakso-tavoitteet.vue'
+import ErikoistuvaKoulutussopimus from '../views/koejakso/erikoistuva/koulutussopimus/koulutussopimus.vue'
+import ErikoistuvaArviointilomakeAloituskeskustelu from '@/views/koejakso/erikoistuva/arviointilomake-aloituskeskustelu/arviointilomake-aloituskeskustelu.vue'
+import KouluttajaKoulutussopimus from '../views/koejakso/kouluttaja/koulutussopimus/kouluttaja-koulutussopimus.vue'
 
 Vue.use(VueRouter)
 Vue.use(Meta)
@@ -170,23 +172,34 @@ const routes: Array<RouteConfig> = [
       },
       {
         path: '/koejakso',
-        name: 'koejakso',
-        component: Koejakso
-      },
-      {
-        path: '/koejakso-yleiset-tavoitteet',
-        name: 'koejakso-yleiset-tavoitteet',
-        component: KoejaksoTavoitteet
-      },
-      {
-        path: '/koejakso/koulutussopimus',
-        name: 'koulutussopimus',
-        component: Koulutussopimus
-      },
-      {
-        path: '/koejakso/aloituskeskustelu',
-        name: 'koejakson-aloituskeskustelu',
-        component: arviointilomakeAloituskeskustelu
+        component: Koejakso,
+        children: [
+          {
+            path: '',
+            name: 'koejakso',
+            component: KoejaksoContainer
+          },
+          {
+            path: 'koejakso-yleiset-tavoitteet',
+            name: 'koejakso-yleiset-tavoitteet',
+            component: KoejaksoTavoitteet
+          },
+          {
+            path: 'koulutussopimus',
+            name: 'koulutussopimus',
+            component: ErikoistuvaKoulutussopimus
+          },
+          {
+            path: 'aloituskeskustelu',
+            name: 'koejakson-aloituskeskustelu',
+            component: ErikoistuvaArviointilomakeAloituskeskustelu
+          },
+          {
+            path: 'koulutussopimus/:id',
+            name: 'koulutussopimus-kouluttaja',
+            component: KouluttajaKoulutussopimus
+          }
+        ]
       }
     ]
   },

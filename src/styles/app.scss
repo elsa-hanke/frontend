@@ -100,6 +100,13 @@ textarea::placeholder {
 
 .b-toast-success,
 .b-toast-danger {
+  .toast-header {
+    position: absolute;
+    right: 0;
+    padding: 0.25rem 0.75rem 0;
+    background-color: transparent !important;
+    border-bottom: none !important;
+  }
   .toast {
     border: none;
     color: $white;
@@ -116,7 +123,7 @@ textarea::placeholder {
 }
 .b-toast-danger {
   &.b-toast-solid {
-    .toast {
+    .toast{
       background-color: $danger;
     }
   }
@@ -224,6 +231,13 @@ h6 {
 
 .text-prewrap {
   white-space: pre-wrap;
+}
+
+.capitalize-first {
+  text-transform: lowercase;
+}
+.capitalize-first::first-letter {
+  text-transform: uppercase;
 }
 
 table {

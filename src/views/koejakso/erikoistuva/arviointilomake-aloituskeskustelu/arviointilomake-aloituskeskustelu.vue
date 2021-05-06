@@ -30,7 +30,6 @@
         :data="aloituskeskusteluData"
         :kouluttajat="kouluttajat"
         :henkilot="kouluttajat"
-        @kouluttajaAdded="onKouluttajatAdded"
         @saveAndExit="onSaveDraftAndExit"
         @submit="onSubmit"
       ></arviointilomake-aloituskeskustelu-form>
@@ -44,7 +43,6 @@
 </template>
 
 <script lang="ts">
-  import axios from 'axios'
   import Component from 'vue-class-component'
   import { Mixins } from 'vue-property-decorator'
   import { toastFail, toastSuccess } from '@/utils/toast'
@@ -54,8 +52,8 @@
   import { checkCurrentRouteAndRedirect } from '@/utils/functions'
   import { LomakeTilat } from '@/utils/constants'
   import UserDetails from '@/components/user-details/user-details.vue'
-  import ArviointilomakeAloituskeskusteluForm from '@/views/koejakso/arviointilomake-aloituskeskustelu/arviointilomake-aloituskeskustelu-form.vue'
-  import ArviointilomakeAloituskeskusteluReadonly from '@/views/koejakso/arviointilomake-aloituskeskustelu/arviointilomake-aloituskeskustelu-readonly.vue'
+  import ArviointilomakeAloituskeskusteluForm from '@/views/koejakso/erikoistuva/arviointilomake-aloituskeskustelu/arviointilomake-aloituskeskustelu-form.vue'
+  import ArviointilomakeAloituskeskusteluReadonly from '@/views/koejakso/erikoistuva/arviointilomake-aloituskeskustelu/arviointilomake-aloituskeskustelu-readonly.vue'
 
   @Component({
     components: {
@@ -64,7 +62,9 @@
       ArviointilomakeAloituskeskusteluReadonly
     }
   })
-  export default class ArviointilomakeAloituskeskustelu extends Mixins(ConfirmRouteExit) {
+  export default class ErikoistuvaArviointilomakeAloituskeskustelu extends Mixins(
+    ConfirmRouteExit
+  ) {
     items = [
       {
         text: this.$t('etusivu'),
@@ -82,10 +82,9 @@
     loading = true
     aloituskeskusteluLomake: null | AloituskeskusteluLomake = null
     koejakso: any = null
-    kouluttajat: [] = []
 
     get account() {
-      return store.getters.account
+      return store.getters['auth/account']
     }
 
     get editable() {
@@ -104,50 +103,46 @@
       return this.aloituskeskusteluLomake
     }
 
-    async fetchKoejakso() {
-      try {
-        const { data } = await axios.get(`erikoistuva-laakari/koejakso`)
-        this.koejakso = data
-        if (data.aloituskeskustelu) {
-          this.aloituskeskusteluLomake = data.aloituskeskustelu
+    get kouluttajat() {
+      return store.getters['erikoistuva/kouluttajat']
+    }
 
-          if (this.aloituskeskusteluLomake) {
-            if (!this.aloituskeskusteluLomake.erikoistuvanNimi) {
-              this.aloituskeskusteluLomake.erikoistuvanNimi = this.account.firstName.concat(
-                ' ',
-                this.account.lastName
-              )
-            }
-            if (data.aloituskeskustelu.koejaksonAlkamispaiva) {
-              this.aloituskeskusteluLomake.koejaksonAlkamispaiva =
-                data.aloituskeskustelu.koejaksonAlkamispaiva
-            }
+    get koejaksoData() {
+      return store.getters['erikoistuva/koejakso']
+    }
+
+    setKoejaksoData() {
+      if (this.koejaksoData.aloituskeskustelu) {
+        this.aloituskeskusteluLomake = this.koejaksoData.aloituskeskustelu
+
+        if (this.aloituskeskusteluLomake) {
+          if (!this.aloituskeskusteluLomake.erikoistuvanNimi) {
+            this.aloituskeskusteluLomake.erikoistuvanNimi = this.account.firstName.concat(
+              ' ',
+              this.account.lastName
+            )
+          }
+          if (this.koejaksoData.aloituskeskustelu.koejaksonAlkamispaiva) {
+            this.aloituskeskusteluLomake.koejaksonAlkamispaiva = this.koejaksoData.aloituskeskustelu.koejaksonAlkamispaiva
           }
         }
-        if (!this.editable) {
-          this.skipRouteExitConfirm = true
-        }
-      } catch (err) {
-        toastFail(this, this.$t('aloituskeskustelu-hakeminen-epaonnistui'))
       }
-    }
-
-    async fetchKouluttajat() {
-      this.kouluttajat = (await axios.get('/kouluttajat')).data
-    }
-
-    onKouluttajatAdded() {
-      this.fetchKouluttajat()
+      if (!this.editable) {
+        this.skipRouteExitConfirm = true
+      }
     }
 
     async onSaveDraftAndExit(form: AloituskeskusteluLomake, params: any) {
       params.saving = true
       this.aloituskeskusteluLomake = form
       try {
-        await axios.post(
-          'erikoistuva-laakari/koejakso/aloituskeskutelu',
-          this.aloituskeskusteluLomake
-        )
+        if (this.koejaksoData.aloituskeskustelunTila === LomakeTilat.UUSI) {
+          await store.dispatch('erikoistuva/postKoulutussopimus', this.aloituskeskusteluLomake)
+        }
+        if (this.koejaksoData.aloituskeskustelunTila === LomakeTilat.TALLENNETTU_KESKENERAISENA) {
+          await store.dispatch('erikoistuva/putKoulutussopimus', this.aloituskeskusteluLomake)
+        }
+
         toastSuccess(this, this.$t('aloituskeskustelu-tallennettu-onnistuneesti'))
         this.skipRouteExitConfirm = true
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
@@ -159,13 +154,9 @@
 
     async saveNewForm() {
       try {
-        await axios.post(
-          'erikoistuva-laakari/koejakso/aloituskeskustelu',
-          this.aloituskeskusteluLomake
-        )
+        await store.dispatch('erikoistuva/postAloituskeskustelu', this.aloituskeskusteluLomake)
         checkCurrentRouteAndRedirect(this.$router, '/koejakso/aloituskeskustelu')
         toastSuccess(this, this.$t('aloituskeskustelu-lisatty-onnistuneesti'))
-        this.fetchKoejakso()
       } catch (err) {
         toastFail(this, this.$t('aloituskeskustelu-lisaaminen-epaonnistui'))
       }
@@ -173,25 +164,22 @@
 
     async updateSentForm() {
       try {
-        await axios.put(
-          'erikoistuva-laakari/koejakso/aloituskeskustelu',
-          this.aloituskeskusteluLomake
-        )
+        await store.dispatch('erikoistuva/putAloituskeskustelu', this.aloituskeskusteluLomake)
         checkCurrentRouteAndRedirect(this.$router, '/koejakso/aloituskeskustelu')
         toastSuccess(this, this.$t('aloituskeskustelu-lisatty-onnistuneesti'))
-        this.fetchKoejakso()
       } catch (err) {
         toastFail(this, this.$t('aloituskeskustelu-lisaaminen-epaonnistui'))
       }
     }
 
-    onSubmit(form: AloituskeskusteluLomake, params: any) {
+    async onSubmit(form: AloituskeskusteluLomake, params: any) {
       params.saving = true
       this.aloituskeskusteluLomake = form
       this.aloituskeskusteluLomake.lahetetty = true
-      if (this.koejakso.aloituskeskustelunTila === LomakeTilat.TALLENNETTU_KESKENERAISENA) {
-        this.updateSentForm()
-      } else if (this.koejakso.aloituskeskustelunTila === LomakeTilat.PALAUTETTU_KORJATTAVAKSI) {
+      if (
+        this.koejaksoData.aloituskeskustelunTila === LomakeTilat.TALLENNETTU_KESKENERAISENA ||
+        this.koejaksoData.aloituskeskustelunTila === LomakeTilat.PALAUTETTU_KORJATTAVAKSI
+      ) {
         this.updateSentForm()
       } else {
         this.saveNewForm()
@@ -201,8 +189,9 @@
 
     async mounted() {
       this.loading = true
-      await this.fetchKoejakso()
-      await this.fetchKouluttajat()
+      await store.dispatch('erikoistuva/getKoejakso')
+      await store.dispatch('erikoistuva/getKouluttajat')
+      this.setKoejaksoData()
       this.loading = false
       if (!this.editable) {
         this.skipRouteExitConfirm = true

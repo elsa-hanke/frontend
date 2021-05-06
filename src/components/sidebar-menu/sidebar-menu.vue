@@ -37,7 +37,11 @@
             <font-awesome-icon icon="award" fixed-width size="lg" />
             {{ $t('arvioinnit') }}
           </b-nav-item>
-          <b-nav-item v-if="$isErikoistuva()" class="border-bottom" :to="{ name: 'koejakso' }">
+          <b-nav-item
+            v-if="$isErikoistuva() || $isKouluttaja()"
+            class="border-bottom"
+            :to="{ name: 'koejakso' }"
+          >
             <font-awesome-icon icon="clipboard-check" fixed-width size="lg" />
             {{ $t('koejakso') }}
           </b-nav-item>

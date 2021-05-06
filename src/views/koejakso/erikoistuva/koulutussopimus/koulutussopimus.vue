@@ -35,14 +35,13 @@
             :data="koulutusopimusData"
             :account="account"
             :kouluttajat="kouluttajat"
-            @refreshKouluttajat="onKouluttajatRefresh"
             @saveAndExit="onSaveDraftAndExit"
             @submit="onSubmit"
           ></koulutussopimus-form>
 
           <koulutussopimus-readonly
             v-if="!editable"
-            :data="koulutusopimusData"
+            :data="koejaksoData.koulutussopimus"
           ></koulutussopimus-readonly>
         </b-col>
       </b-row>
@@ -51,7 +50,6 @@
 </template>
 
 <script lang="ts">
-  import axios from 'axios'
   import Component from 'vue-class-component'
   import { Mixins } from 'vue-property-decorator'
   import { KoulutussopimusLomake } from '@/types'
@@ -59,8 +57,8 @@
   import store from '@/store'
   import ConfirmRouteExit from '@/mixins/confirm-route-exit'
   import UserDetails from '@/components/user-details/user-details.vue'
-  import KoulutussopimusForm from '@/views/koejakso/koulutussopimus/koulutussopimus-form.vue'
-  import KoulutussopimusReadonly from '@/views/koejakso/koulutussopimus/koulutussopimus-readonly.vue'
+  import KoulutussopimusForm from '@/views/koejakso/erikoistuva/koulutussopimus/koulutussopimus-form.vue'
+  import KoulutussopimusReadonly from '@/views/koejakso/erikoistuva/koulutussopimus/koulutussopimus-readonly.vue'
   import { checkCurrentRouteAndRedirect } from '@/utils/functions'
   import { LomakeTilat } from '@/utils/constants'
 
@@ -71,7 +69,7 @@
       KoulutussopimusReadonly
     }
   })
-  export default class Koulutussopimus extends Mixins(ConfirmRouteExit) {
+  export default class ErikoistuvaKoulutussopimus extends Mixins(ConfirmRouteExit) {
     items = [
       {
         text: this.$t('etusivu'),
@@ -88,19 +86,13 @@
     ]
     loading = true
     koulutussopimusLomake: null | KoulutussopimusLomake = null
-    koejakso: any = null
-    kouluttajat: [] = []
-
-    get koulutusopimusData() {
-      return this.koulutussopimusLomake
-    }
 
     get account() {
-      return store.getters.account
+      return store.getters['auth/account']
     }
 
     get editable() {
-      switch (this.koejakso.koulutusSopimuksenTila) {
+      switch (this.koejaksoData.koulutusSopimuksenTila) {
         case LomakeTilat.PALAUTETTU_KORJATTAVAKSI:
           return true
         case LomakeTilat.UUSI:
@@ -112,35 +104,32 @@
     }
 
     get odottaaHyvaksyntaa() {
-      return this.koejakso.koulutusSopimuksenTila === LomakeTilat.ODOTTAA_HYVAKSYNTAA
+      return this.koejaksoData.koulutusSopimuksenTila === LomakeTilat.ODOTTAA_HYVAKSYNTAA
     }
 
-    async fetchKouluttajat() {
-      this.kouluttajat = (await axios.get('/kouluttajat')).data
+    get kouluttajat() {
+      return store.getters['erikoistuva/kouluttajat']
     }
 
-    onKouluttajatRefresh() {
-      this.fetchKouluttajat()
+    get koejaksoData() {
+      return store.getters['erikoistuva/koejakso']
     }
 
-    async fetchKoejakso() {
-      try {
-        const { data } = await axios.get(`erikoistuva-laakari/koejakso`)
-        this.koejakso = data
-        if (data.koulutussopimus) {
-          this.koulutussopimusLomake = data.koulutussopimus
-          if (this.koulutussopimusLomake?.erikoistuvanNimi) {
+    setKoejaksoData() {
+      if (this.koejaksoData.koulutussopimus) {
+        this.koulutussopimusLomake = this.koejaksoData.koulutussopimus
+
+        if (this.koulutussopimusLomake) {
+          if (!this.koulutussopimusLomake?.erikoistuvanNimi) {
             this.koulutussopimusLomake.erikoistuvanNimi = this.account.firstName.concat(
               ' ',
               this.account.lastName
             )
           }
         }
-        if (!this.editable) {
-          this.skipRouteExitConfirm = true
-        }
-      } catch (err) {
-        toastFail(this, this.$t('koulutussopimuksen-hakeminen-epaonnistui'))
+      }
+      if (!this.editable) {
+        this.skipRouteExitConfirm = true
       }
     }
 
@@ -148,20 +137,11 @@
       params.saving = true
       this.koulutussopimusLomake = form
       try {
-        if (this.koejakso.koulutusSopimuksenTila === LomakeTilat.UUSI) {
-          await axios.post(
-            'erikoistuva-laakari/koejakso/koulutussopimus',
-            this.koulutussopimusLomake
-          )
-        } else if (
-          this.koejakso.koulutusSopimuksenTila === LomakeTilat.TALLENNETTU_KESKENERAISENA
-        ) {
-          await axios.put(
-            'erikoistuva-laakari/koejakso/koulutussopimus',
-            this.koulutussopimusLomake
-          )
-        } else {
-          toastFail(this, this.$t('koulutussopimuksen-tallennus-epaonnistui'))
+        if (this.koejaksoData.koulutusSopimuksenTila === LomakeTilat.UUSI) {
+          await store.dispatch('erikoistuva/postKoulutussopimus', this.koulutussopimusLomake)
+        }
+        if (this.koejaksoData.koulutusSopimuksenTila === LomakeTilat.TALLENNETTU_KESKENERAISENA) {
+          await store.dispatch('erikoistuva/putKoulutussopimus', this.koulutussopimusLomake)
         }
 
         toastSuccess(this, this.$t('koulutussopimus-tallennettu-onnistuneesti'))
@@ -175,10 +155,10 @@
 
     async saveNewForm() {
       try {
-        await axios.post('erikoistuva-laakari/koejakso/koulutussopimus', this.koulutussopimusLomake)
+        await store.dispatch('erikoistuva/postKoulutussopimus', this.koulutussopimusLomake)
+
         checkCurrentRouteAndRedirect(this.$router, '/koejakso/koulutussopimus')
         toastSuccess(this, this.$t('koulutussopimus-lisatty-onnistuneesti'))
-        this.fetchKoejakso()
       } catch (err) {
         toastFail(this, this.$t('koulutussopimuksen-lisaaminen-epaonnistui'))
       }
@@ -186,22 +166,23 @@
 
     async updateSentForm() {
       try {
-        await axios.put('erikoistuva-laakari/koejakso/koulutussopimus', this.koulutussopimusLomake)
+        await store.dispatch('erikoistuva/putKoulutussopimus', this.koulutussopimusLomake)
+
         checkCurrentRouteAndRedirect(this.$router, '/koejakso/koulutussopimus')
         toastSuccess(this, this.$t('koulutussopimus-lisatty-onnistuneesti'))
-        this.fetchKoejakso()
       } catch (err) {
         toastFail(this, this.$t('koulutussopimuksen-lisaaminen-epaonnistui'))
       }
     }
 
-    onSubmit(form: KoulutussopimusLomake, params: any) {
+    async onSubmit(form: KoulutussopimusLomake, params: any) {
       params.saving = true
       this.koulutussopimusLomake = form
       this.koulutussopimusLomake.lahetetty = true
-      if (this.koejakso.koulutusSopimuksenTila === LomakeTilat.TALLENNETTU_KESKENERAISENA) {
-        this.updateSentForm()
-      } else if (this.koejakso.koulutusSopimuksenTila === LomakeTilat.PALAUTETTU_KORJATTAVAKSI) {
+      if (
+        this.koejaksoData.koulutusSopimuksenTila === LomakeTilat.TALLENNETTU_KESKENERAISENA ||
+        this.koejaksoData.koulutusSopimuksenTila === LomakeTilat.PALAUTETTU_KORJATTAVAKSI
+      ) {
         this.updateSentForm()
       } else {
         this.saveNewForm()
@@ -211,8 +192,9 @@
 
     async mounted() {
       this.loading = true
-      await this.fetchKoejakso()
-      await this.fetchKouluttajat()
+      await store.dispatch('erikoistuva/getKoejakso')
+      await store.dispatch('erikoistuva/getKouluttajat')
+      await this.setKoejaksoData()
       this.loading = false
       if (!this.editable) {
         this.skipRouteExitConfirm = true

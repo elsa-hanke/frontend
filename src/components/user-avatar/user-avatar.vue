@@ -58,7 +58,7 @@
     }
 
     get currentAccountName() {
-      const account = store.getters.account
+      const account = store.getters['auth/account']
       if (account) {
         return `${account.firstName} ${account.lastName}`
       } else {

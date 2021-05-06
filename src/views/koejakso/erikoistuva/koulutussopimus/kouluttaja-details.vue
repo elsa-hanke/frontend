@@ -33,13 +33,14 @@
 <script lang="ts">
   import { toastFail, toastSuccess } from '@/utils/toast'
   import axios from 'axios'
+  import store from '@/store'
   import Component from 'vue-class-component'
   import { Prop, Mixins } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
   import { required } from 'vuelidate/lib/validators'
   import Avatar from 'vue-avatar'
-  import ElsaButton from '../../../components/button/button.vue'
-  import ElsaFormGroup from '../../../components/form-group/form-group.vue'
+  import ElsaButton from '@/components/button/button.vue'
+  import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import KouluttajaForm from '@/forms/kouluttaja-form.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import { Kouluttaja } from '@/types'
@@ -81,7 +82,7 @@
         await axios.post('/erikoistuva-laakari/lahikouluttajat', value)
         modal.hide('confirm')
         toastSuccess(this, this.$t('uusi-kouluttaja-lisatty'))
-        this.$emit('kouluttajaAdded')
+        await store.dispatch('erikoistuva/getKouluttajat')
       } catch (err) {
         toastFail(
           this,

@@ -118,7 +118,7 @@
   })
   export default class Etusivu extends Vue {
     get account() {
-      return store.getters.account
+      return store.getters['auth/account']
     }
 
     get displayName() {

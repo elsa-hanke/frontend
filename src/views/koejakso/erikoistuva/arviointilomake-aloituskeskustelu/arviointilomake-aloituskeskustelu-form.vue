@@ -2,7 +2,7 @@
   <b-form @submit.stop.prevent="onSubmit">
     <b-row>
       <b-col lg="8">
-        <elsa-form-group :label="$t('sähköpostiosoite')" :required="true">
+        <elsa-form-group :label="$t('sahköpostiosoite')" :required="true">
           <template v-slot="{ uid }">
             <b-form-input
               :id="uid"
@@ -257,7 +257,7 @@
     <b-row>
       <b-col>
         <elsa-button v-if="editable" variant="outline-primary" @click="saveAndExit">
-          {{ $t('tallenna-keskeneräisenä') }}
+          {{ $t('tallenna-keskeneraisena') }}
         </elsa-button>
       </b-col>
       <b-col class="text-right">
@@ -284,6 +284,7 @@
   import { validationMixin } from 'vuelidate'
   import { required, email } from 'vuelidate/lib/validators'
   import _get from 'lodash/get'
+  import store from '@/store'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
@@ -432,7 +433,7 @@
         await axios.post('/erikoistuva-laakari/lahikouluttajat', value)
         modal.hide('confirm')
         toastSuccess(this, this.$t('uusi-kouluttaja-lisatty'))
-        this.$emit('kouluttajaAdded')
+        await store.dispatch('erikoistuva/getKouluttajat')
       } catch (err) {
         toastFail(
           this,

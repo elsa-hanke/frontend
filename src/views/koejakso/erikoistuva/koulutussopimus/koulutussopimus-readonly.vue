@@ -2,19 +2,19 @@
   <div>
     <b-row>
       <b-col lg="8">
-        <h5>{{ $t('koulutusopimus-form.opinto-oikeuden-alkamispäivä') }}</h5>
+        <h5>{{ $t('opinto-oikeuden-alkamispäivä') }}</h5>
         <p>{{ $date(data.opintooikeudenMyontamispaiva) }}</p>
       </b-col>
     </b-row>
     <b-row>
       <b-col lg="8">
-        <h5>{{ $t('koulutusopimus-form.koejakson-alkamispäivä') }}</h5>
+        <h5>{{ $t('koejakson-alkamispäivä') }}</h5>
         <p>{{ $date(data.koejaksonAlkamispaiva) }}</p>
       </b-col>
     </b-row>
     <b-row>
       <b-col lg="4">
-        <h5>{{ $t('sähköpostiosoite') }}</h5>
+        <h5>{{ $t('sahkopostiosoite') }}</h5>
         <p>{{ data.erikoistuvanSahkoposti }}</p>
       </b-col>
       <b-col lg="4">

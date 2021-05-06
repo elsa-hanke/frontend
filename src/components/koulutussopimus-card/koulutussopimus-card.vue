@@ -80,10 +80,11 @@
 <script lang="ts">
   import Vue from 'vue'
   import Component from 'vue-class-component'
-  import { Prop } from 'vue-property-decorator'
   import KoulutussopimusCardContent from './koulutussopimus-card-content.vue'
   import ElsaButton from '@/components/button/button.vue'
   import { LomakeTilat } from '@/utils/constants'
+  import { toastFail } from '@/utils/toast'
+  import axios from 'axios'
 
   @Component({
     components: {
@@ -92,11 +93,22 @@
     }
   })
   export default class KoulutussopimusCard extends Vue {
-    @Prop({ required: false, default: '' })
-    state!: string | undefined
+    state = ''
+
+    async fetchKoejakso() {
+      try {
+        this.state = (await axios.get(`erikoistuva-laakari/koejakso`)).data.koulutusSopimuksenTila
+      } catch (err) {
+        toastFail(this, this.$t('suoritemerkinnan-lomakkeen-hakeminen-epaonnistui'))
+      }
+    }
 
     get KoulutussopimusTilat() {
       return LomakeTilat
+    }
+
+    mounted() {
+      this.fetchKoejakso()
     }
   }
 </script>
