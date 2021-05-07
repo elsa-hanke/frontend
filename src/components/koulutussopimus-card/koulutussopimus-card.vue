@@ -2,7 +2,7 @@
   <div class="d-flex justify-content-center border rounded pt-3 mb-4">
     <div class="container-fluid sopimus-card-container">
       <h2>{{ $t('koulutussopimus') }}</h2>
-      <koulutussopimus-card-content v-if="state === KoulutussopimusTilat.UUSI">
+      <koulutussopimus-card-content v-if="koulutusSopimuksenTila === KoulutussopimusTilat.UUSI">
         <template v-slot:content>
           <span class="pr-5" v-html="$t('koulutussopimus-tila-uusi')" />
         </template>
@@ -14,7 +14,7 @@
       </koulutussopimus-card-content>
 
       <koulutussopimus-card-content
-        v-if="state === KoulutussopimusTilat.TALLENNETTU_KESKENERAISENA"
+        v-if="koulutusSopimuksenTila === KoulutussopimusTilat.TALLENNETTU_KESKENERAISENA"
       >
         <template v-slot:content>
           <div class="d-inline-flex">
@@ -31,7 +31,9 @@
         </template>
       </koulutussopimus-card-content>
 
-      <koulutussopimus-card-content v-if="state === KoulutussopimusTilat.ODOTTAA_HYVAKSYNTAA">
+      <koulutussopimus-card-content
+        v-if="koulutusSopimuksenTila === KoulutussopimusTilat.ODOTTAA_HYVAKSYNTAA"
+      >
         <template v-slot:content>
           <p class="pr-5" v-html="$t('koulutussopimus-tila-odottaa-hyvaksyntaa')" />
         </template>
@@ -42,7 +44,9 @@
         </template>
       </koulutussopimus-card-content>
 
-      <koulutussopimus-card-content v-if="state === KoulutussopimusTilat.PALAUTETTU_KORJATTAVAKSI">
+      <koulutussopimus-card-content
+        v-if="koulutusSopimuksenTila === KoulutussopimusTilat.PALAUTETTU_KORJATTAVAKSI"
+      >
         <template v-slot:content>
           <div class="d-inline-flex">
             <font-awesome-icon :icon="['fas', 'exclamation-circle']" class="text-danger mr-1" />
@@ -58,7 +62,9 @@
         </template>
       </koulutussopimus-card-content>
 
-      <koulutussopimus-card-content v-if="state === KoulutussopimusTilat.HYVAKSYTTY">
+      <koulutussopimus-card-content
+        v-if="koulutusSopimuksenTila === KoulutussopimusTilat.HYVAKSYTTY"
+      >
         <template v-slot:content>
           <div class="d-inline-flex">
             <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-1" />
@@ -79,12 +85,11 @@
 
 <script lang="ts">
   import Vue from 'vue'
+  import store from '@/store'
   import Component from 'vue-class-component'
   import KoulutussopimusCardContent from './koulutussopimus-card-content.vue'
   import ElsaButton from '@/components/button/button.vue'
   import { LomakeTilat } from '@/utils/constants'
-  import { toastFail } from '@/utils/toast'
-  import axios from 'axios'
 
   @Component({
     components: {
@@ -93,22 +98,12 @@
     }
   })
   export default class KoulutussopimusCard extends Vue {
-    state = ''
-
-    async fetchKoejakso() {
-      try {
-        this.state = (await axios.get(`erikoistuva-laakari/koejakso`)).data.koulutusSopimuksenTila
-      } catch (err) {
-        toastFail(this, this.$t('suoritemerkinnan-lomakkeen-hakeminen-epaonnistui'))
-      }
+    get koulutusSopimuksenTila() {
+      return store.getters['erikoistuva/koejakso'].koulutusSopimuksenTila
     }
 
     get KoulutussopimusTilat() {
       return LomakeTilat
-    }
-
-    mounted() {
-      this.fetchKoejakso()
     }
   }
 </script>
