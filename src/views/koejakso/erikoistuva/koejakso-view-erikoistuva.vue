@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-breadcrumb :items="items" class="mb-0" />
-    <b-container fluid>
+    <b-container fluid v-if="!loading">
       <b-row lg>
         <b-col>
           <h1>{{ $t('koejakso') }}</h1>
@@ -182,6 +182,8 @@
       }
     ]
 
+    loading = true
+
     // TODO REFACTOR AND/OR REMOVE
     get tyoskentelyjaksotFormatted() {
       // console.log('tyoskentelyjaksotFormatted()...')
@@ -225,8 +227,10 @@
     // }
 
     async mounted() {
+      this.loading = true
       await store.dispatch('erikoistuva/getKoejakso')
       await store.dispatch('erikoistuva/getKouluttajat')
+      this.loading = false
     }
   }
 </script>
