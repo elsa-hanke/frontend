@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { KoulutussopimusLomake } from '@/types'
+import { AloituskeskusteluLomake, KoulutussopimusLomake } from '@/types'
 
 export async function getKoejaksot() {
   const path = 'kouluttaja/koejaksot'
@@ -13,5 +13,9 @@ export async function getKoulutussopimus(id: number) {
 
 export async function putKoulutussopimus(form: KoulutussopimusLomake) {
   const path = 'kouluttaja/koejakso/koulutussopimus'
+  return await axios.put(path, form)
+}
+export async function putAloituskeskustelu(form: AloituskeskusteluLomake) {
+  const path = 'kouluttaja/koejakso/aloituskeskustelu'
   return await axios.put(path, form)
 }

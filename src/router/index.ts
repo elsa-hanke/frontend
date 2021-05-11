@@ -34,6 +34,7 @@ import KoejaksoTavoitteet from '../views/koejakso/erikoistuva/koejakso-tavoittee
 import ErikoistuvaKoulutussopimus from '../views/koejakso/erikoistuva/koulutussopimus/koulutussopimus.vue'
 import ErikoistuvaArviointilomakeAloituskeskustelu from '@/views/koejakso/erikoistuva/arviointilomake-aloituskeskustelu/arviointilomake-aloituskeskustelu.vue'
 import KouluttajaKoulutussopimus from '../views/koejakso/kouluttaja/koulutussopimus/kouluttaja-koulutussopimus.vue'
+import KouluttajaArviointilomakeAloituskeskustelu from '@/views/koejakso/kouluttaja/arviointilomake-aloituskeskustelu/kouluttaja-arviointilomake-aloituskeskustelu.vue'
 
 Vue.use(VueRouter)
 Vue.use(Meta)
@@ -198,6 +199,11 @@ const routes: Array<RouteConfig> = [
             path: 'koulutussopimus/:id',
             name: 'koulutussopimus-kouluttaja',
             component: KouluttajaKoulutussopimus
+          },
+          {
+            path: 'aloituskeskustelu/:id',
+            name: 'aloituskeskustelu-kouluttaja',
+            component: KouluttajaArviointilomakeAloituskeskustelu
           }
         ]
       }

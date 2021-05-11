@@ -78,12 +78,23 @@ export const arvioinninPerustuminen = {
   Muu: 'MUU'
 } as any
 
+export enum LomakeTyypit {
+  KOULUTUSSOPIMUS = 'koulutussopimus',
+  ALOITUSKESKUSTELU = 'aloituskeskustelu'
+}
+
 export enum LomakeTilat {
   UUSI = 'UUSI',
   HYVAKSYTTY = 'HYVAKSYTTY',
   PALAUTETTU_KORJATTAVAKSI = 'PALAUTETTU_KORJATTAVAKSI',
   TALLENNETTU_KESKENERAISENA = 'TALLENNETTU_KESKENERAISENA',
   ODOTTAA_HYVAKSYNTAA = 'ODOTTAA_HYVAKSYNTAA'
+}
+
+export enum TaskStatus {
+  AVOIN = 'Avoin',
+  PALAUTETTU = 'Palautettu',
+  HYVAKSYTTY = 'Hyväksytty'
 }
 
 export const defaultKoulutuspaikka: Koulutuspaikka = {

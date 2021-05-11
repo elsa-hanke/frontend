@@ -32,7 +32,7 @@
           <koulutussopimus-form
             v-if="editable"
             :editable="editable"
-            :data="koulutusopimusData"
+            :data="koejaksoData.koulutussopimus"
             :account="account"
             :kouluttajat="kouluttajat"
             @saveAndExit="onSaveDraftAndExit"
@@ -118,15 +118,6 @@
     setKoejaksoData() {
       if (this.koejaksoData.koulutussopimus) {
         this.koulutussopimusLomake = this.koejaksoData.koulutussopimus
-
-        if (this.koulutussopimusLomake) {
-          if (!this.koulutussopimusLomake?.erikoistuvanNimi) {
-            this.koulutussopimusLomake.erikoistuvanNimi = this.account.firstName.concat(
-              ' ',
-              this.account.lastName
-            )
-          }
-        }
       }
       if (!this.editable) {
         this.skipRouteExitConfirm = true
@@ -188,6 +179,12 @@
         this.saveNewForm()
       }
       params.saving = false
+    }
+
+    watch() {
+      if (!this.editable) {
+        this.skipRouteExitConfirm = true
+      }
     }
 
     async mounted() {

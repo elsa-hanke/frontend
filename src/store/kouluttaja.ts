@@ -41,16 +41,35 @@ const kouluttaja: Module<any, any> = {
     },
     async putKoulutussopimus({ commit, dispatch }, koulutussopimusLomake) {
       commit('formRequest')
-      try {
-        return await api.putKoulutussopimus(koulutussopimusLomake).then((res) => {
-          if (res.status === 201) {
+      return new Promise((resolve, reject) => {
+        api
+          .putKoulutussopimus(koulutussopimusLomake)
+          .then((response) => {
             commit('formSuccess')
             dispatch('getKoejaksot')
-          }
-        })
-      } catch (err) {
-        commit('formError')
-      }
+            resolve(response)
+          })
+          .catch((error) => {
+            commit('formError')
+            reject(error)
+          })
+      })
+    },
+    async putAloituskeskustelu({ commit, dispatch }, aloituskeskusteluLomake) {
+      commit('formRequest')
+      return new Promise((resolve, reject) => {
+        api
+          .putAloituskeskustelu(aloituskeskusteluLomake)
+          .then((response) => {
+            commit('formSuccess')
+            dispatch('getKoejaksot')
+            resolve(response)
+          })
+          .catch((error) => {
+            commit('formError')
+            reject(error)
+          })
+      })
     }
   },
   getters: {
@@ -59,6 +78,11 @@ const kouluttaja: Module<any, any> = {
     getKoulutussopimus: (state) => (id: number) => {
       if (state.koejaksot) {
         return state.koejaksot.find((koejakso: Koejakso) => koejakso.koulutussopimus.id === id)
+      }
+    },
+    getAloituskeskustelu: (state) => (id: number) => {
+      if (state.koejaksot) {
+        return state.koejaksot.find((koejakso: Koejakso) => koejakso.aloituskeskustelu.id === id)
       }
     }
   }

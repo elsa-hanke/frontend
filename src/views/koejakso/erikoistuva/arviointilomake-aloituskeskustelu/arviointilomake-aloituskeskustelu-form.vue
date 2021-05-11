@@ -2,7 +2,7 @@
   <b-form @submit.stop.prevent="onSubmit">
     <b-row>
       <b-col lg="8">
-        <elsa-form-group :label="$t('sahköpostiosoite')" :required="true">
+        <elsa-form-group :label="$t('sahkopostiosoite')" :required="true">
           <template v-slot="{ uid }">
             <b-form-input
               :id="uid"
@@ -262,12 +262,7 @@
       </b-col>
       <b-col class="text-right">
         <elsa-button variant="back" :to="{ name: 'koejakso' }">{{ $t('peruuta') }}</elsa-button>
-        <elsa-button
-          :loading="params.saving"
-          type="submit"
-          :variant="hasErrors ? 'outline-danger' : 'primary'"
-          class="ml-4 px-5"
-        >
+        <elsa-button :loading="params.saving" type="submit" variant="primary" class="ml-4 px-5">
           {{ $t('allekirjoita-lähetä') }}
         </elsa-button>
       </b-col>
@@ -461,9 +456,12 @@
       if (this.data !== null) {
         this.form = this.data
       }
+
       if (!this.form.erikoistuvanSahkoposti) {
         this.form.erikoistuvanSahkoposti = this.account.email
       }
+
+      this.form.erikoistuvanNimi = this.account.firstName.concat(' ', this.account.lastName)
 
       if (!this.form.koejaksonAlkamispaiva) {
         this.form.koejaksonAlkamispaiva = this.data?.koejaksonAlkamispaiva

@@ -51,55 +51,67 @@ const erikoistuva: Module<any, any> = {
     },
     async postKoulutussopimus({ dispatch, commit }, koulutussopimusLomake) {
       commit('formRequest')
-      try {
-        return await api.postKoulutussopimus(koulutussopimusLomake).then((res) => {
-          if (res.status === 201) {
+      return new Promise((resolve, reject) => {
+        api
+          .postKoulutussopimus(koulutussopimusLomake)
+          .then((response) => {
             commit('formSuccess')
             dispatch('getKoejakso')
-          }
-        })
-      } catch (err) {
-        commit('formError')
-      }
+            resolve(response)
+          })
+          .catch((error) => {
+            commit('formError')
+            reject(error)
+          })
+      })
     },
     async putKoulutussopimus({ dispatch, commit }, koulutussopimusLomake) {
       commit('formRequest')
-      try {
-        return await api.putKoulutussopimus(koulutussopimusLomake).then((res) => {
-          if (res.status === 201) {
+      return new Promise((resolve, reject) => {
+        api
+          .putKoulutussopimus(koulutussopimusLomake)
+          .then((response) => {
             commit('formSuccess')
             dispatch('getKoejakso')
-          }
-        })
-      } catch (err) {
-        commit('formError')
-      }
+            resolve(response)
+          })
+          .catch((error) => {
+            commit('formError')
+            reject(error)
+          })
+      })
     },
-    async postAloituskeskustelu({ dispatch, commit }, aloituskeskusteluLomake) {
+    postAloituskeskustelu({ dispatch, commit }, aloituskeskusteluLomake) {
       commit('formRequest')
-      try {
-        return await api.postAloituskeskustelu(aloituskeskusteluLomake).then((res) => {
-          if (res.status === 201) {
+      return new Promise((resolve, reject) => {
+        api
+          .postAloituskeskustelu(aloituskeskusteluLomake)
+          .then((response) => {
             commit('formSuccess')
             dispatch('getKoejakso')
-          }
-        })
-      } catch (err) {
-        commit('formError')
-      }
+            resolve(response)
+          })
+          .catch((error) => {
+            commit('formError')
+            reject(error)
+          })
+      })
     },
     async putAloituskeskustelu({ dispatch, commit }, aloituskeskusteluLomake) {
       commit('formRequest')
-      try {
-        return await api.putAloituskeskustelu(aloituskeskusteluLomake).then((res) => {
-          if (res.status === 201) {
+      return new Promise((resolve, reject) => {
+        api
+          .putAloituskeskustelu(aloituskeskusteluLomake)
+          .then((response) => {
             commit('formSuccess')
             dispatch('getKoejakso')
-          }
-        })
-      } catch (err) {
-        commit('formError')
-      }
+            resolve(response)
+          })
+          .catch((error) => {
+            commit('formError')
+            reject(error)
+          })
+      })
     },
     async getKouluttajat({ commit }) {
       commit('kouluttajatRequest')

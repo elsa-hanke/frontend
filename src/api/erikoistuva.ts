@@ -23,7 +23,7 @@ export async function postAloituskeskustelu(form: AloituskeskusteluLomake) {
 
 export async function putAloituskeskustelu(form: AloituskeskusteluLomake) {
   const path = 'erikoistuva-laakari/koejakso/aloituskeskustelu'
-  return await axios.post(path, form)
+  return await axios.put(path, form)
 }
 
 export async function getKouluttajat() {

@@ -81,14 +81,13 @@
     ]
     loading = true
     aloituskeskusteluLomake: null | AloituskeskusteluLomake = null
-    koejakso: any = null
 
     get account() {
       return store.getters['auth/account']
     }
 
     get editable() {
-      switch (this.koejakso.aloituskeskustelunTila) {
+      switch (this.koejaksoData.aloituskeskustelunTila) {
         case LomakeTilat.PALAUTETTU_KORJATTAVAKSI:
           return true
         case LomakeTilat.UUSI:
@@ -114,18 +113,6 @@
     setKoejaksoData() {
       if (this.koejaksoData.aloituskeskustelu) {
         this.aloituskeskusteluLomake = this.koejaksoData.aloituskeskustelu
-
-        if (this.aloituskeskusteluLomake) {
-          if (!this.aloituskeskusteluLomake.erikoistuvanNimi) {
-            this.aloituskeskusteluLomake.erikoistuvanNimi = this.account.firstName.concat(
-              ' ',
-              this.account.lastName
-            )
-          }
-          if (this.koejaksoData.aloituskeskustelu.koejaksonAlkamispaiva) {
-            this.aloituskeskusteluLomake.koejaksonAlkamispaiva = this.koejaksoData.aloituskeskustelu.koejaksonAlkamispaiva
-          }
-        }
       }
       if (!this.editable) {
         this.skipRouteExitConfirm = true
@@ -139,6 +126,7 @@
         if (this.koejaksoData.aloituskeskustelunTila === LomakeTilat.UUSI) {
           await store.dispatch('erikoistuva/postKoulutussopimus', this.aloituskeskusteluLomake)
         }
+
         if (this.koejaksoData.aloituskeskustelunTila === LomakeTilat.TALLENNETTU_KESKENERAISENA) {
           await store.dispatch('erikoistuva/putKoulutussopimus', this.aloituskeskusteluLomake)
         }
@@ -155,7 +143,6 @@
     async saveNewForm() {
       try {
         await store.dispatch('erikoistuva/postAloituskeskustelu', this.aloituskeskusteluLomake)
-        checkCurrentRouteAndRedirect(this.$router, '/koejakso/aloituskeskustelu')
         toastSuccess(this, this.$t('aloituskeskustelu-lisatty-onnistuneesti'))
       } catch (err) {
         toastFail(this, this.$t('aloituskeskustelu-lisaaminen-epaonnistui'))
@@ -165,7 +152,6 @@
     async updateSentForm() {
       try {
         await store.dispatch('erikoistuva/putAloituskeskustelu', this.aloituskeskusteluLomake)
-        checkCurrentRouteAndRedirect(this.$router, '/koejakso/aloituskeskustelu')
         toastSuccess(this, this.$t('aloituskeskustelu-lisatty-onnistuneesti'))
       } catch (err) {
         toastFail(this, this.$t('aloituskeskustelu-lisaaminen-epaonnistui'))
@@ -185,6 +171,12 @@
         this.saveNewForm()
       }
       params.saving = false
+    }
+
+    watch() {
+      if (!this.editable) {
+        this.skipRouteExitConfirm = true
+      }
     }
 
     async mounted() {

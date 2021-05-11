@@ -12,6 +12,34 @@
         <div>{{ $t('koulutussopimus-kouluttaja-allekirjoitettu') }}</div>
       </div>
 
+      <hr />
+
+      <div>
+        <b-row>
+          <b-col lg="3" class="font-weight-500">{{ $t('erikoistuva-laakari') }}:</b-col>
+          <b-col>
+            {{ koulutussopimus.erikoistuvanNimi }}, {{ koulutussopimus.erikoistuvanErikoisala }}
+          </b-col>
+        </b-row>
+
+        <b-row>
+          <b-col lg="3" class="font-weight-500">{{ $t('opiskelijanumero') }}:</b-col>
+          <b-col>{{ koulutussopimus.erikoistuvanOpiskelijatunnus }}</b-col>
+        </b-row>
+
+        <b-row>
+          <b-col lg="3" class="font-weight-500">{{ $t('syntymaaika') }}:</b-col>
+          <b-col>{{ $date(koulutussopimus.erikoistuvanSyntymaaika) }}</b-col>
+        </b-row>
+
+        <b-row>
+          <b-col lg="3" class="font-weight-500">{{ $t('yliopisto-opiskeluoikeus') }}:</b-col>
+          <b-col>{{ koulutussopimus.erikoistuvanYliopisto }}</b-col>
+        </b-row>
+      </div>
+
+      <hr />
+
       <b-form @submit.stop.prevent="onSubmit">
         <b-row>
           <b-col lg="8">
@@ -58,8 +86,10 @@
             <div v-for="(kouluttaja, index) in koulutussopimus.kouluttajat" :key="index">
               <kouluttaja-koulutussopimus-form
                 v-if="!kouluttaja.sopimusHyvaksytty"
+                ref="kouluttajaKoulutussopimusForm"
                 :kouluttaja="kouluttaja"
                 v-model="form.kouluttajat[index]"
+                @ready="isValid"
               ></kouluttaja-koulutussopimus-form>
 
               <kouluttaja-koulutussopimus-readonly
@@ -104,7 +134,7 @@
 
         <b-row v-if="editable">
           <b-col>
-            <elsa-button variant="outline-primary" @click="returnToSender">
+            <elsa-button variant="outline-primary" v-b-modal.return-to-sender>
               {{ $t('palauta-muokattavaksi') }}
             </elsa-button>
           </b-col>
@@ -117,29 +147,75 @@
         </b-row>
       </b-form>
     </b-container>
+
+    <b-modal id="return-to-sender" :title="$t('palauta-erikoistuvalle-muokattavaksi')">
+      <div class="d-block">
+        <b-form>
+          <elsa-form-group :label="$t('syy-palautukseen')" :required="true">
+            <template v-slot="{ uid }">
+              <b-form-textarea
+                :id="uid"
+                v-model="form.korjausehdotus"
+                :state="validateState('korjausehdotus')"
+                rows="4"
+                class="textarea-min-height"
+              ></b-form-textarea>
+            </template>
+          </elsa-form-group>
+        </b-form>
+      </div>
+
+      <template #modal-footer>
+        <elsa-button variant="back" @click="hideModal">
+          {{ $t('peruuta') }}
+        </elsa-button>
+
+        <elsa-button variant="primary" @click="returnToSender">
+          {{ $t('palauta-muokattavaksi') }}
+        </elsa-button>
+      </template>
+    </b-modal>
   </div>
 </template>
 
 <script lang="ts">
-  import Vue from 'vue'
   import Component from 'vue-class-component'
+  import _get from 'lodash/get'
+  import { Mixins } from 'vue-property-decorator'
+  import { validationMixin } from 'vuelidate'
+  import { required } from 'vuelidate/lib/validators'
   import store from '@/store'
   import KouluttajaKoulutussopimusForm from '@/views/koejakso/kouluttaja/koulutussopimus/kouluttaja-koulutussopimus-form.vue'
   import ElsaButton from '@/components/button/button.vue'
   import { checkCurrentRouteAndRedirect } from '@/utils/functions'
   import { toastFail, toastSuccess } from '@/utils/toast'
   import { KoulutussopimusLomake, Kouluttaja } from '@/types'
-  import { defaultKouluttaja, defaultKoulutuspaikka } from '@/utils/constants'
+  import { defaultKoulutuspaikka } from '@/utils/constants'
   import KouluttajaKoulutussopimusReadonly from '@/views/koejakso/kouluttaja/koulutussopimus/kouluttaja-koulutussopimus-readonly.vue'
+  import UserDetails from '@/components/user-details/user-details.vue'
+  import ElsaFormGroup from '@/components/form-group/form-group.vue'
 
   @Component({
     components: {
       KouluttajaKoulutussopimusForm,
+      ElsaFormGroup,
       ElsaButton,
-      KouluttajaKoulutussopimusReadonly
+      KouluttajaKoulutussopimusReadonly,
+      UserDetails
+    },
+    validations: {
+      form: {
+        korjausehdotus: {
+          required
+        }
+      }
     }
   })
-  export default class KouluttajaKoulutussopimus extends Vue {
+  export default class KouluttajaKoulutussopimus extends Mixins(validationMixin) {
+    $refs!: {
+      kouluttajaKoulutussopimusForm: any
+    }
+
     items = [
       {
         text: this.$t('etusivu'),
@@ -159,8 +235,7 @@
       saving: false,
       deleting: false
     }
-    loading = true
-    validateState = false
+
     form: KoulutussopimusLomake = {
       erikoistuvanNimi: '',
       erikoistuvanOpiskelijatunnus: '',
@@ -170,13 +245,39 @@
       erikoistuvanYliopisto: '',
       koejaksonAlkamispaiva: '',
       korjausehdotus: '',
-      kouluttajat: [defaultKouluttaja],
+      kouluttajat: [],
       koulutuspaikat: [defaultKoulutuspaikka],
       lahetetty: false,
       muokkauspaiva: '',
       opintooikeudenMyontamispaiva: '',
       vastuuhenkilo: null
     } as any
+
+    loading = true
+
+    formValid = false
+
+    hideModal() {
+      return this.$bvModal.hide('return-to-sender')
+    }
+
+    validateState(value: string) {
+      const form = this.$v.form
+      const { $dirty, $error } = _get(form, value) as any
+      return $dirty ? ($error ? false : null) : null
+    }
+
+    checkForm() {
+      this.$v.$touch()
+      if (this.$v.$anyError) {
+        return
+      }
+    }
+
+    isValid(index: number, form: Kouluttaja) {
+      this.form.kouluttajat[index] = form
+      this.formValid = true
+    }
 
     get koulutussopimusId() {
       return Number(this.$route.params.id)
@@ -194,8 +295,21 @@
       return !this.koulutussopimus.kouluttajat.every((k: Kouluttaja) => k.sopimusHyvaksytty)
     }
 
-    returnToSender() {
-      return
+    async returnToSender() {
+      this.checkForm()
+
+      const form = {
+        ...this.koulutussopimus,
+        lahetetty: false
+      }
+      try {
+        await store.dispatch('kouluttaja/putKoulutussopimus', form)
+
+        checkCurrentRouteAndRedirect(this.$router, '/koejakso')
+        toastSuccess(this, this.$t('koulutussopimus-lisatty-onnistuneesti'))
+      } catch (err) {
+        toastFail(this, this.$t('koulutussopimuksen-lisaaminen-epaonnistui'))
+      }
     }
 
     async updateSentForm() {
@@ -209,10 +323,19 @@
       }
     }
 
-    async onSubmit(params: any) {
+    onSubmit(params: any) {
       params.saving = true
-      this.form.lahetetty = false
-      this.updateSentForm()
+
+      if (this.$refs.kouluttajaKoulutussopimusForm.length === 2) {
+        this.$refs.kouluttajaKoulutussopimusForm[0].checkForm()
+        this.$refs.kouluttajaKoulutussopimusForm[1].checkForm()
+      } else {
+        this.$refs.kouluttajaKoulutussopimusForm[0].checkForm()
+      }
+
+      if (this.formValid) {
+        this.updateSentForm()
+      }
       params.saving = false
     }
 

@@ -10,7 +10,7 @@
       <b-col lg="4">
         <elsa-form-group :label="$t('lahikouluttajan-nimike')" :required="true">
           <template v-slot="{ uid }">
-            <b-form-input :id="uid" v-model="kouluttaja.nimike" :state="validateState('nimike')" />
+            <b-form-input :id="uid" v-model="form.nimike" :state="validateState('nimike')" />
             <b-form-invalid-feedback :id="`${uid}-feedback`">
               {{ $t('pakollinen-tieto') }}
             </b-form-invalid-feedback>
@@ -25,7 +25,7 @@
           <template v-slot="{ uid }">
             <b-form-input
               :id="uid"
-              v-model="kouluttaja.toimipaikka"
+              v-model="form.toimipaikka"
               :state="validateState('toimipaikka')"
             />
             <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -42,7 +42,7 @@
           <template v-slot="{ uid }">
             <b-form-input
               :id="uid"
-              v-model="kouluttaja.lahiosoite"
+              v-model="form.lahiosoite"
               :state="validateState('lahiosoite')"
             />
             <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -57,7 +57,7 @@
           <template v-slot="{ uid }">
             <b-form-input
               :id="uid"
-              v-model="kouluttaja.postitoimipaikka"
+              v-model="form.postitoimipaikka"
               :state="validateState('postitoimipaikka')"
             />
             <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -74,7 +74,7 @@
           <template v-slot="{ uid }">
             <b-form-input
               :id="uid"
-              v-model="kouluttaja.sahkoposti"
+              v-model="form.sahkoposti"
               :state="validateState('sahkoposti')"
             />
             <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -87,11 +87,7 @@
       <b-col lg="4">
         <elsa-form-group :label="$t('puhelin-virka-aikaan')" :required="true">
           <template v-slot="{ uid }">
-            <b-form-input
-              :id="uid"
-              v-model="kouluttaja.puhelin"
-              :state="validateState('puhelin')"
-            />
+            <b-form-input :id="uid" v-model="form.puhelin" :state="validateState('puhelin')" />
             <b-form-invalid-feedback :id="`${uid}-feedback`">
               {{ $t('pakollinen-tieto') }}
             </b-form-invalid-feedback>
@@ -110,6 +106,7 @@
   import _get from 'lodash/get'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import { Kouluttaja } from '@/types'
+  import { defaultKouluttaja } from '@/utils/constants'
 
   @Component({
     components: {
@@ -143,10 +140,32 @@
     @Prop({ required: true, default: {} })
     kouluttaja!: Kouluttaja
 
+    @Prop({ required: false, default: null })
+    index!: number
+
+    form: Kouluttaja = defaultKouluttaja
+
+    get kouluttajaIndex() {
+      return this.index
+    }
+
     validateState(value: string) {
       const form = this.$v.form
       const { $dirty, $error } = _get(form, value) as any
       return $dirty ? ($error ? false : null) : null
+    }
+
+    checkForm() {
+      this.$v.$touch()
+      if (this.$v.$anyError) {
+        return
+      }
+
+      this.$emit('ready', this.kouluttajaIndex, this.form)
+    }
+
+    mounted() {
+      this.form = this.kouluttaja
     }
   }
 </script>

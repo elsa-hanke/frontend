@@ -60,10 +60,8 @@
               {{ $t('oma-profiilini') }}
             </b-link>
           </b-dropdown-item>
-          <b-dropdown-item link-class="py-2">
-            <b-link @click="logout()" class="text-dark text-decoration-none">
-              {{ $t('kirjaudu-ulos') }}
-            </b-link>
+          <b-dropdown-item link-class="py-2 text-dark text-decoration-none" @click="logout">
+            {{ $t('kirjaudu-ulos') }}
           </b-dropdown-item>
         </b-nav-item-dropdown>
 

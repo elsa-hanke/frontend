@@ -340,6 +340,9 @@
         this.form = this.data
         this.selected.vastuuhenkilo = this.data.vastuuhenkilo.id
       }
+
+      this.form.erikoistuvanNimi = this.account.firstName.concat(' ', this.account.lastName)
+
       if (!this.form.erikoistuvanSahkoposti) {
         this.form.erikoistuvanSahkoposti = this.account.email
       }
