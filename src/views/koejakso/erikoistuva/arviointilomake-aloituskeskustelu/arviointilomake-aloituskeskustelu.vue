@@ -143,6 +143,7 @@
     async saveNewForm() {
       try {
         await store.dispatch('erikoistuva/postAloituskeskustelu', this.aloituskeskusteluLomake)
+
         toastSuccess(this, this.$t('aloituskeskustelu-lisatty-onnistuneesti'))
       } catch (err) {
         toastFail(this, this.$t('aloituskeskustelu-lisaaminen-epaonnistui'))
@@ -152,6 +153,7 @@
     async updateSentForm() {
       try {
         await store.dispatch('erikoistuva/putAloituskeskustelu', this.aloituskeskusteluLomake)
+
         toastSuccess(this, this.$t('aloituskeskustelu-lisatty-onnistuneesti'))
       } catch (err) {
         toastFail(this, this.$t('aloituskeskustelu-lisaaminen-epaonnistui'))

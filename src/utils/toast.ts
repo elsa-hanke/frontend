@@ -32,7 +32,7 @@ export function toastFail(vue: Vue, message: any) {
   vue.$root.$bvToast.toast(vNodesMsg, {
     variant: 'danger',
     solid: true,
-    noAutoHide: true,
+    // noAutoHide: true,
     bodyClass: 'shadow rounded p-3 pr-4'
   })
 }

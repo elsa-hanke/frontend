@@ -215,7 +215,6 @@
     $refs!: {
       kouluttajaKoulutussopimusForm: any
     }
-
     items = [
       {
         text: this.$t('etusivu'),
