@@ -106,7 +106,7 @@
       }
       return
     }
-    
+
     async mounted() {
       this.loading = true
       await store.dispatch('kouluttaja/getKoejaksot')
