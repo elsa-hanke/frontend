@@ -40,6 +40,7 @@
           <h4>
             {{ $t('asiakirjojen-tallentaminen-epaonnistui') }}
           </h4>
+          <div class="mb-3">{{ $t('yhtakaan-tiedostoa-ei-tallennettu') }}</div>
           <div class="mb-2" v-if="maxFilesTotalSizeExceeded">
             {{ $t('asiakirjojen-yhteenlaskettu-koko-ylitetty') }}
           </div>

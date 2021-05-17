@@ -58,7 +58,8 @@
               <elsa-button
                 variant="link"
                 class="shadow-none p-0"
-                @click="onViewAsiakirja(row.item.id, row.item.nimi)"
+                @click="onViewAsiakirja(row.item)"
+                :loading="row.item.disablePreview"
               >
                 {{ row.item.nimi }}
               </elsa-button>
@@ -67,22 +68,35 @@
               <elsa-button
                 variant="outline-primary"
                 class="border-0 p-0"
-                @click="onDownloadAsiakirja(row.item.id, row.item.nimi)"
+                @click="onDownloadAsiakirja(row.item)"
+                :loading="row.item.disableDownload"
               >
-                <font-awesome-icon :icon="['fas', 'file-download']" fixed-width size="lg" />
+                <font-awesome-icon
+                  :hidden="row.item.disableDownload"
+                  :icon="['fas', 'file-download']"
+                  fixed-width
+                  size="lg"
+                />
               </elsa-button>
             </template>
             <template #cell(delete)="row">
               <elsa-button
-                @click="onDeleteAsiakirja(row.item.id)"
+                @click="onDeleteAsiakirja(row.item)"
                 variant="outline-primary"
                 class="border-0 p-0"
+                :loading="row.item.disableDelete"
               >
-                <font-awesome-icon :icon="['far', 'trash-alt']" fixed-width size="lg" />
+                <font-awesome-icon
+                  :hidden="row.item.disableDelete"
+                  :icon="['far', 'trash-alt']"
+                  fixed-width
+                  size="lg"
+                />
               </elsa-button>
             </template>
           </b-table>
           <b-pagination
+            class="mt-4"
             v-if="rows > perPage"
             v-model="currentPage"
             :total-rows="rows"
@@ -214,7 +228,9 @@
       this.uploading = false
     }
 
-    async onDeleteAsiakirja(id: number) {
+    async onDeleteAsiakirja(asiakirja: Asiakirja) {
+      Vue.set(asiakirja, 'disableDelete', true)
+
       if (
         await confirmDelete(
           this,
@@ -223,28 +239,32 @@
         )
       ) {
         try {
-          await axios.delete(this.endpointUrl + id)
+          await axios.delete(this.endpointUrl + asiakirja.id)
           toastSuccess(this, this.$t('asiakirjan-poistaminen-onnistui'))
-          this.asiakirjat = this.asiakirjat.filter((asiakirja) => asiakirja.id !== id)
+          this.asiakirjat = this.asiakirjat.filter((a) => a.id !== asiakirja.id)
         } catch (err) {
           toastFail(this, this.$t('asiakirjan-poistaminen-epaonnistui'))
         }
       }
+      Vue.set(asiakirja, 'disableDelete', false)
     }
 
-    async onViewAsiakirja(id: number, nimi: string) {
-      console.log(id)
-      const success = await previewBlobFile(id, nimi, this.endpointUrl)
+    async onViewAsiakirja(asiakirja: Asiakirja) {
+      Vue.set(asiakirja, 'disablePreview', true)
+      const success = await previewBlobFile(asiakirja.id, asiakirja.nimi, this.endpointUrl)
       if (!success) {
         toastFail(this, this.$t('asiakirjan-sisallon-hakeminen-epaonnistui'))
       }
+      Vue.set(asiakirja, 'disablePreview', false)
     }
 
-    async onDownloadAsiakirja(id: number, nimi: string) {
-      const success = await downloadBlobFile(id, nimi, this.endpointUrl)
+    async onDownloadAsiakirja(asiakirja: Asiakirja) {
+      Vue.set(asiakirja, 'disableDownload', true)
+      const success = await downloadBlobFile(asiakirja.id, asiakirja.nimi, this.endpointUrl)
       if (!success) {
         toastFail(this, this.$t('asiakirjan-sisallon-hakeminen-epaonnistui'))
       }
+      Vue.set(asiakirja, 'disableDownload', false)
     }
 
     get tulokset() {
@@ -290,9 +310,10 @@
   @import '~bootstrap/scss/mixins/breakpoints';
 
   .table {
+    border-bottom: 0.0625rem solid $gray-300;
     th {
       border-top: none;
-      padding-bottom: 0.25rem;
+      padding-bottom: 0.375rem;
     }
 
     td {
@@ -312,43 +333,45 @@
   }
 
   @include media-breakpoint-down(xs) {
-    .table tr {
-      padding: 0.375rem 0 0.375rem 0;
-      border: 0.0625rem solid $gray-300;
-      border-radius: 0.25rem;
-      margin-bottom: 0.375rem;
-    }
-
-    .table td {
-      padding: 0.25rem 0 0.25rem 0.25rem;
-      &.file-name {
-        button {
-          word-break: break-all;
-          text-align: justify;
-          font-weight: 500;
+    .table {
+      border-bottom: none;
+      tr {
+        padding: 0.375rem 0 0.375rem 0;
+        border: 0.0625rem solid $gray-300;
+        border-radius: 0.25rem;
+        margin-bottom: 0.375rem;
+      }
+      td {
+        padding: 0.25rem 0 0.25rem 0.25rem;
+        &.file-name {
+          button {
+            word-break: break-all;
+            text-align: justify;
+            font-weight: 500;
+          }
+          > div {
+            width: 100% !important;
+            padding: 0 0.375rem 0 0.375rem !important;
+          }
+          &::before {
+            display: none;
+          }
         }
-        > div {
+        &.created-date::before {
+          text-align: left !important;
+          padding-left: 0.375rem !important;
+          font-weight: 500 !important;
           width: 100% !important;
-          padding: 0 0.375rem 0 0.375rem !important;
         }
-        &::before {
-          display: none;
+        &.download-button {
+          width: 2rem;
+          float: left;
+          > div {
+            padding: 0 0 0 0.25rem !important;
+          }
         }
+        border: none;
       }
-      &.created-date::before {
-        text-align: left !important;
-        padding-left: 0.375rem !important;
-        font-weight: 500 !important;
-        width: 100% !important;
-      }
-      &.download-button {
-        width: 2rem;
-        float: left;
-        > div {
-          padding: 0 0 0 0.25rem !important;
-        }
-      }
-      border: none;
     }
   }
 </style>
