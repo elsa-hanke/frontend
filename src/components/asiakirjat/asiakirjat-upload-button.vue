@@ -8,12 +8,14 @@
       multiple
       hidden
     />
-    <label class="mb-4" for="file-upload" :disabled="uploading" v-on="$listeners">
-      <slot v-if="!uploading" />
-      <span v-else>
-        <slot />
-        <b-spinner v-if="uploading" small class="ml-2"></b-spinner>
-      </span>
+    <label
+      :class="[isPrimaryButton ? 'primary mb-4' : 'outline-primary mb-4']"
+      for="file-upload"
+      :disabled="uploading"
+      v-on="$listeners"
+    >
+      <span>{{ buttonText }}</span>
+      <b-spinner v-if="uploading" small class="ml-2"></b-spinner>
     </label>
     <b-alert variant="danger" :show="hasErrors" @dismissed="onDismissAlert" dismissible>
       <div class="d-flex flex-row">
@@ -25,11 +27,14 @@
             {{ $t('asiakirjan-tallentaminen-epaonnistui') }}
           </h4>
           <ul>
-            <li v-if="duplicateFiles.length > 0">
+            <li v-if="duplicateFilesForCurrentView.length > 0">
               {{ $t('asiakirja-samanniminen-tiedosto') }}
             </li>
+            <li v-if="duplicateFilesForOtherViews.length > 0">
+              {{ $t('asiakirja-samanniminen-tiedosto-toisessa-nakymassa') }}
+            </li>
             <li v-if="filesOfWrongType.length > 0">
-              {{ $t('asiakirjan-tiedostuomuoto-vaara') }}
+              {{ $t('sallitut-tiedostoformaatit') }}
             </li>
             <li v-if="filesExceedingMaxSize.length > 0">
               {{ $t('asiakirjan-maksimi-tiedostokoko-ylitetty') }}
@@ -44,16 +49,24 @@
           <div class="mb-2" v-if="maxFilesTotalSizeExceeded">
             {{ $t('asiakirjojen-yhteenlaskettu-koko-ylitetty') }}
           </div>
-          <span v-if="duplicateFiles.length > 0">
+          <span v-if="duplicateFilesForCurrentView.length > 0">
             {{ $t('asiakirja-samanniminen-tiedosto') }}
             <ul>
-              <li v-for="(file, index) in duplicateFiles" :key="index">
+              <li v-for="(file, index) in duplicateFilesForCurrentView" :key="index">
+                {{ file.name }}
+              </li>
+            </ul>
+          </span>
+          <span v-if="duplicateFilesForOtherViews.length > 0">
+            {{ $t('asiakirja-samanniminen-tiedosto-toisessa-nakymassa') }}
+            <ul>
+              <li v-for="(file, index) in duplicateFilesForOtherViews" :key="index">
                 {{ file.name }}
               </li>
             </ul>
           </span>
           <span v-if="filesOfWrongType.length > 0">
-            {{ $t('asiakirjan-tiedostuomuoto-vaara') }}
+            {{ $t('sallitut-tiedostoformaatit') }}
             <ul>
               <li v-for="(file, index) in filesOfWrongType" :key="index">
                 {{ file.name }}
@@ -81,19 +94,29 @@
   const maxFileSize = 20 * 1024 * 1024
   const maxFilesTotalSize = 100 * 1024 * 1024
 
-  @Component({})
-  export default class ElsaFileUpload extends Vue {
+  @Component
+  export default class AsiakirjatUploadButton extends Vue {
+    private maxFilesTotalSizeExceeded = false
     private filesExceedingMaxSize: File[] = []
     private filesOfWrongType: File[] = []
-    private duplicateFiles: File[] = []
-    private maxFilesTotalSizeExceeded = false
+    private duplicateFilesForCurrentView: File[] = []
+    private duplicateFilesForOtherViews: File[] = []
     private filesToUploadCount = 0
 
     @Prop({ required: false, default: undefined })
     uploading!: boolean | false
 
+    @Prop({ required: false, type: Boolean, default: true })
+    isPrimaryButton!: boolean
+
+    @Prop({ required: true, type: String })
+    buttonText!: string
+
     @Prop({ required: true, default: undefined })
-    existingFileNames!: string[]
+    existingFileNamesForCurrentView!: string[]
+
+    @Prop({ required: false, default: undefined })
+    existingFileNamesForOtherViews!: string[]
 
     handleFileChange(e: Event) {
       const inputElement = e.target as HTMLInputElement
@@ -102,18 +125,14 @@
       // Chromea varten. Muutoin heti perään valittu sama tiedosto ei laukaise koko eventtiä.
       inputElement.value = ''
       this.maxFilesTotalSizeExceeded = this.getIsTotalFileSizeExceeded(fileArray)
-      this.filesExceedingMaxSize = this.getFilesExceedingMaxSize(fileArray)
-      this.filesOfWrongType = this.getFilesOfWrongType(fileArray)
-      this.duplicateFiles = this.getDuplicateFiles(fileArray)
+      this.filesExceedingMaxSize = this.getfilesExceedingMaxSize(fileArray)
+      this.filesOfWrongType = this.getfilesOfWrongType(fileArray)
+      this.duplicateFilesForCurrentView = this.getduplicateFilesForCurrentView(fileArray)
+      this.duplicateFilesForOtherViews = this.getduplicateFilesForOtherViews(fileArray)
 
-      if (
-        !this.maxFilesTotalSizeExceeded &&
-        this.filesExceedingMaxSize.length === 0 &&
-        this.filesOfWrongType.length === 0 &&
-        this.duplicateFiles.length === 0
-      ) {
+      if (!this.hasErrors) {
         this.filesToUploadCount = 0
-        this.$emit('selected-files', fileArray)
+        this.$emit('selectedFiles', fileArray)
       }
     }
 
@@ -121,11 +140,11 @@
       return files.reduce((sum: number, current: File) => sum + current.size, 0) > maxFilesTotalSize
     }
 
-    getFilesExceedingMaxSize(files: File[]): File[] {
+    getfilesExceedingMaxSize(files: File[]): File[] {
       return files.filter((file) => file.size > maxFileSize)
     }
 
-    getFilesOfWrongType(files: File[]): File[] {
+    getfilesOfWrongType(files: File[]): File[] {
       return files.filter(
         (file) =>
           file.type !== 'application/pdf' &&
@@ -135,22 +154,29 @@
       )
     }
 
-    getDuplicateFiles(files: File[]): File[] {
-      return files.filter((file) => this.existingFileNames.indexOf(file.name) >= 0)
+    getduplicateFilesForCurrentView(files: File[]): File[] {
+      return files.filter((file) => this.existingFileNamesForCurrentView?.includes(file.name))
+    }
+
+    getduplicateFilesForOtherViews(files: File[]): File[] {
+      return files.filter((file) => this.existingFileNamesForOtherViews?.includes(file.name))
     }
 
     onDismissAlert() {
+      this.maxFilesTotalSizeExceeded = false
       this.filesExceedingMaxSize = []
       this.filesOfWrongType = []
-      this.duplicateFiles = []
+      this.duplicateFilesForCurrentView = []
+      this.duplicateFilesForOtherViews = []
     }
 
     get hasErrors() {
       return (
         this.maxFilesTotalSizeExceeded ||
-        this.filesExceedingMaxSize.length !== 0 ||
-        this.filesOfWrongType.length !== 0 ||
-        this.duplicateFiles.length !== 0
+        this.filesExceedingMaxSize.length > 0 ||
+        this.filesOfWrongType.length > 0 ||
+        this.duplicateFilesForCurrentView.length > 0 ||
+        this.duplicateFilesForOtherViews.length > 0
       )
     }
   }
@@ -160,22 +186,36 @@
   @import '~@/styles/variables';
 
   label {
-    color: $white;
-    background-color: $primary;
-    border-color: $primary;
     display: inline-block;
     font-weight: 500;
-    border: 2px solid transparent;
-    padding: 0.375rem 1.6rem;
+    padding: 0.375rem 1.625rem;
     border-radius: 50rem;
     &[disabled] {
       opacity: 0.6;
     }
-    &:hover,
-    &:active {
-      &:not([disabled]) {
-        background-color: darken($primary, 15);
-        cursor: pointer;
+    &.primary {
+      color: $white;
+      background-color: $primary;
+      border: 2px solid transparent;
+      &:hover,
+      &:active {
+        &:not([disabled]) {
+          background-color: darken($primary, 15);
+          cursor: pointer;
+        }
+      }
+    }
+    &.outline-primary {
+      color: $primary;
+      background-color: transparent;
+      border: 2px solid $primary;
+      &:hover,
+      &:active {
+        &:not([disabled]) {
+          color: $btn-primary-hover-background-color;
+          border-color: $btn-primary-hover-border-color;
+          cursor: pointer;
+        }
       }
     }
   }
