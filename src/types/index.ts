@@ -151,4 +151,7 @@ export interface Asiakirja {
   id: number
   nimi: string
   lisattypvm: string
+  disablePreview: boolean
+  disableDownload: boolean
+  disableDelete: boolean
 }
