@@ -10,6 +10,8 @@
             v-if="tyoskentelyjakso"
             :value="tyoskentelyjakso"
             :editing="true"
+            :asiakirjat="tyoskentelyjakso.asiakirjat"
+            :kaikkiAsiakirjaNimet="tyoskentelyjakso.kaikkiAsiakirjaNimet"
             @submit="onSubmit"
             @delete="onDelete"
             @cancel="onCancel"
@@ -70,11 +72,21 @@
       }
     }
 
-    async onSubmit(value: any, params: any) {
+    async onSubmit(data: any, params: any) {
       params.saving = true
       try {
+        const formData = new FormData()
+
+        formData.append('tyoskentelyjaksoJson', JSON.stringify(data.tyoskentelyjakso))
+        data.addedFiles.forEach((file: File) => formData.append('files', file, file.name))
+        formData.append('deletedAsiakirjaIdsJson', JSON.stringify(data.deletedAsiakirjaIds))
+
         this.tyoskentelyjakso = (
-          await axios.put('erikoistuva-laakari/tyoskentelyjaksot', value)
+          await axios.put('erikoistuva-laakari/tyoskentelyjaksot', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          })
         ).data
         toastSuccess(this, this.$t('tyoskentelyjakson-tallentaminen-onnistui'))
         this.skipRouteExitConfirm = true

@@ -77,6 +77,21 @@
                 </span>
               </template>
             </elsa-form-group>
+            <elsa-form-group :label="$t('liitetiedostot')">
+              <template v-slot="{ uid }">
+                <asiakirjat-content
+                  class="mb-5"
+                  :id="uid"
+                  :asiakirjat="tyoskentelyjakso.asiakirjat"
+                  :sortingEnabled="false"
+                  :paginationEnabled="false"
+                  :enableSearch="false"
+                  :enableDelete="false"
+                  :noContentInfoText="$t('ei-liitetiedostoja')"
+                  :loading="loading"
+                />
+              </template>
+            </elsa-form-group>
             <div class="text-right">
               <elsa-button
                 v-if="!tyoskentelyjaksoWrapper.suoritusarvioinnit"
@@ -114,6 +129,7 @@
     tyoskentelypaikkaTyyppiLabel,
     tyoskentelyjaksoKaytannonKoulutusLabel
   } from '@/utils/tyoskentelyjakso'
+  import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
   import { confirmDelete } from '@/utils/confirm'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
@@ -121,7 +137,8 @@
     components: {
       TyoskentelyjaksoForm,
       ElsaFormGroup,
-      ElsaButton
+      ElsaButton,
+      AsiakirjatContent
     }
   })
   export default class Tyoskentelyjakso extends Vue {
@@ -140,11 +157,13 @@
       }
     ]
     tyoskentelyjakso: any = null
+    loading = false
     deleting = false
 
     async mounted() {
       const tyoskentelyjaksoId = this.$route?.params?.tyoskentelyjaksoId
       if (tyoskentelyjaksoId) {
+        this.loading = true
         try {
           this.tyoskentelyjakso = (
             await axios.get(`erikoistuva-laakari/tyoskentelyjaksot/${tyoskentelyjaksoId}`)
@@ -152,6 +171,7 @@
         } catch (err) {
           this.$router.replace({ name: 'tyoskentelyjaksot' })
         }
+        this.loading = false
       }
     }
 
