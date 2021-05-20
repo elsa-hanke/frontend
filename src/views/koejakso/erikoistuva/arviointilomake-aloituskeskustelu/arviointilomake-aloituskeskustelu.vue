@@ -124,11 +124,11 @@
       this.aloituskeskusteluLomake = form
       try {
         if (this.koejaksoData.aloituskeskustelunTila === LomakeTilat.UUSI) {
-          await store.dispatch('erikoistuva/postKoulutussopimus', this.aloituskeskusteluLomake)
+          await store.dispatch('erikoistuva/postAloituskeskustelu', this.aloituskeskusteluLomake)
         }
 
         if (this.koejaksoData.aloituskeskustelunTila === LomakeTilat.TALLENNETTU_KESKENERAISENA) {
-          await store.dispatch('erikoistuva/putKoulutussopimus', this.aloituskeskusteluLomake)
+          await store.dispatch('erikoistuva/putAloituskeskustelu', this.aloituskeskusteluLomake)
         }
 
         toastSuccess(this, this.$t('aloituskeskustelu-tallennettu-onnistuneesti'))
@@ -143,8 +143,8 @@
     async saveNewForm() {
       try {
         await store.dispatch('erikoistuva/postAloituskeskustelu', this.aloituskeskusteluLomake)
-
         toastSuccess(this, this.$t('aloituskeskustelu-lisatty-onnistuneesti'))
+        this.skipRouteExitConfirm = true
       } catch (err) {
         toastFail(this, this.$t('aloituskeskustelu-lisaaminen-epaonnistui'))
       }
@@ -153,8 +153,8 @@
     async updateSentForm() {
       try {
         await store.dispatch('erikoistuva/putAloituskeskustelu', this.aloituskeskusteluLomake)
-
         toastSuccess(this, this.$t('aloituskeskustelu-lisatty-onnistuneesti'))
+        this.skipRouteExitConfirm = true
       } catch (err) {
         toastFail(this, this.$t('aloituskeskustelu-lisaaminen-epaonnistui'))
       }

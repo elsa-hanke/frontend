@@ -179,12 +179,11 @@
 
 <script lang="ts">
   import Component from 'vue-class-component'
-  import { Prop, Mixins } from 'vue-property-decorator'
+  import { Vue, Prop, Mixins } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
   import { required, email } from 'vuelidate/lib/validators'
   import { Kouluttaja, KoulutussopimusLomake, UserAccount } from '@/types'
   import _get from 'lodash/get'
-  import _includes from 'lodash/includes'
   import { defaultKouluttaja, defaultKoulutuspaikka, vastuuhenkilot } from '@/utils/constants'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
@@ -295,7 +294,7 @@
     }
 
     selectKouluttaja(kouluttaja: Kouluttaja, index: number) {
-      this.form.kouluttajat[index] = kouluttaja
+      Vue.set(this.form.kouluttajat, index, kouluttaja)
     }
 
     addKouluttaja() {
@@ -307,8 +306,13 @@
     }
 
     get kouluttajatList() {
+      const selectedKouluttajat =
+        this.form.kouluttajat[0].kayttajaId !== null
+          ? this.form.kouluttajat.map((k) => k.kayttajaId)
+          : null
+
       return this.kouluttajat.map((k) => {
-        if (_includes(this.form.kouluttajat, k)) {
+        if (selectedKouluttajat?.indexOf(k.id) !== -1) {
           return {
             ...k,
             $isDisabled: true

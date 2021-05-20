@@ -11,13 +11,14 @@
     </template>
     <template v-slot="{ uid }">
       <elsa-form-multiselect
-        v-model="form.kouluttaja"
+        :value="kouluttajaData"
         :id="uid"
         :options="multiselectOptions"
         :state="validateState('kouluttaja')"
         label="nimi"
-        track-by="nimi"
+        track-by="id"
         @select="onKouluttajaSelect"
+        :allow-empty="true"
       >
         <template v-slot:option="{ option }">
           <div v-if="option.nimi">{{ optionDisplayName(option) }}</div>
@@ -63,18 +64,14 @@
     }
   })
   export default class KouluttajaDetails extends Mixins(validationMixin) {
-    @Prop({ required: false, default: () => '' })
+    @Prop({ required: true, default: null })
     kouluttaja!: Kouluttaja
 
     @Prop({ required: false, default: () => [] })
     kouluttajat!: Kouluttaja[]
 
-    @Prop({ required: false, default: null })
+    @Prop({ required: true, default: null })
     index!: number
-
-    form = {
-      kouluttaja: {}
-    }
 
     async onKouluttajaSubmit(value: any, params: any, modal: any) {
       params.saving = true
@@ -112,16 +109,16 @@
       return $dirty ? ($error ? false : null) : null
     }
 
+    get kouluttajaData() {
+      return this.kouluttaja
+    }
+
     get multiselectOptions() {
       return this.kouluttajat
     }
 
     get kouluttajaIndex() {
       return this.index
-    }
-
-    mounted(): void {
-      this.form.kouluttaja = this.kouluttaja
     }
   }
 </script>

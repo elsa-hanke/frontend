@@ -147,9 +147,8 @@
     async saveNewForm() {
       try {
         await store.dispatch('erikoistuva/postKoulutussopimus', this.koulutussopimusLomake)
-
-        checkCurrentRouteAndRedirect(this.$router, '/koejakso/koulutussopimus')
         toastSuccess(this, this.$t('koulutussopimus-lisatty-onnistuneesti'))
+        this.skipRouteExitConfirm = true
       } catch (err) {
         toastFail(this, this.$t('koulutussopimuksen-lisaaminen-epaonnistui'))
       }
@@ -158,9 +157,8 @@
     async updateSentForm() {
       try {
         await store.dispatch('erikoistuva/putKoulutussopimus', this.koulutussopimusLomake)
-
-        checkCurrentRouteAndRedirect(this.$router, '/koejakso/koulutussopimus')
         toastSuccess(this, this.$t('koulutussopimus-lisatty-onnistuneesti'))
+        this.skipRouteExitConfirm = true
       } catch (err) {
         toastFail(this, this.$t('koulutussopimuksen-lisaaminen-epaonnistui'))
       }
