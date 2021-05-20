@@ -72,7 +72,7 @@
     koulutuspaikka!: Koulutuspaikka
     form = {
       toimipaikallaKoulutussopimus: null
-    }
+    } as any
 
     get yliopistot() {
       return yliopistot
@@ -81,6 +81,12 @@
     validateState(name: string) {
       const { $dirty, $error } = this.$v.form[name] as any
       return $dirty ? ($error ? false : null) : null
+    }
+
+    mounted(): void {
+      if (!this.koulutuspaikka.yliopisto) {
+        this.form.toimipaikallaKoulutussopimus = true
+      }
     }
   }
 </script>

@@ -187,7 +187,7 @@
             <elsa-form-multiselect
               v-model="form.lahikouluttaja"
               :id="uid"
-              :options="kouluttajat"
+              :options="lahikouluttajatList"
               :state="validateState('lahikouluttaja.nimi')"
               label="nimi"
               track-by="nimi"
@@ -216,7 +216,7 @@
             <elsa-form-multiselect
               v-model="form.lahiesimies"
               :id="uid"
-              :options="kouluttajat"
+              :options="lahiesimiesList"
               :state="validateState('lahiesimies.nimi')"
               label="nimi"
               track-by="nimi"
@@ -438,6 +438,30 @@
         )
       }
       params.saving = false
+    }
+
+    get lahikouluttajatList() {
+      return this.kouluttajat.map((k) => {
+        if (this.form.lahiesimies.id === k.id) {
+          return {
+            ...k,
+            $isDisabled: true
+          }
+        }
+        return k
+      })
+    }
+
+    get lahiesimiesList() {
+      return this.kouluttajat.map((k) => {
+        if (this.form.lahikouluttaja.id === k.id) {
+          return {
+            ...k,
+            $isDisabled: true
+          }
+        }
+        return k
+      })
     }
 
     saveAndExit() {

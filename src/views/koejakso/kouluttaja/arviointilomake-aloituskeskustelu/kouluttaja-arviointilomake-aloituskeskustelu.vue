@@ -142,7 +142,12 @@
         </b-col>
         <b-col class="text-right">
           <elsa-button variant="back" :to="{ name: 'koejakso' }">{{ $t('peruuta') }}</elsa-button>
-          <elsa-button :loading="params.saving" type="submit" variant="primary" class="ml-4 px-5">
+          <elsa-button
+            :loading="params.saving"
+            @click="onSubmit"
+            variant="primary"
+            class="ml-4 px-5"
+          >
             {{ $t('allekirjoita-lähetä') }}
           </elsa-button>
         </b-col>
@@ -254,7 +259,7 @@
     }
 
     get editable() {
-      return !(
+      return (
         !this.aloituskeskustelu.lahiesimies.sopimusHyvaksytty ||
         !this.aloituskeskustelu.lahikouluttaja.sopimusHyvaksytty ||
         this.koejaksoData.aloituskeskustelunTila !== LomakeTilat.PALAUTETTU_KORJATTAVAKSI

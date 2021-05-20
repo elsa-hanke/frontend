@@ -83,17 +83,22 @@
         <b-row>
           <b-col>
             <h3>{{ $t('koulutuspaikan-lahikouluttaja') }}</h3>
-            <div v-for="(kouluttaja, index) in koulutussopimus.kouluttajat" :key="index">
+            <div
+              v-for="(kouluttaja, index) in koulutussopimus.kouluttajat"
+              :key="index"
+              class="kouluttaja-section"
+            >
               <kouluttaja-koulutussopimus-form
-                v-if="!kouluttaja.sopimusHyvaksytty"
+                v-if="currentKouluttaja(kouluttaja)"
                 ref="kouluttajaKoulutussopimusForm"
-                :kouluttaja="kouluttaja"
                 v-model="form.kouluttajat[index]"
+                :kouluttaja="kouluttaja"
+                :index="index"
                 @ready="isValid"
               ></kouluttaja-koulutussopimus-form>
 
               <kouluttaja-koulutussopimus-readonly
-                v-else
+                v-if="!currentKouluttaja(kouluttaja)"
                 :kouluttaja="kouluttaja"
               ></kouluttaja-koulutussopimus-readonly>
             </div>
@@ -187,6 +192,7 @@
   import store from '@/store'
   import KouluttajaKoulutussopimusForm from '@/views/koejakso/kouluttaja/koulutussopimus/kouluttaja-koulutussopimus-form.vue'
   import ElsaButton from '@/components/button/button.vue'
+  import ConfirmRouteExit from '@/mixins/confirm-route-exit'
   import { checkCurrentRouteAndRedirect } from '@/utils/functions'
   import { toastFail, toastSuccess } from '@/utils/toast'
   import { KoulutussopimusLomake, Kouluttaja } from '@/types'
@@ -211,7 +217,8 @@
       }
     }
   })
-  export default class KouluttajaKoulutussopimus extends Mixins(validationMixin) {
+  export default class KouluttajaKoulutussopimus extends Mixins(ConfirmRouteExit, validationMixin) {
+    skipRouteExitConfirm!: boolean
     $refs!: {
       kouluttajaKoulutussopimusForm: any
     }
@@ -290,8 +297,18 @@
       return this.koejaksoData.koulutussopimus
     }
 
+    get account() {
+      return store.getters['auth/account']
+    }
+
     get editable() {
       return !this.koulutussopimus.kouluttajat.every((k: Kouluttaja) => k.sopimusHyvaksytty)
+    }
+
+    //TODO switch to email when it is added to KayttajaDTO
+    currentKouluttaja(kouluttaja: any) {
+      const nimi = this.account.firstName.concat(' ', this.account.lastName)
+      return kouluttaja.nimi === nimi
     }
 
     async returnToSender() {
@@ -299,15 +316,16 @@
 
       const form = {
         ...this.koulutussopimus,
+        korjausehdotus: this.form.korjausehdotus,
         lahetetty: false
       }
       try {
         await store.dispatch('kouluttaja/putKoulutussopimus', form)
 
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
-        toastSuccess(this, this.$t('koulutussopimus-lisatty-onnistuneesti'))
+        toastSuccess(this, this.$t('koulutussopimus-palautettu-onnistuneesti'))
       } catch (err) {
-        toastFail(this, this.$t('koulutussopimuksen-lisaaminen-epaonnistui'))
+        toastFail(this, this.$t('koulutussopimus-palautus-epaonnistui'))
       }
     }
 
@@ -334,6 +352,7 @@
 
       if (this.formValid) {
         this.updateSentForm()
+        this.skipRouteExitConfirm = true
       }
       params.saving = false
     }
@@ -346,3 +365,9 @@
     }
   }
 </script>
+
+<style lang="scss" scoped>
+  .kouluttaja-section + .kouluttaja-section {
+    margin-top: 2.5rem;
+  }
+</style>
