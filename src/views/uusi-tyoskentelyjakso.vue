@@ -82,7 +82,8 @@
           await axios.post('erikoistuva-laakari/tyoskentelyjaksot', formData, {
             headers: {
               'Content-Type': 'multipart/form-data'
-            }
+            },
+            timeout: 120000
           })
         ).data
 
