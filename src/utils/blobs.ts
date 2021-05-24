@@ -6,7 +6,8 @@ async function fetchBlobData(endpointUrl: string, id: number): Promise<BlobDataR
 
   try {
     const response = await axios.get(endpointUrl + id, {
-      responseType: 'blob'
+      responseType: 'blob',
+      timeout: 120000
     })
     return { data: response.data, contentType: response.headers['content-type'] }
   } catch {
