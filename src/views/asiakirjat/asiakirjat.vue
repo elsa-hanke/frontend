@@ -83,7 +83,8 @@
           await axios.post(this.endpointUrl, formData, {
             headers: {
               'Content-Type': 'multipart/form-data'
-            }
+            },
+            timeout: 120000
           })
         ).data
         this.asiakirjat = [...asiakirjat, ...this.asiakirjat]
