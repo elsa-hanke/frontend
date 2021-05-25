@@ -212,6 +212,37 @@
         </div>
       </template>
     </elsa-form-group>
+    <elsa-form-group
+      class="attachments"
+      :label="$t('liitetiedostot')"
+      :help="$t('sallitut-tiedostoformaatit')"
+    >
+      <template v-slot="{ uid }">
+        <span :id="uid">
+          {{ $t('tyoskentelyjakson-liitetiedostot-kuvaus') }}
+        </span>
+        <asiakirjat-upload-button
+          class="mt-3"
+          :id="uid"
+          :isPrimaryButton="false"
+          :buttonText="$t('lisaa-liitetiedosto')"
+          :existingFileNamesForCurrentView="existingFileNamesForCurrentView"
+          :existingFileNamesForOtherViews="existingFileNamesForOtherViews"
+          @selectedFiles="onFilesAdded"
+        />
+        <asiakirjat-content
+          class="mb-5"
+          :id="uid"
+          :asiakirjat="asiakirjatTableItems"
+          :sortingEnabled="false"
+          :paginationEnabled="false"
+          :enableSearch="false"
+          :enableDelete="true"
+          :showInfoIfEmpty="false"
+          @deleteAsiakirja="onDeleteLiitetiedosto"
+        />
+      </template>
+    </elsa-form-group>
     <elsa-form-group v-if="!modal" :label="$t('lisatiedot')">
       <template v-slot="{ uid }">
         <b-form-checkbox :id="uid" v-model="form.hyvaksyttyAiempaanErikoisalaan">
@@ -252,13 +283,19 @@
     tyoskentelypaikkaTyyppiLabel,
     tyoskentelyjaksoKaytannonKoulutusLabel
   } from '@/utils/tyoskentelyjakso'
+  import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
+  import AsiakirjatUploadButton from '@/components/asiakirjat/asiakirjat-upload-button.vue'
+  import { Asiakirja } from '@/types'
+  import { confirmDelete } from '@/utils/confirm'
 
   @Component({
     components: {
       ElsaFormGroup,
       ElsaFormMultiselect,
       ElsaFormDatepicker,
-      ElsaButton
+      ElsaButton,
+      AsiakirjatContent,
+      AsiakirjatUploadButton
     },
     validations: {
       form: {
@@ -311,6 +348,12 @@
     @Prop({ required: false, default: () => [] })
     erikoisalat!: any[]
 
+    @Prop({ required: false, default: undefined })
+    asiakirjat!: Asiakirja[]
+
+    @Prop({ required: false, default: () => [] })
+    kaikkiAsiakirjaNimet!: string[]
+
     @Prop({
       required: false,
       type: Object,
@@ -330,6 +373,10 @@
       })
     })
     value!: any
+
+    addedFiles: File[] = []
+    newAsiakirjatMapped: Asiakirja[] = []
+    deletedAsiakirjat: Asiakirja[] = []
 
     form = {
       alkamispaiva: null,
@@ -393,9 +440,9 @@
       if (this.$v.form.$anyError) {
         return
       }
-      this.$emit(
-        'submit',
-        {
+
+      const submitData = {
+        tyoskentelyjakso: {
           ...this.form,
           tyoskentelypaikka: {
             ...this.form.tyoskentelypaikka,
@@ -403,12 +450,62 @@
           },
           omaaErikoisalaaTukevaId: this.form.omaaErikoisalaaTukeva?.id
         },
-        this.params
-      )
+        addedFiles: this.addedFiles,
+        deletedAsiakirjaIds: this.deletedAsiakirjat.map((asiakirja) => asiakirja.id)
+      }
+
+      delete submitData.tyoskentelyjakso.asiakirjat
+      delete submitData.tyoskentelyjakso.kaikkiAsiakirjaNimet
+
+      this.$emit('submit', submitData, this.params)
     }
 
     async onTyoskentelyjaksoDelete() {
       this.$emit('delete', this.params)
+    }
+
+    onFilesAdded(files: File[]) {
+      const addedFilesInDeletedArray = files.filter((added) =>
+        this.deletedAsiakirjat.map((deleted) => deleted.nimi).includes(added.name)
+      )
+      const addedFilesNotInDeletedArray = files.filter(
+        (added) => !addedFilesInDeletedArray.includes(added)
+      )
+
+      this.deletedAsiakirjat = this.deletedAsiakirjat?.filter(
+        (deletedAsiakirja) =>
+          !addedFilesInDeletedArray
+            .map((addedFile) => addedFile.name)
+            .includes(deletedAsiakirja.nimi)
+      )
+      this.addedFiles = [...this.addedFiles, ...addedFilesNotInDeletedArray]
+      this.newAsiakirjatMapped = [
+        ...this.mapFiles(addedFilesNotInDeletedArray),
+        ...this.newAsiakirjatMapped
+      ]
+    }
+
+    async onDeleteLiitetiedosto(asiakirja: Asiakirja) {
+      if (
+        await confirmDelete(
+          this,
+          this.$t('poista-liitetiedosto') as string,
+          (this.$t('liitetiedoston') as string).toLowerCase()
+        )
+      ) {
+        // Jos asiakirjalla on id, on se tallennettu kantaan jo aiemmin, joten
+        // lisää asiakirja poistettaviin asiakirjoihin.
+        if (asiakirja.id) {
+          this.deletedAsiakirjat = [asiakirja, ...this.deletedAsiakirjat]
+        } else {
+          // Jos asiakirjalla ei ole id:tä, on se lisätty ensimmäistä kertaa
+          // tässä näkymässä, joten poista asiakirja lisättävistä tiedostoista.
+          this.addedFiles = this.addedFiles?.filter((file) => file.name !== asiakirja.nimi)
+          this.newAsiakirjatMapped = this.newAsiakirjatMapped?.filter(
+            (a) => a.nimi != asiakirja.nimi
+          )
+        }
+      }
     }
 
     onOsaaikaprosenttiInput(value: string) {
@@ -474,6 +571,39 @@
           nimi: this.$t('muu')
         }
       ]
+    }
+
+    get asiakirjatTableItems() {
+      return [...this.newAsiakirjatMapped, ...this.asiakirjatExcludingDeleted()]
+    }
+
+    get existingFileNamesForCurrentView() {
+      return this.asiakirjatTableItems?.map((item) => item.nimi)
+    }
+
+    get existingFileNamesForOtherViews() {
+      return this.kaikkiAsiakirjaNimet?.filter(
+        (nimi) => !this.existingFileNamesForCurrentView.includes(nimi)
+      )
+    }
+
+    private mapFiles(files: File[]): Asiakirja[] {
+      return files.map((file) => {
+        const asiakirja: Asiakirja = {
+          nimi: file.name,
+          data: file.arrayBuffer(),
+          lisattypvm: new Date().toString(),
+          contentType: file.type
+        }
+        return asiakirja
+      })
+    }
+
+    private asiakirjatExcludingDeleted(): Asiakirja[] {
+      return (this.asiakirjat ?? []).filter(
+        (asiakirja) =>
+          !this.deletedAsiakirjat.map((deleted) => deleted.nimi).includes(asiakirja.nimi)
+      )
     }
   }
 </script>

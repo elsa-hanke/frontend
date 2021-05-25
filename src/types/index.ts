@@ -108,10 +108,10 @@ export type Lahiesimies = {
   sopimusHyvaksytty: boolean
 }
 
-export type BlobFileResult = {
-  anchorElement: any
-  error: boolean
-  msSaveOrOpenBlob: boolean
+export type BlobDataResult = {
+  data?: any
+  contentType?: string
+  error?: boolean
 }
 
 export interface AloituskeskusteluLomake {
@@ -148,7 +148,12 @@ export interface Koejakso {
 }
 
 export interface Asiakirja {
-  id: number
+  id?: number
   nimi: string
-  lisattypvm: string
+  lisattypvm?: string
+  contentType?: string
+  data?: Promise<ArrayBuffer>
+  disablePreview?: boolean
+  disableDownload?: boolean
+  disableDelete?: boolean
 }
