@@ -312,7 +312,7 @@
           : null
 
       return this.kouluttajat.map((k) => {
-        if (selectedKouluttajat?.indexOf(k.id) !== -1) {
+        if (selectedKouluttajat?.includes(k.id)) {
           return {
             ...k,
             $isDisabled: true

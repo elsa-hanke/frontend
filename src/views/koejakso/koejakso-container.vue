@@ -3,7 +3,7 @@
     <koejakso-view-erikoistuva v-if="$isErikoistuva()"></koejakso-view-erikoistuva>
     <koejakso-view-kouluttaja v-if="$isKouluttaja()"></koejakso-view-kouluttaja>
 
-    <b-container v-else>
+    <b-container v-if="notFound">
       <p>{{ $t('sivua-ei-loydy') }}</p>
     </b-container>
   </div>
@@ -21,7 +21,11 @@
       KoejaksoViewErikoistuva
     }
   })
-  export default class KoejaksoContainer extends Vue {}
+  export default class KoejaksoContainer extends Vue {
+    get notFound() {
+      return !(this.$isErikoistuva() || this.$isKouluttaja())
+    }
+  }
 </script>
 
 <style lang="scss">

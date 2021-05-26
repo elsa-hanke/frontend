@@ -3,13 +3,26 @@
     <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid v-if="!loading">
       <h1 class="mb-3">{{ $t('koulutussopimus') }}</h1>
-      <div v-if="editable">
+      <div v-if="!signed">
         <p>{{ $t('koulutussopimus-kouluttaja-ingressi') }}</p>
       </div>
 
-      <div v-if="!editable" class="d-flex bg-light border rounded px-4 py-3 mb-4">
+      <div v-if="signed" class="d-flex bg-light border rounded px-4 py-3 mb-4">
         <font-awesome-icon icon="info-circle" fixed-width class="text-muted mr-2" />
         <div>{{ $t('koulutussopimus-kouluttaja-allekirjoitettu') }}</div>
+      </div>
+
+      <div v-if="returned" class="bg-light border rounded px-4 py-3 mb-4">
+        <div class="d-flex">
+          <font-awesome-icon icon="info-circle" fixed-width class="text-muted mr-2" />
+          <div>
+            <div>{{ $t('koulutussopimus-kouluttaja-palautettu') }}</div>
+            <div>
+              <span>{{ $t('koulutussopimus-tila-palautettu-korjattavaksi-syy') }}</span>
+              <span>&nbsp;{{ koulutussopimus.korjausehdotus }}</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       <hr />
@@ -89,7 +102,7 @@
               class="kouluttaja-section"
             >
               <kouluttaja-koulutussopimus-form
-                v-if="currentKouluttaja(kouluttaja)"
+                v-if="currentKouluttaja(kouluttaja) && editable"
                 ref="kouluttajaKoulutussopimusForm"
                 v-model="form.kouluttajat[index]"
                 :kouluttaja="kouluttaja"
@@ -98,7 +111,7 @@
               ></kouluttaja-koulutussopimus-form>
 
               <kouluttaja-koulutussopimus-readonly
-                v-if="!currentKouluttaja(kouluttaja)"
+                v-if="!currentKouluttaja(kouluttaja) || !editable"
                 :kouluttaja="kouluttaja"
               ></kouluttaja-koulutussopimus-readonly>
             </div>
@@ -119,21 +132,23 @@
 
         <hr />
 
-        <b-row>
-          <b-col lg="8">
-            <h3>{{ $t('allekirjoitukset') }}</h3>
-          </b-col>
-        </b-row>
-        <b-row>
-          <b-col lg="4">
-            <h5>{{ $t('päiväys') }}</h5>
-            <p>TODO</p>
-          </b-col>
-          <b-col lg="4">
-            <h5>{{ $t('nimi-ja-nimike') }}</h5>
-            <p>{{ koulutussopimus.erikoistuvanNimi }}</p>
-          </b-col>
-        </b-row>
+        <div v-if="editable">
+          <b-row>
+            <b-col lg="8">
+              <h3>{{ $t('allekirjoitukset') }}</h3>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col lg="4">
+              <h5>{{ $t('päiväys') }}</h5>
+              <p>TODO</p>
+            </b-col>
+            <b-col lg="4">
+              <h5>{{ $t('nimi-ja-nimike') }}</h5>
+              <p>{{ koulutussopimus.erikoistuvanNimi }}</p>
+            </b-col>
+          </b-row>
+        </div>
 
         <hr v-if="editable" />
 
@@ -196,7 +211,7 @@
   import { checkCurrentRouteAndRedirect } from '@/utils/functions'
   import { toastFail, toastSuccess } from '@/utils/toast'
   import { KoulutussopimusLomake, Kouluttaja } from '@/types'
-  import { defaultKoulutuspaikka } from '@/utils/constants'
+  import { defaultKoulutuspaikka, LomakeTilat } from '@/utils/constants'
   import KouluttajaKoulutussopimusReadonly from '@/views/koejakso/kouluttaja/koulutussopimus/kouluttaja-koulutussopimus-readonly.vue'
   import UserDetails from '@/components/user-details/user-details.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
@@ -302,7 +317,19 @@
     }
 
     get editable() {
-      return !this.koulutussopimus.kouluttajat.every((k: Kouluttaja) => k.sopimusHyvaksytty)
+      return this.koejaksoData.koulutusSopimuksenTila !== LomakeTilat.PALAUTETTU_KORJATTAVAKSI
+    }
+
+    get signed() {
+      return this.koulutussopimus.kouluttajat.every((k: Kouluttaja) => {
+        if (this.currentKouluttaja(k)) {
+          return k.sopimusHyvaksytty
+        }
+      })
+    }
+
+    get returned() {
+      return this.koejaksoData.koulutusSopimuksenTila === LomakeTilat.PALAUTETTU_KORJATTAVAKSI
     }
 
     //TODO switch to email when it is added to KayttajaDTO
@@ -321,7 +348,7 @@
       }
       try {
         await store.dispatch('kouluttaja/putKoulutussopimus', form)
-
+        this.skipRouteExitConfirm = true
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
         toastSuccess(this, this.$t('koulutussopimus-palautettu-onnistuneesti'))
       } catch (err) {
@@ -332,7 +359,6 @@
     async updateSentForm() {
       try {
         await store.dispatch('kouluttaja/putKoulutussopimus', this.form)
-
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
         toastSuccess(this, this.$t('koulutussopimus-lisatty-onnistuneesti'))
       } catch (err) {
@@ -351,8 +377,8 @@
       }
 
       if (this.formValid) {
-        this.updateSentForm()
         this.skipRouteExitConfirm = true
+        this.updateSentForm()
       }
       params.saving = false
     }
@@ -362,6 +388,14 @@
       await store.dispatch('kouluttaja/getKoejaksot')
       this.form = this.koulutussopimus
       this.loading = false
+
+      if (this.returned) {
+        this.skipRouteExitConfirm = true
+      }
+
+      if (!this.editable) {
+        this.skipRouteExitConfirm = true
+      }
     }
   }
 </script>

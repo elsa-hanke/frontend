@@ -14,4 +14,11 @@ export class RolesPlugin {
   }
 }
 
+declare module 'vue/types/vue' {
+  interface Vue {
+    $isErikoistuva: Function
+    $isKouluttaja: Function
+  }
+}
+
 Vue.use(new RolesPlugin())

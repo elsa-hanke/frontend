@@ -1,52 +1,46 @@
 <template>
   <div class="d-flex justify-content-center border rounded pt-3 mb-4">
-    <div class="container-fluid sopimus-card-container">
+    <div class="container-fluid">
       <h2>{{ $t('koulutussopimus') }}</h2>
-      <koulutussopimus-card-content v-if="koulutussopimuksenTila === KoulutussopimusTilat.UUSI">
+      <koejakso-card-content v-if="tila === lomaketilat.UUSI">
         <template v-slot:content>
           <span class="pr-5" v-html="$t('koulutussopimus-tila-uusi')" />
         </template>
         <template v-slot:button>
-          <elsa-button variant="primary" class="mb-4" :to="{ name: 'koulutussopimus' }">
-            {{ $t('täytä-koulutussopimus') }}
+          <elsa-button variant="primary" class="mb-4" :to="{ name: url }">
+            {{ $t('tayta-koulutussopimus') }}
           </elsa-button>
         </template>
-      </koulutussopimus-card-content>
+      </koejakso-card-content>
 
-      <koulutussopimus-card-content
-        v-if="koulutussopimuksenTila === KoulutussopimusTilat.TALLENNETTU_KESKENERAISENA"
-      >
+      <koejakso-card-content v-if="tila === lomaketilat.TALLENNETTU_KESKENERAISENA">
         <template v-slot:content>
           <div class="d-inline-flex">
             <font-awesome-icon :icon="['far', 'clock']" class="text-warning mr-1" />
           </div>
           <div class="d-inline-flex">
-            <span class="pr-5" v-html="$t('koulutussopimus-tila-tallennettu-keskeneräisenä')" />
+            <span class="pr-5" v-html="$t('koulutussopimus-tila-tallennettu-keskeneraisena')" />
           </div>
         </template>
         <template v-slot:button>
-          <elsa-button variant="primary" class="mb-4" :to="{ name: 'koulutussopimus' }">
+          <elsa-button variant="primary" class="mb-4" :to="{ name: url }">
             {{ $t('viimeistele-koulutussopimus') }}
           </elsa-button>
         </template>
-      </koulutussopimus-card-content>
+      </koejakso-card-content>
 
-      <koulutussopimus-card-content
-        v-if="koulutussopimuksenTila === KoulutussopimusTilat.ODOTTAA_HYVAKSYNTAA"
-      >
+      <koejakso-card-content v-if="tila === lomaketilat.ODOTTAA_HYVAKSYNTAA">
         <template v-slot:content>
           <p class="pr-5" v-html="$t('koulutussopimus-tila-odottaa-hyvaksyntaa')" />
         </template>
         <template v-slot:button>
-          <elsa-button variant="primary" class="mb-4" :to="{ name: 'koulutussopimus' }">
-            {{ $t('näytä-koulutussopimus') }}
+          <elsa-button variant="primary" class="mb-4" :to="{ name: url }">
+            {{ $t('nayta-koulutussopimus') }}
           </elsa-button>
         </template>
-      </koulutussopimus-card-content>
+      </koejakso-card-content>
 
-      <koulutussopimus-card-content
-        v-if="koulutussopimuksenTila === KoulutussopimusTilat.PALAUTETTU_KORJATTAVAKSI"
-      >
+      <koejakso-card-content v-if="tila === lomaketilat.PALAUTETTU_KORJATTAVAKSI">
         <template v-slot:content>
           <div class="d-inline-flex">
             <font-awesome-icon :icon="['fas', 'exclamation-circle']" class="text-danger mr-1" />
@@ -55,36 +49,34 @@
             <div class="pr-5">
               <p class="mb-0">{{ $t('koulutussopimus-tila-palautettu-korjattavaksi') }}</p>
               <p>
-                <span>{{ $t('koulutussopimus-tila-palautettu-korjattavaksi-syy') }}</span>
-                <span>{{ korjausehdotus }}</span>
+                <span>{{ $t('syy') }}</span>
+                <span>&nbsp;{{ korjausehdotus }}</span>
               </p>
             </div>
           </div>
         </template>
         <template v-slot:button>
-          <elsa-button variant="primary" class="mb-4" :to="{ name: 'koulutussopimus' }">
+          <elsa-button variant="primary" class="mb-4" :to="{ name: url }">
             {{ $t('viimeistele-koulutussopimus') }}
           </elsa-button>
         </template>
-      </koulutussopimus-card-content>
+      </koejakso-card-content>
 
-      <koulutussopimus-card-content
-        v-if="koulutussopimuksenTila === KoulutussopimusTilat.HYVAKSYTTY"
-      >
+      <koejakso-card-content v-if="tila === lomaketilat.HYVAKSYTTY">
         <template v-slot:content>
           <div class="d-inline-flex">
             <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-1" />
           </div>
           <div class="d-inline-flex">
-            <span class="pr-5" v-html="$t('koulutussopimus-tila-hyvaksytty')" />
+            <span class="pr-5">{{ $t('koulutussopimus-tila-hyvaksytty') }}</span>
           </div>
         </template>
         <template v-slot:button>
-          <elsa-button variant="primary" class="mb-4" :to="{ name: 'koulutussopimus' }">
-            {{ $t('näytä-koulutussopimus') }}
+          <elsa-button variant="primary" class="mb-4" :to="{ name: url }">
+            {{ $t('nayta-koulutussopimus') }}
           </elsa-button>
         </template>
-      </koulutussopimus-card-content>
+      </koejakso-card-content>
     </div>
   </div>
 </template>
@@ -93,27 +85,38 @@
   import Vue from 'vue'
   import store from '@/store'
   import Component from 'vue-class-component'
-  import KoulutussopimusCardContent from './koulutussopimus-card-content.vue'
+  import KoejaksoCardContent from './koejakso-card-content.vue'
   import ElsaButton from '@/components/button/button.vue'
   import { LomakeTilat } from '@/utils/constants'
 
   @Component({
     components: {
-      KoulutussopimusCardContent,
+      KoejaksoCardContent,
       ElsaButton
     }
   })
   export default class KoulutussopimusCard extends Vue {
-    get koulutussopimuksenTila() {
-      return store.getters['erikoistuva/koejakso'].koulutusSopimuksenTila
+    get koejakso() {
+      return store.getters['erikoistuva/koejakso']
+    }
+
+    get tila() {
+      return this.koejakso.koulutusSopimuksenTila
     }
 
     get korjausehdotus() {
-      return store.getters['erikoistuva/koejakso'].koulutussopimus.korjausehdotus
+      if (this.koejakso.koulutussopimus) {
+        return this.koejakso.koulutussopimus.korjausehdotus
+      }
+      return null
     }
 
-    get KoulutussopimusTilat() {
+    get lomaketilat() {
       return LomakeTilat
+    }
+
+    get url() {
+      return 'koulutussopimus'
     }
   }
 </script>
