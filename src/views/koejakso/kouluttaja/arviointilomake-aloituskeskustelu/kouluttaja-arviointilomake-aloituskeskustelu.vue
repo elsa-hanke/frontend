@@ -260,7 +260,6 @@
 
     get editable() {
       return (
-        !this.aloituskeskustelu.lahiesimies.sopimusHyvaksytty ||
         !this.aloituskeskustelu.lahikouluttaja.sopimusHyvaksytty ||
         this.koejaksoData.aloituskeskustelunTila !== LomakeTilat.PALAUTETTU_KORJATTAVAKSI
       )

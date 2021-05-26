@@ -67,70 +67,15 @@
       <b-row lg>
         <b-col>
           <h1>{{ $t('koejakson-arviointi') }}</h1>
-          <div class="d-flex justify-content-center border rounded pt-3 mb-4">
-            <div class="container-fluid">
-              <h2>
-                <span class="form-order">A</span>
-                {{ $t('aloituskeskustelu-otsikko') }}
-              </h2>
-              <p>{{ $t('lomake-ei-täytetty') }}</p>
-              <elsa-button
-                variant="primary"
-                :to="{ name: 'koejakson-aloituskeskustelu' }"
-                class="mb-4"
-              >
-                {{ $t('täytä-aloituskeskustelu') }}
-              </elsa-button>
-            </div>
-          </div>
-          <div class="d-flex justify-content-center border rounded pt-3 mb-4">
-            <div class="container-fluid">
-              <h2>
-                <span class="form-order">B</span>
-                {{ $t('väliarviointi-otsikko') }}
-              </h2>
-              <p>{{ $t('lomake-ei-täytetty') }}</p>
-              <elsa-button variant="primary" :to="{ name: 'arviointipyynto' }" class="mb-4">
-                {{ $t('pyyda-arviointia') }}
-              </elsa-button>
-            </div>
-          </div>
-          <div class="d-flex justify-content-center border rounded pt-3 mb-4">
-            <div class="container-fluid">
-              <h2>
-                <span class="form-order">C</span>
-                {{ $t('kehittämistoimenpiteet-otsikko') }}
-              </h2>
-              <p>{{ $t('lomake-ei-täytetty') }}</p>
-              <elsa-button variant="primary" :to="{ name: 'arviointipyynto' }" class="mb-4">
-                {{ $t('pyyda-arviointia') }}
-              </elsa-button>
-            </div>
-          </div>
-          <div class="d-flex justify-content-center border rounded pt-3 mb-4">
-            <div class="container-fluid">
-              <h2>
-                <span class="form-order">D</span>
-                {{ $t('loppukeskustelu-otsikko') }}
-              </h2>
-              <p>{{ $t('lomake-ei-täytetty') }}</p>
-              <elsa-button variant="primary" :to="{ name: 'arviointipyynto' }" class="mb-4">
-                {{ $t('pyyda-arviointia') }}
-              </elsa-button>
-            </div>
-          </div>
-          <div class="d-flex justify-content-center border rounded pt-3 mb-4">
-            <div class="container-fluid">
-              <h2>
-                <span class="form-order">E</span>
-                {{ $t('koejakson-arvio-otsikko') }}
-              </h2>
-              <p>{{ $t('lomake-ei-täytetty') }}</p>
-              <elsa-button variant="primary" :to="{ name: 'arviointipyynto' }" class="mb-4">
-                {{ $t('pyyda-arviointia') }}
-              </elsa-button>
-            </div>
-          </div>
+          <elsa-aloituskeskustelu-card></elsa-aloituskeskustelu-card>
+
+          <elsa-valiarviointi-card></elsa-valiarviointi-card>
+
+          <elsa-kehittamistoimenpiteet-card></elsa-kehittamistoimenpiteet-card>
+
+          <elsa-loppukeskustelu-card></elsa-loppukeskustelu-card>
+
+          <elsa-vastuuhenkilon-arvio-card></elsa-vastuuhenkilon-arvio-card>
         </b-col>
       </b-row>
     </b-container>
@@ -148,7 +93,12 @@
   import ElsaLuottamuksenTaso from '@/components/luottamuksen-taso/luottamuksen-taso.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
-  import ElsaKoulutussopimusCard from '@/components/koulutussopimus-card/koulutussopimus-card.vue'
+  import ElsaKoulutussopimusCard from '@/components/koejakso-cards/koulutussopimus-card.vue'
+  import ElsaAloituskeskusteluCard from '@/components/koejakso-cards/aloituskeskustelu-card.vue'
+  import ElsaValiarviointiCard from '@/components/koejakso-cards/valiarviointi-card.vue'
+  import ElsaKehittamistoimenpiteetCard from '@/components/koejakso-cards/kehittamistoimenpiteet-card.vue'
+  import ElsaLoppukeskusteluCard from '@/components/koejakso-cards/loppukeskustelu-card.vue'
+  import ElsaVastuuhenkilonArvioCard from '@/components/koejakso-cards/vastuuhenkilon-arvio-card.vue'
 
   @Component({
     components: {
@@ -157,7 +107,12 @@
       ElsaLuottamuksenTaso,
       ElsaFormGroup,
       ElsaFormMultiselect,
-      ElsaKoulutussopimusCard
+      ElsaKoulutussopimusCard,
+      ElsaAloituskeskusteluCard,
+      ElsaValiarviointiCard,
+      ElsaKehittamistoimenpiteetCard,
+      ElsaLoppukeskusteluCard,
+      ElsaVastuuhenkilonArvioCard
     }
   })
   export default class KoejaksoViewErikoistuva extends Vue {
