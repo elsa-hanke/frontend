@@ -10,7 +10,7 @@
             v-if="!loading"
             :kunnat="kunnat"
             :erikoisalat="erikoisalat"
-            :kaikkiAsiakirjaNimet="tyoskentelyjaksoLomake.kaikkiAsiakirjaNimet"
+            :reservedAsiakirjaNimet="tyoskentelyjaksoLomake.reservedAsiakirjaNimet"
             :modal="false"
             @submit="onSubmit"
             @cancel="onCancel"

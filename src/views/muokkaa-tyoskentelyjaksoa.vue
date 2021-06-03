@@ -11,7 +11,6 @@
             :value="tyoskentelyjakso"
             :editing="true"
             :asiakirjat="tyoskentelyjakso.asiakirjat"
-            :kaikkiAsiakirjaNimet="tyoskentelyjakso.kaikkiAsiakirjaNimet"
             @submit="onSubmit"
             @delete="onDelete"
             @cancel="onCancel"
