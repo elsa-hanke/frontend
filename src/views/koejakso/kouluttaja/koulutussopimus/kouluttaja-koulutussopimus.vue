@@ -18,7 +18,7 @@
           <div>
             <div>{{ $t('koulutussopimus-kouluttaja-palautettu') }}</div>
             <div>
-              <span>{{ $t('koulutussopimus-tila-palautettu-korjattavaksi-syy') }}</span>
+              <span>{{ $t('syy') }}</span>
               <span>&nbsp;{{ koulutussopimus.korjausehdotus }}</span>
             </div>
           </div>
