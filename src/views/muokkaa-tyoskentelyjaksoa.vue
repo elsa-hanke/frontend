@@ -81,14 +81,13 @@
         data.addedFiles.forEach((file: File) => formData.append('files', file, file.name))
         formData.append('deletedAsiakirjaIdsJson', JSON.stringify(data.deletedAsiakirjaIds))
 
-        this.tyoskentelyjakso = (
-          await axios.put('erikoistuva-laakari/tyoskentelyjaksot', formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            },
-            timeout: 120000
-          })
-        ).data
+        await axios.put('erikoistuva-laakari/tyoskentelyjaksot', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          },
+          timeout: 120000
+        })
+
         toastSuccess(this, this.$t('tyoskentelyjakson-tallentaminen-onnistui'))
         this.skipRouteExitConfirm = true
         this.$router.push({
