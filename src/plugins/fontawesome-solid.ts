@@ -30,7 +30,8 @@ import {
   faShare,
   faBars,
   faTimes,
-  faFileDownload
+  faFileDownload,
+  faUndoAlt
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(faArrowsAlt)
@@ -64,3 +65,4 @@ library.add(faShare)
 library.add(faBars)
 library.add(faTimes)
 library.add(faFileDownload)
+library.add(faUndoAlt)
