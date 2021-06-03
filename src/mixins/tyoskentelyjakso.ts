@@ -23,8 +23,19 @@ export default class TyoskentelyjaksoMixin extends Vue {
   async onTyoskentelyjaksoSubmit(value: any, params: any, modal: any) {
     params.saving = true
     try {
-      const tyoskentelyjakso = (await axios.post('/erikoistuva-laakari/tyoskentelyjaksot', value))
-        .data
+      const formData = new FormData()
+      formData.append('tyoskentelyjaksoJson', JSON.stringify(value.tyoskentelyjakso))
+      value.addedFiles.forEach((file: File) => formData.append('files', file, file.name))
+
+      const tyoskentelyjakso = (
+        await axios.post('erikoistuva-laakari/tyoskentelyjaksot', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          },
+          timeout: 120000
+        })
+      ).data
+
       this.tyoskentelyjaksot.push(tyoskentelyjakso)
       tyoskentelyjakso.label = tyoskentelyjaksoLabel(this, tyoskentelyjakso)
       this.form.tyoskentelyjakso = tyoskentelyjakso
