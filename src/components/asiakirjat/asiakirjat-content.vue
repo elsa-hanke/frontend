@@ -27,6 +27,7 @@
       <b-spinner variant="primary" :label="$t('ladataan')" />
     </div>
     <b-table
+      class="asiakirjat-table"
       v-if="rows > 0"
       :items="tulokset"
       :fields="computedFields"
@@ -251,7 +252,7 @@
   @import '~@/styles/variables';
   @import '~bootstrap/scss/mixins/breakpoints';
 
-  .table {
+  .asiakirjat-table {
     border-bottom: 0.0625rem solid $gray-300;
     th {
       border-top: none;
@@ -262,6 +263,7 @@
     td {
       padding-top: 0.5rem;
       padding-bottom: 0.5rem;
+      vertical-align: middle;
 
       &.file-name {
         button {
@@ -269,14 +271,11 @@
           text-align: justify;
         }
       }
-      &.created-date {
-        padding-top: 0.688rem;
-      }
     }
   }
 
   @include media-breakpoint-down(xs) {
-    .table {
+    .asiakirjat-table {
       border-bottom: none;
       tr {
         padding: 0.375rem 0 0.375rem 0;
@@ -288,11 +287,6 @@
       td {
         padding: 0.25rem 0 0.25rem 0.25rem;
         &.file-name {
-          button {
-            word-break: break-all;
-            text-align: justify;
-            font-weight: 500;
-          }
           > div {
             width: 100% !important;
             padding: 0 0.375rem 0 0.375rem !important;

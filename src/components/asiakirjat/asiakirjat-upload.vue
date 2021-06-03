@@ -4,14 +4,14 @@
       id="file-upload"
       type="file"
       @change="handleFileChange"
-      :disabled="uploading"
+      :disabled="uploading || disabled"
       multiple
       hidden
     />
     <label
       :class="[isPrimaryButton ? 'primary mb-4' : 'outline-primary mb-4']"
       for="file-upload"
-      :disabled="uploading"
+      :disabled="uploading || disabled"
       v-on="$listeners"
     >
       <span>{{ buttonText }}</span>
@@ -95,7 +95,7 @@
   const maxFilesTotalSize = 100 * 1024 * 1024
 
   @Component
-  export default class AsiakirjatUploadButton extends Vue {
+  export default class AsiakirjatUpload extends Vue {
     private maxFilesTotalSizeExceeded = false
     private filesExceedingMaxSize: File[] = []
     private filesOfWrongType: File[] = []
@@ -117,6 +117,9 @@
 
     @Prop({ required: false, default: undefined })
     existingFileNamesForOtherViews!: string[]
+
+    @Prop({ required: false, type: Boolean, default: false })
+    disabled!: boolean
 
     handleFileChange(e: Event) {
       const inputElement = e.target as HTMLInputElement
