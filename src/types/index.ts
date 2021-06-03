@@ -157,3 +157,10 @@ export interface Asiakirja {
   disableDownload?: boolean
   disableDelete?: boolean
 }
+
+export interface KoejaksonTyoskentelyjakso {
+  id: number
+  formattedNimi: string
+  paattymispaiva: string
+  disableDelete: boolean
+}
