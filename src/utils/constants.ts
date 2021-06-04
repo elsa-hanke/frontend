@@ -79,8 +79,11 @@ export const arvioinninPerustuminen = {
 } as any
 
 export enum LomakeTyypit {
-  KOULUTUSSOPIMUS = 'koulutussopimus',
-  ALOITUSKESKUSTELU = 'aloituskeskustelu'
+  KOULUTUSSOPIMUS = 'KOULUTUSSOPIMUS',
+  ALOITUSKESKUSTELU = 'ALOITUSKESKUSTELU',
+  VALIARVIOINTI = 'VALIARVIOINTI',
+  KEHITTAMISTOIMENPITEET = 'KEHITTAMISTOIMENPITEET',
+  LOPPUKESKUSTELU = 'LOPPUKESKUSTELU'
 }
 
 export enum LomakeTilat {
@@ -94,9 +97,10 @@ export enum LomakeTilat {
 }
 
 export enum TaskStatus {
-  AVOIN = 'Avoin',
-  PALAUTETTU = 'Palautettu',
-  HYVAKSYTTY = 'Hyväksytty'
+  AVOIN = 'AVOIN',
+  AVOIN_PALAUTUNUT = 'AVOIN_PALAUTUNUT',
+  PALAUTETTU = 'PALAUTETTU',
+  HYVAKSYTTY = 'HYVAKSYTTY'
 }
 
 export const defaultKoulutuspaikka: Koulutuspaikka = {

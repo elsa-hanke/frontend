@@ -191,6 +191,7 @@
   import { required } from 'vuelidate/lib/validators'
   import { format } from 'date-fns'
   import _get from 'lodash/get'
+  import * as api from '@/api/kouluttaja'
   import store from '@/store'
   import ElsaButton from '@/components/button/button.vue'
   import { checkCurrentRouteAndRedirect } from '@/utils/functions'
@@ -198,6 +199,8 @@
   import UserDetails from '@/components/user-details/user-details.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import { LomakeTilat } from '@/utils/constants'
+  import { AloituskeskusteluLomake } from '@/types'
+  import ConfirmRouteExit from '@/mixins/confirm-route-exit'
 
   @Component({
     components: {
@@ -211,7 +214,11 @@
       }
     }
   })
-  export default class KouluttajaArviointilomakeAloituskeskustelu extends Mixins(validationMixin) {
+  export default class KouluttajaArviointilomakeAloituskeskustelu extends Mixins(
+    ConfirmRouteExit,
+    validationMixin
+  ) {
+    skipRouteExitConfirm!: boolean
     items = [
       {
         text: this.$t('etusivu'),
@@ -234,6 +241,8 @@
 
     loading = true
 
+    aloituskeskustelu: null | AloituskeskusteluLomake = null
+
     korjausehdotus = ''
 
     validateState(value: string) {
@@ -254,13 +263,9 @@
       return store.getters['kouluttaja/getAloituskeskustelu'](this.aloituskeskusteluId)
     }
 
-    get aloituskeskustelu() {
-      return this.koejaksoData.aloituskeskustelu
-    }
-
     get editable() {
       return (
-        !this.aloituskeskustelu.lahikouluttaja.sopimusHyvaksytty ||
+        !this.aloituskeskustelu?.lahikouluttaja.sopimusHyvaksytty ||
         this.koejaksoData.aloituskeskustelunTila !== LomakeTilat.PALAUTETTU_KORJATTAVAKSI
       )
     }
@@ -282,7 +287,7 @@
       }
       try {
         await store.dispatch('kouluttaja/putAloituskeskustelu', form)
-
+        this.skipRouteExitConfirm = true
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
         toastSuccess(this, this.$t('aloituskeskustelu-lisatty-onnistuneesti'))
       } catch (err) {
@@ -311,13 +316,20 @@
     onSubmit(params: any) {
       params.saving = true
       this.updateSentForm()
+      this.skipRouteExitConfirm = true
       params.saving = false
     }
 
     async mounted() {
       this.loading = true
       await store.dispatch('kouluttaja/getKoejaksot')
+      const { data } = await api.getAloituskeskustelu(this.aloituskeskusteluId)
+      this.aloituskeskustelu = data
       this.loading = false
+
+      if (!this.editable) {
+        this.skipRouteExitConfirm = true
+      }
     }
   }
 </script>

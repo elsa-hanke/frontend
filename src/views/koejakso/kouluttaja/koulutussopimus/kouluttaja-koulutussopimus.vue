@@ -18,8 +18,8 @@
           <div>
             <div>{{ $t('koulutussopimus-kouluttaja-palautettu') }}</div>
             <div>
-              <span>{{ $t('koulutussopimus-tila-palautettu-korjattavaksi-syy') }}</span>
-              <span>&nbsp;{{ koulutussopimus.korjausehdotus }}</span>
+              <span>{{ $t('syy') }}</span>
+              <span>&nbsp;{{ form.korjausehdotus }}</span>
             </div>
           </div>
         </div>
@@ -30,24 +30,22 @@
       <div>
         <b-row>
           <b-col lg="3" class="font-weight-500">{{ $t('erikoistuva-laakari') }}:</b-col>
-          <b-col>
-            {{ koulutussopimus.erikoistuvanNimi }}, {{ koulutussopimus.erikoistuvanErikoisala }}
-          </b-col>
+          <b-col>{{ form.erikoistuvanNimi }}, {{ form.erikoistuvanErikoisala }}</b-col>
         </b-row>
 
         <b-row>
           <b-col lg="3" class="font-weight-500">{{ $t('opiskelijanumero') }}:</b-col>
-          <b-col>{{ koulutussopimus.erikoistuvanOpiskelijatunnus }}</b-col>
+          <b-col>{{ form.erikoistuvanOpiskelijatunnus }}</b-col>
         </b-row>
 
         <b-row>
           <b-col lg="3" class="font-weight-500">{{ $t('syntymaaika') }}:</b-col>
-          <b-col>{{ $date(koulutussopimus.erikoistuvanSyntymaaika) }}</b-col>
+          <b-col>{{ $date(form.erikoistuvanSyntymaaika) }}</b-col>
         </b-row>
 
         <b-row>
           <b-col lg="3" class="font-weight-500">{{ $t('yliopisto-opiskeluoikeus') }}:</b-col>
-          <b-col>{{ koulutussopimus.erikoistuvanYliopisto }}</b-col>
+          <b-col>{{ form.erikoistuvanYliopisto }}</b-col>
         </b-row>
       </div>
 
@@ -57,23 +55,23 @@
         <b-row>
           <b-col lg="8">
             <h5>{{ $t('opinto-oikeuden-alkamispäivä') }}</h5>
-            <p>{{ $date(koulutussopimus.opintooikeudenMyontamispaiva) }}</p>
+            <p>{{ $date(form.opintooikeudenMyontamispaiva) }}</p>
           </b-col>
         </b-row>
         <b-row>
           <b-col lg="8">
             <h5>{{ $t('koejakson-alkamispäivä') }}</h5>
-            <p>{{ $date(koulutussopimus.koejaksonAlkamispaiva) }}</p>
+            <p>{{ $date(form.koejaksonAlkamispaiva) }}</p>
           </b-col>
         </b-row>
         <b-row>
           <b-col lg="4">
             <h5>{{ $t('sahkopostiosoite') }}</h5>
-            <p>{{ koulutussopimus.erikoistuvanSahkoposti }}</p>
+            <p>{{ form.erikoistuvanSahkoposti }}</p>
           </b-col>
           <b-col lg="4">
             <h5>{{ $t('puhelin-virka-aikaan') }}</h5>
-            <p>{{ koulutussopimus.erikoistuvanPuhelinnumero }}</p>
+            <p>{{ form.erikoistuvanPuhelinnumero }}</p>
           </b-col>
         </b-row>
 
@@ -82,7 +80,7 @@
         <b-row>
           <b-col lg="8">
             <h3>{{ $t('koulutuspaikan-tiedot') }}</h3>
-            <div v-for="(koulutuspaikka, index) in koulutussopimus.koulutuspaikat" :key="index">
+            <div v-for="(koulutuspaikka, index) in form.koulutuspaikat" :key="index">
               <h5>{{ $t('toimipaikan-nimi') }}</h5>
               <p>{{ koulutuspaikka.nimi }}</p>
               <h5>{{ $t('toimipaikalla-koulutussopimus.header') }}</h5>
@@ -97,7 +95,7 @@
           <b-col>
             <h3>{{ $t('koulutuspaikan-lahikouluttaja') }}</h3>
             <div
-              v-for="(kouluttaja, index) in koulutussopimus.kouluttajat"
+              v-for="(kouluttaja, index) in form.kouluttajat"
               :key="index"
               class="kouluttaja-section"
             >
@@ -124,9 +122,7 @@
           <b-col lg="8">
             <h3>{{ $t('erikoisala-vastuuhenkilö') }}</h3>
             <h5>{{ $t('erikoisala-vastuuhenkilö-label') }}</h5>
-            <p>
-              {{ koulutussopimus.vastuuhenkilo.nimi }}, {{ koulutussopimus.vastuuhenkilo.nimike }}
-            </p>
+            <p>{{ form.vastuuhenkilo.nimi }}, {{ form.vastuuhenkilo.nimike }}</p>
           </b-col>
         </b-row>
 
@@ -145,7 +141,7 @@
             </b-col>
             <b-col lg="4">
               <h5>{{ $t('nimi-ja-nimike') }}</h5>
-              <p>{{ koulutussopimus.erikoistuvanNimi }}</p>
+              <p>{{ form.erikoistuvanNimi }}</p>
             </b-col>
           </b-row>
         </div>
@@ -204,6 +200,7 @@
   import { Mixins } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
   import { required } from 'vuelidate/lib/validators'
+  import * as api from '@/api/kouluttaja'
   import store from '@/store'
   import KouluttajaKoulutussopimusForm from '@/views/koejakso/kouluttaja/koulutussopimus/kouluttaja-koulutussopimus-form.vue'
   import ElsaButton from '@/components/button/button.vue'
@@ -300,16 +297,12 @@
       this.formValid = true
     }
 
+    get koulutussopimusTila() {
+      return store.getters['kouluttaja/koejaksot'].find((a: any) => a.id === this.koulutussopimusId)
+    }
+
     get koulutussopimusId() {
       return Number(this.$route.params.id)
-    }
-
-    get koejaksoData() {
-      return store.getters['kouluttaja/getKoulutussopimus'](this.koulutussopimusId)
-    }
-
-    get koulutussopimus() {
-      return this.koejaksoData.koulutussopimus
     }
 
     get account() {
@@ -317,11 +310,11 @@
     }
 
     get editable() {
-      return this.koejaksoData.koulutusSopimuksenTila !== LomakeTilat.PALAUTETTU_KORJATTAVAKSI
+      return this.koulutussopimusTila !== LomakeTilat.PALAUTETTU_KORJATTAVAKSI
     }
 
     get signed() {
-      return this.koulutussopimus.kouluttajat.every((k: Kouluttaja) => {
+      return this.form.kouluttajat.every((k: Kouluttaja) => {
         if (this.currentKouluttaja(k)) {
           return k.sopimusHyvaksytty
         }
@@ -329,7 +322,9 @@
     }
 
     get returned() {
-      return this.koejaksoData.koulutusSopimuksenTila === LomakeTilat.PALAUTETTU_KORJATTAVAKSI
+      return (
+        this.koulutussopimusTila.koulutusSopimuksenTila === LomakeTilat.PALAUTETTU_KORJATTAVAKSI
+      )
     }
 
     //TODO switch to email when it is added to KayttajaDTO
@@ -342,7 +337,7 @@
       this.checkForm()
 
       const form = {
-        ...this.koulutussopimus,
+        ...this.form,
         korjausehdotus: this.form.korjausehdotus,
         lahetetty: false
       }
@@ -386,7 +381,8 @@
     async mounted() {
       this.loading = true
       await store.dispatch('kouluttaja/getKoejaksot')
-      this.form = this.koulutussopimus
+      const { data } = await api.getKoulutussopimus(this.koulutussopimusId)
+      this.form = data
       this.loading = false
 
       if (this.returned) {

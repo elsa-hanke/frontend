@@ -8,7 +8,6 @@
               :id="uid"
               v-model="form.opintooikeudenMyontamispaiva"
               :state="validateState('opintooikeudenMyontamispaiva')"
-              :min="opintooikeudenMyontamispaiva"
               :max="opintooikeudenPaattymispaiva"
             ></elsa-form-datepicker>
             <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -34,7 +33,7 @@
               :id="uid"
               v-model="form.koejaksonAlkamispaiva"
               :state="validateState('koejaksonAlkamispaiva')"
-              :min="koejaksonAlkamispaiva"
+              :min="opintooikeudenMyontamispaiva"
               :max="koejaksonPaattymispaiva"
               :disabled="!form.opintooikeudenMyontamispaiva"
             ></elsa-form-datepicker>
@@ -271,10 +270,6 @@
 
     get opintooikeudenPaattymispaiva() {
       return ''
-    }
-
-    get koejaksonAlkamispaiva() {
-      return this.opintooikeudenMyontamispaiva
     }
 
     get koejaksonPaattymispaiva() {

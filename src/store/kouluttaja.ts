@@ -1,6 +1,5 @@
 import { Module } from 'vuex'
 import * as api from '@/api/kouluttaja'
-import { Koejakso } from '@/types'
 
 const kouluttaja: Module<any, any> = {
   namespaced: true,
@@ -74,17 +73,7 @@ const kouluttaja: Module<any, any> = {
   },
   getters: {
     status: (state) => state.status,
-    koejaksot: (state) => state.koejaksot,
-    getKoulutussopimus: (state) => (id: number) => {
-      if (state.koejaksot) {
-        return state.koejaksot.find((koejakso: Koejakso) => koejakso.koulutussopimus.id === id)
-      }
-    },
-    getAloituskeskustelu: (state) => (id: number) => {
-      if (state.koejaksot) {
-        return state.koejaksot.find((koejakso: Koejakso) => koejakso.aloituskeskustelu.id === id)
-      }
-    }
+    koejaksot: (state) => state.koejaksot
   }
 }
 

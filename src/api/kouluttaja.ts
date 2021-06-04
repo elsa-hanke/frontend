@@ -16,6 +16,11 @@ export async function putKoulutussopimus(form: KoulutussopimusLomake) {
   return await axios.put(path, form)
 }
 
+export async function getAloituskeskustelu(id: number) {
+  const path = `/kouluttaja/koejakso/aloituskeskustelu/${id}`
+  return await axios.get(path)
+}
+
 export async function putAloituskeskustelu(form: AloituskeskusteluLomake) {
   const path = 'kouluttaja/koejakso/aloituskeskustelu'
   return await axios.put(path, form)
