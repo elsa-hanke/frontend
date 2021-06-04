@@ -35,6 +35,7 @@ import ErikoistuvaKoulutussopimus from '../views/koejakso/erikoistuva/koulutusso
 import ErikoistuvaArviointilomakeAloituskeskustelu from '@/views/koejakso/erikoistuva/arviointilomake-aloituskeskustelu/arviointilomake-aloituskeskustelu.vue'
 import KouluttajaKoulutussopimus from '../views/koejakso/kouluttaja/koulutussopimus/kouluttaja-koulutussopimus.vue'
 import KouluttajaArviointilomakeAloituskeskustelu from '@/views/koejakso/kouluttaja/arviointilomake-aloituskeskustelu/kouluttaja-arviointilomake-aloituskeskustelu.vue'
+import ErikoistuvaArviointilomakeValiarviointi from '@/views/koejakso/erikoistuva/arviointilomake-valiarviointi/arviointilomake-valiarviointi.vue'
 
 Vue.use(VueRouter)
 Vue.use(Meta)
@@ -183,27 +184,74 @@ const routes: Array<RouteConfig> = [
           {
             path: 'koejakso-yleiset-tavoitteet',
             name: 'koejakso-yleiset-tavoitteet',
-            component: KoejaksoTavoitteet
+            component: KoejaksoTavoitteet,
+            beforeEnter: (to, from, next) => {
+              if (Vue.prototype.$isErikoistuva()) {
+                next()
+              } else {
+                next(from.fullPath)
+              }
+            }
           },
           {
             path: 'koulutussopimus',
             name: 'koulutussopimus',
-            component: ErikoistuvaKoulutussopimus
+            component: ErikoistuvaKoulutussopimus,
+            beforeEnter: (to, from, next) => {
+              if (Vue.prototype.$isErikoistuva()) {
+                next()
+              } else {
+                next(from.fullPath)
+              }
+            }
           },
           {
             path: 'aloituskeskustelu',
             name: 'koejakson-aloituskeskustelu',
-            component: ErikoistuvaArviointilomakeAloituskeskustelu
+            component: ErikoistuvaArviointilomakeAloituskeskustelu,
+            beforeEnter: (to, from, next) => {
+              if (Vue.prototype.$isErikoistuva()) {
+                next()
+              } else {
+                next(from.fullPath)
+              }
+            }
+          },
+          {
+            path: 'valiarviointi',
+            name: 'koejakson-valiarviointi',
+            component: ErikoistuvaArviointilomakeValiarviointi,
+            beforeEnter: (to, from, next) => {
+              if (Vue.prototype.$isErikoistuva()) {
+                next()
+              } else {
+                next(from.fullPath)
+              }
+            }
           },
           {
             path: 'koulutussopimus/:id',
             name: 'koulutussopimus-kouluttaja',
-            component: KouluttajaKoulutussopimus
+            component: KouluttajaKoulutussopimus,
+            beforeEnter: (to, from, next) => {
+              if (Vue.prototype.$isKouluttaja()) {
+                next()
+              } else {
+                next(from.fullPath)
+              }
+            }
           },
           {
             path: 'aloituskeskustelu/:id',
             name: 'aloituskeskustelu-kouluttaja',
-            component: KouluttajaArviointilomakeAloituskeskustelu
+            component: KouluttajaArviointilomakeAloituskeskustelu,
+            beforeEnter: (to, from, next) => {
+              if (Vue.prototype.$isKouluttaja()) {
+                next()
+              } else {
+                next(from.fullPath)
+              }
+            }
           }
         ]
       }

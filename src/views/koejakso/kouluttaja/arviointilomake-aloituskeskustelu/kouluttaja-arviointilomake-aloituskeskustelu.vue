@@ -148,7 +148,7 @@
             variant="primary"
             class="ml-4 px-5"
           >
-            {{ $t('allekirjoita-lähetä') }}
+            {{ $t('allekirjoita-laheta') }}
           </elsa-button>
         </b-col>
       </b-row>
