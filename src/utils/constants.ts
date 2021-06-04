@@ -79,11 +79,11 @@ export const arvioinninPerustuminen = {
 } as any
 
 export enum LomakeTyypit {
-  KOULUTUSSOPIMUS = 'koulutussopimus',
-  ALOITUSKESKUSTELU = 'aloituskeskustelu',
-  VALIARVIOINTI = 'valiarviointi',
-  KEHITTAMISTOIMENPITEET = 'kehittamistoimenpiteet',
-  LOPPUKESKUSTELU = 'loppukeskustelu'
+  KOULUTUSSOPIMUS = 'KOULUTUSSOPIMUS',
+  ALOITUSKESKUSTELU = 'ALOITUSKESKUSTELU',
+  VALIARVIOINTI = 'VALIARVIOINTI',
+  KEHITTAMISTOIMENPITEET = 'KEHITTAMISTOIMENPITEET',
+  LOPPUKESKUSTELU = 'LOPPUKESKUSTELU'
 }
 
 export enum LomakeTilat {
