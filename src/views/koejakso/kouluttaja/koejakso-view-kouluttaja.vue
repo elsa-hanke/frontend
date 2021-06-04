@@ -24,7 +24,7 @@
           <b-table
             responsive
             fixed
-            :items="taskList"
+            :items="koejaksot"
             :fields="fields"
             :sort-by.sync="sortBy"
             :sort-desc.sync="sortDesc"
@@ -58,30 +58,30 @@
             <template #cell(koejaksonVaihe)="data">
               <b-link
                 :to="{
-                  name: linkComponent(data.item),
+                  name: linkComponent(data.item.tyyppi),
                   params: { id: data.item.id }
                 }"
                 class="task-type"
               >
-                {{ data.item.type }}
+                {{ $t('lomake-tyyppi-' + data.item.tyyppi) }}
               </b-link>
             </template>
 
             <template #cell(tila)="data">
               <font-awesome-icon
-                :icon="taskIcon(data.item.status)"
-                :class="taskClass(data.item.status)"
+                :icon="taskIcon(data.item.tila)"
+                :class="taskClass(data.item.tila)"
               />
-              {{ taskStatus(data.item.status) }}
+              {{ taskStatus(data.item.tila) }}
             </template>
 
             <template #cell(pvm)="data">
-              {{ $date(data.item.muokkauspaiva) }}
+              {{ $date(data.item.pvm) }}
             </template>
 
             <template #cell(actions)="row">
               <b-link
-                v-if="row.item.type !== getLomakeTyypit.KOULUTUSSOPIMUS"
+                v-if="showCompleted(row.item)"
                 @click="row.toggleDetails"
                 class="text-decoration-none"
               >
@@ -96,9 +96,9 @@
             </template>
 
             <template #row-details="row">
-              <div class="row-details-row">
+              <div v-for="(a, index) in row.item.aiemmat" :key="index" class="row-details-row">
                 <div class="row-details-col width-20" />
-                <div class="row-details-col width-30">API CHANGES: {{ row.item.id }}</div>
+                <div class="row-details-col width-30">API CHANGES: {{ a.id }}</div>
                 <div class="row-details-col width-175">TODO</div>
                 <div class="row-details-col width-15">DATE</div>
                 <div class="row-details-col width-175" />
@@ -190,34 +190,8 @@
       return store.getters['kouluttaja/koejaksot']
     }
 
-    get taskList() {
-      const arr: any = []
-      this.koejaksot.map((a: any) => {
-        if (a.koulutussopimus) {
-          arr.push({
-            ...a.koulutussopimus,
-            type: LomakeTyypit.KOULUTUSSOPIMUS,
-            status: a.koulutusSopimuksenTila
-          })
-        }
-
-        if (a.aloituskeskustelu) {
-          arr.push({
-            ...a.aloituskeskustelu,
-            type: LomakeTyypit.ALOITUSKESKUSTELU,
-            status: a.aloituskeskustelunTila
-          })
-        }
-      })
-      return arr
-    }
-
     get rows() {
-      return this.taskList?.length
-    }
-
-    get getLomakeTyypit() {
-      return LomakeTyypit
+      return this.koejaksot?.length
     }
 
     taskIcon(status: string) {
@@ -253,14 +227,21 @@
       }
     }
 
-    linkComponent(value: any) {
-      switch (value.type) {
+    linkComponent(type: string) {
+      switch (type) {
         case LomakeTyypit.KOULUTUSSOPIMUS:
           return 'koulutussopimus-kouluttaja'
         case LomakeTyypit.ALOITUSKESKUSTELU:
           return 'aloituskeskustelu-kouluttaja'
       }
       return
+    }
+
+    showCompleted(item: any) {
+      const aiemmat = Object.values(item.aiemmat).some((x) => x !== null)
+      if (item.tyyppi !== LomakeTyypit.KOULUTUSSOPIMUS && aiemmat) {
+        return true
+      }
     }
 
     async mounted() {
