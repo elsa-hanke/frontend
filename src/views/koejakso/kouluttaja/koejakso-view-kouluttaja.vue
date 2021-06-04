@@ -98,9 +98,12 @@
             <template #row-details="row">
               <div v-for="(a, index) in row.item.aiemmat" :key="index" class="row-details-row">
                 <div class="row-details-col width-20" />
-                <div class="row-details-col width-30">API CHANGES: {{ a.id }}</div>
-                <div class="row-details-col width-175">TODO</div>
-                <div class="row-details-col width-15">DATE</div>
+                <div class="row-details-col width-30">{{ $t('lomake-tyyppi-' + a.tyyppi) }}</div>
+                <div class="row-details-col width-175">
+                  <font-awesome-icon :icon="taskIcon(a.tila)" :class="taskClass(a.tila)" />
+                  {{ taskStatus(a.tila) }}
+                </div>
+                <div class="row-details-col width-15">{{ $date(a.pvm) }}</div>
                 <div class="row-details-col width-175" />
               </div>
             </template>
@@ -253,6 +256,7 @@
 </script>
 
 <style lang="scss">
+  @import '~@/styles/variables';
   .task-type {
     text-transform: capitalize;
   }
@@ -264,6 +268,7 @@
   .kouluttaja-table {
     .row-details {
       padding: 0;
+      background-color: $gray-300;
 
       &-row {
         display: flex;
