@@ -23,20 +23,21 @@
                 :fields="fields"
                 :sort-compare="sortCompare"
                 :sort-by.sync="sortBy"
-                :sort-desc.sync="sortAsc"
+                :sort-desc.sync="sortDesc"
                 :per-page="perPage"
                 :current-page="currentPage"
                 fixed
                 responsive
+                tbody-tr-class="arvioinnit-table-row"
               >
                 <template #table-colgroup>
-                  <col span="1" style="width: 12%" />
-                  <col span="1" style="width: 5%" />
-                  <col span="1" style="width: 5%" />
                   <col span="1" style="width: 10%" />
+                  <col span="1" style="width: 7.5%" />
+                  <col span="1" style="width: 10%" />
+                  <col span="1" style="width: 17.5%" />
+                  <col span="1" style="width: 30%" />
                   <col span="1" style="width: 15%" />
-                  <col span="1" style="width: 12%" />
-                  <col span="1" style="width: 100px" />
+                  <col span="1" style="width: 10%" />
                 </template>
                 <template #cell(arvioitavaTapahtuma)="row">
                   <elsa-button
@@ -87,7 +88,7 @@
                       name: 'muokkaa-arviointia',
                       params: { arviointiId: row.item.id }
                     }"
-                    class="d-flex align-items-center text-decoration-none text-nowrap"
+                    class="align-items-center text-decoration-none text-nowrap"
                   >
                     {{ $t('tee-arviointi') }}
                   </elsa-button>
@@ -230,8 +231,7 @@
         }
       }
       td {
-        padding-top: 0;
-        padding-bottom: 0;
+        padding: 0.25rem 0.75rem;
         vertical-align: middle;
         div {
           min-height: $font-size-base * 2.5;

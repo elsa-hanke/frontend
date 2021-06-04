@@ -34,11 +34,11 @@
             details-td-class="row-details"
           >
             <template #table-colgroup>
-              <col span="1" width="20%" />
-              <col span="1" width="30%" />
-              <col span="1" width="17.5%" />
-              <col span="1" width="15%" />
-              <col span="1" width="17.5%" />
+              <col span="1" style="width: 20%" />
+              <col span="1" style="width: 30%" />
+              <col span="1" style="width: 17.5%" />
+              <col span="1" style="width: 15%" />
+              <col span="1" style="width: 17.5%" />
             </template>
 
             <template #head()="scope">

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { AloituskeskusteluLomake, KoulutussopimusLomake } from '@/types'
+import { AloituskeskusteluLomake, KoulutussopimusLomake, ValiarviointiLomake } from '@/types'
 
 export async function getKoejakso() {
   const path = '/erikoistuva-laakari/koejakso'
@@ -24,6 +24,11 @@ export async function postAloituskeskustelu(form: AloituskeskusteluLomake) {
 export async function putAloituskeskustelu(form: AloituskeskusteluLomake) {
   const path = 'erikoistuva-laakari/koejakso/aloituskeskustelu'
   return await axios.put(path, form)
+}
+
+export async function postValiarviointi(form: ValiarviointiLomake) {
+  const path = 'erikoistuva-laakari/koejakso/valiarviointi'
+  return await axios.post(path, form)
 }
 
 export async function getKouluttajat() {

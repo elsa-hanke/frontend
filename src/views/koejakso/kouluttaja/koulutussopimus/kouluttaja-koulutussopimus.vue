@@ -157,7 +157,7 @@
           <b-col class="text-right">
             <elsa-button variant="back" :to="{ name: 'koejakso' }">{{ $t('peruuta') }}</elsa-button>
             <elsa-button :loading="params.saving" type="submit" variant="primary" class="ml-4 px-5">
-              {{ $t('allekirjoita-lähetä') }}
+              {{ $t('allekirjoita-laheta') }}
             </elsa-button>
           </b-col>
         </b-row>
@@ -255,6 +255,7 @@
     }
 
     form: KoulutussopimusLomake = {
+      id: null,
       erikoistuvanNimi: '',
       erikoistuvanOpiskelijatunnus: '',
       erikoistuvanPuhelinnumero: '',
@@ -269,7 +270,7 @@
       muokkauspaiva: '',
       opintooikeudenMyontamispaiva: '',
       vastuuhenkilo: null
-    } as any
+    }
 
     loading = true
 

@@ -1,6 +1,6 @@
 <template>
   <div class="table-responsive">
-    <table class="table table-borderless table-sm border-0" :summary="$t('henkilotiedot')">
+    <table class="table table-borderless border-0 table-sm" :summary="$t('henkilotiedot')">
       <colgroup>
         <col class="col-lg-2" />
         <col class="col-lg-8" />
