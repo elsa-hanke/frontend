@@ -235,7 +235,7 @@
       await store.dispatch('erikoistuva/getKouluttajat')
       this.tyoskentelyjaksotMutable = store.getters['erikoistuva/koejakso'].tyoskentelyjaksot
       this.tyoskentelyjaksotKoejakso = this.mapTyoskentelyjaksotKoejakso(
-        this.tyoskentelyjaksotMutable.filter((t: any) => t.liitettyKoejaksoon)
+        this.tyoskentelyjaksotMutable?.filter((t: any) => t.liitettyKoejaksoon) ?? []
       )
       this.loading = false
     }
