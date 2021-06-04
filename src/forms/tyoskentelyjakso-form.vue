@@ -221,13 +221,14 @@
         <span :id="uid">
           {{ $t('tyoskentelyjakson-liitetiedostot-kuvaus') }}
         </span>
-        <asiakirjat-upload-button
+        <asiakirjat-upload
           class="mt-3"
           :id="uid"
           :isPrimaryButton="false"
           :buttonText="$t('lisaa-liitetiedosto')"
           :existingFileNamesForCurrentView="existingFileNamesForCurrentView"
           :existingFileNamesForOtherViews="existingFileNamesForOtherViews"
+          :disabled="reservedAsiakirjaNimetMutable === undefined"
           @selectedFiles="onFilesAdded"
         />
         <asiakirjat-content
@@ -269,6 +270,7 @@
 </template>
 
 <script lang="ts">
+  import axios from 'axios'
   import Component from 'vue-class-component'
   import { Mixins, Prop } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
@@ -284,7 +286,7 @@
     tyoskentelyjaksoKaytannonKoulutusLabel
   } from '@/utils/tyoskentelyjakso'
   import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
-  import AsiakirjatUploadButton from '@/components/asiakirjat/asiakirjat-upload-button.vue'
+  import AsiakirjatUpload from '@/components/asiakirjat/asiakirjat-upload.vue'
   import { Asiakirja } from '@/types'
   import { confirmDelete } from '@/utils/confirm'
 
@@ -295,7 +297,7 @@
       ElsaFormDatepicker,
       ElsaButton,
       AsiakirjatContent,
-      AsiakirjatUploadButton
+      AsiakirjatUpload
     },
     validations: {
       form: {
@@ -351,8 +353,8 @@
     @Prop({ required: false, default: undefined })
     asiakirjat!: Asiakirja[]
 
-    @Prop({ required: false, default: () => [] })
-    kaikkiAsiakirjaNimet!: string[]
+    @Prop({ required: false, default: undefined })
+    reservedAsiakirjaNimet!: string[]
 
     @Prop({
       required: false,
@@ -377,6 +379,7 @@
     addedFiles: File[] = []
     newAsiakirjatMapped: Asiakirja[] = []
     deletedAsiakirjat: Asiakirja[] = []
+    reservedAsiakirjaNimetMutable: string[] = []
 
     form = {
       alkamispaiva: null,
@@ -406,7 +409,7 @@
       deleting: false
     }
 
-    mounted() {
+    async mounted() {
       this.form = {
         ...this.value,
         tyoskentelypaikka: {
@@ -417,6 +420,13 @@
           this,
           this.value.kaytannonKoulutus
         )
+      }
+
+      this.reservedAsiakirjaNimetMutable = this.reservedAsiakirjaNimet
+      if (!this.reservedAsiakirjaNimetMutable) {
+        this.reservedAsiakirjaNimetMutable = (
+          await axios.get('erikoistuva-laakari/asiakirjat/nimet')
+        ).data
       }
     }
 
@@ -455,7 +465,6 @@
       }
 
       delete submitData.tyoskentelyjakso.asiakirjat
-      delete submitData.tyoskentelyjakso.kaikkiAsiakirjaNimet
 
       this.$emit('submit', submitData, this.params)
     }
@@ -582,7 +591,7 @@
     }
 
     get existingFileNamesForOtherViews() {
-      return this.kaikkiAsiakirjaNimet?.filter(
+      return this.reservedAsiakirjaNimetMutable?.filter(
         (nimi) => !this.existingFileNamesForCurrentView.includes(nimi)
       )
     }

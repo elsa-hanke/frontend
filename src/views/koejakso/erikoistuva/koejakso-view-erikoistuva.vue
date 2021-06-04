@@ -21,37 +21,100 @@
               <h2>{{ $t('koejakson-suorituspaikka') }}</h2>
               <p>{{ $t('koejakson-suorituspaikka-kuvaus') }}</p>
               <b-row>
-                <b-col cols="9">
+                <b-col>
                   <b-row>
-                    <b-col cols="lg" class="mb-2 mb-lg-0">
-                      {{ $t('tyoskentelyjakso') }}
+                    <b-col class="mt-2" cols="12" md="9">
+                      <elsa-form-group
+                        :label="$t('tyoskentelyjakso')"
+                        :add-new-enabled="true"
+                        :add-new-label="$t('lisaa-tyoskentelyjakso')"
+                        :required="false"
+                        @submit="onTyoskentelyjaksoSubmit"
+                      >
+                        <template v-slot:modal-content="{ submit, cancel }">
+                          <tyoskentelyjakso-form
+                            :kunnat="kunnat"
+                            :erikoisalat="erikoisalat"
+                            @submit="submit"
+                            @cancel="cancel"
+                          />
+                        </template>
+                        <template v-slot="{ uid }">
+                          <elsa-form-multiselect
+                            :id="uid"
+                            v-model="form.tyoskentelyjakso"
+                            :options="tyoskentelyjaksotFormatted"
+                            label="label"
+                            track-by="id"
+                            @select="onTyoskentelyjaksoSelect"
+                          />
+                          <b-form-invalid-feedback :id="`${uid}-feedback`">
+                            {{ $t('pakollinen-tieto') }}
+                          </b-form-invalid-feedback>
+                        </template>
+                      </elsa-form-group>
                     </b-col>
-                    <b-col cols="lg" align-self-lg="end">
-                      <p class="text-lg-right">
-                        <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
-                        <b-link>{{ $t('lisaa-tyoskentelyjakso') }}</b-link>
-                        {{ $t('jos-et-loyda-alta') }}
-                      </p>
+                    <b-col
+                      align-self="center"
+                      class="mt-md-3 mb-3 mb-md-0 pl-3 pl-md-0"
+                      cols="9"
+                      md="3"
+                    >
+                      <elsa-button
+                        variant="primary"
+                        :disabled="form.tyoskentelyjakso === null"
+                        :loading="tyoskentelyjaksoUpdating"
+                        @click="onTyoskentelyjaksoAttached"
+                      >
+                        {{ $t('liita-koejaksoon') }}
+                      </elsa-button>
                     </b-col>
                   </b-row>
                 </b-col>
-              </b-row>
-
-              <b-row>
-                <b-col cols="9" class="mb-2 mb-md-0">
-                  <elsa-form-multiselect
-                    v-model="selected.tyoskentelyjakso"
-                    :options="tyoskentelyjaksotFormatted"
-                    label="label"
-                    track-by="id"
-                    @select="onTyoskentelyjaksoSelect"
-                  />
-                </b-col>
-                <b-col>
-                  <elsa-button variant="primary" class="align-self-end">
-                    {{ $t('liita-koejaksoon') }}
-                  </elsa-button>
-                </b-col>
+                <b-table
+                  class="tyoskentelyjaksot-koejakso-table mt-1 mr-3 mr-md-4 ml-3"
+                  v-if="tyoskentelyjaksotKoejakso.length > 0"
+                  :items="tyoskentelyjaksotKoejakso"
+                  :fields="fields"
+                  :sort-by.sync="sortBy"
+                  :sort-desc.sync="sortDesc"
+                  stacked="sm"
+                >
+                  <template #table-colgroup="scope">
+                    <col
+                      v-for="field in scope.fields"
+                      :key="field.key"
+                      :style="{ width: `${field.width}%` }"
+                    />
+                  </template>
+                  <template #cell(formattedNimi)="row">
+                    <elsa-button
+                      :to="{
+                        name: 'tyoskentelyjakso',
+                        params: { tyoskentelyjaksoId: row.item.id }
+                      }"
+                      variant="link"
+                      class="shadow-none p-0 text-left"
+                    >
+                      {{ row.item.formattedNimi }}
+                    </elsa-button>
+                  </template>
+                  <template #cell(delete)="row">
+                    <elsa-button
+                      @click="onTyoskentelyjaksoDetached(row.item)"
+                      variant="outline-primary"
+                      class="border-0 p-0"
+                      :loading="row.item.disableDelete"
+                    >
+                      <font-awesome-icon
+                        :hidden="row.item.disableDelete"
+                        :icon="['far', 'trash-alt']"
+                        fixed-width
+                        size="lg"
+                      />
+                    </elsa-button>
+                  </template>
+                </b-table>
               </b-row>
             </div>
           </div>
@@ -85,9 +148,10 @@
 <script lang="ts">
   import axios from 'axios'
   import Vue from 'vue'
+  import { Mixins } from 'vue-property-decorator'
+  import { validationMixin } from 'vuelidate'
   import Component from 'vue-class-component'
   import store from '@/store'
-  import { tyoskentelyjaksoLabel } from '@/utils/tyoskentelyjakso'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
   import ElsaLuottamuksenTaso from '@/components/luottamuksen-taso/luottamuksen-taso.vue'
@@ -99,6 +163,12 @@
   import ElsaKehittamistoimenpiteetCard from '@/components/koejakso-cards/kehittamistoimenpiteet-card.vue'
   import ElsaLoppukeskusteluCard from '@/components/koejakso-cards/loppukeskustelu-card.vue'
   import ElsaVastuuhenkilonArvioCard from '@/components/koejakso-cards/vastuuhenkilon-arvio-card.vue'
+  import TyoskentelyjaksoMixin from '@/mixins/tyoskentelyjakso'
+  import TyoskentelyjaksoForm from '@/forms/tyoskentelyjakso-form.vue'
+  import { tyoskentelyjaksoLabel } from '@/utils/tyoskentelyjakso'
+  import { toastSuccess, toastFail } from '@/utils/toast'
+  import { confirmDelete } from '@/utils/confirm'
+  import { KoejaksonTyoskentelyjakso } from '@/types'
 
   @Component({
     components: {
@@ -112,20 +182,20 @@
       ElsaValiarviointiCard,
       ElsaKehittamistoimenpiteetCard,
       ElsaLoppukeskusteluCard,
-      ElsaVastuuhenkilonArvioCard
+      ElsaVastuuhenkilonArvioCard,
+      TyoskentelyjaksoForm
     }
   })
-  export default class KoejaksoViewErikoistuva extends Vue {
-    selected = {
-      tyoskentelyjakso: null,
-      epaOsaamisalue: null,
-      kouluttaja: null
+  export default class KoejaksoViewErikoistuva extends Mixins(
+    validationMixin,
+    TyoskentelyjaksoMixin
+  ) {
+    form = {
+      tyoskentelyjakso: null
     } as any
-    options = {
-      tyoskentelyjaksot: [],
-      epaOsaamisalueet: [],
-      kouluttajat: []
-    } as any
+    tyoskentelyjaksot: any
+    tyoskentelyjaksotMutable = []
+    tyoskentelyjaksotKoejakso: KoejaksonTyoskentelyjakso[] = []
     items = [
       {
         text: this.$t('etusivu'),
@@ -136,56 +206,124 @@
         active: true
       }
     ]
-
     loading = true
+    tyoskentelyjaksoUpdating = false
+    sortBy = 'paattymispaiva'
+    sortDesc = true
 
-    // TODO REFACTOR AND/OR REMOVE
-    get tyoskentelyjaksotFormatted() {
-      // console.log('tyoskentelyjaksotFormatted()...')
-      return this.options.tyoskentelyjaksot.map((tj: any) => ({
-        ...tj,
-        label: tyoskentelyjaksoLabel(this, tj)
-      }))
-    }
-
-    // TODO REFACTOR AND/OR REMOVE
-    async onTyoskentelyjaksoSelect(selected: any) {
-      // console.log('onTyoskentelyjaksoSelect()...')
-      this.selected.tyoskentelyjakso = selected
-      await this.fetch()
-    }
-
-    // TODO REFACTOR AND/OR REMOVE
-    async fetch(options: any = {}) {
-      try {
-        const res = (
-          await axios.get('erikoistuva-laakari/suoritusarvioinnit', {
-            params: {
-              ...options,
-              sort: 'tapahtumanAjankohta,desc',
-              'tyoskentelyjaksoId.equals': this.selected.tyoskentelyjakso?.id,
-              'arvioitavaOsaalueId.equals': this.selected.epaOsaamisalue?.id,
-              'arvioinninAntajaId.equals': this.selected.kouluttaja?.id
-            }
-          })
-        ).data
-        console.log('xxx:' + res.toString())
-        //this.kategoriat = this.solveKategoriat();
-      } catch (err) {
-        //this.omat = [];
+    private fields = [
+      {
+        key: 'formattedNimi',
+        label: '',
+        class: 'btn-tyoskentelyjakso'
+      },
+      {
+        key: 'delete',
+        label: '',
+        width: 5
+      },
+      {
+        key: 'paattymispaiva',
+        thClass: 'd-none',
+        tdClass: 'd-none'
       }
-    }
-
-    // mounted() {
-    //   // const oppimistavoitteet = (await axios.get('erikoistuva-laakari/oppimistavoitteet-taulukko')).data
-    //   // console.log(oppimistavoitteet.toString())
-    // }
+    ]
 
     async mounted() {
       this.loading = true
       await store.dispatch('erikoistuva/getKoejakso')
       await store.dispatch('erikoistuva/getKouluttajat')
+      this.tyoskentelyjaksotMutable = store.getters['erikoistuva/koejakso'].tyoskentelyjaksot
+      this.tyoskentelyjaksotKoejakso = this.mapTyoskentelyjaksotKoejakso(
+        this.tyoskentelyjaksotMutable.filter((t: any) => t.liitettyKoejaksoon)
+      )
       this.loading = false
+    }
+
+    mapTyoskentelyjaksotKoejakso(tyoskentelyjaksot: any[]): KoejaksonTyoskentelyjakso[] {
+      return tyoskentelyjaksot.map((t) => this.mapTyoskentelyjaksoKoejakso(t))
+    }
+
+    mapTyoskentelyjaksoKoejakso(tyoskentelyjakso: any): KoejaksonTyoskentelyjakso {
+      return {
+        id: tyoskentelyjakso.id,
+        formattedNimi: tyoskentelyjaksoLabel(this, tyoskentelyjakso),
+        paattymispaiva: tyoskentelyjakso.paattymispaiva
+      } as KoejaksonTyoskentelyjakso
+    }
+
+    async onTyoskentelyjaksoAttached() {
+      this.tyoskentelyjaksoUpdating = true
+      try {
+        const tyoskentelyjakso = (
+          await axios.patch('erikoistuva-laakari/tyoskentelyjaksot/koejakso', {
+            id: this.form.tyoskentelyjakso.id,
+            liitettyKoejaksoon: true
+          })
+        ).data
+
+        this.tyoskentelyjaksotKoejakso = [
+          this.mapTyoskentelyjaksoKoejakso(tyoskentelyjakso),
+          ...this.tyoskentelyjaksotKoejakso
+        ] as any
+        this.form.tyoskentelyjakso = null
+
+        toastSuccess(this, this.$t('tyoskentelyjakson-lisaaminen-koejaksolle-onnistui'))
+      } catch {
+        toastFail(this, this.$t('tyoskentelyjakson-lisaaminen-koejaksolle-epaonnistui'))
+      }
+      this.tyoskentelyjaksoUpdating = false
+    }
+
+    async onTyoskentelyjaksoDetached(tyoskentelyjakso: KoejaksonTyoskentelyjakso) {
+      if (
+        await confirmDelete(
+          this,
+          this.$t('poista-tyoskentelyjakso-koejaksolta') as string,
+          (this.$t('tyoskentelyjakson-koejaksolta') as string).toLowerCase()
+        )
+      ) {
+        Vue.set(tyoskentelyjakso, 'disableDelete', true)
+        try {
+          await axios.patch('erikoistuva-laakari/tyoskentelyjaksot/koejakso', {
+            id: tyoskentelyjakso.id,
+            liitettyKoejaksoon: false
+          })
+          this.tyoskentelyjaksotKoejakso = this.tyoskentelyjaksotKoejakso.filter(
+            (t: any) => t.id !== tyoskentelyjakso.id
+          )
+
+          toastSuccess(this, this.$t('tyoskentelyjakson-poistaminen-koejaksolta-onnistui'))
+        } catch (err) {
+          toastFail(this, this.$t('tyoskentelyjakson-poistaminen-koejaksolta-epaonnistui'))
+        }
+        Vue.set(tyoskentelyjakso, 'disableDelete', false)
+      }
+    }
+
+    get tyoskentelyjaksotFormatted() {
+      return this.tyoskentelyjaksotMutable
+        .concat(this.tyoskentelyjaksot)
+        .filter((t: any) => !this.tyoskentelyjaksotKoejakso.map((tk) => tk.id).includes(t.id))
+        .map((t: any) => ({
+          ...t,
+          label: tyoskentelyjaksoLabel(this, t)
+        }))
+        .sort((t1, t2) => {
+          return t1.paattymispaiva < t2.paattymispaiva
+            ? 1
+            : t1.paattymispaiva > t2.paattymispaiva
+            ? -1
+            : 0
+        })
+    }
+
+    get kunnat() {
+      return store.getters['erikoistuva/koejakso'].kunnat
+    }
+
+    get erikoisalat() {
+      return store.getters['erikoistuva/koejakso'].erikoisalat
     }
   }
 </script>
@@ -195,5 +333,44 @@
 
   .form-order {
     font-weight: bold;
+  }
+</style>
+
+<style lang="scss">
+  @import '~@/styles/variables';
+  @import '~bootstrap/scss/mixins/breakpoints';
+
+  .tyoskentelyjaksot-koejakso-table {
+    border-bottom: 0.0625rem solid $gray-300;
+    thead,
+    &tr {
+      display: none;
+    }
+    td {
+      vertical-align: middle;
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+    }
+  }
+
+  @include media-breakpoint-down(xs) {
+    .tyoskentelyjaksot-koejakso-table {
+      border-bottom: none;
+      margin-bottom: 0;
+      tr {
+        padding: 0.375rem 0 0.375rem 0;
+        border: 0.0625rem solid $gray-300;
+        border-radius: 0.25rem;
+        margin-bottom: 0.375rem;
+      }
+      td {
+        width: 100%;
+        padding: 0.25rem 0 0.25rem 0.25rem;
+        border: none;
+        &.btn-tyoskentelyjakso > div {
+          width: 100% !important;
+        }
+      }
+    }
   }
 </style>

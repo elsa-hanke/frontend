@@ -6,14 +6,14 @@
         <b-col>
           <h1>{{ $t('asiakirjat') }}</h1>
           <p>{{ $t('asiakirjat-kuvaus') }}</p>
-          <asiakirjat-upload-button
+          <asiakirjat-upload
             :buttonText="$t('lisaa-asiakirja')"
             :uploading="uploading"
             :existingFileNamesForCurrentView="existingFileNames"
             @selectedFiles="onAsiakirjatAdded"
           >
             {{ $t('lisaa-asiakirja') }}
-          </asiakirjat-upload-button>
+          </asiakirjat-upload>
           <asiakirjat-content
             :asiakirjat="asiakirjat"
             :loading="loading"
@@ -30,7 +30,7 @@
   import axios from 'axios'
   import { Component, Vue } from 'vue-property-decorator'
   import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
-  import AsiakirjatUploadButton from '@/components/asiakirjat/asiakirjat-upload-button.vue'
+  import AsiakirjatUpload from '@/components/asiakirjat/asiakirjat-upload.vue'
   import { Asiakirja } from '@/types'
   import { toastSuccess, toastFail } from '@/utils/toast'
   import { confirmDelete } from '@/utils/confirm'
@@ -38,7 +38,7 @@
   @Component({
     components: {
       AsiakirjatContent,
-      AsiakirjatUploadButton
+      AsiakirjatUpload
     }
   })
   export default class Asiakirjat extends Vue {
