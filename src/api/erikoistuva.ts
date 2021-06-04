@@ -35,3 +35,24 @@ export async function getKouluttajat() {
   const path = '/kouluttajat'
   return await axios.get(path)
 }
+
+export async function getTyoskentelyjakso(id: string) {
+  return await axios.get(`erikoistuva-laakari/tyoskentelyjaksot/${id}`)
+}
+
+export async function getTyoskentelyjaksoLomake() {
+  return await axios.get(`erikoistuva-laakari/tyoskentelyjakso-lomake`)
+}
+
+export async function putTyoskentelyjakso(formData: FormData) {
+  await axios.put('erikoistuva-laakari/tyoskentelyjaksot', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    },
+    timeout: 120000
+  })
+}
+
+export async function deleteTyoskentelyjakso(id: string) {
+  await axios.delete(`erikoistuva-laakari/tyoskentelyjaksot/${id}`)
+}
