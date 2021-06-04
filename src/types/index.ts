@@ -1,6 +1,6 @@
 export type ErikoistuvaLaakari = {
   erikoisalaId: number
-  id: number
+  id: number | null
   kayttajaId: number
   opintojenAloitusvuosi: string
   opiskelijatunnus: string
@@ -69,7 +69,7 @@ export type Kouluttaja = {
 }
 
 export type Vastuuhenkilo = {
-  id: number
+  id: number | null
   kuittausaika: string
   nimi: string
   nimike: string
@@ -83,7 +83,7 @@ export interface KoulutussopimusLomake {
   erikoistuvanSahkoposti: string
   erikoistuvanSyntymaaika: string
   erikoistuvanYliopisto: string
-  id: number
+  id: number | null
   koejaksonAlkamispaiva: string
   korjausehdotus: string
   kouluttajat: Kouluttaja[]
@@ -91,18 +91,11 @@ export interface KoulutussopimusLomake {
   lahetetty: boolean
   muokkauspaiva: string
   opintooikeudenMyontamispaiva: string
-  vastuuhenkilo: Vastuuhenkilo
+  vastuuhenkilo: Vastuuhenkilo | null
 }
 
-export type Lahikouluttaja = {
-  id: number
-  kuittausaika: string
-  nimi: string
-  sopimusHyvaksytty: boolean
-}
-
-export type Lahiesimies = {
-  id: number
+export type Esimies = {
+  id: number | null
   kuittausaika: string
   nimi: string
   sopimusHyvaksytty: boolean
@@ -120,7 +113,7 @@ export interface AloituskeskusteluLomake {
   erikoistuvanOpiskelijatunnus: string
   erikoistuvanSahkoposti: string
   erikoistuvanYliopisto: string
-  id: number
+  id: number | null
   koejaksonAlkamispaiva: string
   koejaksonOsaamistavoitteet: string
   koejaksonPaattymispaiva: string
@@ -128,11 +121,66 @@ export interface AloituskeskusteluLomake {
   koejaksonToinenSuorituspaikka: string
   korjausehdotus: string
   lahetetty: boolean
-  lahiesimies: Lahiesimies
-  lahikouluttaja: Lahikouluttaja
+  lahiesimies: Esimies
+  lahikouluttaja: Esimies
   muokkauspaiva: string
-  suoritettuKokoaikatyossa: boolean
-  tyotunnitViikossa: number
+  suoritettuKokoaikatyossa: boolean | null
+  tyotunnitViikossa: number | null
+}
+
+export interface ValiarviointiLomake {
+  edistyminenTavoitteidenMukaista: boolean | null
+  erikoistuvaAllekirjoittanut: boolean
+  erikoistuvanErikoisala: string
+  erikoistuvanNimi: string
+  erikoistuvanOpiskelijatunnus: string
+  erikoistuvanYliopisto: string
+  id: number | null
+  kehittamistoimenpiteet: string
+  korjausehdotus: string
+  lahiesimies: Esimies
+  lahikouluttaja: Esimies
+  muokkauspaiva: string
+  vahvuudet: string
+}
+
+export interface KehittamistoimenpiteetLomake {
+  erikoistuvaAllekirjoittanut: boolean
+  erikoistuvanErikoisala: string
+  erikoistuvanNimi: string
+  erikoistuvanOpiskelijatunnus: string
+  erikoistuvanYliopisto: string
+  id: number | null
+  kehittamistoimenpiteetRiittavat: boolean
+  korjausehdotus: string
+  lahiesimies: Esimies
+  lahikouluttaja: Esimies
+  muokkauspaiva: string
+}
+
+export interface LoppukeskusteluLomake {
+  erikoistuvaAllekirjoittanut: boolean
+  erikoistuvanErikoisala: string
+  erikoistuvanNimi: string
+  erikoistuvanOpiskelijatunnus: string
+  erikoistuvanYliopisto: string
+  esitetaanKoejaksonHyvaksymista: boolean
+  id: number | null
+  korjausehdotus: string
+  lahiesimies: Esimies
+  lahikouluttaja: Esimies
+  muokkauspaiva: string
+}
+
+export interface VastuuhenkilonArvioLomake {
+  erikoistuvaAllekirjoittanut: boolean
+  erikoistuvanErikoisala: string
+  erikoistuvanNimi: string
+  erikoistuvanOpiskelijatunnus: string
+  erikoistuvanYliopisto: string
+  id: number | null
+  muokkauspaiva: string
+  vastuuhenkilo: Esimies
 }
 
 export interface PoissaoloLomake {
@@ -141,10 +189,18 @@ export interface PoissaoloLomake {
 }
 
 export interface Koejakso {
-  aloituskeskustelu: AloituskeskusteluLomake
-  aloituskeskustelunTila: string | null
   koulutusSopimuksenTila: string | null
   koulutussopimus: KoulutussopimusLomake
+  aloituskeskustelunTila: string | null
+  aloituskeskustelu: AloituskeskusteluLomake
+  valiarvioinninTila: string | null
+  valiarviointi: ValiarviointiLomake
+  kehittamistoimenpiteidenTila: string | null
+  kehittamistoimenpiteet: KehittamistoimenpiteetLomake
+  loppukeskustelunTila: string | null
+  loppukeskustelu: LoppukeskusteluLomake
+  vastuuhenkilonArvionTila: string | null
+  vastuuhenkilonArvio: VastuuhenkilonArvioLomake
 }
 
 export interface Asiakirja {
