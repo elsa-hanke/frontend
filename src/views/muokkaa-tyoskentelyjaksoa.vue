@@ -7,9 +7,11 @@
           <h1>{{ $t('muokkaa-tyoskentelyjaksoa') }}</h1>
           <hr />
           <tyoskentelyjakso-form
-            v-if="tyoskentelyjakso"
+            v-if="!loading && tyoskentelyjakso"
             :value="tyoskentelyjakso"
             :editing="true"
+            :kunnat="this.tyoskentelyjaksoLomake.kunnat"
+            :erikoisalat="this.tyoskentelyjaksoLomake.erikoisalat"
             :asiakirjat="tyoskentelyjakso.asiakirjat"
             @submit="onSubmit"
             @delete="onDelete"
@@ -25,12 +27,18 @@
 </template>
 
 <script lang="ts">
-  import axios from 'axios'
   import { Component, Mixins } from 'vue-property-decorator'
   import ConfirmRouteExit from '@/mixins/confirm-route-exit'
   import TyoskentelyjaksoForm from '@/forms/tyoskentelyjakso-form.vue'
   import { toastFail, toastSuccess } from '@/utils/toast'
   import { confirmDelete } from '@/utils/confirm'
+  import { TyoskentelyjaksoLomake } from '@/types'
+  import {
+    getTyoskentelyjakso,
+    getTyoskentelyjaksoLomake,
+    putTyoskentelyjakso,
+    deleteTyoskentelyjakso
+  } from '@/api/erikoistuva'
 
   @Component({
     components: {
@@ -52,19 +60,29 @@
         active: true
       }
     ]
+    tyoskentelyjaksoLomake: null | TyoskentelyjaksoLomake = null
     tyoskentelyjakso: any = null
+    loading = true
 
     async mounted() {
       await this.fetchTyoskentelyjakso()
+      await this.fetchLomake()
+      this.loading = false
+    }
+
+    async fetchLomake() {
+      try {
+        this.tyoskentelyjaksoLomake = (await getTyoskentelyjaksoLomake()).data
+      } catch (err) {
+        toastFail(this, this.$t('tyoskentelyjakson-lomakkeen-hakeminen-epaonnistui'))
+      }
     }
 
     async fetchTyoskentelyjakso() {
       const tyoskentelyjaksoId = this.$route?.params?.tyoskentelyjaksoId
       if (tyoskentelyjaksoId) {
         try {
-          this.tyoskentelyjakso = (
-            await axios.get(`erikoistuva-laakari/tyoskentelyjaksot/${tyoskentelyjaksoId}`)
-          ).data
+          this.tyoskentelyjakso = (await getTyoskentelyjakso(tyoskentelyjaksoId)).data
         } catch (err) {
           this.$router.replace({ name: 'tyoskentelyjaksot' })
         }
@@ -80,12 +98,7 @@
         data.addedFiles.forEach((file: File) => formData.append('files', file, file.name))
         formData.append('deletedAsiakirjaIdsJson', JSON.stringify(data.deletedAsiakirjaIds))
 
-        await axios.put('erikoistuva-laakari/tyoskentelyjaksot', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          },
-          timeout: 120000
-        })
+        putTyoskentelyjakso(formData)
 
         toastSuccess(this, this.$t('tyoskentelyjakson-tallentaminen-onnistui'))
         this.skipRouteExitConfirm = true
@@ -111,7 +124,7 @@
       ) {
         params.deleting = true
         try {
-          await axios.delete(`erikoistuva-laakari/tyoskentelyjaksot/${this.tyoskentelyjakso.id}`)
+          deleteTyoskentelyjakso(this.tyoskentelyjakso.id)
           toastSuccess(this, this.$t('tyoskentelyjakso-poistettu-onnistuneesti'))
           this.skipRouteExitConfirm = true
           this.$router.push({
