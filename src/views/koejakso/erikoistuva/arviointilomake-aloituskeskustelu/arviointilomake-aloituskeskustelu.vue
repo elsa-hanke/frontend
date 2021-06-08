@@ -27,7 +27,7 @@
         v-if="editable"
         :editable="editable"
         :account="account"
-        :data="aloituskeskusteluData"
+        :data="koejaksoData.aloituskeskustelu"
         :kouluttajat="kouluttajat"
         :henkilot="kouluttajat"
         @saveAndExit="onSaveDraftAndExit"
@@ -36,7 +36,7 @@
 
       <arviointilomake-aloituskeskustelu-readonly
         v-if="!editable"
-        :data="aloituskeskusteluData"
+        :data="koejaksoData.aloituskeskustelu"
       ></arviointilomake-aloituskeskustelu-readonly>
     </b-container>
   </div>
@@ -96,10 +96,6 @@
           return true
       }
       return false
-    }
-
-    get aloituskeskusteluData() {
-      return this.aloituskeskusteluLomake
     }
 
     get kouluttajat() {
