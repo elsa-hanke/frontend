@@ -30,7 +30,7 @@
           <h5>{{ $t('toimipaikan-nimi') }}</h5>
           <p>{{ koulutuspaikka.nimi }}</p>
           <h5>{{ $t('toimipaikalla-koulutussopimus.header') }}</h5>
-          <p>TODO</p>
+          <p>{{ koulutuspaikka.yliopisto ? koulutuspaikka.yliopisto : $t('kylla') }}</p>
         </div>
       </b-col>
     </b-row>
@@ -61,11 +61,25 @@
     <b-row>
       <b-col lg="4">
         <h5>{{ $t('päiväys') }}</h5>
-        <p>TODO</p>
+        <p v-if="erikoistuvaAllekirjoitus">{{ $date(erikoistuvaAllekirjoitus) }}</p>
+        <div v-if="kouluttajatAllekirjoitus.length > 1">
+          <p v-for="(k, index) in kouluttajatAllekirjoitus" :key="index">
+            {{ $date(k.kuittausaika) }}
+          </p>
+        </div>
+        <p v-if="vastuuhenkiloAllekirjoitus">{{ $date(vastuuhenkiloAllekirjoitus) }}</p>
       </b-col>
       <b-col lg="4">
         <h5>{{ $t('nimi-ja-nimike') }}</h5>
-        <p>{{ data.erikoistuvanNimi }}</p>
+        <p v-if="erikoistuvaAllekirjoitus">{{ data.erikoistuvanNimi }}</p>
+        <div v-if="kouluttajatAllekirjoitus.length > 1">
+          <p v-for="(k, index) in kouluttajatAllekirjoitus" :key="index">
+            {{ k.nimi }}
+          </p>
+        </div>
+        <p v-if="vastuuhenkiloAllekirjoitus">
+          {{ data.vastuuhenkilo.nimi }}, {{ data.vastuuhenkilo.nimike }}
+        </p>
       </b-col>
     </b-row>
   </div>
@@ -81,5 +95,22 @@
   export default class KoulutussopimusReadonly extends Vue {
     @Prop({ required: true, default: {} })
     data!: KoulutussopimusLomake
+
+    get erikoistuvaAllekirjoitus() {
+      return this.data.erikoistuvanAllekirjoitusaika
+    }
+
+    get kouluttajatAllekirjoitus() {
+      return this.data.kouluttajat.map((a) => {
+        if (a.kuittausaika) {
+          return a
+        }
+        return 0
+      })
+    }
+
+    get vastuuhenkiloAllekirjoitus() {
+      return this.data.vastuuhenkilo?.kuittausaika
+    }
   }
 </script>

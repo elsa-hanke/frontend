@@ -86,11 +86,15 @@
     <b-row>
       <b-col lg="4">
         <h5>{{ $t('päiväys') }}</h5>
-        <p>TODO</p>
+        <p v-if="erikoistuvaAllekirjoitus">{{ $date(erikoistuvaAllekirjoitus) }}</p>
+        <p v-if="kouluttajaAllekirjoitus">{{ $date(kouluttajaAllekirjoitus) }}</p>
+        <p v-if="lahiesimiesAllekirjoitus">{{ $date(lahiesimiesAllekirjoitus) }}</p>
       </b-col>
       <b-col lg="4">
         <h5>{{ $t('nimi-ja-nimike') }}</h5>
-        <p>{{ data.erikoistuvanNimi }}</p>
+        <p v-if="erikoistuvaAllekirjoitus">{{ data.erikoistuvanNimi }}</p>
+        <p v-if="kouluttajaAllekirjoitus">{{ data.lahikouluttaja.nimi }}</p>
+        <p v-if="lahiesimiesAllekirjoitus">{{ data.lahiesimies.nimi }}</p>
       </b-col>
     </b-row>
   </div>
@@ -120,6 +124,18 @@
         this.data.tyotunnitViikossa +
         this.$t('tuntia-viikossa')
       )
+    }
+
+    get erikoistuvaAllekirjoitus() {
+      return this.data.erikoistuvanAllekirjoitusaika
+    }
+
+    get kouluttajaAllekirjoitus() {
+      return this.data.lahikouluttaja.kuittausaika
+    }
+
+    get lahiesimiesAllekirjoitus() {
+      return this.data.lahiesimies.kuittausaika
     }
   }
 </script>

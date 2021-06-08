@@ -92,6 +92,7 @@ export interface KoulutussopimusLomake {
   muokkauspaiva: string
   opintooikeudenMyontamispaiva: string
   vastuuhenkilo: Vastuuhenkilo | null
+  erikoistuvanAllekirjoitusaika: string
 }
 
 export type Esimies = {
@@ -126,6 +127,7 @@ export interface AloituskeskusteluLomake {
   muokkauspaiva: string
   suoritettuKokoaikatyossa: boolean | null
   tyotunnitViikossa: number | null
+  erikoistuvanAllekirjoitusaika: string
 }
 
 export interface ValiarviointiLomake {

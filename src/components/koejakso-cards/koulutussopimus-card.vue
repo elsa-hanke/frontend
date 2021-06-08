@@ -34,7 +34,7 @@
           <p class="pr-5" v-html="$t('koulutussopimus-tila-odottaa-hyvaksyntaa')" />
         </template>
         <template v-slot:button>
-          <elsa-button variant="primary" class="mb-4" :to="{ name: url }">
+          <elsa-button variant="outline-primary" class="mb-4" :to="{ name: url }">
             {{ $t('nayta-koulutussopimus') }}
           </elsa-button>
         </template>
