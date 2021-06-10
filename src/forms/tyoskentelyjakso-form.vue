@@ -522,7 +522,6 @@
       } else {
         this.form.osaaikaprosentti = parseFloat(value)
       }
-      this.form.paattymispaiva = null
     }
 
     onCancel() {
