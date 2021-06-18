@@ -226,6 +226,12 @@
           return ['fas', 'check-circle']
         case LomakeTilat.ODOTTAA_ERIKOISTUVAN_HYVAKSYNTAA:
           return ['far', 'check-circle']
+        case LomakeTilat.ODOTTAA_ESIMIEHEN_HYVAKSYNTAA:
+          return ['far', 'check-circle']
+        case LomakeTilat.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA:
+          return ['far', 'check-circle']
+        case LomakeTilat.ODOTTAA_TOISEN_KOULUTTAJAN_HYVAKSYNTAA:
+          return ['far', 'check-circle']
       }
     }
 
@@ -238,6 +244,12 @@
         case LomakeTilat.HYVAKSYTTY:
           return 'text-success'
         case LomakeTilat.ODOTTAA_ERIKOISTUVAN_HYVAKSYNTAA:
+          return 'text-success'
+        case LomakeTilat.ODOTTAA_ESIMIEHEN_HYVAKSYNTAA:
+          return 'text-success'
+        case LomakeTilat.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA:
+          return 'text-success'
+        case LomakeTilat.ODOTTAA_TOISEN_KOULUTTAJAN_HYVAKSYNTAA:
           return 'text-success'
       }
     }
@@ -252,6 +264,12 @@
           return this.$t('lomake-tila-' + TaskStatus.HYVAKSYTTY)
         case LomakeTilat.ODOTTAA_ERIKOISTUVAN_HYVAKSYNTAA:
           return this.$t('lomake-tila-' + TaskStatus.ODOTTAA_ERIKOISTUVAN_HYVAKSYNTAA)
+        case LomakeTilat.ODOTTAA_ESIMIEHEN_HYVAKSYNTAA:
+          return this.$t('lomake-tila-' + TaskStatus.ODOTTAA_ESIMIEHEN_HYVAKSYNTAA)
+        case LomakeTilat.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA:
+          return this.$t('lomake-tila-' + TaskStatus.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA)
+        case LomakeTilat.ODOTTAA_TOISEN_KOULUTTAJAN_HYVAKSYNTAA:
+          return this.$t('lomake-tila-' + TaskStatus.ODOTTAA_TOISEN_KOULUTTAJAN_HYVAKSYNTAA)
       }
     }
 
