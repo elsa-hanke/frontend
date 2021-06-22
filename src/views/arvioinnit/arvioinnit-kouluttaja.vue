@@ -1,5 +1,5 @@
 <template>
-  <arvioinnit-kouluttaja :arvioinnit="arvioinnit" />
+  <arvioinnit-list :arvioinnit="arvioinnit" />
 </template>
 
 <script lang="ts">
@@ -23,7 +23,7 @@
 
     async fetch() {
       try {
-        this.arvioinnit = (await axios.get('vastuuhenkilo/suoritusarvioinnit')).data
+        this.arvioinnit = (await axios.get('kouluttaja/suoritusarvioinnit')).data
       } catch (err) {
         this.arvioinnit = []
       }
