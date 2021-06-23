@@ -1,5 +1,5 @@
 <template>
-  <arvioinnit-list :arvioinnit="arvioinnit" />
+  <arvioinnit-list :arvioinnit="arvioinnit" :loading="loading" />
 </template>
 
 <script lang="ts">
@@ -16,9 +16,11 @@
   })
   export default class Arvioinnit extends Vue {
     private arvioinnit: null | any[] = null
+    private loading = true
 
     async mounted() {
       await this.fetch()
+      this.loading = false
     }
 
     async fetch() {

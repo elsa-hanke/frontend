@@ -46,6 +46,7 @@
 
   .search-input {
     margin: 0.625rem 0 0.25rem 0 !important;
+    max-width: 25rem;
 
     @include media-breakpoint-down(xs) {
       margin: 0.625rem 0 1rem 0 !important;
