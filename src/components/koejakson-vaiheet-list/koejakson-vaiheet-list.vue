@@ -137,7 +137,12 @@
               </b-table>
             </template>
           </b-table>
-          <pagination :currentPage.sync="currentPage" :perPage="perPage" :rows="rows" />
+          <pagination
+            :currentPage.sync="currentPage"
+            :perPage="perPage"
+            :rows="rows"
+            :loading="loading"
+          />
         </b-col>
       </b-row>
     </b-container>
@@ -333,10 +338,7 @@
     }
 
     @include media-breakpoint-down(sm) {
-      table {
-        margin-bottom: 0;
-        border-bottom: none;
-      }
+      border-bottom: none;
 
       tr {
         padding: 0.375rem 0 0.375rem 0;
@@ -381,6 +383,7 @@
 
       td {
         padding: 0.25rem 0 0.25rem 0.25rem;
+        border: none;
 
         &.nimi {
           font-size: $h4-font-size;
@@ -398,7 +401,9 @@
         &.pvm,
         &.actions {
           > div {
-            width: 100% !important;
+            &:empty {
+              display: none !important;
+            }
             padding: 0 0.375rem 0 0.375rem !important;
           }
           &::before {
@@ -409,7 +414,6 @@
           }
           text-align: left;
         }
-        border: none;
       }
     }
   }

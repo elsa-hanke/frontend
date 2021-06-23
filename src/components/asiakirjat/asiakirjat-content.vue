@@ -74,7 +74,12 @@
         </elsa-button>
       </template>
     </b-table>
-    <pagination :currentPage.sync="currentPage" :perPage="perPage" :rows="rows" />
+    <pagination
+      :currentPage.sync="currentPage"
+      :perPage="perPage"
+      :rows="rows"
+      :loading="loading"
+    />
   </div>
 </template>
 
@@ -222,48 +227,55 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @import '~@/styles/variables';
   @import '~bootstrap/scss/mixins/breakpoints';
 
-  @include media-breakpoint-down(xs) {
-    .asiakirjat-table {
-      border-bottom: none;
-      tr {
-        padding: 0.375rem 0 0.375rem 0;
-        border: 0.0625rem solid $gray-300;
-        border-radius: 0.25rem;
-        margin-bottom: 0.5rem;
-      }
-
+  .asiakirjat-table {
+    ::v-deep table {
       td {
-        padding: 0.25rem 0 0.25rem 0.25rem;
-        &.file-name {
-          > div {
-            width: 100% !important;
-            padding: 0 0.375rem 0 0.375rem !important;
-          }
-          &::before {
-            display: none;
-          }
-        }
-        &.created-date::before {
-          text-align: left !important;
-          padding-left: 0.375rem !important;
-          font-weight: 500 !important;
-          width: 100% !important;
-        }
-        &.download-btn {
-          width: 2rem;
-          > div {
-            padding: 0 0 0 0.25rem !important;
-          }
-        }
-        border: none;
+        padding-top: 0.25rem;
+        padding-bottom: 0.25rem;
+        vertical-align: middle;
       }
-    }
-    .float-left-xs {
-      float: left;
+      @include media-breakpoint-down(xs) {
+        border-bottom: none;
+        tr {
+          padding: 0.375rem 0 0.375rem 0;
+          border: 0.0625rem solid $gray-300;
+          border-radius: 0.25rem;
+          margin-bottom: 0.5rem;
+        }
+
+        td {
+          padding: 0.25rem 0 0.25rem 0.25rem;
+          &.file-name {
+            > div {
+              width: 100% !important;
+              padding: 0 0.375rem 0 0.375rem !important;
+            }
+            &::before {
+              display: none;
+            }
+          }
+          &.created-date::before {
+            text-align: left !important;
+            padding-left: 0.375rem !important;
+            font-weight: 500 !important;
+            width: 100% !important;
+          }
+          &.download-btn {
+            width: 2rem;
+            > div {
+              padding: 0 0 0 0.25rem !important;
+            }
+          }
+          border: none;
+        }
+      }
+      .float-left-xs {
+        float: left;
+      }
     }
   }
 </style>
