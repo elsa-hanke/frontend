@@ -1,6 +1,6 @@
 <template>
   <b-pagination
-    v-if="rows > perPage"
+    v-if="!loading && rows > perPage"
     class="mt-4"
     v-model="currentPageMutable"
     :total-rows="rows"
@@ -27,14 +27,17 @@
 
   @Component({})
   export default class Pagination extends Vue {
-    @Prop({ required: false, default: null })
+    @Prop({ required: true, default: null })
     currentPage!: any | null
 
-    @Prop({ required: false, default: 0 })
+    @Prop({ required: true, default: 0 })
     rows!: number
 
-    @Prop({ required: false, default: 20 })
+    @Prop({ required: true, default: 20 })
     perPage!: number
+
+    @Prop({ required: true, default: false })
+    loading!: boolean
 
     get currentPageMutable() {
       return this.currentPage
@@ -45,3 +48,9 @@
     }
   }
 </script>
+
+<style lang="scss">
+  .maxw {
+    max-width: inherit;
+  }
+</style>
