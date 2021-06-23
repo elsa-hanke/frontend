@@ -1,107 +1,111 @@
 <template>
-  <div class="arvioinnit">
-    <b-breadcrumb :items="items" class="mb-0"></b-breadcrumb>
+  <div>
+    <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid>
       <b-row lg>
         <b-col>
-          <h1>{{ $t('arvioinnit') }}</h1>
+          <h1>{{ $t('suoritusarvioinnit') }}</h1>
+          <search-input
+            class="mb-4"
+            :hakutermi.sync="hakutermi"
+            :placeholder="$t('hae-suoritusarviointeja')"
+          />
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <div v-if="!loading">
+            <b-alert v-if="rows === 0" variant="dark" show>
+              <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
+              <span v-if="hakutermi.length > 0">
+                {{ $t('ei-hakutuloksia') }}
+              </span>
+              <span v-else>
+                {{ $t('ei-suoritusarviointeja') }}
+              </span>
+            </b-alert>
+          </div>
+          <div v-else class="text-center">
+            <b-spinner variant="primary" :label="$t('ladataan')" />
+          </div>
           <div class="arvioinnit">
-            <div class="w-25 position-relative align-items-center">
-              <b-form-input
-                v-model="hakusana"
-                placeholder="Hae suoritusarviointeja..."
-                class="suoritusarviointi-haku"
-              ></b-form-input>
-              <font-awesome-icon
-                :icon="['fas', 'search']"
-                class="text-primary position-absolute haku-ikoni"
-              />
-            </div>
-            <div v-if="arvioinnit" class="arvioinnit-table">
-              <b-table
-                :items="tulokset"
-                :fields="fields"
-                :sort-compare="sortCompare"
-                :sort-by.sync="sortBy"
-                :sort-desc.sync="sortAsc"
-                :per-page="perPage"
-                :current-page="currentPage"
-                fixed
-                responsive
-              >
-                <template #table-colgroup>
-                  <col span="1" style="width: 12%" />
-                  <col span="1" style="width: 5%" />
-                  <col span="1" style="width: 5%" />
-                  <col span="1" style="width: 10%" />
-                  <col span="1" style="width: 15%" />
-                  <col span="1" style="width: 12%" />
-                  <col span="1" style="width: 100px" />
-                </template>
-                <template #cell(arvioitavaTapahtuma)="row">
-                  <elsa-button
-                    :to="{
-                      name: 'arviointi',
-                      params: { arviointiId: row.item.id }
-                    }"
-                    variant="link"
-                    class="shadow-none px-0 text-truncate text-left w-100"
-                  >
-                    {{ row.item.arvioitavaTapahtuma }}
-                  </elsa-button>
-                </template>
-                <template #cell(tapahtumanAjankohta)="row">
+            <b-table
+              v-if="!loading && rows > 0"
+              class="arvioinnit-table"
+              :items="tulokset"
+              :fields="fields"
+              :per-page="perPage"
+              :current-page="currentPage"
+              fixed
+              responsive
+            >
+              <template #table-colgroup>
+                <col span="1" style="width: 22%" />
+                <col span="1" style="width: 7%" />
+                <col span="1" style="width: 9%" />
+                <col span="1" style="width: 13%" />
+                <col span="1" style="width: 29%" />
+                <col span="1" style="width: 15%" />
+                <col span="1" style="width: 9rem" />
+              </template>
+              <template #cell(arvioitavaTapahtuma)="row">
+                <elsa-button
+                  :to="{
+                    name: 'arviointi',
+                    params: { arviointiId: row.item.id }
+                  }"
+                  variant="link"
+                  class="shadow-none px-0 text-truncate text-left w-100"
+                >
+                  {{ row.item.arvioitavaTapahtuma }}
+                </elsa-button>
+              </template>
+              <template #cell(tapahtumanAjankohta)="row">
+                <span class="text-nowrap">
                   {{ $date(row.item.tapahtumanAjankohta) }}
-                </template>
-                <template #cell(tila)="row">
-                  <span v-if="row.item.lukittu" class="text-nowrap">
-                    <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success" />
-                    {{ $t('hyvaksytty') }}
-                  </span>
-                  <span v-else-if="row.item.arviointiAika" class="text-nowrap">
-                    <font-awesome-icon :icon="['far', 'check-circle']" class="text-success" />
-                    {{ $t('valmis') }}
-                  </span>
-                  <span v-else class="text-nowrap">
-                    <font-awesome-icon :icon="['far', 'clock']" class="text-warning" />
-                    {{ $t('avoin') }}
-                  </span>
-                </template>
-                <!-- eslint-disable-next-line -->
-                <template #cell(arvioinninSaaja.nimi)="row">
-                  {{ row.item.arvioinninSaaja.nimi }}
-                </template>
-                <!-- eslint-disable-next-line -->
-                <template #cell(arvioitavaOsaalue.nimi)="row">
-                  {{ row.item.arvioitavaOsaalue.nimi }}
-                </template>
-                <!-- eslint-disable-next-line -->
-                <template #cell(tyoskentelyjakso.tyoskentelypaikka.nimi)="row">
-                  {{ row.item.tyoskentelyjakso.tyoskentelypaikka.nimi }}
-                </template>
-                <template #cell(teeArviointi)="row">
-                  <elsa-button
-                    v-if="!row.item.arviointiAika"
-                    variant="primary"
-                    :to="{
-                      name: 'muokkaa-arviointia',
-                      params: { arviointiId: row.item.id }
-                    }"
-                    class="d-flex align-items-center text-decoration-none text-nowrap"
-                  >
-                    {{ $t('tee-arviointi') }}
-                  </elsa-button>
-                </template>
-              </b-table>
-              <b-pagination
-                v-model="currentPage"
-                :total-rows="rows"
-                :per-page="perPage"
-              ></b-pagination>
-            </div>
-            <div v-else class="text-center">
-              <b-spinner variant="primary" :label="$t('ladataan')" />
-            </div>
+                </span>
+              </template>
+              <template #cell(tila)="row">
+                <span v-if="row.item.lukittu" class="text-nowrap">
+                  <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success" />
+                  {{ $t('hyvaksytty') }}
+                </span>
+                <span v-else-if="row.item.arviointiAika" class="text-nowrap">
+                  <font-awesome-icon :icon="['far', 'check-circle']" class="text-success" />
+                  {{ $t('valmis') }}
+                </span>
+                <span v-else class="text-nowrap">
+                  <font-awesome-icon :icon="['far', 'clock']" class="text-warning" />
+                  {{ $t('avoin') }}
+                </span>
+              </template>
+              <!-- eslint-disable-next-line -->
+              <template #cell(arvioinninSaaja.nimi)="row">
+                {{ row.item.arvioinninSaaja.nimi }}
+              </template>
+              <!-- eslint-disable-next-line -->
+              <template #cell(arvioitavaOsaalue.nimi)="row">
+                {{ row.item.arvioitavaOsaalue.nimi }}
+              </template>
+              <!-- eslint-disable-next-line -->
+              <template #cell(tyoskentelyjakso.tyoskentelypaikka.nimi)="row">
+                {{ row.item.tyoskentelyjakso.tyoskentelypaikka.nimi }}
+              </template>
+              <template #cell(teeArviointi)="row">
+                <elsa-button
+                  v-if="!row.item.arviointiAika"
+                  variant="primary"
+                  :to="{
+                    name: 'muokkaa-arviointia',
+                    params: { arviointiId: row.item.id }
+                  }"
+                  class="d-flex text-nowrap pt-1 pb-1"
+                >
+                  {{ $t('tee-arviointi') }}
+                </elsa-button>
+              </template>
+            </b-table>
+            <pagination :currentPage.sync="currentPage" :perPage="perPage" :rows="rows" />
           </div>
         </b-col>
       </b-row>
@@ -112,15 +116,22 @@
 <script lang="ts">
   import { Component, Prop, Vue } from 'vue-property-decorator'
   import ElsaButton from '@/components/button/button.vue'
+  import SearchInput from '@/components/search-input/search-input.vue'
+  import Pagination from '@/components/pagination/pagination.vue'
 
   @Component({
     components: {
-      ElsaButton
+      ElsaButton,
+      SearchInput,
+      Pagination
     }
   })
   export default class ArvioinnitList extends Vue {
     @Prop({ required: true, default: undefined })
     arvioinnit!: null | any[]
+
+    @Prop({ required: false, type: Boolean, default: false })
+    loading!: boolean
 
     items = [
       {
@@ -170,94 +181,35 @@
       }
     ]
 
-    hakusana = ''
-    sortBy = 'tila'
-    sortDesc = true
-    perPage = 10
+    hakutermi = ''
+    perPage = 20
     currentPage = 1
 
     get tulokset() {
-      return this.hakusana
-        ? this.arvioinnit?.filter((item) => item.arvioitavaTapahtuma.includes(this.hakusana))
+      return this.hakutermi
+        ? this.arvioinnit?.filter((item) =>
+            item.arvioitavaTapahtuma.toLowerCase().includes(this.hakutermi.toLowerCase())
+          )
         : this.arvioinnit
     }
 
     get rows() {
       return this.tulokset?.length
     }
-
-    sortCompare(a: any, b: any, key: string): any {
-      if (key == 'tila') {
-        if (a.lukittu) {
-          return 1
-        }
-        if (b.lukittu) {
-          return -1
-        }
-        if (a.arviointiAika) {
-          return 1
-        }
-        if (b.arviointiAika) {
-          return -1
-        }
-        return 0
-      }
-      return false
-    }
   }
 </script>
 
 <style lang="scss" scoped>
   @import '~@/styles/variables';
-  .arvioinnit-table {
-    ::v-deep table {
-      thead th {
-        border-top: none;
 
-        // Ilman tätä, rikkoo responsiivisuuden
-        .sr-only {
-          display: none;
-        }
-      }
+  .arvioinnit-table {
+    max-width: 1420px;
+    ::v-deep table {
       td {
-        padding-top: 0;
-        padding-bottom: 0;
+        padding-top: 0.25rem;
+        padding-bottom: 0.25rem;
         vertical-align: middle;
-        div {
-          min-height: $font-size-base * 2.5;
-        }
-      }
-      .b-table-details {
-        td {
-          padding-left: 0;
-          padding-right: 0;
-          background: #f5f5f6;
-        }
-        table {
-          th {
-            padding-bottom: 0.3rem;
-            padding-left: 0;
-            padding-right: 0;
-          }
-        }
       }
     }
-  }
-
-  .suoritusarviointi-haku {
-    border-radius: 25px;
-  }
-
-  .haku-ikoni {
-    top: 11px;
-    right: 20px;
-  }
-
-  .text-light-muted {
-    color: #b1b1b1;
-  }
-
-  .tapahtuma-field {
-    max-width: 1px;
   }
 </style>

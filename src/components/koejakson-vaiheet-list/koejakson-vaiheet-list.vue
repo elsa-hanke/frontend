@@ -17,8 +17,11 @@
           <div v-if="!loading">
             <b-alert v-if="rows === 0" variant="dark" show>
               <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
-              <span>
+              <span v-if="hakutermi.length > 0">
                 {{ $t('ei-hakutuloksia') }}
+              </span>
+              <span v-else>
+                {{ $t('ei-koejaksoja') }}
               </span>
             </b-alert>
           </div>
@@ -74,7 +77,9 @@
             </template>
 
             <template #cell(pvm)="data">
-              {{ $date(data.item.pvm) }}
+              <span class="text-nowrap">
+                {{ $date(data.item.pvm) }}
+              </span>
             </template>
 
             <template #cell(actions)="row">
@@ -314,6 +319,7 @@
           display: none;
         }
         td {
+          word-wrap: break-all;
           padding-top: 0.375rem;
           padding-bottom: 0.375rem;
           border-top: none;
