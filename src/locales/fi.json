@@ -227,6 +227,7 @@
   "koulutussopimus-tila-odottaa-hyvaksyntaa": "Koulutussopimus lähetetty kouluttajan ja vastuuhenkilön hyväksyttäväksi. Saat ilmoituksen, kun koulutussopimus on hyväksytty. Hyväksytty koulutussopimus menee ELSA:sta automaattisesti oman yliopiston lääketieteellisen tiedekunnan opintohallintoon. Et voi enää muokata sopimusta.",
   "koulutussopimus-tila-palautettu-korjattavaksi": "Koulutussopimus on palautettu takaisin muokattavaksi lähikouluttajan toimesta.",
   "koulutussopimus-tila-hyvaksytty": "Koulussopimus on hyväksytty kaikkien osapuolten toimesta.<br>Koulutussopimus on toimitettu automaattisesti oman yliopiston lääketieteellisen tiedekunnan opintohallintoon.",
+  "koulutussopimus-vastuuhenkilo": "Henkilökohtainen koulutussopimus",
   "koulutussuunnitelma": "Koulutussuunnitelma",
   "koulutustyypit": "Koulutustyypit",
   "kunta": "Kunta",
@@ -412,7 +413,7 @@
   "toimipaikan-nimi": "Toimipaikan nimi",
   "toimipaikalla-koulutussopimus": {
     "header": "Toimipaikalla on koulutussopimus oman yliopiston kanssa",
-    "ei-sopimusta": "Ei, toimipaikalla on koulutussopimus seuraavan yliopiston kanssa"
+    "ei-sopimusta": "Ei, toimipaikalla on koulutussopimus seuraavan yliopiston kanssa:"
   },
   "toinen-toimipaikka": "Toinen toimipaikka",
   "poista-toimipaikka": "Poista toimipaikka",

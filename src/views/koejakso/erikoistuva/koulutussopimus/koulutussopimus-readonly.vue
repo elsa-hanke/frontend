@@ -30,7 +30,13 @@
           <h5>{{ $t('toimipaikan-nimi') }}</h5>
           <p>{{ koulutuspaikka.nimi }}</p>
           <h5>{{ $t('toimipaikalla-koulutussopimus.header') }}</h5>
-          <p>{{ koulutuspaikka.yliopisto ? koulutuspaikka.yliopisto : $t('kylla') }}</p>
+          <p>
+            {{
+              koulutuspaikka.yliopisto
+                ? $t('toimipaikalla-koulutussopimus.ei-sopimusta') + koulutuspaikka.yliopisto
+                : $t('kylla')
+            }}
+          </p>
         </div>
       </b-col>
     </b-row>

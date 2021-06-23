@@ -22,12 +22,12 @@
     private componentLinks = new Map()
 
     async mounted() {
-      await store.dispatch('vastuuhenkilo/getKoejaksot')
+      await store.dispatch('kouluttaja/getKoejaksot')
       this.loading = false
     }
 
     get koejaksot() {
-      return store.getters['vastuuhenkilo/koejaksot']
+      return store.getters['kouluttaja/koejaksot']
     }
   }
 </script>

@@ -9,7 +9,10 @@ export class RolesPlugin {
     }
 
     vue.prototype.$isKouluttaja = (): boolean => {
-      return store.getters['auth/account'].authorities.includes(ELSA_ROLE.Kouluttaja)
+      return (
+        store.getters['auth/account'].authorities.includes(ELSA_ROLE.Kouluttaja) &&
+        !store.getters['auth/account'].authorities.includes(ELSA_ROLE.Vastuuhenkilo)
+      )
     }
 
     vue.prototype.$isVastuuhenkilo = (): boolean => {

@@ -84,13 +84,7 @@
               <h5>{{ $t('toimipaikan-nimi') }}</h5>
               <p>{{ koulutuspaikka.nimi }}</p>
               <h5>{{ $t('toimipaikalla-koulutussopimus.header') }}</h5>
-              <p>
-                {{
-                  koulutuspaikka.yliopisto
-                    ? $t('toimipaikalla-koulutussopimus.ei-sopimusta') + koulutuspaikka.yliopisto
-                    : $t('kylla')
-                }}
-              </p>
+              <p>{{ koulutuspaikka.yliopisto ? $t('toimipaikalla-koulutussopimus.ei-sopimusta') + koulutuspaikka.yliopisto : $t('kylla') }}</p>
             </div>
           </b-col>
         </b-row>
@@ -105,17 +99,7 @@
               :key="index"
               class="kouluttaja-section"
             >
-              <kouluttaja-koulutussopimus-form
-                v-if="currentKouluttaja(kouluttaja) && editable"
-                ref="kouluttajaKoulutussopimusForm"
-                v-model="form.kouluttajat[index]"
-                :kouluttaja="kouluttaja"
-                :index="index"
-                @ready="isValid"
-              ></kouluttaja-koulutussopimus-form>
-
               <kouluttaja-koulutussopimus-readonly
-                v-if="!currentKouluttaja(kouluttaja) || !editable"
                 :kouluttaja="kouluttaja"
               ></kouluttaja-koulutussopimus-readonly>
             </div>
@@ -134,6 +118,11 @@
 
         <hr />
 
+        <b-row>
+          <b-col lg="8">
+            <h3>{{ $t('allekirjoitukset') }}</h3>
+          </b-col>
+        </b-row>
         <b-row>
           <b-col lg="4">
             <h5>{{ $t('päiväys') }}</h5>
@@ -213,22 +202,21 @@
   import { Mixins } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
   import { required } from 'vuelidate/lib/validators'
-  import * as api from '@/api/kouluttaja'
+  import * as api from '@/api/vastuuhenkilo'
   import store from '@/store'
-  import KouluttajaKoulutussopimusForm from '@/views/koejakso/kouluttaja/koulutussopimus/kouluttaja-koulutussopimus-form.vue'
   import ElsaButton from '@/components/button/button.vue'
   import ConfirmRouteExit from '@/mixins/confirm-route-exit'
   import { checkCurrentRouteAndRedirect } from '@/utils/functions'
   import { toastFail, toastSuccess } from '@/utils/toast'
   import { KoulutussopimusLomake, Kouluttaja } from '@/types'
   import { defaultKoulutuspaikka, LomakeTilat } from '@/utils/constants'
-  import KouluttajaKoulutussopimusReadonly from '@/views/koejakso/kouluttaja/koulutussopimus/kouluttaja-koulutussopimus-readonly.vue'
+  import KouluttajaKoulutussopimusReadonly
+    from '@/views/koejakso/kouluttaja/koulutussopimus/kouluttaja-koulutussopimus-readonly.vue'
   import UserDetails from '@/components/user-details/user-details.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
 
   @Component({
     components: {
-      KouluttajaKoulutussopimusForm,
       ElsaFormGroup,
       ElsaButton,
       KouluttajaKoulutussopimusReadonly,
@@ -242,7 +230,10 @@
       }
     }
   })
-  export default class KouluttajaKoulutussopimus extends Mixins(ConfirmRouteExit, validationMixin) {
+  export default class VastuuhenkiloKoulutussopimus extends Mixins(
+    ConfirmRouteExit,
+    validationMixin
+  ) {
     skipRouteExitConfirm!: boolean
     $refs!: {
       kouluttajaKoulutussopimusForm: any
@@ -257,7 +248,7 @@
         to: { name: 'koejakso' }
       },
       {
-        text: this.$t('koulutussopimus-kouluttaja'),
+        text: this.$t('koulutussopimus-vastuuhenkilo'),
         active: true
       }
     ]
@@ -306,11 +297,6 @@
       }
     }
 
-    isValid(index: number, form: Kouluttaja) {
-      this.form.kouluttajat[index] = form
-      this.formValid = true
-    }
-
     get koulutussopimusTila() {
       return store.getters['kouluttaja/koejaksot'].find((a: any) => a.id === this.koulutussopimusId)
     }
@@ -329,9 +315,7 @@
 
     get signed() {
       return this.form.kouluttajat.every((k: Kouluttaja) => {
-        if (this.currentKouluttaja(k)) {
-          return k.sopimusHyvaksytty
-        }
+        return k.sopimusHyvaksytty
       })
     }
 
@@ -358,12 +342,6 @@
       return this.form.vastuuhenkilo?.kuittausaika
     }
 
-    //TODO switch to email when it is added to KayttajaDTO
-    currentKouluttaja(kouluttaja: any) {
-      const nimi = this.account.firstName.concat(' ', this.account.lastName)
-      return kouluttaja.nimi === nimi
-    }
-
     async returnToSender() {
       this.checkForm()
 
@@ -373,7 +351,7 @@
         lahetetty: false
       }
       try {
-        await store.dispatch('kouluttaja/putKoulutussopimus', form)
+        await store.dispatch('vastuuhenkilo/putKoulutussopimus', form)
         this.skipRouteExitConfirm = true
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
         toastSuccess(this, this.$t('koulutussopimus-palautettu-onnistuneesti'))
@@ -384,7 +362,7 @@
 
     async updateSentForm() {
       try {
-        await store.dispatch('kouluttaja/putKoulutussopimus', this.form)
+        await store.dispatch('vastuuhenkilo/putKoulutussopimus', this.form)
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
         toastSuccess(this, this.$t('koulutussopimus-lisatty-onnistuneesti'))
       } catch (err) {
@@ -395,17 +373,8 @@
     onSubmit(params: any) {
       params.saving = true
 
-      if (this.$refs.kouluttajaKoulutussopimusForm.length === 2) {
-        this.$refs.kouluttajaKoulutussopimusForm[0].checkForm()
-        this.$refs.kouluttajaKoulutussopimusForm[1].checkForm()
-      } else {
-        this.$refs.kouluttajaKoulutussopimusForm[0].checkForm()
-      }
-
-      if (this.formValid) {
-        this.skipRouteExitConfirm = true
-        this.updateSentForm()
-      }
+      this.skipRouteExitConfirm = true
+      this.updateSentForm()
       params.saving = false
     }
 
@@ -426,9 +395,3 @@
     }
   }
 </script>
-
-<style lang="scss" scoped>
-  .kouluttaja-section + .kouluttaja-section {
-    margin-top: 2.5rem;
-  }
-</style>
