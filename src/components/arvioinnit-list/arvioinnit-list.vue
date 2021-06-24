@@ -56,7 +56,7 @@
                   params: { arviointiId: row.item.id }
                 }"
                 variant="link"
-                class="shadow-none px-0 text-left w-100"
+                class="shadow-none px-0 text-truncate text-left w-100"
               >
                 {{ row.item.arvioitavaTapahtuma }}
               </elsa-button>
@@ -82,15 +82,21 @@
             </template>
             <!-- eslint-disable-next-line -->
             <template #cell(arvioinninSaaja.nimi)="row">
-              {{ row.item.arvioinninSaaja.nimi }}
+              <div class="text-truncate w-100">
+                {{ row.item.arvioinninSaaja.nimi }}
+              </div>
             </template>
             <!-- eslint-disable-next-line -->
             <template #cell(arvioitavaOsaalue.nimi)="row">
-              {{ row.item.arvioitavaOsaalue.nimi }}
+              <div class="text-truncate w-100">
+                {{ row.item.arvioitavaOsaalue.nimi }}
+              </div>
             </template>
             <!-- eslint-disable-next-line -->
             <template #cell(tyoskentelyjakso.tyoskentelypaikka.nimi)="row">
-              {{ row.item.tyoskentelyjakso.tyoskentelypaikka.nimi }}
+              <div class="text-truncate w-100">
+                {{ row.item.tyoskentelyjakso.tyoskentelypaikka.nimi }}
+              </div>
             </template>
             <template #cell(teeArviointi)="row">
               <elsa-button
