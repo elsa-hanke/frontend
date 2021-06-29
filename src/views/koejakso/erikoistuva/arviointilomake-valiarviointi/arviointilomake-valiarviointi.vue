@@ -195,12 +195,14 @@
       korjausehdotus: '',
       lahiesimies: {
         id: null,
+        userId: null,
         kuittausaika: '',
         nimi: '',
         sopimusHyvaksytty: false
       },
       lahikouluttaja: {
         id: 0,
+        userId: null,
         kuittausaika: '',
         nimi: '',
         sopimusHyvaksytty: false
@@ -304,7 +306,6 @@
       if (this.$v.$anyError) {
         return
       }
-      console.log('lomake', this.valiarviointiLomake)
       return this.$bvModal.show('confirm-send')
     }
 
