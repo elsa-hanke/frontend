@@ -1,11 +1,16 @@
 export type ErikoistuvaLaakari = {
-  erikoisalaId: number
   id: number | null
   kayttajaId: number
+  erikoisalaId: number
+  erikoisalaNimi: string
   opintojenAloitusvuosi: string
   opiskelijatunnus: string
   puhelinnumero: string
   sahkoposti: string
+  syntymaaika: string
+  opintooikeudenMyontamispaiva: string
+  opintooikeudenPaattymispaiva: string
+  yliopisto: string
 }
 
 export interface UserAccount {
@@ -91,12 +96,14 @@ export interface KoulutussopimusLomake {
   lahetetty: boolean
   muokkauspaiva: string
   opintooikeudenMyontamispaiva: string
-  vastuuhenkilo: Vastuuhenkilo | null
+  opintooikeudenPaattymispaiva: string
+  vastuuhenkilo: Vastuuhenkilo | undefined
   erikoistuvanAllekirjoitusaika?: string
 }
 
-export type Esimies = {
+export type KoejaksonVaiheHyvaksyja = {
   id: number | null
+  kayttajaUserId: string | null
   kuittausaika: string
   nimi: string
   sopimusHyvaksytty: boolean
@@ -122,8 +129,8 @@ export interface AloituskeskusteluLomake {
   koejaksonToinenSuorituspaikka: string
   korjausehdotus: string
   lahetetty: boolean
-  lahiesimies: Esimies
-  lahikouluttaja: Esimies
+  lahiesimies: KoejaksonVaiheHyvaksyja
+  lahikouluttaja: KoejaksonVaiheHyvaksyja
   muokkauspaiva: string
   suoritettuKokoaikatyossa: boolean | null
   tyotunnitViikossa: number | null
@@ -140,8 +147,8 @@ export interface ValiarviointiLomake {
   id: number | null
   kehittamistoimenpiteet: string
   korjausehdotus: string
-  lahiesimies: Esimies
-  lahikouluttaja: Esimies
+  lahiesimies: KoejaksonVaiheHyvaksyja
+  lahikouluttaja: KoejaksonVaiheHyvaksyja
   muokkauspaiva: string
   vahvuudet: string
 }
@@ -155,8 +162,8 @@ export interface KehittamistoimenpiteetLomake {
   id: number | null
   kehittamistoimenpiteetRiittavat: boolean
   korjausehdotus: string
-  lahiesimies: Esimies
-  lahikouluttaja: Esimies
+  lahiesimies: KoejaksonVaiheHyvaksyja
+  lahikouluttaja: KoejaksonVaiheHyvaksyja
   muokkauspaiva: string
 }
 
@@ -169,8 +176,8 @@ export interface LoppukeskusteluLomake {
   esitetaanKoejaksonHyvaksymista: boolean
   id: number | null
   korjausehdotus: string
-  lahiesimies: Esimies
-  lahikouluttaja: Esimies
+  lahiesimies: KoejaksonVaiheHyvaksyja
+  lahikouluttaja: KoejaksonVaiheHyvaksyja
   muokkauspaiva: string
 }
 
@@ -182,7 +189,7 @@ export interface VastuuhenkilonArvioLomake {
   erikoistuvanYliopisto: string
   id: number | null
   muokkauspaiva: string
-  vastuuhenkilo: Esimies
+  vastuuhenkilo: KoejaksonVaiheHyvaksyja
 }
 
 export interface PoissaoloLomake {
@@ -221,4 +228,9 @@ export interface KoejaksonTyoskentelyjakso {
   formattedNimi: string
   paattymispaiva: string
   disableDelete: boolean
+}
+
+export interface KoejaksonVaiheAllekirjoitus {
+  nimiAndNimike: string
+  pvm: string
 }

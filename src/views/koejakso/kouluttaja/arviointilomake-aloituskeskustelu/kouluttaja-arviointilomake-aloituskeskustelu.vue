@@ -4,38 +4,54 @@
     <b-container fluid v-if="!loading">
       <h1 class="mb-3">{{ $t('aloituskeskustelu-kouluttaja') }}</h1>
 
-      <div v-if="editable">
+      <div v-if="editable && isCurrentUserLahiesimies">
+        <p>{{ $t('aloituskeskustelu-esimies-ingressi') }}</p>
+      </div>
+      <div v-else-if="editable">
         <p>{{ $t('aloituskeskustelu-kouluttaja-ingressi') }}</p>
       </div>
 
-      <div v-if="!editable && showSentMsg" class="d-flex bg-light border rounded px-4 py-3 mb-4">
-        <font-awesome-icon icon="info-circle" fixed-width class="text-muted mr-2" />
-        <div>{{ $t('koulutussopimus-kouluttaja-allekirjoitettu') }}</div>
-      </div>
+      <b-alert :show="showWaitingForLahiesimies" variant="dark" class="mt-3">
+        <div class="d-flex flex-row">
+          <em class="align-middle">
+            <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
+          </em>
+          <div>
+            {{ $t('aloituskeskustelu-kouluttaja-allekirjoitettu') }}
+          </div>
+        </div>
+      </b-alert>
 
+      <b-alert :show="returned" variant="dark" class="mt-3">
+        <div class="d-flex flex-row">
+          <em class="align-middle">
+            <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
+          </em>
+          <div>
+            {{ $t('aloituskeskustelu-palautettu-erikoistuvalle-muokattavaksi') }}
+            <span class="d-block">{{ $t('syy') }} {{ aloituskeskustelu.korjausehdotus }}</span>
+          </div>
+        </div>
+      </b-alert>
+
+      <b-alert variant="success" :show="acceptedByEveryone">
+        <div class="d-flex flex-row">
+          <em class="align-middle">
+            <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
+          </em>
+          <span>{{ $t('aloituskeskustelu-hyvaksytty-kaikkien-toimesta') }}</span>
+        </div>
+      </b-alert>
       <hr />
-
-      <div>
-        <b-row>
-          <b-col lg="3" class="font-weight-500">{{ $t('erikoistuva-laakari') }}:</b-col>
-          <b-col>
-            {{ aloituskeskustelu.erikoistuvanNimi }}, {{ aloituskeskustelu.erikoistuvanErikoisala }}
-          </b-col>
-        </b-row>
-
-        <b-row>
-          <b-col lg="3" class="font-weight-500">{{ $t('opiskelijanumero') }}:</b-col>
-          <b-col>{{ aloituskeskustelu.erikoistuvanOpiskelijatunnus }}</b-col>
-        </b-row>
-
-        <b-row>
-          <b-col lg="3" class="font-weight-500">{{ $t('yliopisto-opiskeluoikeus') }}:</b-col>
-          <b-col>{{ aloituskeskustelu.erikoistuvanYliopisto }}</b-col>
-        </b-row>
-      </div>
-
+      <erikoistuva-details
+        :firstName="erikoistuvanEtunimi"
+        :lastName="erikoistuvanSukunimi"
+        :erikoisala="aloituskeskustelu.erikoistuvanErikoisala"
+        :opiskelijatunnus="aloituskeskustelu.erikoistuvanOpiskelijatunnus"
+        :yliopisto="aloituskeskustelu.erikoistuvanYliopisto"
+        :show-birthdate="false"
+      />
       <hr />
-
       <div>
         <b-row>
           <b-col>
@@ -62,34 +78,10 @@
         <b-row>
           <b-col lg="8">
             <h5>{{ $t('koejakso-suoritettu-kokoaikatyössä') }}</h5>
-            <p>{{ aloituskeskustelu.suoritettuKokoaikatyossa }}</p>
-          </b-col>
-        </b-row>
-        <b-row>
-          <b-col lg="8">
-            <h5>{{ $t('tarvittavat-liitteet') }}</h5>
-            <b-table-simple fixed class="mb-0">
-              <b-thead>
-                <b-tr>
-                  <b-th class="border-top-0">
-                    {{ $t('tiedoston-nimi') }}
-                  </b-th>
-                  <b-th class="border-top-0">
-                    {{ $t('lisatty') }}
-                  </b-th>
-                </b-tr>
-              </b-thead>
-              <b-tbody>
-                <b-tr>
-                  <b-td>Todo.pdf</b-td>
-                  <b-td>1.1.2021</b-td>
-                </b-tr>
-                <b-tr>
-                  <b-td>Todo.pdf</b-td>
-                  <b-td>1.1.2021</b-td>
-                </b-tr>
-              </b-tbody>
-            </b-table-simple>
+            <p v-if="aloituskeskustelu.suoritettuKokoaikatyossa">{{ $t('kylla') }}</p>
+            <p v-else>
+              {{ $t('suoritettu-osa-aikatyossa-tuntia-viikossa', { tyotunnitViikossa }) }}
+            </p>
           </b-col>
         </b-row>
         <hr />
@@ -115,25 +107,9 @@
           </b-col>
         </b-row>
         <hr />
-        <b-row>
-          <b-col lg="8">
-            <h3>{{ $t('allekirjoitukset') }}</h3>
-          </b-col>
-        </b-row>
-        <b-row>
-          <b-col lg="4">
-            <h5>{{ $t('päiväys') }}</h5>
-            <p>TODO</p>
-          </b-col>
-          <b-col lg="4">
-            <h5>{{ $t('nimi-ja-nimike') }}</h5>
-            <p>{{ aloituskeskustelu.erikoistuvanNimi }}</p>
-          </b-col>
-        </b-row>
+        <koejakson-vaihe-allekirjoitukset :allekirjoitukset="allekirjoitukset" />
       </div>
-
-      <hr v-if="editable" />
-
+      <hr v-if="showAllekirjoitukset && editable" />
       <b-row v-if="editable">
         <b-col>
           <elsa-button variant="outline-primary" v-b-modal.return-to-sender>
@@ -143,6 +119,15 @@
         <b-col class="text-right">
           <elsa-button variant="back" :to="{ name: 'koejakso' }">{{ $t('peruuta') }}</elsa-button>
           <elsa-button
+            v-if="isCurrentUserLahiesimies"
+            v-b-modal.confirm-send
+            variant="primary"
+            class="ml-4 px-5"
+          >
+            {{ $t('allekirjoita-laheta') }}
+          </elsa-button>
+          <elsa-button
+            v-else
             :loading="params.saving"
             @click="onSubmit"
             variant="primary"
@@ -170,14 +155,26 @@
           </elsa-form-group>
         </b-form>
       </div>
-
       <template #modal-footer>
-        <elsa-button variant="back" @click="hideModal">
+        <elsa-button variant="back" @click="hideModal('return-to-sender')">
           {{ $t('peruuta') }}
         </elsa-button>
-
         <elsa-button variant="primary" @click="returnToSender">
           {{ $t('palauta-muokattavaksi') }}
+        </elsa-button>
+      </template>
+    </b-modal>
+
+    <b-modal id="confirm-send" :title="$t('vahvista-lomakkeen-lahetys')">
+      <div class="d-block">
+        <p>{{ $t('vahvista-koejakson-vaihe-hyvaksytty', { koejaksonVaihe }) }}</p>
+      </div>
+      <template #modal-footer>
+        <elsa-button variant="back" @click="hideModal('confirm-send')">
+          {{ $t('peruuta') }}
+        </elsa-button>
+        <elsa-button variant="primary" @click="onSubmit">
+          {{ $t('allekirjoita-laheta') }}
         </elsa-button>
       </template>
     </b-modal>
@@ -196,17 +193,21 @@
   import ElsaButton from '@/components/button/button.vue'
   import { checkCurrentRouteAndRedirect } from '@/utils/functions'
   import { toastFail, toastSuccess } from '@/utils/toast'
-  import UserDetails from '@/components/user-details/user-details.vue'
+  import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import { LomakeTilat } from '@/utils/constants'
   import { AloituskeskusteluLomake } from '@/types'
   import ConfirmRouteExit from '@/mixins/confirm-route-exit'
+  import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
+  import { KoejaksonVaiheAllekirjoitus } from '@/types'
+  import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
 
   @Component({
     components: {
-      UserDetails,
+      ErikoistuvaDetails,
       ElsaFormGroup,
-      ElsaButton
+      ElsaButton,
+      KoejaksonVaiheAllekirjoitukset
     },
     validations: {
       korjausehdotus: {
@@ -233,17 +234,14 @@
         active: true
       }
     ]
-
     params = {
       saving: false,
       deleting: false
     }
-
     loading = true
-
     aloituskeskustelu: null | AloituskeskusteluLomake = null
-
     korjausehdotus = ''
+    koejaksonVaihe = 'aloituskeskustelu'
 
     validateState(value: string) {
       const form = this.$v
@@ -251,27 +249,95 @@
       return $dirty ? ($error ? false : null) : null
     }
 
-    hideModal() {
-      return this.$bvModal.hide('return-to-sender')
+    hideModal(id: string) {
+      return this.$bvModal.hide(id)
     }
 
     get aloituskeskusteluId() {
       return Number(this.$route.params.id)
     }
 
-    get koejaksoData() {
-      return store.getters['kouluttaja/getAloituskeskustelu'](this.aloituskeskusteluId)
+    get aloituskeskustelunTila() {
+      return store.getters['kouluttaja/koejaksot'].find(
+        (k: any) => k.id === this.aloituskeskusteluId
+      )?.tila
+    }
+
+    get showAllekirjoitukset() {
+      return (
+        this.aloituskeskustelu?.erikoistuvanAllekirjoitusaika !== null ||
+        this.aloituskeskustelu?.lahikouluttaja.sopimusHyvaksytty ||
+        this.aloituskeskustelu?.lahiesimies.sopimusHyvaksytty
+      )
+    }
+
+    get returned() {
+      return this.aloituskeskustelunTila === LomakeTilat.PALAUTETTU_KORJATTAVAKSI
+    }
+
+    get isCurrentUserLahiesimies() {
+      const currentUser = store.getters['auth/account']
+      return this.aloituskeskustelu?.lahiesimies.kayttajaUserId === currentUser.id
     }
 
     get editable() {
       return (
-        !this.aloituskeskustelu?.lahikouluttaja.sopimusHyvaksytty ||
-        this.koejaksoData.aloituskeskustelunTila !== LomakeTilat.PALAUTETTU_KORJATTAVAKSI
+        this.aloituskeskustelunTila !== LomakeTilat.PALAUTETTU_KORJATTAVAKSI &&
+        ((this.isCurrentUserLahiesimies &&
+          !this.aloituskeskustelu?.lahiesimies.sopimusHyvaksytty) ||
+          !this.aloituskeskustelu?.lahikouluttaja.sopimusHyvaksytty)
       )
     }
 
-    get showSentMsg() {
-      return this.koejaksoData.aloituskeskustelunTila !== LomakeTilat.PALAUTETTU_KORJATTAVAKSI
+    get acceptedByEveryone() {
+      return (
+        this.aloituskeskustelunTila !== LomakeTilat.PALAUTETTU_KORJATTAVAKSI &&
+        this.aloituskeskustelu?.lahikouluttaja.sopimusHyvaksytty &&
+        this.aloituskeskustelu?.lahiesimies.sopimusHyvaksytty
+      )
+    }
+
+    get tyotunnitViikossa() {
+      return this.aloituskeskustelu?.tyotunnitViikossa
+    }
+
+    get showWaitingForLahiesimies() {
+      return (
+        !this.isCurrentUserLahiesimies &&
+        this.aloituskeskustelunTila !== LomakeTilat.PALAUTETTU_KORJATTAVAKSI &&
+        this.aloituskeskustelu?.lahikouluttaja.sopimusHyvaksytty &&
+        !this.aloituskeskustelu?.lahiesimies.sopimusHyvaksytty
+      )
+    }
+
+    get erikoistuvanEtunimi() {
+      return this.aloituskeskustelu?.erikoistuvanNimi.split(' ')[0]
+    }
+
+    get erikoistuvanSukunimi() {
+      return this.aloituskeskustelu?.erikoistuvanNimi.split(' ')[1]
+    }
+
+    get allekirjoitukset() {
+      const allekirjoitusErikoistuva = allekirjoituksetHelper.mapAllekirjoitusErikoistuva(
+        this,
+        this.aloituskeskustelu?.erikoistuvanNimi,
+        this.aloituskeskustelu?.erikoistuvanAllekirjoitusaika
+      ) as KoejaksonVaiheAllekirjoitus
+      const allekirjoitusLahikouluttaja = allekirjoituksetHelper.mapAllekirjoitusLahikouluttaja(
+        this,
+        this.aloituskeskustelu?.lahikouluttaja
+      )
+      const allekirjoitusLahiesimies = allekirjoituksetHelper.mapAllekirjoitusLahiesimies(
+        this,
+        this.aloituskeskustelu?.lahiesimies
+      )
+
+      return [
+        allekirjoitusErikoistuva,
+        allekirjoitusLahikouluttaja,
+        allekirjoitusLahiesimies
+      ].filter((a) => a !== null)
     }
 
     async returnToSender() {
@@ -296,13 +362,21 @@
     }
 
     async updateSentForm() {
-      const form = {
-        ...this.aloituskeskustelu,
-        lahiesimies: {
-          sopimusHyvaksytty: true,
-          kuittausaika: format(new Date(), 'yyyy-MM-dd')
-        }
-      }
+      const form = this.isCurrentUserLahiesimies
+        ? {
+            ...this.aloituskeskustelu,
+            lahiesimies: {
+              sopimusHyvaksytty: true,
+              kuittausaika: format(new Date(), 'yyyy-MM-dd')
+            }
+          }
+        : {
+            ...this.aloituskeskustelu,
+            lahikouluttaja: {
+              sopimusHyvaksytty: true,
+              kuittausaika: format(new Date(), 'yyyy-MM-dd')
+            }
+          }
       try {
         await store.dispatch('kouluttaja/putAloituskeskustelu', form)
 

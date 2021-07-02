@@ -24,33 +24,20 @@
           </div>
         </div>
       </div>
-
       <hr />
-
-      <div>
-        <b-row>
-          <b-col lg="3" class="font-weight-500">{{ $t('erikoistuva-laakari') }}:</b-col>
-          <b-col>{{ form.erikoistuvanNimi }}, {{ form.erikoistuvanErikoisala }}</b-col>
-        </b-row>
-
-        <b-row>
-          <b-col lg="3" class="font-weight-500">{{ $t('opiskelijanumero') }}:</b-col>
-          <b-col>{{ form.erikoistuvanOpiskelijatunnus }}</b-col>
-        </b-row>
-
-        <b-row>
-          <b-col lg="3" class="font-weight-500">{{ $t('syntymaaika') }}:</b-col>
-          <b-col>{{ $date(form.erikoistuvanSyntymaaika) }}</b-col>
-        </b-row>
-
-        <b-row>
-          <b-col lg="3" class="font-weight-500">{{ $t('yliopisto-opiskeluoikeus') }}:</b-col>
-          <b-col>{{ form.erikoistuvanYliopisto }}</b-col>
-        </b-row>
-      </div>
-
+      <b-row>
+        <b-col>
+          <erikoistuva-details
+            :firstName="erikoistuvanEtunimi"
+            :lastName="erikoistuvanSukunimi"
+            :erikoisala="form.erikoistuvanErikoisala"
+            :opiskelijatunnus="form.erikoistuvanOpiskelijatunnus"
+            :syntymaaika="form.erikoistuvanSyntymaaika"
+            :yliopisto="form.erikoistuvanYliopisto"
+          ></erikoistuva-details>
+        </b-col>
+      </b-row>
       <hr />
-
       <b-form @submit.stop.prevent="onSubmit">
         <b-row>
           <b-col lg="8">
@@ -78,13 +65,17 @@
         <hr />
 
         <b-row>
-          <b-col lg="8">
+          <b-col lg="12">
             <h3>{{ $t('koulutuspaikan-tiedot') }}</h3>
             <div v-for="(koulutuspaikka, index) in form.koulutuspaikat" :key="index">
               <h5>{{ $t('toimipaikan-nimi') }}</h5>
               <p>{{ koulutuspaikka.nimi }}</p>
               <h5>{{ $t('toimipaikalla-koulutussopimus.header') }}</h5>
-              <p>TODO</p>
+              <p v-if="!koulutuspaikka.yliopisto">{{ $t('kylla') }}</p>
+              <p v-else>
+                {{ $t('toimipaikalla-koulutussopimus.ei-sopimusta') }}:
+                {{ koulutuspaikka.yliopisto }}
+              </p>
             </div>
           </b-col>
         </b-row>
@@ -125,29 +116,9 @@
             <p>{{ form.vastuuhenkilo.nimi }}, {{ form.vastuuhenkilo.nimike }}</p>
           </b-col>
         </b-row>
-
         <hr />
-
-        <div v-if="editable">
-          <b-row>
-            <b-col lg="8">
-              <h3>{{ $t('allekirjoitukset') }}</h3>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col lg="4">
-              <h5>{{ $t('päiväys') }}</h5>
-              <p>TODO</p>
-            </b-col>
-            <b-col lg="4">
-              <h5>{{ $t('nimi-ja-nimike') }}</h5>
-              <p>{{ form.erikoistuvanNimi }}</p>
-            </b-col>
-          </b-row>
-        </div>
-
+        <koejakson-vaihe-allekirjoitukset :allekirjoitukset="allekirjoitukset" />
         <hr v-if="editable" />
-
         <b-row v-if="editable">
           <b-col>
             <elsa-button variant="outline-primary" v-b-modal.return-to-sender>
@@ -210,8 +181,11 @@
   import { KoulutussopimusLomake, Kouluttaja } from '@/types'
   import { defaultKoulutuspaikka, LomakeTilat } from '@/utils/constants'
   import KouluttajaKoulutussopimusReadonly from '@/views/koejakso/kouluttaja/koulutussopimus/kouluttaja-koulutussopimus-readonly.vue'
-  import UserDetails from '@/components/user-details/user-details.vue'
+  import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
+  import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
+  import { KoejaksonVaiheAllekirjoitus } from '@/types'
+  import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
 
   @Component({
     components: {
@@ -219,7 +193,8 @@
       ElsaFormGroup,
       ElsaButton,
       KouluttajaKoulutussopimusReadonly,
-      UserDetails
+      ErikoistuvaDetails,
+      KoejaksonVaiheAllekirjoitukset
     },
     validations: {
       form: {
@@ -269,7 +244,8 @@
       lahetetty: false,
       muokkauspaiva: '',
       opintooikeudenMyontamispaiva: '',
-      vastuuhenkilo: null
+      opintooikeudenPaattymispaiva: '',
+      vastuuhenkilo: undefined
     }
 
     loading = true
@@ -328,10 +304,16 @@
       )
     }
 
-    //TODO switch to email when it is added to KayttajaDTO
+    get erikoistuvanEtunimi() {
+      return this.form.erikoistuvanNimi.split(' ')[0]
+    }
+
+    get erikoistuvanSukunimi() {
+      return this.form.erikoistuvanNimi.split(' ')[1]
+    }
+
     currentKouluttaja(kouluttaja: any) {
-      const nimi = this.account.firstName.concat(' ', this.account.lastName)
-      return kouluttaja.nimi === nimi
+      return this.account.email === kouluttaja.sahkoposti
     }
 
     async returnToSender() {
@@ -393,6 +375,26 @@
       if (!this.editable) {
         this.skipRouteExitConfirm = true
       }
+    }
+
+    get allekirjoitukset(): KoejaksonVaiheAllekirjoitus[] {
+      const allekirjoitusErikoistuva = allekirjoituksetHelper.mapAllekirjoitusErikoistuva(
+        this,
+        this.form.erikoistuvanNimi,
+        this.form.erikoistuvanAllekirjoitusaika
+      ) as KoejaksonVaiheAllekirjoitus
+      const allekirjoituksetKouluttajat = allekirjoituksetHelper.mapAllekirjoituksetSopimuksenKouluttajat(
+        this.form.kouluttajat
+      ) as KoejaksonVaiheAllekirjoitus[]
+      const allekirjoitusVastuuhenkilo = allekirjoituksetHelper.mapAllekirjoitusVastuuhenkilo(
+        this.form.vastuuhenkilo
+      ) as KoejaksonVaiheAllekirjoitus
+
+      return [
+        allekirjoitusErikoistuva,
+        ...allekirjoituksetKouluttajat,
+        allekirjoitusVastuuhenkilo
+      ].filter((a) => a !== null)
     }
   }
 </script>

@@ -13,7 +13,14 @@
       <hr />
       <b-row>
         <b-col>
-          <user-details :account="account" :show-birthdate="false"></user-details>
+          <erikoistuva-details
+            :firstName="account.firstName"
+            :lastName="account.lastName"
+            :erikoisala="account.erikoistuvaLaakari.erikoisalaNimi"
+            :opiskelijatunnus="account.erikoistuvaLaakari.opiskelijatunnus"
+            :yliopisto="account.erikoistuvaLaakari.yliopisto"
+            :show-birthdate="false"
+          ></erikoistuva-details>
         </b-col>
       </b-row>
 
@@ -130,7 +137,7 @@
   import store from '@/store'
   import { ValiarviointiLomake } from '@/types'
   import { LomakeTilat } from '@/utils/constants'
-  import UserDetails from '@/components/user-details/user-details.vue'
+  import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
   import KouluttajaForm from '@/forms/kouluttaja-form.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
@@ -138,7 +145,7 @@
 
   @Component({
     components: {
-      UserDetails,
+      ErikoistuvaDetails,
       KouluttajaForm,
       ElsaFormGroup,
       ElsaFormMultiselect,
@@ -195,12 +202,14 @@
       korjausehdotus: '',
       lahiesimies: {
         id: null,
+        kayttajaUserId: null,
         kuittausaika: '',
         nimi: '',
         sopimusHyvaksytty: false
       },
       lahikouluttaja: {
         id: 0,
+        kayttajaUserId: null,
         kuittausaika: '',
         nimi: '',
         sopimusHyvaksytty: false
@@ -304,7 +313,6 @@
       if (this.$v.$anyError) {
         return
       }
-      console.log('lomake', this.valiarviointiLomake)
       return this.$bvModal.show('confirm-send')
     }
 
@@ -326,7 +334,9 @@
 
     async mounted() {
       this.loading = true
-      await store.dispatch('erikoistuva/getKoejakso')
+      if (!this.koejaksoData) {
+        await store.dispatch('erikoistuva/getKoejakso')
+      }
       await store.dispatch('erikoistuva/getKouluttajat')
       this.setKoejaksoData()
       this.loading = false
